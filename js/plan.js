@@ -55,6 +55,10 @@ export function defaultStudyPlan(weeklyHours = 10) {
     includeOptional: false,
     includeProjects: true,
     includeReviews: true,
+    includeCompanions: true,
+    spacedReview: false,
+    minBlockMinutes: 30,
+    maxBlockMinutes: 90,
     skippedDates: [],
     sessions: [],
     university: emptyUniversity(),
@@ -100,6 +104,8 @@ export function buildWorkItems(view, level, options) {
         kind: 'topic',
         refId: topic.id,
         phaseId: phase.id,
+        trackId: options.trackId || '',
+        trackName: options.trackName || '',
         title: topic.title,
         minutes: Math.max(30, Math.round((Number(topic.hours) || 1) * 60)),
         summary: topic.description || '',
@@ -114,6 +120,8 @@ export function buildWorkItems(view, level, options) {
           kind: 'project',
           refId: project.id,
           phaseId: phase.id,
+          trackId: options.trackId || '',
+          trackName: options.trackName || '',
           title: `Projeto: ${project.title}`,
           minutes: Math.max(45, Math.round((Number(project.hours) || 2) * 60)),
           summary: project.description || '',
@@ -126,6 +134,8 @@ export function buildWorkItems(view, level, options) {
         kind: 'review',
         refId: phase.id,
         phaseId: phase.id,
+        trackId: options.trackId || '',
+        trackName: options.trackName || '',
         title: `Revisão: ${phase.title}`,
         minutes: 45,
         summary: 'Autoavaliação da etapa. Se errar, volte ao tópico indicado.',
@@ -134,6 +144,28 @@ export function buildWorkItems(view, level, options) {
     }
   }
   return items;
+}
+
+export function interleaveWorkItems(primaryItems, companionLists) {
+  const queues = (companionLists || []).map((list) => [...list]).filter((list) => list.length > 0);
+  if (!queues.length) return [...primaryItems];
+  const out = [];
+  const main = [...primaryItems];
+  let compIndex = 0;
+  while (main.length || queues.some((q) => q.length)) {
+    for (let i = 0; i < 2 && main.length; i += 1) out.push(main.shift());
+    if (queues.some((q) => q.length)) {
+      for (let tries = 0; tries < queues.length; tries += 1) {
+        const q = queues[(compIndex + tries) % queues.length];
+        if (q.length) {
+          out.push(q.shift());
+          compIndex = (compIndex + tries + 1) % queues.length;
+          break;
+        }
+      }
+    }
+  }
+  return out;
 }
 
 function examPercent(date, ranges) {
@@ -234,9 +266,34 @@ export function previewRows(plan, fromDate, untilDate) {
       });
     }
     cursor = addUtcDays(cursor, 1);
-    if (rows.length > 80) break;
+    if (rows.length > 420) break;
   }
   return rows;
+}
+
+export function findSessionConflicts(plan, session) {
+  const conflicts = [];
+  const start = toMinutes(session.start);
+  const end = toMinutes(session.end);
+  if (start == null || end == null || end <= start) {
+    conflicts.push('Horário de fim precisa ser depois do início.');
+    return conflicts;
+  }
+  const university = plan.university || emptyUniversity();
+  for (const block of busyOnDate(session.date, university)) {
+    if (start < block.end && end > block.start) {
+      conflicts.push(`Conflito com aula/evento: ${block.title}`);
+    }
+  }
+  for (const other of plan.sessions || []) {
+    if (other.id === session.id || other.date !== session.date) continue;
+    const oStart = toMinutes(other.start);
+    const oEnd = toMinutes(other.end);
+    if (oStart != null && oEnd != null && start < oEnd && end > oStart) {
+      conflicts.push(`Sobrepõe sessão: ${other.title}`);
+    }
+  }
+  return conflicts;
 }
 
 function compareSessions(a, b) {
@@ -296,20 +353,26 @@ export function generateSessions(plan, items, options = {}) {
     cursor = addUtcDays(cursor, 1);
   }
 
+  const minBlock = Math.max(20, Math.min(90, Number(plan.minBlockMinutes) || 20));
+  const maxBlock = Number(plan.maxBlockMinutes) > 0 ? Math.max(minBlock, Number(plan.maxBlockMinutes)) : 0;
   const created = [];
+  const spacedQueue = [];
   let gapIndex = 0;
   for (const item of queue) {
     let left = item.left;
+    let lastDate = '';
     while (left >= 20 && gapIndex < gaps.length) {
       const gap = gaps[gapIndex];
       const room = gap.end - gap.start;
-      if (room < 20) {
+      if (room < 20 || (room < minBlock && left >= minBlock)) {
         gapIndex += 1;
         continue;
       }
-      const take = Math.min(room, left);
+      let take = Math.min(room, left);
+      if (maxBlock && take > maxBlock) take = maxBlock;
       const start = gap.start;
       const end = gap.start + take;
+      lastDate = gap.date;
       created.push({
         id: idFactory(),
         date: gap.date,
@@ -319,15 +382,52 @@ export function generateSessions(plan, items, options = {}) {
         kind: item.kind,
         refId: item.refId,
         phaseId: item.phaseId,
+        trackId: item.trackId || '',
+        trackName: item.trackName || '',
         locked: false,
         detail: '',
         summary: item.summary,
         links: item.links || [],
       });
-      gap.start = end;
+      gap.start = maxBlock && take === maxBlock && (gap.end - end >= minBlock + 10) ? end + 10 : end;
       left -= take;
       if (gap.end - gap.start < 20) gapIndex += 1;
     }
+    if (plan.spacedReview && item.kind === 'topic' && lastDate) {
+      const reviewAfter = formatISODate(addUtcDays(parseISODate(lastDate), 7));
+      spacedQueue.push({
+        afterDate: reviewAfter,
+        title: `Revisão espaçada: ${item.title}`,
+        refId: item.refId,
+        phaseId: item.phaseId,
+        trackId: item.trackId || '',
+        trackName: item.trackName || '',
+        links: item.links || [],
+      });
+    }
+  }
+  for (const rev of spacedQueue) {
+    const slotGap = gaps.find((gap) => gap.date >= rev.afterDate && (gap.end - gap.start) >= 25);
+    if (!slotGap) continue;
+    const start = slotGap.start;
+    const end = start + 25;
+    created.push({
+      id: idFactory(),
+      date: slotGap.date,
+      start: fromMinutes(start),
+      end: fromMinutes(end),
+      title: rev.title,
+      kind: 'review',
+      refId: rev.refId,
+      phaseId: rev.phaseId,
+      trackId: rev.trackId,
+      trackName: rev.trackName,
+      locked: false,
+      detail: '',
+      summary: 'Revisão espaçada (+7 dias) para fixar o conteúdo.',
+      links: rev.links,
+    });
+    slotGap.start = end;
   }
   return [...kept, ...created].sort(compareSessions);
 }
@@ -348,7 +448,7 @@ function fold(line) {
   return parts.join('\r\n');
 }
 
-export function sessionsToIcs(sessions, calendarName) {
+export function sessionsToIcs(sessions, calendarName, timeZone = '') {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -357,10 +457,12 @@ export function sessionsToIcs(sessions, calendarName) {
     'METHOD:PUBLISH',
     `X-WR-CALNAME:${icsEscape(calendarName || 'Plano de estudo')}`,
   ];
+  const tz = /^[A-Za-z_]+\/[A-Za-z_]+(?:\/[A-Za-z_]+)?$/.test(timeZone || '') ? timeZone : '';
   const now = new Date();
   const stamp = `${now.getUTCFullYear()}${String(now.getUTCMonth() + 1).padStart(2, '0')}${String(now.getUTCDate()).padStart(2, '0')}T${String(now.getUTCHours()).padStart(2, '0')}${String(now.getUTCMinutes()).padStart(2, '0')}00Z`;
   for (const session of sessions) {
     const description = [
+      session.trackName ? `Trilha: ${session.trackName}` : '',
       session.summary,
       session.detail,
       (session.links || []).length ? `Recursos:\n${session.links.map((link) => `- ${link.title}: ${link.url}`).join('\n')}` : '',
@@ -370,8 +472,8 @@ export function sessionsToIcs(sessions, calendarName) {
     lines.push('BEGIN:VEVENT');
     lines.push(fold(`UID:${session.id}@rumo-guia-de-estudos`));
     lines.push(`DTSTAMP:${stamp}`);
-    lines.push(`DTSTART:${start}`);
-    lines.push(`DTEND:${end}`);
+    lines.push(tz ? `DTSTART;TZID=${tz}:${start}` : `DTSTART:${start}`);
+    lines.push(tz ? `DTEND;TZID=${tz}:${end}` : `DTEND:${end}`);
     lines.push(fold(`SUMMARY:${icsEscape(session.title)}`));
     if (description) lines.push(fold(`DESCRIPTION:${icsEscape(description)}`));
     lines.push('END:VEVENT');

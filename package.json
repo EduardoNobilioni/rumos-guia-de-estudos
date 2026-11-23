@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.mjs",
-    "validate": "node scripts/validate-tracks.mjs"
+    "validate": "node scripts/validate-tracks.mjs",
+    "check-links": "node scripts/check-links.mjs"
   }
 }

@@ -270,6 +270,8 @@ export function emptyTrackState() {
     overrides: {},
     customTopics: [],
     customProjects: [],
+    customLinks: {},
+    doneResources: {},
     completedProjects: {},
     guideChecks: {},
     quizAnswers: {},
@@ -346,6 +348,8 @@ function sanitizeStudyPlan(raw) {
       kind,
       refId: isId(session.refId) ? session.refId : '',
       phaseId: isId(session.phaseId) ? session.phaseId : '',
+      trackId: isId(session.trackId) ? session.trackId : '',
+      trackName: typeof session.trackName === 'string' ? session.trackName.slice(0, 80) : '',
       locked: session.locked === true,
       detail: typeof session.detail === 'string' ? session.detail.slice(0, 500) : '',
       summary: typeof session.summary === 'string' ? session.summary.slice(0, 600) : '',
@@ -406,6 +410,10 @@ function sanitizeStudyPlan(raw) {
     includeOptional: raw.includeOptional === true,
     includeProjects: raw.includeProjects !== false,
     includeReviews: raw.includeReviews !== false,
+    includeCompanions: raw.includeCompanions !== false,
+    spacedReview: raw.spacedReview === true,
+    minBlockMinutes: Math.min(90, Math.max(20, Number(raw.minBlockMinutes) || 30)),
+    maxBlockMinutes: Number(raw.maxBlockMinutes) > 0 ? Math.min(240, Math.max(30, Number(raw.maxBlockMinutes))) : 0,
     skippedDates: [...new Set((raw.skippedDates || []).filter((date) => parseISODate(date)))].slice(0, 100),
     sessions,
     university: {
@@ -428,6 +436,30 @@ function sanitizeQuizAnswers(raw) {
   return out;
 }
 
+function sanitizeCustomLinksMap(raw) {
+  const out = {};
+  if (!isPlainObject(raw)) return out;
+  for (const [topicId, list] of Object.entries(raw)) {
+    if (!isId(topicId)) continue;
+    const links = sanitizeResources(list);
+    if (links.length) out[topicId] = links;
+  }
+  return out;
+}
+
+function sanitizeDoneResources(raw) {
+  const out = {};
+  if (!isPlainObject(raw)) return out;
+  let count = 0;
+  for (const [key, value] of Object.entries(raw)) {
+    if (typeof key !== 'string' || !key.trim() || key.length > 600 || !value) continue;
+    out[key] = true;
+    count += 1;
+    if (count >= 2000) break;
+  }
+  return out;
+}
+
 export function sanitizeTrackState(raw) {
   const base = emptyTrackState();
   if (!isPlainObject(raw)) return base;
@@ -442,6 +474,8 @@ export function sanitizeTrackState(raw) {
   base.overrides = sanitizeOverrides(raw.overrides);
   base.customTopics = sanitizeCustomTopics(raw.customTopics);
   base.customProjects = sanitizeCustomProjects(raw.customProjects);
+  base.customLinks = sanitizeCustomLinksMap(raw.customLinks);
+  base.doneResources = sanitizeDoneResources(raw.doneResources);
   base.completedProjects = sanitizeBoolMap(raw.completedProjects);
   base.guideChecks = sanitizeGuideChecks(raw.guideChecks);
   base.quizAnswers = sanitizeQuizAnswers(raw.quizAnswers);
@@ -659,7 +693,13 @@ export function moveId(list, id, direction) {
 }
 
 export function topicsForPhase(phase, trackState) {
-  const builtin = (phase.topics || []).map((topic) => ({ ...topic, custom: false }));
+  const extraLinks = (topicId) => ((trackState.customLinks && trackState.customLinks[topicId]) || [])
+    .map((resource) => ({ ...resource, custom: true }));
+  const builtin = (phase.topics || []).map((topic) => ({
+    ...topic,
+    custom: false,
+    resources: [...(topic.resources || []), ...extraLinks(topic.id)],
+  }));
   const custom = (trackState.customTopics || [])
     .filter((topic) => topic.phaseId === phase.id)
     .map((topic) => ({
@@ -667,7 +707,7 @@ export function topicsForPhase(phase, trackState) {
       custom: true,
       tags: topic.tags || [],
       prerequisites: topic.prerequisites || [],
-      resources: topic.resources || [],
+      resources: [...(topic.resources || []), ...extraLinks(topic.id)],
     }));
   return [...builtin, ...custom];
 }

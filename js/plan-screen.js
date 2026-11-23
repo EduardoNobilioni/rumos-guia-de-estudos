@@ -5,8 +5,10 @@ import {
   WEEKDAY_SHORT,
   buildWorkItems,
   defaultStudyPlan,
+  findSessionConflicts,
   fromMinutes,
   generateSessions,
+  interleaveWorkItems,
   localISODate,
   previewRows,
   sessionsToIcs,
@@ -32,15 +34,33 @@ export function initPlanScreen(api) {
     render();
   }
 
+  let previewDays = 35;
+
   function items(skipDone) {
+    const track = api.track();
     const trackState = api.trackState();
     const current = plan();
-    return buildWorkItems(api.view(), trackState.level, {
+    const primary = buildWorkItems(api.view(), trackState.level, {
       includeOptional: current.includeOptional,
       includeProjects: current.includeProjects,
       includeReviews: current.includeReviews,
       skipDone,
+      trackId: track.id,
+      trackName: track.name,
     });
+    const companions = current.includeCompanions !== false && typeof api.companions === 'function'
+      ? api.companions()
+      : [];
+    if (!companions.length) return primary;
+    const companionLists = companions.map((comp) => buildWorkItems(comp.view, comp.trackState.level || trackState.level, {
+      includeOptional: current.includeOptional,
+      includeProjects: current.includeProjects,
+      includeReviews: current.includeReviews,
+      skipDone,
+      trackId: comp.track.id,
+      trackName: comp.track.name,
+    }));
+    return interleaveWorkItems(primary, companionLists);
   }
 
   function generate(fromDate) {
@@ -56,8 +76,12 @@ export function initPlanScreen(api) {
   function render() {
     const current = plan();
     const university = current.university;
-    const end = new Date();
-    end.setDate(end.getDate() + 35);
+    const companions = typeof api.companions === 'function' ? api.companions() : [];
+    const startRef = parseISODate(current.startDate) || new Date();
+    const todayRef = new Date();
+    const baseRef = todayRef > startRef ? todayRef : startRef;
+    const end = new Date(baseRef.getTime());
+    end.setDate(end.getDate() + previewDays);
     const until = `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, '0')}-${String(end.getDate()).padStart(2, '0')}`;
     const rows = previewRows(current, current.startDate, until);
     const sessionCount = current.sessions.length;
@@ -104,6 +128,20 @@ export function initPlanScreen(api) {
             <label class="inline-flex gap-2"><input data-plan="optional" type="checkbox" ${current.includeOptional ? 'checked' : ''} /> Incluir tópicos opcionais</label>
             <label class="inline-flex gap-2"><input data-plan="projects" type="checkbox" ${current.includeProjects ? 'checked' : ''} /> Incluir projetos</label>
             <label class="inline-flex gap-2"><input data-plan="reviews" type="checkbox" ${current.includeReviews ? 'checked' : ''} /> Incluir sessões de revisão</label>
+            <label class="inline-flex gap-2"><input data-plan="spaced-review" type="checkbox" ${current.spacedReview ? 'checked' : ''} /> Revisão espaçada (+7 dias)</label>
+            ${companions.length ? `<label class="inline-flex gap-2"><input data-plan="companions" type="checkbox" ${current.includeCompanions !== false ? 'checked' : ''} /> Incluir tecnologias paralelas (${api.escapeHtml(companions.map((c) => c.track.name).join(', '))})</label>` : ''}
+          </div>
+          <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
+            <label>Bloco mínimo por sessão
+              <select data-plan="min-block" class="${field}">
+                ${[20, 30, 45, 60].map((m) => `<option value="${m}" ${(current.minBlockMinutes || 30) === m ? 'selected' : ''}>${m} min</option>`).join('')}
+              </select>
+            </label>
+            <label>Bloco máximo por sessão
+              <select data-plan="max-block" class="${field}">
+                ${[{ v: 60, l: '60 min' }, { v: 90, l: '90 min' }, { v: 120, l: '120 min' }, { v: 0, l: 'Sem limite' }].map((opt) => `<option value="${opt.v}" ${(current.maxBlockMinutes ?? 90) === opt.v ? 'selected' : ''}>${opt.l}</option>`).join('')}
+              </select>
+            </label>
           </div>
           <div class="mt-4 flex flex-wrap gap-2">
             <button type="button" data-plan="generate" class="px-3 py-2 rounded-sm bg-terra dark:bg-ochre text-paper dark:text-night text-sm font-semibold">Gerar plano</button>
@@ -181,13 +219,18 @@ export function initPlanScreen(api) {
                     <span class="font-mono">${block.allDay ? 'Dia inteiro' : `${block.startLabel}–${block.endLabel}`}</span>
                     <span class="ml-2">Ocupado · ${api.escapeHtml(block.title)}</span>
                   </li>`).join('')}
-                ${row.sessions.map((session) => `
-                  <li class="study-block rounded-sm px-3 py-2 text-sm">
+                ${row.sessions.map((session) => {
+                  const conflicts = findSessionConflicts(current, session);
+                  const canComplete = (session.kind === 'topic' || session.kind === 'project') && session.refId && typeof api.isDone === 'function';
+                  const done = canComplete ? api.isDone(session.kind, session.refId, session.trackId) : false;
+                  return `
+                  <li class="study-block rounded-sm px-3 py-2 text-sm ${conflicts.length ? 'border-terra' : ''}">
                     <div class="flex flex-wrap gap-2 items-center">
                       <input aria-label="Data de ${api.escapeHtml(session.title)}" data-plan="edit-date" data-id="${session.id}" type="date" value="${session.date}" class="rounded-sm border border-line dark:border-sage/60 bg-transparent px-2 py-1" />
                       <input aria-label="Início de ${api.escapeHtml(session.title)}" data-plan="edit-start" data-id="${session.id}" type="time" value="${session.start}" class="rounded-sm border border-line dark:border-sage/60 bg-transparent px-2 py-1" />
                       <input aria-label="Fim de ${api.escapeHtml(session.title)}" data-plan="edit-end" data-id="${session.id}" type="time" value="${session.end}" class="rounded-sm border border-line dark:border-sage/60 bg-transparent px-2 py-1" />
-                      <input aria-label="Nome da sessão" data-plan="edit-title" data-id="${session.id}" value="${api.escapeHtml(session.title)}" class="w-full sm:flex-1 sm:min-w-0 rounded-sm border border-line dark:border-sage/60 bg-transparent px-2 py-1" />
+                      <input aria-label="Nome da sessão" data-plan="edit-title" data-id="${session.id}" value="${api.escapeHtml(session.title)}" class="w-full sm:flex-1 sm:min-w-0 rounded-sm border border-line dark:border-sage/60 bg-transparent px-2 py-1 ${done ? 'line-through opacity-75' : ''}" />
+                      ${canComplete ? `<button type="button" data-plan="complete-ref" data-id="${session.id}" aria-pressed="${done}" class="px-2 py-1 rounded-sm border ${done ? 'border-terra dark:border-ochre text-terra dark:text-ochre font-semibold' : 'border-line'}">${done ? 'Concluído' : 'Concluir'}</button>` : ''}
                       <button type="button" data-plan="shift-day" data-dir="-1" data-id="${session.id}" class="px-2 py-1 rounded-sm border border-line">Dia anterior</button>
                       <button type="button" data-plan="shift-day" data-dir="1" data-id="${session.id}" class="px-2 py-1 rounded-sm border border-line">Dia seguinte</button>
                       <button type="button" data-plan="resize" data-dir="-15" data-id="${session.id}" class="px-2 py-1 rounded-sm border border-line">−15 min</button>
@@ -195,8 +238,11 @@ export function initPlanScreen(api) {
                       <button type="button" data-plan="lock" data-id="${session.id}" aria-pressed="${session.locked}" class="px-2 py-1 rounded-sm border ${session.locked ? 'border-terra dark:border-ochre text-terra dark:text-ochre' : 'border-line'}">${session.locked ? 'Travada' : 'Travar'}</button>
                       <button type="button" data-plan="delete" data-id="${session.id}" class="px-2 py-1 rounded-sm text-terra dark:text-warn">Apagar</button>
                     </div>
-                    <p class="mt-1 text-xs text-muted">${labelKind(session.kind)}${session.summary ? ` · ${api.escapeHtml(session.summary)}` : ''}</p>
-                  </li>`).join('')}
+                    <p class="mt-1 text-xs text-muted">${labelKind(session.kind)}${session.trackName ? ` · ${api.escapeHtml(session.trackName)}` : ''}${session.summary ? ` · ${api.escapeHtml(session.summary)}` : ''}</p>
+                    ${conflicts.length ? `<p class="mt-1 text-xs text-terra font-semibold">${conflicts.map((c) => api.escapeHtml(c)).join(' · ')}</p>` : ''}
+                    ${renderSessionLinks(session.links, api.escapeHtml)}
+                  </li>`;
+                }).join('')}
               </ul>
             </section>`).join('') || '<p class="read text-muted">Gere o plano para ver as semanas.</p>'}
         </div>
@@ -206,7 +252,10 @@ export function initPlanScreen(api) {
             ${current.sessions.map((session) => `<li>${api.escapeHtml(session.date)} ${session.start}–${session.end} · ${api.escapeHtml(session.title)} · ${labelKind(session.kind)}</li>`).join('') || '<li>Nenhuma sessão gerada.</li>'}
           </ol>
         </section>
-        <button type="button" data-plan="add" class="mt-4 px-3 py-2 rounded-sm border border-terra/70 dark:border-ochre/70 text-terra dark:text-ochre text-sm no-print">Adicionar sessão</button>
+        <div class="mt-4 flex flex-wrap gap-2 no-print">
+          <button type="button" data-plan="more-days" class="px-3 py-2 rounded-sm border border-line dark:border-sage/60 text-sm">Ver mais 35 dias</button>
+          <button type="button" data-plan="add" class="px-3 py-2 rounded-sm border border-terra/70 dark:border-ochre/70 text-terra dark:text-ochre text-sm">Adicionar sessão</button>
+        </div>
       </div>`;
   }
 
@@ -230,7 +279,10 @@ export function initPlanScreen(api) {
     }
     if (action === 'generate') generate();
     if (action === 'reschedule') generate(localISODate());
-    if (action === 'ics') api.download(`rumo-plano-${api.track().id}.ics`, sessionsToIcs(current.sessions, `Rumo — ${api.track().name}`), 'text/calendar');
+    if (action === 'ics') {
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      api.download(`rumo-plano-${api.track().id}.ics`, sessionsToIcs(current.sessions, `Rumo — ${api.track().name}`, zone), 'text/calendar');
+    }
     if (action === 'pdf') api.downloadPdf(current.sessions);
     if (action === 'print') {
       document.body.classList.add('printing-plan');
@@ -290,10 +342,26 @@ export function initPlanScreen(api) {
       current.university.examRanges = current.university.examRanges.filter((range) => range.id !== target.dataset.id);
       save();
     }
+    if (action === 'complete-ref') {
+      const session = sessionById(target.dataset.id);
+      if (session && session.refId && typeof api.toggleDone === 'function') {
+        api.toggleDone(session.kind, session.refId, session.trackId);
+        render();
+      }
+      return;
+    }
+    if (action === 'more-days') {
+      previewDays += 35;
+      render();
+      return;
+    }
     if (action === 'shift-day') {
       const session = sessionById(target.dataset.id);
       const next = addUtcDays(parseISODate(session.date), Number(target.dataset.dir));
       session.date = formatISODate(next);
+      session.locked = true;
+      const conflicts = findSessionConflicts(current, session);
+      if (conflicts.length) api.toast(conflicts[0], 'error');
       save();
       return;
     }
@@ -304,6 +372,9 @@ export function initPlanScreen(api) {
       if (end - start < 20) end = start + 20;
       if (end > 23 * 60 + 45) end = 23 * 60 + 45;
       session.end = fromMinutes(end);
+      session.locked = true;
+      const conflicts = findSessionConflicts(current, session);
+      if (conflicts.length) api.toast(conflicts[0], 'error');
       save();
       return;
     }
@@ -360,6 +431,10 @@ export function initPlanScreen(api) {
     if (target.dataset.plan === 'optional') current.includeOptional = target.checked;
     if (target.dataset.plan === 'projects') current.includeProjects = target.checked;
     if (target.dataset.plan === 'reviews') current.includeReviews = target.checked;
+    if (target.dataset.plan === 'spaced-review') current.spacedReview = target.checked;
+    if (target.dataset.plan === 'companions') current.includeCompanions = target.checked;
+    if (target.dataset.plan === 'min-block') current.minBlockMinutes = Number(target.value) || 30;
+    if (target.dataset.plan === 'max-block') current.maxBlockMinutes = Number(target.value) || 0;
     if (target.dataset.plan === 'buffer-before') current.university.bufferBefore = Number(target.value) || 0;
     if (target.dataset.plan === 'buffer-after') current.university.bufferAfter = Number(target.value) || 0;
     if (target.dataset.plan === 'exam-load') current.university.examLoadPercent = Number(target.value) || 50;
@@ -390,11 +465,26 @@ export function initPlanScreen(api) {
       return;
     }
     const session = target.dataset.id ? sessionById(target.dataset.id) : null;
-    if (session && target.dataset.plan === 'edit-date') session.date = target.value || session.date;
-    if (session && target.dataset.plan === 'edit-start') session.start = target.value || session.start;
-    if (session && target.dataset.plan === 'edit-end') session.end = target.value || session.end;
+    if (session && target.dataset.plan === 'edit-date') {
+      session.date = target.value || session.date;
+      session.locked = true;
+    }
+    if (session && target.dataset.plan === 'edit-start') {
+      session.start = target.value || session.start;
+      session.locked = true;
+    }
+    if (session && target.dataset.plan === 'edit-end') {
+      session.end = target.value || session.end;
+      session.locked = true;
+    }
     if (session && target.dataset.plan === 'edit-title') session.title = target.value.slice(0, 140) || session.title;
     api.persist();
+    if (session && ['edit-date', 'edit-start', 'edit-end'].includes(target.dataset.plan)) {
+      const conflicts = findSessionConflicts(current, session);
+      if (conflicts.length) api.toast(conflicts[0], 'error');
+      render();
+      return;
+    }
     if (['weekday', 'start', 'slot-start', 'slot-end'].includes(target.dataset.plan)) render();
   });
 
@@ -413,4 +503,10 @@ function labelKind(kind) {
   if (kind === 'review') return 'Revisão da autoavaliação';
   if (kind === 'custom') return 'Sessão sua';
   return 'Estudo do tópico';
+}
+
+function renderSessionLinks(links, escapeHtml) {
+  const valid = (links || []).filter((link) => link && /^https?:\/\//i.test(link.url || ''));
+  if (!valid.length) return '';
+  return `<ul class="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-xs">${valid.map((link) => `<li><a class="underline decoration-terra underline-offset-2" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.title || link.url)}</a></li>`).join('')}</ul>`;
 }

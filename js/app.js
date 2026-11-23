@@ -64,8 +64,12 @@ let editingProjectId = null;
 const session = {
   search: '',
   filter: 'all',
+  resourceLang: 'all',
+  resourceKind: 'all',
   openNotes: {},
+  openLinkForms: {},
   openPhaseNotes: {},
+  dialogResources: [],
   onboarding: { step: 1, trackId: null, level: null, hours: null, mode: 'create', companionIds: [], query: '' },
 };
 
@@ -253,17 +257,30 @@ function miniButton(label, attrs, extra = '') {
 }
 
 function renderTopic(topic, phase, index, total, titleById, doneIds) {
+  const trackState = activeTrackState();
   const strike = topic.done && state.strikethrough ? 'line-through' : '';
   const optional = topic.status === 'optional';
   const hidden = topic.status === 'hidden';
   const noteOpen = !!session.openNotes[topic.id];
+  const linkFormOpen = !!session.openLinkForms[topic.id];
   const tags = (topic.tags || []).map((tag) => `<span class="px-2 py-0.5 text-[11px] font-mono rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/60">${escapeHtml(tag)}</span>`).join('');
-  const resources = (topic.resources || []).map((resource) => {
+  const filteredResources = (topic.resources || []).filter((resource) => {
+    if (session.resourceLang !== 'all' && (resource.lang || 'pt') !== session.resourceLang) return false;
+    if (session.resourceKind !== 'all' && (resource.kind || 'leitura') !== session.resourceKind) return false;
+    return true;
+  });
+  const resources = filteredResources.map((resource) => {
     const href = safeUrl(resource.url);
     if (!href) return '';
     const kind = KIND_LABEL[resource.kind] || 'Leitura';
     const lang = resource.lang === 'en' ? 'EN' : 'PT';
-    return `<li><a class="underline decoration-terra underline-offset-2" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(resource.title)}</a> <span class="font-mono text-[10px] text-muted">${lang} · ${kind}</span></li>`;
+    const resKey = `${topic.id}::${href}`;
+    const resDone = !!(trackState.doneResources && trackState.doneResources[resKey]);
+    const resStrike = resDone && state.strikethrough ? 'line-through opacity-75' : '';
+    const removeBtn = resource.custom
+      ? ` <button type="button" data-action="remove-topic-link" data-item-id="${topic.id}" data-url="${escapeHtml(href)}" class="text-xs text-terra underline ml-1">Remover</button>`
+      : '';
+    return `<li class="flex items-start gap-2"><input type="checkbox" data-action="toggle-resource" data-item-id="${topic.id}" data-url="${escapeHtml(href)}" aria-label="Marcar recurso ${escapeHtml(resource.title)} como visto" ${resDone ? 'checked' : ''} class="mt-1.5 shrink-0" /><div><a class="underline decoration-terra underline-offset-2 ${resStrike}" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(resource.title)}</a> <span class="font-mono text-[10px] text-muted">${lang} · ${kind}${resource.custom ? ' · seu link' : ''}</span>${removeBtn}</div></li>`;
   }).join('');
   const prereq = (topic.prerequisites || []).map((id) => {
     const name = titleById.get(id);
@@ -305,8 +322,31 @@ function renderTopic(topic, phase, index, total, titleById, doneIds) {
             ${tags}
           </div>
           ${prereq ? `<p class="mt-2 text-xs text-muted">Antes: ${prereq}</p>` : ''}
-          ${resources ? `<ul class="read mt-3 space-y-2">${resources}</ul>` : ''}
-          <div class="mt-2 flex flex-wrap gap-1.5">${statusButtons}</div>
+          ${resources ? `<ul class="read mt-3 space-y-2">${resources}</ul>` : ((topic.resources || []).length ? '<p class="mt-2 text-xs text-muted">Nenhum link neste filtro.</p>' : '')}
+          <div class="mt-2 flex flex-wrap gap-1.5">${statusButtons}${hidden ? '' : miniButton('+ Link', `data-action="toggle-link-form" data-item-id="${topic.id}"`)}</div>
+          ${linkFormOpen ? `
+            <div class="mt-3 p-3 rounded-sm border border-line dark:border-sage/50 bg-paper dark:bg-night space-y-2 text-xs">
+              <p class="font-mono text-muted">Adicionar link próprio neste tópico</p>
+              <div class="grid sm:grid-cols-2 gap-2">
+                <input id="link-title-${topic.id}" placeholder="Título do material" maxlength="180" class="rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-card px-2 py-1.5" />
+                <input id="link-url-${topic.id}" type="url" placeholder="https://..." maxlength="500" class="rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-card px-2 py-1.5" />
+              </div>
+              <div class="flex flex-wrap gap-2 items-center">
+                <select id="link-lang-${topic.id}" class="rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-card px-2 py-1.5">
+                  <option value="pt">PT</option>
+                  <option value="en">EN</option>
+                </select>
+                <select id="link-kind-${topic.id}" class="rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-card px-2 py-1.5">
+                  <option value="leitura">Leitura</option>
+                  <option value="documentacao">Documentação</option>
+                  <option value="curso">Curso</option>
+                  <option value="pratica">Prática</option>
+                  <option value="video">Vídeo</option>
+                </select>
+                <button type="button" data-action="add-topic-link" data-item-id="${topic.id}" class="px-3 py-1.5 rounded-sm bg-terra dark:bg-ochre text-paper dark:text-night font-semibold">Salvar link</button>
+              </div>
+            </div>
+          ` : ''}
           ${noteOpen ? `
             <label class="block mt-3 text-xs font-mono text-muted" for="note-${topic.id}">Anotações pessoais</label>
             <textarea id="note-${topic.id}" data-action="edit-note" data-item-id="${topic.id}" rows="3" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-paper dark:bg-night p-2 text-sm">${escapeHtml(topic.note || '')}</textarea>
@@ -858,6 +898,16 @@ async function askConfirm({ title, body, confirmLabel, danger = true }) {
   return result;
 }
 
+function renderDialogResources() {
+  const list = $('topicResourcesList');
+  if (!list) return;
+  list.innerHTML = session.dialogResources.map((res, idx) => `
+    <li class="flex items-center justify-between gap-2 px-2 py-1 rounded-sm border border-line dark:border-sage/50">
+      <span class="truncate">${escapeHtml(res.title)} (${res.lang === 'en' ? 'EN' : 'PT'} · ${KIND_LABEL[res.kind] || 'Leitura'})</span>
+      <button type="button" data-remove-dialog-res="${idx}" class="text-terra underline shrink-0">Remover</button>
+    </li>`).join('');
+}
+
 function openTopicDialog(topic) {
   editingTopicId = topic?.id || null;
   $('topicDialogTitle').textContent = topic ? 'Editar tópico' : 'Novo tópico';
@@ -867,8 +917,17 @@ function openTopicDialog(topic) {
   fillLevelSelect($('topicLevel'), topic?.level || activeTrackState().level);
   $('topicHours').value = topic?.hours || 4;
   $('topicTags').value = (topic?.tags || []).join(', ');
-  $('topicResourceTitle').value = topic?.resources?.[0]?.title || '';
-  $('topicResourceUrl').value = topic?.resources?.[0]?.url || '';
+  session.dialogResources = (topic?.resources || []).filter((r) => !r.custom || topic?.custom).map((r) => ({
+    title: r.title,
+    url: r.url,
+    lang: r.lang === 'en' ? 'en' : 'pt',
+    kind: r.kind || 'leitura',
+  }));
+  $('topicResourceTitle').value = '';
+  $('topicResourceUrl').value = '';
+  $('topicResourceLang').value = 'pt';
+  $('topicResourceKind').value = 'leitura';
+  renderDialogResources();
   $('topicDialog').showModal();
 }
 
@@ -893,9 +952,15 @@ function saveTopic(event) {
   }
   const resourceTitle = $('topicResourceTitle').value.trim();
   const resourceUrl = $('topicResourceUrl').value.trim();
-  const resources = resourceTitle && safeUrl(resourceUrl)
-    ? [{ title: resourceTitle, url: resourceUrl, lang: 'pt', kind: 'leitura' }]
-    : [];
+  const resources = [...session.dialogResources];
+  if (resourceTitle && safeUrl(resourceUrl)) {
+    resources.push({
+      title: resourceTitle,
+      url: resourceUrl,
+      lang: $('topicResourceLang').value === 'en' ? 'en' : 'pt',
+      kind: $('topicResourceKind').value || 'leitura',
+    });
+  }
   const data = {
     id: editingTopicId || newId('topico'),
     phaseId: $('topicPhase').value,
@@ -1029,6 +1094,61 @@ function onRoadmapClick(event) {
     else session.openNotes[id] = true;
     renderRoadmap();
     if (session.openNotes[id]) document.getElementById(`note-${id}`)?.focus();
+    return;
+  }
+  if (action === 'toggle-link-form') {
+    const id = el.dataset.itemId;
+    if (session.openLinkForms[id]) delete session.openLinkForms[id];
+    else session.openLinkForms[id] = true;
+    renderRoadmap();
+    if (session.openLinkForms[id]) document.getElementById(`link-title-${id}`)?.focus();
+    return;
+  }
+  if (action === 'add-topic-link') {
+    const id = el.dataset.itemId;
+    const title = (document.getElementById(`link-title-${id}`)?.value || '').trim();
+    const url = (document.getElementById(`link-url-${id}`)?.value || '').trim();
+    const lang = document.getElementById(`link-lang-${id}`)?.value === 'en' ? 'en' : 'pt';
+    const kind = document.getElementById(`link-kind-${id}`)?.value || 'leitura';
+    if (!title || !safeUrl(url)) {
+      toast('Informe um título e uma URL válida (https://...).', 'error');
+      return;
+    }
+    trackState.customLinks = trackState.customLinks || {};
+    const list = trackState.customLinks[id] || [];
+    if (list.length >= 6) {
+      toast('Limite de 6 links próprios por tópico atingido.', 'error');
+      return;
+    }
+    list.push({ title: title.slice(0, 180), url: url.slice(0, 500), lang, kind });
+    trackState.customLinks[id] = list;
+    delete session.openLinkForms[id];
+    persist();
+    refresh();
+    toast('Link adicionado ao tópico.');
+    return;
+  }
+  if (action === 'remove-topic-link') {
+    const id = el.dataset.itemId;
+    const url = el.dataset.url;
+    if (trackState.customLinks && trackState.customLinks[id]) {
+      trackState.customLinks[id] = trackState.customLinks[id].filter((item) => item.url !== url);
+      if (!trackState.customLinks[id].length) delete trackState.customLinks[id];
+      persist();
+      refresh();
+      toast('Link removido.');
+    }
+    return;
+  }
+  if (action === 'toggle-resource') {
+    const id = el.dataset.itemId;
+    const url = el.dataset.url;
+    const key = `${id}::${url}`;
+    trackState.doneResources = trackState.doneResources || {};
+    if (trackState.doneResources[key]) delete trackState.doneResources[key];
+    else trackState.doneResources[key] = true;
+    persist();
+    renderRoadmap();
     return;
   }
   if (action === 'toggle-item') {
@@ -1222,8 +1342,20 @@ function bind() {
   $('resetFiltersBtn').addEventListener('click', () => {
     session.search = '';
     session.filter = 'all';
+    session.resourceLang = 'all';
+    session.resourceKind = 'all';
     $('searchInput').value = '';
+    $('resourceLangFilter').value = 'all';
+    $('resourceKindFilter').value = 'all';
     updateDashboard();
+    renderRoadmap();
+  });
+  $('resourceLangFilter').addEventListener('change', (event) => {
+    session.resourceLang = event.target.value;
+    renderRoadmap();
+  });
+  $('resourceKindFilter').addEventListener('change', (event) => {
+    session.resourceKind = event.target.value;
     renderRoadmap();
   });
   $('toggleAllPhasesBtn').addEventListener('click', () => {
@@ -1265,6 +1397,33 @@ function bind() {
   $('topicCancel').addEventListener('click', () => $('topicDialog').close());
   $('projectCancel').addEventListener('click', () => $('projectDialog').close());
   $('topicForm').addEventListener('submit', saveTopic);
+  $('topicAddResourceBtn').addEventListener('click', () => {
+    const title = $('topicResourceTitle').value.trim();
+    const url = $('topicResourceUrl').value.trim();
+    if (!title || !safeUrl(url)) {
+      toast('Informe título e URL válida (https://...) para adicionar.', 'error');
+      return;
+    }
+    if (session.dialogResources.length >= 6) {
+      toast('Máximo de 6 recursos por tópico.', 'error');
+      return;
+    }
+    session.dialogResources.push({
+      title,
+      url,
+      lang: $('topicResourceLang').value === 'en' ? 'en' : 'pt',
+      kind: $('topicResourceKind').value || 'leitura',
+    });
+    $('topicResourceTitle').value = '';
+    $('topicResourceUrl').value = '';
+    renderDialogResources();
+  });
+  $('topicResourcesList').addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-remove-dialog-res]');
+    if (!btn) return;
+    session.dialogResources.splice(Number(btn.dataset.removeDialogRes), 1);
+    renderDialogResources();
+  });
   $('projectForm').addEventListener('submit', saveProject);
   $('exportJsonBtn').addEventListener('click', exportJson);
   $('importJsonBtn').addEventListener('click', () => $('importFileInput').click());
@@ -1378,10 +1537,36 @@ function bind() {
     track: activeTrack,
     trackState: activeTrackState,
     view: () => buildRoadmap(activeTrack(), activeTrackState()),
+    companions: () => (state.profile.companionIds || [])
+      .filter((id) => id !== activeTrack().id)
+      .map((id) => trackById(id))
+      .filter(Boolean)
+      .map((t) => {
+        const ts = ensureTrack(state, t.id);
+        return { track: t, trackState: ts, view: buildRoadmap(t, ts) };
+      }),
+    isDone: (kind, refId, trackId) => {
+      const ts = trackId ? ensureTrack(state, trackId) : activeTrackState();
+      if (kind === 'project') return !!ts.completedProjects?.[refId];
+      if (kind === 'topic') return !!ts.completed?.[refId];
+      return false;
+    },
+    toggleDone: (kind, refId, trackId) => {
+      const ts = trackId ? ensureTrack(state, trackId) : activeTrackState();
+      if (kind === 'project') {
+        if (ts.completedProjects[refId]) delete ts.completedProjects[refId];
+        else ts.completedProjects[refId] = true;
+      } else if (kind === 'topic') {
+        if (ts.completed[refId]) delete ts.completed[refId];
+        else ts.completed[refId] = true;
+      }
+      persist();
+    },
+    refreshApp: refresh,
     persist,
     toast,
     escapeHtml,
-    showApp: () => { $('app').hidden = false; },
+    showApp: () => { $('app').hidden = false; refresh(); },
     hideApp: () => { $('app').hidden = true; },
     download: downloadFile,
     downloadPdf: (sessions) => downloadFile(`rumo-plano-${activeTrack().id}.pdf`, textPdf(planMarkdown(activeTrack().name, sessions).split('\n')), 'application/pdf'),

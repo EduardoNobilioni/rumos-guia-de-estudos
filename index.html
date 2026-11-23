@@ -242,6 +242,25 @@
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-line dark:border-sage/50">
+          <label class="inline-flex items-center gap-1.5 text-xs font-medium">
+            <span class="text-muted">Idioma dos links</span>
+            <select id="resourceLangFilter" class="px-2 py-1.5 rounded-sm text-xs bg-paper dark:bg-night border border-line dark:border-sage/60">
+              <option value="all">Todos</option>
+              <option value="pt">PT</option>
+              <option value="en">EN</option>
+            </select>
+          </label>
+          <label class="inline-flex items-center gap-1.5 text-xs font-medium">
+            <span class="text-muted">Formato</span>
+            <select id="resourceKindFilter" class="px-2 py-1.5 rounded-sm text-xs bg-paper dark:bg-night border border-line dark:border-sage/60">
+              <option value="all">Todos</option>
+              <option value="documentacao">Documentação</option>
+              <option value="curso">Curso</option>
+              <option value="leitura">Leitura</option>
+              <option value="pratica">Prática</option>
+              <option value="video">Vídeo</option>
+            </select>
+          </label>
           <button id="toggleAllPhasesBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60"><span id="toggleAllPhasesLabel">Recolher todas</span></button>
           <label class="inline-flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">
             <input id="strikethroughToggle" type="checkbox" checked />
@@ -340,12 +359,34 @@
         <label class="block">Tags, separadas por vírgula
           <input id="topicTags" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
         </label>
-        <label class="block">Nome de um recurso gratuito
-          <input id="topicResourceTitle" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-        </label>
-        <label class="block">URL do recurso
-          <input id="topicResourceUrl" type="url" placeholder="https://" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-        </label>
+        <div class="pt-2 border-t border-line dark:border-sage/50 space-y-2">
+          <p class="text-xs font-mono text-muted">Recursos gratuitos (você pode adicionar vários)</p>
+          <ul id="topicResourcesList" class="space-y-1 text-xs"></ul>
+          <label class="block">Nome do recurso
+            <input id="topicResourceTitle" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
+          </label>
+          <label class="block">URL do recurso
+            <input id="topicResourceUrl" type="url" placeholder="https://" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <label>Idioma
+              <select id="topicResourceLang" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2">
+                <option value="pt">PT</option>
+                <option value="en">EN</option>
+              </select>
+            </label>
+            <label>Formato
+              <select id="topicResourceKind" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2">
+                <option value="leitura">Leitura</option>
+                <option value="documentacao">Documentação</option>
+                <option value="curso">Curso</option>
+                <option value="pratica">Prática</option>
+                <option value="video">Vídeo</option>
+              </select>
+            </label>
+          </div>
+          <button type="button" id="topicAddResourceBtn" class="px-3 py-1.5 rounded-sm text-xs border border-line dark:border-sage/60">+ Adicionar recurso à lista</button>
+        </div>
       </div>
       <div class="mt-5 flex justify-end gap-2">
         <button type="button" id="topicCancel" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Cancelar</button>

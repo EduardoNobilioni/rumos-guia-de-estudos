@@ -17,12 +17,12 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 ## O que o app faz
 
 - **Onboarding.** Na primeira visita: trilha, nível (iniciante, intermediário ou avançado) e horas por semana. A escolha é em três grupos — Carreiras, Fundamentos e Tecnologias — com busca. O botão **Refazer/Trocar trilha** abre as mesmas perguntas. O progresso de cada trilha fica guardado.
-- **Tecnologia junto.** Na escolha da trilha dá para marcar uma ou mais trilhas de tecnologia (Python, JavaScript, SQL, Git e GitHub, Linux, Docker) para estudar ao lado da principal. O progresso não se mistura. No topo da página, os botões trocam de trilha.
-- **Personalização.** Tópicos abaixo do seu nível começam como opcionais. Você pode torná-los obrigatórios, ocultá-los, criar os seus e reordenar tópicos e etapas. Trocar de trilha não apaga as outras.
+- **Tecnologia junto.** Na escolha da trilha dá para marcar uma ou mais trilhas de tecnologia (Python, JavaScript, TypeScript, React, Node.js, SQL, Git e GitHub, Linux, Docker, Kubernetes) para estudar ao lado da principal. O progresso não se mistura. No topo da página, os botões trocam de trilha.
+- **Personalização e links.** Tópicos abaixo do seu nível começam como opcionais. Você pode torná-los obrigatórios, ocultá-los, criar os seus (com múltiplos recursos) e reordenar tópicos e etapas. Em qualquer tópico dá para adicionar links próprios (**+ Link**), marcar materiais como vistos e filtrar por idioma (`PT` / `EN`) ou formato. Trocar de trilha não apaga as outras.
 - **Anotações.** Cada tópico tem anotações. Cada etapa tem um campo **Observações**.
 - **Projetos.** Cada etapa traz ideias por nível. Dá para ver só o seu nível ou todos. Muitos projetos têm roteiro e definição de pronto, com caixas para ir marcando. Você também pode criar uma ideia sua e marcar projetos como feitos.
 - **Autoavaliação.** Perguntas de múltipla escolha por etapa e, em alguns tópicos, no próprio tópico. A resposta aparece na hora, com uma explicação. Se errar, o app aponta o tópico para revisar. Se o acerto ficar abaixo de 70%, a etapa ou o tópico mostra **Revisar**. Não é nota.
-- **Plano de estudo.** Você escolhe a data de início, os dias e o horário de cada dia. As horas da trilha já vêm preenchidas. O app distribui tópicos, projetos e uma revisão, na ordem e respeitando pré-requisitos. A prévia deixa mudar data, horário e nome, travar uma sessão, apagar, encurtar ou alongar 15 minutos e pular datas. **Recalcular a partir de hoje** remonta o que ainda não passou e preserva o que está travado.
+- **Plano de estudo.** Você escolhe a data de início, os dias, o horário de cada dia e o tamanho mínimo/máximo dos blocos de estudo. As horas da trilha já vêm preenchidas. O app distribui tópicos, projetos e revisões (inclusive revisão espaçada +7 dias e tecnologias paralelas intercaladas, se marcado), na ordem e respeitando pré-requisitos. As sessões mostram os links do tópico e permitem concluir direto pelo plano. A prévia deixa mudar data, horário e nome (travando a sessão editada e alertando sobre conflitos com aulas ou outras sessões), apagar, encurtar ou alongar 15 minutos e pular datas. **Recalcular a partir de hoje** remonta o que ainda não passou e preserva o que está travado.
 - **Grade da faculdade.** Dá para importar um `.ics` (Google Agenda, Outlook, Apple Calendar ou o sistema da universidade), cadastrar o horário semanal na mão ou colar um CSV (`seg,08:00,10:00,Cálculo` ou uma data). Aulas aparecem como **Ocupado** e o estudo não cai em cima delas. Você pode reservar minutos antes e depois da aula e reduzir a carga numa semana de prova.
 - **Exportar e compartilhar.** Backup JSON (o arquivo antigo do Full-Stack ainda importa), checklist Markdown, imagem PNG, PDF da trilha, PDF e impressão do plano, e um `.ics` só com as sessões de estudo. O link de compartilhar leva a configuração da trilha, não as anotações nem o progresso.
 - **Temas.** Claro e escuro. Sem preferência salva, o app segue o tema do sistema.
@@ -33,11 +33,11 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 
 ## Trilhas
 
-**Carreiras.** Front-end, Back-end, Full-Stack, Ciência de Dados, Analista de Dados, Engenharia de Dados, Machine Learning e IA, Java e Spring Boot, Mobile, QA e Testes de Software, DevOps.
+**Carreiras.** Front-end, Back-end, Full-Stack, Ciência de Dados, Analista de Dados, Engenharia de Dados, Machine Learning e IA, Java e Spring Boot, Mobile, QA e Testes de Software, DevOps, Cibersegurança, Cloud e Arquitetura em Nuvem, Arquitetura de Software e System Design.
 
-**Fundamentos.** Fundamentos da Computação, Estruturas de Dados e Algoritmos.
+**Fundamentos.** Fundamentos da Computação, Estruturas de Dados e Algoritmos, Banco de Dados e Modelagem, Engenharia de Software e Boas Práticas.
 
-**Tecnologias.** Python, JavaScript, SQL, Git e GitHub, Linux, Docker.
+**Tecnologias.** Python, JavaScript, TypeScript, React, Node.js, SQL, Git e GitHub, Linux, Docker, Kubernetes.
 
 Ciência de Dados é a trilha que se chamava Dados. O identificador no arquivo e no progresso salvo continua `dados`, então tópico marcado, anotação e autoavaliação antiga permanecem. Os tópicos novos (planilha, Power BI, teste A/B, coleta) entram sem apagar os antigos. Analista, Engenharia de Dados e Machine Learning são trilhas novas, com o próprio progresso. Quem abre a Ciência de Dados vê um aviso disso, uma vez.
 
@@ -137,9 +137,10 @@ Não há dependência para instalar. O `npm` só chama o Node.
 ```bash
 npm test
 npm run validate
+npm run check-links
 ```
 
-`npm test` cobre progresso, backup antigo, link, recorrência do `.ics` e o plano em volta da grade. `npm run validate` confere se cada trilha tem etapas, recursos e autoavaliação.
+`npm test` cobre progresso, backup antigo, link, recorrência do `.ics`, plano em volta da grade, detecção de conflitos e intercalação de tecnologias. `npm run validate` confere se cada trilha tem etapas, recursos e autoavaliação. `npm run check-links` verifica a disponibilidade HTTP das URLs das trilhas.
 
 ## Publicar no GitHub Pages
 

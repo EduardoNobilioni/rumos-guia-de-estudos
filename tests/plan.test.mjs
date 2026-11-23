@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { parseCsvSchedule, parseIcs } from '../js/ics.js';
-import { buildWorkItems, defaultStudyPlan, generateSessions, sessionsToIcs } from '../js/plan.js';
+import { buildWorkItems, defaultStudyPlan, findSessionConflicts, generateSessions, interleaveWorkItems, sessionsToIcs } from '../js/plan.js';
 import { sanitizeTrackState } from '../js/model.js';
 
 const ICS = `BEGIN:VCALENDAR
@@ -130,6 +130,46 @@ test('backup guarda a grade e o plano', () => {
   const again = sanitizeTrackState(state);
   assert.equal(again.studyPlan.university.manual[0].title, 'Física');
   assert.equal(again.studyPlan.weekdays.includes(1), true);
+});
+
+test('interleaveWorkItems mistura trilha principal e tecnologias paralelas', () => {
+  const primary = [{ refId: 'p1' }, { refId: 'p2' }, { refId: 'p3' }];
+  const comp = [{ refId: 'c1' }, { refId: 'c2' }];
+  const merged = interleaveWorkItems(primary, [comp]);
+  assert.deepEqual(merged.map((x) => x.refId), ['p1', 'p2', 'c1', 'p3', 'c2']);
+});
+
+test('findSessionConflicts detecta horário inválido, aula e sobreposição', () => {
+  const plan = defaultStudyPlan(4);
+  plan.university.manual.push({ id: 'a1', weekday: 1, start: '08:00', end: '10:00', title: 'Cálculo' });
+  plan.sessions = [
+    { id: 's1', date: '2026-03-02', start: '19:00', end: '20:00', title: 'HTTP' },
+  ];
+  assert.ok(findSessionConflicts(plan, { id: 's2', date: '2026-03-02', start: '20:00', end: '19:00' }).length > 0);
+  assert.match(findSessionConflicts(plan, { id: 's2', date: '2026-03-02', start: '09:00', end: '10:30' })[0], /Cálculo/);
+  assert.match(findSessionConflicts(plan, { id: 's2', date: '2026-03-02', start: '19:30', end: '20:30' })[0], /HTTP/);
+  assert.equal(findSessionConflicts(plan, { id: 's2', date: '2026-03-02', start: '20:00', end: '21:00' }).length, 0);
+});
+
+test('maxBlockMinutes limita duração da sessão e spacedReview agenda revisão +7 dias', () => {
+  const plan = defaultStudyPlan(6);
+  plan.startDate = '2026-03-02';
+  plan.weekdays = [1];
+  plan.slots = { 1: { start: '18:00', end: '22:00' } };
+  plan.maxBlockMinutes = 60;
+  plan.spacedReview = true;
+  const items = [{
+    kind: 'topic', refId: 't1', phaseId: 'f1', title: 'HTML', minutes: 120, summary: 'Base', links: [],
+  }];
+  const sessions = generateSessions(plan, items, { idFactory: sequence() });
+  const study = sessions.filter((s) => s.kind === 'topic');
+  assert.equal(study.length, 2);
+  assert.equal(study[0].start, '18:00');
+  assert.equal(study[0].end, '19:00');
+  const spaced = sessions.find((s) => s.kind === 'review' && s.date >= '2026-03-09');
+  assert.ok(spaced);
+  const ics = sessionsToIcs(sessions, 'Plano', 'America/Sao_Paulo');
+  assert.match(ics, /DTSTART;TZID=America\/Sao_Paulo:/);
 });
 
 function sequence() {
