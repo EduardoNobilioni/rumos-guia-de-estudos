@@ -1,26 +1,32 @@
 :root {
   color-scheme: light;
-  --font-body: "Atkinson Hyperlegible Mono", ui-monospace, Menlo, Consolas, monospace;
-  --font-ui: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  --paper: #e3ded2;
-  --soft: #f3eee4;
-  --blush: #e9ddd5;
-  --ink: #2b211b;
-  --muted: #3a2d25;
-  --night: #2a201a;
-  --card: #3a2d25;
-  --ochre: #ddc08a;
-  --sage: #9aa8a4;
-  --line: #5e6b68;
-  --terra: #7a3329;
-  --warn: #5c241c;
-  --focus: #7a3329;
+  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --paper: #F7F8FA;
+  --soft: #FFFFFF;
+  --blush: #F1F5F9;
+  --ink: #0F172A;
+  --muted: #475569;
+  --night: #0E141B;
+  --card: #161F29;
+  --ochre: #60A5FA;
+  --sage: #64748B;
+  --line: #64748B;
+  --terra: #1D4ED8;
+  --warn: #B91C1C;
+  --success: #047857;
+  --amber: #B45309;
+  --focus: #1D4ED8;
 }
 
 html.dark {
   color-scheme: dark;
-  --muted: #e4d8ce;
-  --focus: #ddc08a;
+  --muted: #94A3B8;
+  --success: #34D399;
+  --amber: #FBBF24;
+  --warn: #F87171;
+  --focus: #60A5FA;
 }
 
 html.dark .text-muted {
@@ -29,14 +35,9 @@ html.dark .text-muted {
 
 html body {
   font-family: var(--font-body);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 1.65;
-}
-
-body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
-  background-blend-mode: multiply;
+  line-height: 1.6;
 }
 
 h1,
@@ -48,11 +49,13 @@ label,
 legend,
 summary,
 input,
-select,
-.font-mono,
-.phase-index,
-.track-switch {
+select {
   font-family: var(--font-ui);
+}
+
+.font-mono,
+.phase-index {
+  font-family: var(--font-mono);
 }
 
 html body :is(h1, h2, h3, h4) {
@@ -226,32 +229,73 @@ html.dark .progress-fill {
 }
 
 .busy-block {
-  border: 1px solid #5e6b68;
-  background-color: #d5dbd9;
-  background-image: repeating-linear-gradient(-45deg, #9aa8a4 0 2px, transparent 2px 7px);
-  color: #2b211b;
+  border: 1px solid #64748B;
+  background-color: #E2E8F0;
+  background-image: repeating-linear-gradient(-45deg, rgba(100, 116, 139, 0.28) 0 2px, transparent 2px 8px);
+  color: #0F172A;
 }
 
 html.dark .busy-block {
-  border-color: #9aa8a4;
-  background-color: #2a201a;
-  background-image: repeating-linear-gradient(-45deg, #9aa8a4 0 2px, transparent 2px 7px);
-  color: #e9ddd5;
+  border-color: #64748B;
+  background-color: #1E293B;
+  background-image: repeating-linear-gradient(-45deg, rgba(148, 163, 184, 0.22) 0 2px, transparent 2px 8px);
+  color: #F1F5F9;
 }
 
 .study-block {
   border: 1px solid var(--terra);
-  background: #f6f1ea;
+  background: #EFF6FF;
 }
 
 html.dark .study-block {
   border-color: var(--ochre);
-  background: #4a3a2c;
+  background: #172538;
+}
+
+.topic-node {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+html.dark .topic-node {
+  background: var(--night);
+  border-color: rgba(100, 116, 139, 0.55);
+}
+
+.topic-node:hover {
+  transform: translateY(-1px);
+  border-color: var(--terra);
+}
+
+html.dark .topic-node:hover {
+  border-color: var(--ochre);
+}
+
+.topic-node.is-done {
+  border-color: var(--success);
+  background: rgba(4, 120, 87, 0.06);
+}
+
+html.dark .topic-node.is-done {
+  background: rgba(52, 211, 153, 0.08);
+}
+
+.topic-node.is-optional {
+  border-style: dashed;
+  border-color: var(--amber);
 }
 
 dialog {
-  width: min(100% - 2rem, 40rem);
-  max-height: min(100% - 2rem, 48rem);
+  width: min(100% - 2rem, 42rem);
+  max-height: min(100% - 2rem, 50rem);
   border: 0;
   padding: 0;
   background: transparent;
@@ -259,7 +303,8 @@ dialog {
 }
 
 dialog::backdrop {
-  background: rgba(42, 32, 26, 0.72);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(2px);
 }
 
 .choice-card {

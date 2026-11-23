@@ -21,10 +21,11 @@
   <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
-  <meta name="theme-color" content="#2a201a" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0E141B" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/app.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -33,32 +34,33 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Atkinson Hyperlegible Mono', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
-            mono: ['IBM Plex Mono', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
+            sans: ['Plus Jakarta Sans', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
           },
           borderRadius: {
             none: '0',
-            sm: '2px',
-            DEFAULT: '2px',
-            md: '2px',
-            lg: '2px',
-            xl: '2px',
-            '2xl': '2px',
-            full: '2px',
+            sm: '6px',
+            DEFAULT: '8px',
+            md: '10px',
+            lg: '12px',
+            xl: '14px',
+            '2xl': '18px',
+            full: '9999px',
           },
           colors: {
-            paper: '#e3ded2',
-            soft: '#f3eee4',
-            blush: '#e9ddd5',
-            ink: '#2b211b',
-            muted: '#3a2d25',
-            night: '#2a201a',
-            card: '#3a2d25',
-            ochre: '#ddc08a',
-            sage: '#9aa8a4',
-            line: '#5e6b68',
-            terra: '#7a3329',
-            warn: '#f3ddd6',
+            paper: '#F7F8FA',
+            soft: '#FFFFFF',
+            blush: '#F1F5F9',
+            ink: '#0F172A',
+            muted: '#475569',
+            night: '#0E141B',
+            card: '#161F29',
+            ochre: '#60A5FA',
+            sage: '#64748B',
+            line: '#64748B',
+            terra: '#1D4ED8',
+            warn: '#FCA5A5',
+            emerald: '#047857',
           }
         }
       }
@@ -73,7 +75,7 @@
         : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       document.documentElement.classList.toggle('dark', theme !== 'light');
       const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.content = theme === 'light' ? '#e3ded2' : '#2a201a';
+      if (meta) meta.content = theme === 'light' ? '#F7F8FA' : '#0E141B';
     } catch (error) {
       /* o app segue no tema do sistema, ou escuro se a preferência não puder ser lida */
     }
@@ -261,6 +263,7 @@
               <option value="video">Vídeo</option>
             </select>
           </label>
+          <button id="viewModeBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-semibold border border-terra dark:border-ochre text-terra dark:text-ochre">Modo: Mapa visual</button>
           <button id="toggleAllPhasesBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60"><span id="toggleAllPhasesLabel">Recolher todas</span></button>
           <label class="inline-flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">
             <input id="strikethroughToggle" type="checkbox" checked />
@@ -438,7 +441,25 @@
     </form>
   </dialog>
 
+  <dialog id="topicDetailDialog" aria-labelledby="topicDetailTitle">
+    <div class="rounded-lg bg-soft dark:bg-card border border-line dark:border-sage/50 p-6 max-h-[85vh] overflow-y-auto shadow-xl">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p id="topicDetailEyebrow" class="text-xs font-mono uppercase tracking-wider text-terra dark:text-ochre font-semibold"></p>
+          <h2 id="topicDetailTitle" class="mt-1 text-xl font-bold"></h2>
+        </div>
+        <button type="button" id="topicDetailClose" class="px-3 py-1.5 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Fechar</button>
+      </div>
+      <div id="topicDetailBody" class="mt-4"></div>
+    </div>
+  </dialog>
+
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0" role="status" aria-live="polite"></div>
   <script type="module" src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
 </body>
 </html>

@@ -64,6 +64,8 @@ let editingProjectId = null;
 const session = {
   search: '',
   filter: 'all',
+  viewMode: 'map',
+  detailTopicId: null,
   resourceLang: 'all',
   resourceKind: 'all',
   openNotes: {},
@@ -181,7 +183,7 @@ function showScreen(name) {
 function applyTheme() {
   document.documentElement.classList.toggle('dark', state.theme !== 'light');
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = state.theme === 'light' ? '#e3ded2' : '#2a201a';
+  if (meta) meta.content = state.theme === 'light' ? '#F7F8FA' : '#0E141B';
   $('themeLabel').textContent = state.theme === 'light' ? 'Tema escuro' : 'Tema claro';
   $('themeIcon').textContent = state.theme === 'light' ? '☾' : '☀';
   $('onbThemeBtn').textContent = state.theme === 'light' ? 'Tema escuro' : 'Tema claro';
@@ -254,6 +256,57 @@ function checkbox(checked, attrs, label) {
 
 function miniButton(label, attrs, extra = '') {
   return `<button type="button" ${attrs} class="px-2 py-1 rounded-sm text-[11px] font-medium border border-line dark:border-sage/60 text-muted dark:text-blush ${extra}">${label}</button>`;
+}
+
+function renderTopicNode(topic, titleById, doneIds) {
+  const strike = topic.done && state.strikethrough ? 'line-through opacity-75' : '';
+  const optional = topic.status === 'optional';
+  const resCount = (topic.resources || []).length;
+  const pendingPrereqs = (topic.prerequisites || []).filter((id) => !doneIds.has(id) && titleById.has(id));
+  const nodeClass = topic.done ? 'is-done' : (optional ? 'is-optional' : '');
+  return `
+    <div class="topic-node ${nodeClass}">
+      <div class="pt-0.5 shrink-0">
+        ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
+      </div>
+      <button type="button" data-action="open-topic-detail" data-item-id="${topic.id}" class="min-w-0 flex-1 text-left">
+        <p class="text-sm font-semibold leading-snug ${strike}">${escapeHtml(topic.title)}</p>
+        <p class="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-muted">
+          <span>${LEVEL_LABELS[topic.level] || topic.level}</span>
+          <span>·</span>
+          <span>${Number(topic.hours) || 0} h</span>
+          <span>·</span>
+          <span>${resCount} ${resCount === 1 ? 'link' : 'links'}</span>
+          ${optional ? '<span class="px-1.5 py-0.5 rounded-sm border border-line text-[10px]">Opcional</span>' : ''}
+        </p>
+        ${pendingPrereqs.length ? `<p class="mt-1 text-[11px] text-muted truncate">Antes: ${escapeHtml(pendingPrereqs.map((id) => titleById.get(id)).join(', '))}</p>` : ''}
+      </button>
+    </div>`;
+}
+
+function renderTopicDetail(topicId) {
+  const dialog = $('topicDetailDialog');
+  if (!dialog) return;
+  const located = findTopic(topicId);
+  if (!located) {
+    session.detailTopicId = null;
+    if (dialog.open) dialog.close();
+    return;
+  }
+  const trackState = activeTrackState();
+  const view = buildRoadmap(activeTrack(), trackState);
+  const titleById = new Map();
+  const doneIds = new Set();
+  view.phases.forEach((p) => p.topics.forEach((t) => {
+    titleById.set(t.id, t.title);
+    if (t.done) doneIds.add(t.id);
+  }));
+  const phase = view.phases.find((p) => p.id === located.phase.id) || located.phase;
+  const idx = phase.topics.findIndex((t) => t.id === topicId);
+  const topic = phase.topics[idx] || located.topic;
+  $('topicDetailEyebrow').textContent = `Etapa ${String(phase.number).padStart(2, '0')} · ${phase.title}`;
+  $('topicDetailTitle').textContent = topic.title;
+  $('topicDetailBody').innerHTML = renderTopic(topic, phase, idx, phase.topics.length, titleById, doneIds);
 }
 
 function renderTopic(topic, phase, index, total, titleById, doneIds) {
@@ -433,14 +486,16 @@ function renderPhase(phase, query, phaseHit) {
   const notesKnown = Object.prototype.hasOwnProperty.call(session.openPhaseNotes, phase.id);
   const notesOpen = noteHit || (notesKnown ? session.openPhaseNotes[phase.id] : phase.note.trim().length > 0);
   const allIndexes = phase.topics;
-  const items = topics.map((topic) => renderTopic(
-    topic,
-    phase,
-    allIndexes.findIndex((item) => item.id === topic.id),
-    allIndexes.length,
-    titleById,
-    doneIds,
-  )).join('');
+  const items = session.viewMode === 'map'
+    ? `<div class="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">${topics.map((topic) => renderTopicNode(topic, titleById, doneIds)).join('')}</div>`
+    : `<div class="divide-y divide-line dark:divide-sage/40">${topics.map((topic) => renderTopic(
+      topic,
+      phase,
+      allIndexes.findIndex((item) => item.id === topic.id),
+      allIndexes.length,
+      titleById,
+      doneIds,
+    )).join('')}</div>`;
   const otherLevels = phase.projects.some((project) => project.level !== trackState.level);
   const projectHint = trackState.showAllProjectLevels
     ? 'Mostrando todos os níveis.'
@@ -474,7 +529,7 @@ function renderPhase(phase, query, phaseHit) {
         </div>
       </div>
       ${collapsed ? '' : `
-        <div class="divide-y divide-line dark:divide-sage/40">${items}</div>
+        ${items}
         <div class="p-4 sm:px-5 border-t border-line dark:border-sage/50">
           <div class="flex items-center justify-between gap-2">
             <h3 class="text-sm font-bold">Ideias de projeto</h3>
@@ -636,6 +691,7 @@ function refresh() {
   updateHeader();
   updateDashboard();
   renderRoadmap();
+  if ($('topicDetailDialog').open && session.detailTopicId) renderTopicDetail(session.detailTopicId);
 }
 
 function choiceCard(name, value, title, text, selected, type = 'radio') {
@@ -1080,6 +1136,12 @@ function onRoadmapClick(event) {
   if (!el) return;
   const trackState = activeTrackState();
   const action = el.dataset.action;
+  if (action === 'open-topic-detail') {
+    session.detailTopicId = el.dataset.itemId;
+    renderTopicDetail(session.detailTopicId);
+    $('topicDetailDialog').showModal();
+    return;
+  }
   if (action === 'toggle-phase') {
     const id = el.dataset.phaseId;
     if (trackState.collapsedPhases[id]) delete trackState.collapsedPhases[id];
@@ -1357,6 +1419,34 @@ function bind() {
   $('resourceKindFilter').addEventListener('change', (event) => {
     session.resourceKind = event.target.value;
     renderRoadmap();
+  });
+  $('viewModeBtn').addEventListener('click', () => {
+    session.viewMode = session.viewMode === 'map' ? 'list' : 'map';
+    $('viewModeBtn').textContent = session.viewMode === 'map' ? 'Modo: Mapa visual' : 'Modo: Lista detalhada';
+    renderRoadmap();
+  });
+  $('topicDetailClose').addEventListener('click', () => {
+    session.detailTopicId = null;
+    $('topicDetailDialog').close();
+  });
+  $('topicDetailDialog').addEventListener('close', () => {
+    session.detailTopicId = null;
+  });
+  $('topicDetailBody').addEventListener('click', (event) => {
+    const el = event.target.closest('[data-action]');
+    if (!el) return;
+    handleAction(el, event);
+    if (session.detailTopicId && $('topicDetailDialog').open) renderTopicDetail(session.detailTopicId);
+  });
+  $('topicDetailBody').addEventListener('input', (event) => {
+    const el = event.target;
+    if (el.dataset.action === 'edit-note') {
+      const id = el.dataset.itemId;
+      const trackState = activeTrackState();
+      if (el.value.trim()) trackState.notes[id] = el.value;
+      else delete trackState.notes[id];
+      persist();
+    }
   });
   $('toggleAllPhasesBtn').addEventListener('click', () => {
     const trackState = activeTrackState();

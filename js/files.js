@@ -113,12 +113,12 @@ export function roadmapMarkdown(track, view) {
   return lines.join('\n');
 }
 
-const FONT_BODY = '"Atkinson Hyperlegible Mono", ui-monospace, Menlo, Consolas, monospace';
-const FONT_UI = '"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace';
+const FONT_BODY = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+const FONT_UI = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
 const MARK_NORTH = [[25.19, 6.81], [20.60, 17.34], [14.66, 11.40]];
 const MARK_TAIL = [[6.81, 25.19], [11.40, 14.66], [17.34, 20.60]];
-const MARK_NORTH_LIGHT = '#7a3329';
-const MARK_TAIL_LIGHT = '#887655';
+const MARK_NORTH_LIGHT = '#1D4ED8';
+const MARK_TAIL_LIGHT = '#64748B';
 
 function brandMarkPdf() {
   const paint = (points, rgb) => {
@@ -161,25 +161,25 @@ export function drawRoadmap(canvas, track, view) {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#e3ded2';
+  ctx.fillStyle = '#F7F8FA';
   ctx.fillRect(0, 0, width, height);
   drawBrandMark(ctx, 48, 22, 40);
-  ctx.fillStyle = '#2b211b';
-  ctx.font = `600 32px ${FONT_UI}`;
+  ctx.fillStyle = '#0F172A';
+  ctx.font = `700 32px ${FONT_UI}`;
   ctx.fillText('rumo', 100, 52);
-  ctx.font = `500 20px ${FONT_UI}`;
-  ctx.fillStyle = '#7a3329';
+  ctx.font = `600 20px ${FONT_UI}`;
+  ctx.fillStyle = '#1D4ED8';
   ctx.fillText(track.name, 48, 108);
   let y = 168;
   for (const phase of view.phases) {
-    ctx.fillStyle = '#2b211b';
+    ctx.fillStyle = '#0F172A';
     ctx.font = `600 18px ${FONT_UI}`;
     ctx.fillText(`Etapa ${phase.number}: ${phase.title}`, 48, y);
     y += line;
-    ctx.font = `400 17px ${FONT_BODY}`;
+    ctx.font = `400 16px ${FONT_BODY}`;
     for (const topic of phase.topics) {
       if (topic.status === 'hidden') continue;
-      ctx.fillStyle = topic.done ? '#7a3329' : '#2b211b';
+      ctx.fillStyle = topic.done ? '#047857' : '#0F172A';
       const prefix = topic.done ? '✓' : '○';
       const optional = topic.status === 'optional' ? ' · opcional' : '';
       ctx.fillText(`${prefix}  ${topic.title}${optional}`, 72, y);

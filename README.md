@@ -25,7 +25,8 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 - **Plano de estudo.** Você escolhe a data de início, os dias, o horário de cada dia e o tamanho mínimo/máximo dos blocos de estudo. As horas da trilha já vêm preenchidas. O app distribui tópicos, projetos e revisões (inclusive revisão espaçada +7 dias e tecnologias paralelas intercaladas, se marcado), na ordem e respeitando pré-requisitos. As sessões mostram os links do tópico e permitem concluir direto pelo plano. A prévia deixa mudar data, horário e nome (travando a sessão editada e alertando sobre conflitos com aulas ou outras sessões), apagar, encurtar ou alongar 15 minutos e pular datas. **Recalcular a partir de hoje** remonta o que ainda não passou e preserva o que está travado.
 - **Grade da faculdade.** Dá para importar um `.ics` (Google Agenda, Outlook, Apple Calendar ou o sistema da universidade), cadastrar o horário semanal na mão ou colar um CSV (`seg,08:00,10:00,Cálculo` ou uma data). Aulas aparecem como **Ocupado** e o estudo não cai em cima delas. Você pode reservar minutos antes e depois da aula e reduzir a carga numa semana de prova.
 - **Exportar e compartilhar.** Backup JSON (o arquivo antigo do Full-Stack ainda importa), checklist Markdown, imagem PNG, PDF da trilha, PDF e impressão do plano, e um `.ics` só com as sessões de estudo. O link de compartilhar leva a configuração da trilha, não as anotações nem o progresso.
-- **Temas.** Claro e escuro. Sem preferência salva, o app segue o tema do sistema.
+- **Visualização em mapa + popup.** Por padrão, cada etapa exibe um mapa limpo com nós clicáveis (nível, horas, quantidade de links e pré-requisitos). Clicar no tópico abre o popup com descrição, recursos filtráveis, anotações, quiz e ações — ou você pode alternar para **Modo: Lista detalhada** quando quiser.
+- **Temas e offline (PWA).** Claro e escuro (seguindo o sistema quando não há preferência salva) e suporte offline via Service Worker (`sw.js`) e `manifest.webmanifest`.
 
 ![Trilha com progresso, autoavaliação e o visto no tópico concluído](docs/screenshots/trilha.png)
 
@@ -55,24 +56,18 @@ Ciência de Dados é a trilha que se chamava Dados. O identificador no arquivo e
 
 ## Visual
 
-O visual é plano, de meados do século: cantos quase retos, borda de 1 px, sem gradiente e sem brilho. Não há serifada. O texto corrido usa Atkinson Hyperlegible Mono, desenhada para leitura longa e para distinguir l, 1 e I, e 0 e O. Títulos, rótulos, botões e metadados usam IBM Plex Mono: uma mono de manual técnico, mais próxima dessa paleta do que uma fonte de editor de código. O corpo fica em 17 px, peso 400, entrelinha 1,65 e no máximo cerca de 70 caracteres por linha. Frases longas não vão em caixa alta. A página pede as fontes com `font-display: swap` e, se elas não carregarem, cai em ui-monospace, Menlo, Consolas e monospace.
+O visual prioriza leitura confortável, clareza e foco de estudo com base em psicologia das cores e contraste WCAG 2.2 AA: cantos suaves (`6–12 px`), bordas sutis e respiro generoso. O texto corrido e títulos usam Plus Jakarta Sans; horas, metadados e tags usam JetBrains Mono.
 
-O PNG da trilha e a impressão do plano usam as mesmas duas famílias. O PDF gerado no navegador usa Courier, a mono que o formato já traz, em 10 pt com entrelinha 1,6 e linhas de até 70 caracteres. Esse gerador não embute arquivo de fonte.
-
-As cores partem de uma paleta midcentury (aproximações dos tons Benjamin Moore) e foram ajustadas para caber em WCAG 2.2 AA e no contraste APCA do rascunho WCAG 3 (Lc 75 ou mais no texto corrido, 60 na interface, 45 em borda e ícone).
-
-| Papel | Cor | Uso |
-| --- | --- | --- |
-| Ashwood | `#e3ded2` | Fundo claro |
-| Superfície | `#f3eee4` | Cartões no tema claro |
-| Opulence | `#e9ddd5` | Texto principal no tema escuro |
-| Tinta | `#2b211b` | Texto principal no tema claro |
-| Noite | `#2a201a` | Fundo escuro |
-| Cartão escuro | `#3a2d25` | Cartões no tema escuro |
-| Terra cotta | `#7a3329` | Botão e destaque no tema claro; avisos de revisar |
-| Tan | `#ddc08a` | Destaque no tema escuro. É o Woodstock Tan clareado para o contraste |
-| Wales Gray | `#9aa8a4` | Hachura dos horários ocupados e bordas no tema escuro |
-| Borda clara | `#5e6b68` | Wales Gray escurecido, para a borda aparecer no papel |
+| Papel | Claro | Escuro | Uso |
+| --- | --- | --- | --- |
+| Fundo | `#F7F8FA` | `#0E141B` | Fundo da página |
+| Superfície | `#FFFFFF` | `#161F29` | Cartões e popups |
+| Texto principal | `#0F172A` | `#F1F5F9` | Leitura principal |
+| Texto secundário | `#475569` | `#94A3B8` | Rótulos e metadados |
+| Destaque / Foco | `#1D4ED8` | `#60A5FA` | Botões, foco e ação principal |
+| Progresso | `#047857` | `#34D399` | Tópico concluído |
+| Atenção leve | `#B45309` | `#FBBF24` | Opcional / Revisar |
+| Borda / Neutro | `#64748B` | `#64748B` | Contornos e hachura de ocupado |
 
 O horário de aula é hachurado e traz a palavra **Ocupado**. A sessão de estudo tem borda na cor de destaque. Tópico concluído tem um visto desenhado, não só um quadrado pintado. Etapa pela metade mostra um traço.
 
@@ -103,7 +98,8 @@ Não há analytics, conta nem envio dos seus dados para um servidor deste projet
 ## Estrutura
 
 - `index.html` — página
-- `css/app.css` — tema, foco, hachura da grade e impressão
+- `manifest.webmanifest` e `sw.js` — manifesto PWA e cache offline
+- `css/app.css` — tema, foco, nós do mapa, hachura da grade e impressão
 - `js/app.js` — interface da trilha e da autoavaliação
 - `js/plan-screen.js` — plano de estudo e importação da grade
 - `js/plan.js` — distribuição das sessões
