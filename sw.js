@@ -7,6 +7,7 @@ const CORE_ASSETS = [
   './js/model.js',
   './js/plan.js',
   './js/plan-screen.js',
+  './js/dashboard-screen.js',
   './js/ics.js',
   './js/files.js',
   './js/share.js',

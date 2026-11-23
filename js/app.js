@@ -35,6 +35,7 @@ import {
 import { decodePlan, encodePlan, planFromHash } from './share.js';
 import { drawRoadmap, roadmapLines, roadmapMarkdown, textPdf } from './files.js';
 import { initPlanScreen } from './plan-screen.js';
+import { initDashboardScreen } from './dashboard-screen.js';
 import { planMarkdown } from './plan.js';
 
 const KIND_LABEL = {
@@ -1660,6 +1661,23 @@ function bind() {
     hideApp: () => { $('app').hidden = true; },
     download: downloadFile,
     downloadPdf: (sessions) => downloadFile(`rumo-plano-${activeTrack().id}.pdf`, textPdf(planMarkdown(activeTrack().name, sessions).split('\n')), 'application/pdf'),
+  });
+  initDashboardScreen({
+    track: activeTrack,
+    trackState: activeTrackState,
+    view: () => buildRoadmap(activeTrack(), activeTrackState()),
+    companions: () => (state.profile.companionIds || [])
+      .filter((id) => id !== activeTrack().id)
+      .map((id) => trackById(id))
+      .filter(Boolean)
+      .map((t) => {
+        const ts = ensureTrack(state, t.id);
+        return { track: t, trackState: ts, view: buildRoadmap(t, ts) };
+      }),
+    exportJson,
+    escapeHtml,
+    showApp: () => { $('app').hidden = false; refresh(); },
+    hideApp: () => { $('app').hidden = true; },
   });
   $('quizDialog').addEventListener('close', () => {
     if (!$('app').hidden) refresh();

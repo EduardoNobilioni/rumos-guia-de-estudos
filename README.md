@@ -26,6 +26,7 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 - **Grade da faculdade.** Dá para importar um `.ics` (Google Agenda, Outlook, Apple Calendar ou o sistema da universidade), cadastrar o horário semanal na mão ou colar um CSV (`seg,08:00,10:00,Cálculo` ou uma data). Aulas aparecem como **Ocupado** e o estudo não cai em cima delas. Você pode reservar minutos antes e depois da aula e reduzir a carga numa semana de prova.
 - **Exportar e compartilhar.** Backup JSON (o arquivo antigo do Full-Stack ainda importa), checklist Markdown, imagem PNG, PDF da trilha, PDF e impressão do plano, e um `.ics` só com as sessões de estudo. O link de compartilhar leva a configuração da trilha, não as anotações nem o progresso.
 - **Visualização em mapa + popup.** Por padrão, cada etapa exibe um mapa limpo com nós clicáveis (nível, horas, quantidade de links e pré-requisitos). Clicar no tópico abre o popup com descrição, recursos filtráveis, anotações, quiz e ações — ou você pode alternar para **Modo: Lista detalhada** quando quiser.
+- **Painel de acompanhamento.** Botão **Painel** no topo com indicadores (progresso geral, horas concluídas, projetos e materiais vistos), gráfico semanal de ritmo planejado, anéis de progresso por etapa e tecnologias paralelas, próximas sessões e acesso rápido ao backup JSON (pronto para futura sincronização online).
 - **Temas e offline (PWA).** Claro e escuro (seguindo o sistema quando não há preferência salva) e suporte offline via Service Worker (`sw.js`) e `manifest.webmanifest`.
 
 ![Trilha com progresso, autoavaliação e o visto no tópico concluído](docs/screenshots/trilha.png)
@@ -100,7 +101,8 @@ Não há analytics, conta nem envio dos seus dados para um servidor deste projet
 - `index.html` — página
 - `manifest.webmanifest` e `sw.js` — manifesto PWA e cache offline
 - `css/app.css` — tema, foco, nós do mapa, hachura da grade e impressão
-- `js/app.js` — interface da trilha e da autoavaliação
+- `js/app.js` — interface da trilha, mapa/popup e autoavaliação
+- `js/dashboard-screen.js` — painel de acompanhamento com KPIs, gráfico semanal e anéis de progresso
 - `js/plan-screen.js` — plano de estudo e importação da grade
 - `js/plan.js` — distribuição das sessões
 - `js/ics.js` — leitura de `.ics` e CSV
