@@ -2,13 +2,13 @@
   "id": "machine-learning",
   "name": "Machine Learning e IA",
   "tagline": "Um modelo pequeno, com métrica e limite à vista",
-  "description": "Introdução sóbria: o que é aprender com dado, como não vazar a resposta para o treino e por que a métrica precisa existir antes do gráfico.",
+  "description": "Da base estatística ao modelo em produção: como preparar dados sem vazamento, escolher métricas, treinar modelos tabulares, redes neurais, RAG com LLMs e monitorar drift.",
   "phases": [
     {
       "id": "ml-fase-1",
       "number": 1,
       "badgeTitle": "Ideia",
-      "title": "Dado, tarefa e limite",
+      "title": "Dado, matemática base e limite",
       "topics": [
         {
           "id": "ml-tarefa",
@@ -17,21 +17,50 @@
           "title": "Que tarefa é essa",
           "description": "Classificar, prever número ou agrupar são tarefas diferentes. Sem rótulo, não há supervisão. \"Usar IA\" não é tarefa. Escreva a decisão que o número vai informar.",
           "tags": [
-            "ML"
+            "ML",
+            "Fundamentos"
           ],
           "prerequisites": [],
           "resources": [
             {
-              "title": "Começando com scikit-learn",
-              "url": "https://scikit-learn.org/stable/getting_started.html",
-              "lang": "en",
-              "kind": "documentacao"
-            },
-            {
-              "title": "Fundamentos de IA (Microsoft Learn)",
+              "title": "Fundamentos de IA (Microsoft Learn pt-BR)",
               "url": "https://learn.microsoft.com/pt-br/training/modules/get-started-ai-fundamentals/",
               "lang": "pt",
               "kind": "curso"
+            },
+            {
+              "title": "Choosing the right estimator (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/machine_learning_map.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ml-estatistica",
+          "level": "iniciante",
+          "hours": 8,
+          "title": "Estatística e vetores essenciais",
+          "description": "Média engana com outliers; mediana e percentis mostram a distribuição. Entenda variância, correlação (que não é causa), probabilidade condicional e produto escalar de vetores.",
+          "tags": [
+            "Estatística",
+            "Matemática"
+          ],
+          "prerequisites": [
+            "ml-tarefa"
+          ],
+          "resources": [
+            {
+              "title": "Estatística e Probabilidade (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/math/statistics-probability",
+              "lang": "pt",
+              "kind": "curso"
+            },
+            {
+              "title": "Essence of Linear Algebra (3Blue1Brown)",
+              "url": "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+              "lang": "en",
+              "kind": "video"
             }
           ]
         },
@@ -42,10 +71,11 @@
           "title": "Tabela de treino",
           "description": "Linha é exemplo, coluna é característica. O alvo é o que você quer prever e não pode estar escondido nas outras colunas. Dado faltante precisa de uma regra, não de otimismo.",
           "tags": [
-            "Features"
+            "Features",
+            "Pandas"
           ],
           "prerequisites": [
-            "ml-tarefa"
+            "ml-estatistica"
           ],
           "resources": [
             {
@@ -66,24 +96,25 @@
           "id": "ml-vazamento",
           "level": "avancado",
           "hours": 5,
-          "title": "Vazamento",
+          "title": "Vazamento de dados (Data Leakage)",
           "description": "Vazar é usar, no treino, informação que você não teria na hora de prever. Separar o conjunto de teste antes de normalizar com a estatística do arquivo inteiro já é um vazamento clássico. O número fica lindo e mente.",
           "tags": [
-            "Vazamento"
+            "Vazamento",
+            "Validação"
           ],
           "prerequisites": [
             "ml-dado"
           ],
           "resources": [
             {
-              "title": "Validação cruzada (scikit-learn)",
-              "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+              "title": "Common pitfalls in scikit-learn (Data Leakage)",
+              "url": "https://scikit-learn.org/stable/common_pitfalls.html",
               "lang": "en",
-              "kind": "documentacao"
+              "kind": "leitura"
             },
             {
-              "title": "Começando com scikit-learn",
-              "url": "https://scikit-learn.org/stable/getting_started.html",
+              "title": "Train-Test Split (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -204,9 +235,10 @@
           "level": "intermediario",
           "hours": 8,
           "title": "Um modelo linear ou uma árvore rasa",
-          "description": "Comece pelo modelo que você explica. Regressão linear ou uma árvore pequena. Se você não descreve a entrada, um modelo maior só esconde o buraco.",
+          "description": "Comece pelo modelo que você explica. Regressão linear, regressão logística ou uma árvore pequena. Se você não descreve a entrada, um modelo maior só esconde o buraco.",
           "tags": [
-            "scikit-learn"
+            "scikit-learn",
+            "Baseline"
           ],
           "prerequisites": [
             "ml-dado"
@@ -215,6 +247,12 @@
             {
               "title": "Começando com scikit-learn",
               "url": "https://scikit-learn.org/stable/getting_started.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Modelos lineares (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/linear_model.html",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -227,22 +265,23 @@
           "title": "Métrica antes do treino",
           "description": "Acurácia mente quando uma classe domina. Erro absoluto médio tem unidade. Escolha a métrica com a decisão, e olhe o teste uma vez, não vinte.",
           "tags": [
-            "Métrica"
+            "Métrica",
+            "Avaliação"
           ],
           "prerequisites": [
             "ml-modelo"
           ],
           "resources": [
             {
-              "title": "Validação cruzada (scikit-learn)",
-              "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+              "title": "Métricas e pontuação (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "Estatística (Khan Academy)",
-              "url": "https://pt.khanacademy.org/math/statistics-probability",
-              "lang": "pt",
+              "title": "Classification: Accuracy, Precision, Recall (Google ML)",
+              "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall",
+              "lang": "en",
               "kind": "curso"
             }
           ]
@@ -262,16 +301,16 @@
           ],
           "resources": [
             {
-              "title": "People + AI Guidebook",
+              "title": "People + AI Guidebook (Google)",
               "url": "https://pair.withgoogle.com/",
               "lang": "en",
               "kind": "leitura"
             },
             {
-              "title": "Modelos de linguagem grandes (IBM)",
-              "url": "https://www.ibm.com/br-pt/topics/large-language-models",
-              "lang": "pt",
-              "kind": "leitura"
+              "title": "Fairness in ML (Google Crash Course)",
+              "url": "https://developers.google.com/machine-learning/crash-course/fairness",
+              "lang": "en",
+              "kind": "curso"
             }
           ]
         },
@@ -289,16 +328,16 @@
           ],
           "resources": [
             {
-              "title": "Modelos de linguagem grandes (IBM)",
+              "title": "Modelos de linguagem grandes (IBM pt-BR)",
               "url": "https://www.ibm.com/br-pt/topics/large-language-models",
               "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "Fundamentos de IA (Microsoft Learn)",
-              "url": "https://learn.microsoft.com/pt-br/training/modules/get-started-ai-fundamentals/",
+              "title": "Prompt Engineering Guide",
+              "url": "https://www.promptingguide.ai/pt",
               "lang": "pt",
-              "kind": "curso"
+              "kind": "leitura"
             }
           ]
         }
@@ -401,6 +440,564 @@
               "text": "O LLM substitui a métrica.",
               "correct": false,
               "explanation": "Texto provável não é erro medido na sua tabela."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ml-fase-3",
+      "number": 3,
+      "badgeTitle": "Engenharia",
+      "title": "Features, validação e desbalanceamento",
+      "topics": [
+        {
+          "id": "ml-features",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Engenharia de atributos e Pipeline",
+          "description": "Transforme categorias (One-Hot/Ordinal), preencha nulos e normalize escalas dentro de um Pipeline e ColumnTransformer. Assim o preparo de treino e teste é idêntico e não vaza.",
+          "tags": [
+            "Pipeline",
+            "Preprocessing"
+          ],
+          "prerequisites": [
+            "ml-vazamento",
+            "ml-modelo"
+          ],
+          "resources": [
+            {
+              "title": "Pipelines e estimadores compostos",
+              "url": "https://scikit-learn.org/stable/modules/compose.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Preprocessing data (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ml-validacao",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Validação cruzada e viés vs. variância",
+          "description": "Separar um único split pode dar sorte ou azar. K-fold mede estabilidade; hiperparâmetros são ajustados na validação, não no teste. Aprenda a ler overfitting e underfitting.",
+          "tags": [
+            "Cross-Validation",
+            "Overfitting"
+          ],
+          "prerequisites": [
+            "ml-features",
+            "ml-metrica"
+          ],
+          "resources": [
+            {
+              "title": "Validação cruzada (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Ajuste de hiperparâmetros",
+              "url": "https://scikit-learn.org/stable/modules/grid_search.html",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "ml-desbalanceado",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Classes desbalanceadas e limiar de decisão",
+          "description": "Fraude ou doença rara têm 1% de positivos. Em vez de sair fazendo oversampling cego, entenda Precision-Recall, custo assimétrico do erro e ajuste o limiar (threshold) da probabilidade.",
+          "tags": [
+            "Precision-Recall",
+            "Threshold"
+          ],
+          "prerequisites": [
+            "ml-validacao"
+          ],
+          "resources": [
+            {
+              "title": "Ajuste de threshold de classificação",
+              "url": "https://scikit-learn.org/stable/modules/classification_threshold.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Precision-Recall (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ml3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Pipeline reprodutível",
+          "description": "Encapsule imputação de nulos, codificação categórica e um modelo linear num único Pipeline do scikit-learn.",
+          "steps": [
+            "Use ColumnTransformer para separar colunas numéricas e de texto.",
+            "Salve e carregue o pipeline com joblib.",
+            "Teste com uma linha nova que tenha valor nulo."
+          ],
+          "definitionOfDone": [
+            "O pipeline roda direto no dado bruto sem limpeza manual fora dele.",
+            "A linha com nulo não quebra a predição."
+          ]
+        },
+        {
+          "id": "ml3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Diagnóstico de overfitting",
+          "description": "Compare o erro no treino e na validação cruzada variando a profundidade de uma árvore de decisão e mostre onde começa o overfitting.",
+          "steps": [
+            "Teste profundidades de 1 a 20.",
+            "Plote ou tabele erro de treino vs. validação.",
+            "Escolha o ponto de parada justificado."
+          ],
+          "definitionOfDone": [
+            "A curva ou tabela mostra treino caindo e validação subindo.",
+            "O conjunto de teste final só foi tocado uma vez."
+          ]
+        },
+        {
+          "id": "ml3-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Limiar por custo de negócio",
+          "description": "Num problema desbalanceado, defina um custo para falso positivo e falso negativo e escolha o threshold que minimiza o prejuízo total.",
+          "steps": [
+            "Modele o custo de cada tipo de erro.",
+            "Varie o limiar de 0.1 a 0.9.",
+            "Compare o limiar padrão (0.5) com o ótimo."
+          ],
+          "definitionOfDone": [
+            "A matriz de confusão nos dois limiares está visível.",
+            "A economia estimada está explicada."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ml-fase-3-q1",
+          "prompt": "Qual a principal razão para colocar o escalonamento (StandardScaler) dentro de um Pipeline?",
+          "reviewTopicId": "ml-features",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Garantir que média e desvio sejam calculados só no fold de treino durante a validação cruzada.",
+              "correct": true,
+              "explanation": "Fora do Pipeline, é fácil calcular o scaler antes do split e vazar dados."
+            },
+            {
+              "id": "b",
+              "text": "Para o modelo não precisar de métrica.",
+              "correct": false,
+              "explanation": "Métrica continua sendo necessária."
+            },
+            {
+              "id": "c",
+              "text": "Para remover automaticamente todas as colunas nulas.",
+              "correct": false,
+              "explanation": "Nulos precisam de imputer explícito."
+            }
+          ]
+        },
+        {
+          "id": "ml-fase-3-q2",
+          "prompt": "Quando o erro de treino é quase zero mas o de validação é alto, o que está acontecendo?",
+          "reviewTopicId": "ml-validacao",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Overfitting: o modelo decorou ruído do treino e não generaliza.",
+              "correct": true,
+              "explanation": "Reduzir complexidade, regularizar ou trazer mais dados ajuda a corrigir."
+            },
+            {
+              "id": "b",
+              "text": "Underfitting: o modelo é simples demais.",
+              "correct": false,
+              "explanation": "No underfitting, tanto o treino quanto a validação têm erro alto."
+            },
+            {
+              "id": "c",
+              "text": "O modelo está pronto para produção.",
+              "correct": false,
+              "explanation": "Ele vai errar muito em dados novos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ml-fase-4",
+      "number": 4,
+      "badgeTitle": "Algoritmos",
+      "title": "Ensembles, não supervisionado e Deep Learning",
+      "topics": [
+        {
+          "id": "ml-ensemble",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "Ensembles e Gradient Boosting",
+          "description": "Em dados tabulares, Random Forest e Gradient Boosting (XGBoost, LightGBM, HistGradientBoosting) costumam vencer redes neurais com muito menos ajuste. Entenda bagging vs. boosting.",
+          "tags": [
+            "Ensembles",
+            "XGBoost"
+          ],
+          "prerequisites": [
+            "ml-validacao"
+          ],
+          "resources": [
+            {
+              "title": "Ensemble methods (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/ensemble.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Documentação do XGBoost",
+              "url": "https://xgboost.readthedocs.io/en/stable/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ml-nao-supervisionado",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Clustering e redução de dimensionalidade",
+          "description": "Sem rótulo, você busca estrutura: agrupar clientes semelhantes (k-means, DBSCAN) ou comprimir dezenas de colunas em componentes principais (PCA) para visualização ou ruído.",
+          "tags": [
+            "Clustering",
+            "PCA"
+          ],
+          "prerequisites": [
+            "ml-features"
+          ],
+          "resources": [
+            {
+              "title": "Clustering (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/clustering.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Decomposição e PCA (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/decomposition.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ml-deep-learning",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Redes neurais e PyTorch",
+          "description": "Para imagem, áudio, texto ou séries complexas, redes neurais aprendem representações em camadas via gradiente descendente e backpropagation. Saiba quando um modelo tabular simples ainda é melhor.",
+          "tags": [
+            "Deep Learning",
+            "PyTorch"
+          ],
+          "prerequisites": [
+            "ml-estatistica",
+            "ml-validacao"
+          ],
+          "resources": [
+            {
+              "title": "Aprendendo o básico no PyTorch",
+              "url": "https://pytorch.org/tutorials/beginner/basics/intro.html",
+              "lang": "en",
+              "kind": "curso"
+            },
+            {
+              "title": "Neural Networks (3Blue1Brown)",
+              "url": "https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi",
+              "lang": "en",
+              "kind": "video"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ml4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Segmentação sem rótulo",
+          "description": "Aplique k-means em um dataset com variáveis escalonadas e descreva o perfil médio de cada grupo encontrado.",
+          "steps": [
+            "Normalize as colunas antes de calcular distâncias.",
+            "Teste k de 2 a 6 e justifique a escolha.",
+            "Dê um nome humano para cada cluster."
+          ],
+          "definitionOfDone": [
+            "As escalas foram normalizadas.",
+            "Cada grupo tem resumo numérico."
+          ]
+        },
+        {
+          "id": "ml4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 10,
+          "title": "Tabular: Linear vs. Boosting",
+          "description": "Compare regressão logística/linear contra HistGradientBoosting ou LightGBM no mesmo split e avalie ganho de métrica vs. tempo de treino.",
+          "steps": [
+            "Use o mesmo Pipeline de pré-processamento ou split.",
+            "Meça tempo e métrica no teste.",
+            "Mostre as variáveis mais importantes."
+          ],
+          "definitionOfDone": [
+            "A comparação está em tabela.",
+            "Você explica se o ganho justifica a complexidade."
+          ]
+        },
+        {
+          "id": "ml4-projeto-avancado",
+          "level": "avancado",
+          "hours": 12,
+          "title": "Classificador pequeno em PyTorch",
+          "description": "Treine uma rede neural pequena (MLP ou CNN básica) com loop explícito de treino/validação, perda caindo e early stopping.",
+          "steps": [
+            "Implemente Dataset e DataLoader.",
+            "Registre loss de treino e validação por época.",
+            "Salve os pesos do melhor checkpoint."
+          ],
+          "definitionOfDone": [
+            "O loop de validação usa `torch.no_grad()`.",
+            "Gráfico ou log das épocas está no repositório."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ml-fase-4-q1",
+          "prompt": "Por que normalizar escalas antes de rodar k-means?",
+          "reviewTopicId": "ml-nao-supervisionado",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque k-means usa distância euclidiana e colunas em milhares dominariam colunas entre 0 e 1.",
+              "correct": true,
+              "explanation": "Sem escala comum, salário em reais esmaga idade em anos no cálculo da distância."
+            },
+            {
+              "id": "b",
+              "text": "Porque k-means não aceita números positivos.",
+              "correct": false,
+              "explanation": "Aceita qualquer número real."
+            },
+            {
+              "id": "c",
+              "text": "Para transformar o problema em supervisionado.",
+              "correct": false,
+              "explanation": "Continua não supervisionado."
+            }
+          ]
+        },
+        {
+          "id": "ml-fase-4-q2",
+          "prompt": "Em dados tabulares médios, por que testar Gradient Boosting antes de uma rede neural?",
+          "reviewTopicId": "ml-ensemble",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Árvores em boosting costumam atingir ótima acurácia em tabelas com menos ajuste e menor custo.",
+              "correct": true,
+              "explanation": "Redes neurais brilham mais em dados não estruturados (texto, imagem, áudio)."
+            },
+            {
+              "id": "b",
+              "text": "Porque redes neurais não funcionam em tabelas.",
+              "correct": false,
+              "explanation": "Funcionam, mas raramente valem o esforço em tabelas pequenas/médias."
+            },
+            {
+              "id": "c",
+              "text": "Porque boosting dispensa separação de treino e teste.",
+              "correct": false,
+              "explanation": "Boosting também sofre overfitting e precisa de validação."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ml-fase-5",
+      "number": 5,
+      "badgeTitle": "Produção",
+      "title": "RAG, LLMs aplicados e MLOps",
+      "topics": [
+        {
+          "id": "ml-rag",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Embeddings, busca vetorial e RAG",
+          "description": "Em vez de depender da memória do LLM, quebre seus documentos em trechos, gere embeddings, recupere os mais relevantes e passe como contexto. Avalie se a resposta cita a fonte e não inventa.",
+          "tags": [
+            "RAG",
+            "Embeddings"
+          ],
+          "prerequisites": [
+            "ml-llm"
+          ],
+          "resources": [
+            {
+              "title": "Embeddings no guia da OpenAI",
+              "url": "https://platform.openai.com/docs/guides/embeddings",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Hugging Face — NLP Course",
+              "url": "https://huggingface.co/learn/nlp-course/chapter1/1",
+              "lang": "en",
+              "kind": "curso"
+            }
+          ]
+        },
+        {
+          "id": "ml-mlops",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Servir modelo, versionamento e drift",
+          "description": "Notebook não é produção. Versione dado, código e artefato do modelo, exponha predição via API ou lote e monitore se os dados de entrada mudaram (data drift) ou se o erro subiu.",
+          "tags": [
+            "MLOps",
+            "Drift"
+          ],
+          "prerequisites": [
+            "ml-features",
+            "ml-metrica"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do MLflow",
+              "url": "https://mlflow.org/docs/latest/index.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "FastAPI — tutorial",
+              "url": "https://fastapi.tiangolo.com/pt/tutorial/",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ml5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Busca semântica em notas",
+          "description": "Indexe alguns arquivos Markdown com embeddings e retorne os 3 trechos mais próximos para uma pergunta, sem precisar nem de LLM na resposta.",
+          "steps": [
+            "Divida os textos em parágrafos.",
+            "Calcule similaridade de cosseno.",
+            "Mostre a pergunta e os 3 trechos com pontuação."
+          ],
+          "definitionOfDone": [
+            "A busca roda localmente.",
+            "Perguntas fora do tema retornam score baixo visível."
+          ]
+        },
+        {
+          "id": "ml5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 10,
+          "title": "API de predição com validação",
+          "description": "Sirva um Pipeline do scikit-learn atrás de um endpoint FastAPI validando tipos na entrada e registrando cada predição em log.",
+          "steps": [
+            "Defina o schema de entrada com Pydantic.",
+            "Carregue o modelo uma vez na subida.",
+            "Teste entrada inválida retornando HTTP 422."
+          ],
+          "definitionOfDone": [
+            "Endpoint `/predict` funciona com `curl`.",
+            "Modelo e versão aparecem na resposta."
+          ]
+        },
+        {
+          "id": "ml5-projeto-avancado",
+          "level": "avancado",
+          "hours": 12,
+          "title": "RAG com conjunto de avaliação",
+          "description": "Monte um sistema RAG sobre documentos reais e crie 10 perguntas de teste para medir quantas vezes o trecho certo foi recuperado antes de gerar a resposta.",
+          "steps": [
+            "Monte o conjunto de 10 perguntas e trechos esperados.",
+            "Meça taxa de acerto da busca (recall@3).",
+            "Adicione regra de recusar resposta se não houver trecho relevante."
+          ],
+          "definitionOfDone": [
+            "Métrica de busca e exemplos de falha estão documentados.",
+            "A resposta mostra a fonte usada."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ml-fase-5-q1",
+          "prompt": "Num sistema RAG, se a resposta final sai errada porque o trecho certo nem apareceu no contexto, onde está o problema?",
+          "reviewTopicId": "ml-rag",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Na etapa de recuperação (chunking/busca), antes mesmo de chamar o LLM.",
+              "correct": true,
+              "explanation": "Por isso se mede a qualidade da busca separada da geração."
+            },
+            {
+              "id": "b",
+              "text": "Apenas na temperatura do modelo.",
+              "correct": false,
+              "explanation": "Temperatura não cria o documento que não foi recuperado."
+            },
+            {
+              "id": "c",
+              "text": "Na cor do botão da interface.",
+              "correct": false,
+              "explanation": "É um problema de indexação e busca."
+            }
+          ]
+        },
+        {
+          "id": "ml-fase-5-q2",
+          "prompt": "O que é data drift em produção?",
+          "reviewTopicId": "ml-mlops",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Mudança na distribuição dos dados de entrada reais em relação ao que o modelo viu no treino.",
+              "correct": true,
+              "explanation": "Quando o mundo muda (ex.: inflação, novo perfil de usuário), a performance tende a cair."
+            },
+            {
+              "id": "b",
+              "text": "Quando o servidor fica sem espaço em disco.",
+              "correct": false,
+              "explanation": "Isso é falha de infraestrutura."
+            },
+            {
+              "id": "c",
+              "text": "Quando o notebook é salvo sem saída.",
+              "correct": false,
+              "explanation": "Drift é fenômeno estatístico dos dados em produção."
             }
           ]
         }

@@ -103,6 +103,12 @@
               "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
               "lang": "en",
               "kind": "curso"
+            },
+            {
+              "title": "The Missing Semester — Shell",
+              "url": "https://missing.csail.mit.edu/2020/course-shell/",
+              "lang": "en",
+              "kind": "curso"
             }
           ],
           "title": "Linha de Comando (Terminal)",
@@ -151,10 +157,16 @@
           ],
           "resources": [
             {
-              "title": "Livro Pro Git — ramificações",
-              "url": "https://git-scm.com/book/pt-br/v2",
+              "title": "Branches em poucas palavras (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-Branches-em-poucas-palavras",
               "lang": "pt",
               "kind": "leitura"
+            },
+            {
+              "title": "Learn Git Branching (interativo pt-BR)",
+              "url": "https://learngitbranching.js.org/?locale=pt_BR",
+              "lang": "pt",
+              "kind": "pratica"
             }
           ],
           "title": "Git — Ramificação e Integração",
@@ -934,8 +946,14 @@
           ],
           "resources": [
             {
-              "title": "Folha de autorização da OWASP",
+              "title": "Authorization Cheat Sheet (OWASP)",
               "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Broken Access Control (OWASP Top 10)",
+              "url": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
               "lang": "en",
               "kind": "leitura"
             }
@@ -1705,16 +1723,16 @@
           ],
           "resources": [
             {
-              "title": "Linha de comando para iniciantes (Ubuntu)",
-              "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
-              "lang": "en",
-              "kind": "curso"
-            },
-            {
-              "title": "Guia inicial do Nginx",
-              "url": "https://nginx.org/en/docs/beginners_guide.html",
+              "title": "Linux Journey — Sysadmin & Permissions",
+              "url": "https://linuxjourney.com/lesson/file-permissions",
               "lang": "en",
               "kind": "leitura"
+            },
+            {
+              "title": "OpenSSH — manual básico",
+              "url": "https://www.openssh.com/manual.html",
+              "lang": "en",
+              "kind": "documentacao"
             }
           ],
           "title": "Fundamentos de Linux e Servidores",
@@ -1761,10 +1779,16 @@
           ],
           "resources": [
             {
-              "title": "Começando com Docker Compose",
-              "url": "https://docs.docker.com/compose/gettingstarted/",
+              "title": "Docker Compose — Overview",
+              "url": "https://docs.docker.com/compose/",
               "lang": "en",
-              "kind": "pratica"
+              "kind": "documentacao"
+            },
+            {
+              "title": "Networking in Compose (Docker)",
+              "url": "https://docs.docker.com/compose/how-tos/networking/",
+              "lang": "en",
+              "kind": "documentacao"
             }
           ],
           "title": "Docker Compose",
@@ -2049,14 +2073,14 @@
           ],
           "resources": [
             {
-              "title": "Guia inicial do Express",
-              "url": "https://expressjs.com/pt-br/starter/installing.html",
+              "title": "Guia de Roteamento no Express (pt-BR)",
+              "url": "https://expressjs.com/pt-br/guide/routing.html",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Especificação OpenAPI",
-              "url": "https://swagger.io/specification/",
+              "title": "PostgreSQL + Node (node-postgres)",
+              "url": "https://node-postgres.com/",
               "lang": "en",
               "kind": "documentacao"
             }

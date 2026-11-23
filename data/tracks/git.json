@@ -22,16 +22,16 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "Livro do Git em português",
-              "url": "https://git-scm.com/book/pt-br/v2",
+              "title": "Gravando alterações no repositório (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Gravando-Altera%C3%A7%C3%B5es-no-Reposit%C3%B3rio",
               "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "Sobre o Git (GitHub Docs)",
-              "url": "https://docs.github.com/pt/get-started/using-git/about-git",
+              "title": "Learn Git Branching (interativo)",
+              "url": "https://learngitbranching.js.org/?locale=pt_BR",
               "lang": "pt",
-              "kind": "documentacao"
+              "kind": "pratica"
             }
           ]
         },
@@ -49,10 +49,16 @@
           ],
           "resources": [
             {
-              "title": "Livro do Git em português",
-              "url": "https://git-scm.com/book/pt-br/v2",
+              "title": "Branches em poucas palavras (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-Branches-em-poucas-palavras",
               "lang": "pt",
               "kind": "leitura"
+            },
+            {
+              "title": "Sobre branches (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches",
+              "lang": "pt",
+              "kind": "documentacao"
             }
           ]
         },
@@ -70,16 +76,16 @@
           ],
           "resources": [
             {
-              "title": "Livro do Git em português",
-              "url": "https://git-scm.com/book/pt-br/v2",
+              "title": "Branching e Merging básico (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-B%C3%A1sico-de-Branch-e-Merge",
               "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "Hello World no GitHub",
-              "url": "https://docs.github.com/pt/get-started/start-your-journey/hello-world",
+              "title": "Resolvendo conflitos de mesclagem (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line",
               "lang": "pt",
-              "kind": "pratica"
+              "kind": "documentacao"
             }
           ]
         }
@@ -207,10 +213,16 @@
           ],
           "resources": [
             {
-              "title": "Hello World no GitHub",
-              "url": "https://docs.github.com/pt/get-started/start-your-journey/hello-world",
+              "title": "Trabalhando com Remotos (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Trabalhando-com-Remotos",
               "lang": "pt",
-              "kind": "pratica"
+              "kind": "leitura"
+            },
+            {
+              "title": "Gerenciando repositórios remotos (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/get-started/getting-started-with-git/managing-remote-repositories",
+              "lang": "pt",
+              "kind": "documentacao"
             }
           ]
         },
@@ -229,10 +241,16 @@
           ],
           "resources": [
             {
-              "title": "Sobre pull requests",
+              "title": "Sobre Pull Requests (GitHub Docs pt-BR)",
               "url": "https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests",
               "lang": "pt",
               "kind": "documentacao"
+            },
+            {
+              "title": "Fluxo do GitHub (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/get-started/using-github/github-flow",
+              "lang": "pt",
+              "kind": "leitura"
             }
           ]
         },
@@ -250,8 +268,14 @@
           ],
           "resources": [
             {
-              "title": "Sobre o Git (GitHub Docs)",
-              "url": "https://docs.github.com/pt/get-started/using-git/about-git",
+              "title": "Ignorando arquivos com .gitignore (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/get-started/getting-started-with-git/ignoring-files",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Removendo dados confidenciais do histórico (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository",
               "lang": "pt",
               "kind": "documentacao"
             }
@@ -356,6 +380,395 @@
               "text": "Listar a sua biografia.",
               "correct": false,
               "explanation": "Biografia não testa."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gt-fase-3",
+      "number": 3,
+      "badgeTitle": "Histórico",
+      "title": "Rebase, desfazer e recuperação",
+      "topics": [
+        {
+          "id": "gt-rebase",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Rebase vs. merge e cherry-pick",
+          "description": "`merge` preserva a bifurcação real; `rebase` reaplica seus commits no topo da `main` deixando a linha reta (e permite juntar commits bagunçados com `rebase -i`). Regra de ouro: nunca dê rebase em branch compartilhada que outra pessoa já baixou.",
+          "tags": [
+            "rebase",
+            "cherry-pick"
+          ],
+          "prerequisites": [
+            "gt-conflito"
+          ],
+          "resources": [
+            {
+              "title": "Rebasing (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-Rebasing",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Reescrevendo o histórico (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ferramentas-do-Git-Reescrevendo-o-Hist%C3%B3rico",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "gt-desfazer",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Desfazer com segurança (restore, reset, revert)",
+          "description": "Use `git restore` para descartar mudança local não commitada, `git revert` para desfazer um commit já enviado ao remoto (criando um commit novo que anula o erro) e reserve `git reset` para commits que ainda estão só na sua máquina.",
+          "tags": [
+            "revert",
+            "reset"
+          ],
+          "prerequisites": [
+            "gt-commit"
+          ],
+          "resources": [
+            {
+              "title": "Desfazendo coisas (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Desfazendo-Coisas",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "git-revert (Documentação oficial)",
+              "url": "https://git-scm.com/docs/git-revert",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "gt-reflog",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Reflog e bisect (resgate e caça a bugs)",
+          "description": "Deu um `reset --hard` errado e achou que perdeu tudo? Enquanto o garbage collector não rodar, `git reflog` guarda onde o `HEAD` apontou. E `git bisect` faz busca binária no histórico para achar exatamente qual commit quebrou um teste.",
+          "tags": [
+            "reflog",
+            "bisect"
+          ],
+          "prerequisites": [
+            "gt-desfazer"
+          ],
+          "resources": [
+            {
+              "title": "Depuração com Git (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ferramentas-do-Git-Depurando-com-o-Git",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "git-reflog (Documentação oficial)",
+              "url": "https://git-scm.com/docs/git-reflog",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "gt3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "Reverter sem reescrever história",
+          "description": "Faça um commit com um bug proposital, simule que já foi para a `main` e desfaça com `git revert` preservando o histórico.",
+          "steps": [
+            "Crie o commit defeituoso.",
+            "Rode `git revert HEAD`.",
+            "Confira `git log --oneline` mostrando os dois commits."
+          ],
+          "definitionOfDone": [
+            "O código volta ao estado anterior.",
+            "O histórico não foi reescrito."
+          ]
+        },
+        {
+          "id": "gt3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Limpar 4 commits com rebase -i",
+          "description": "Crie uma branch com 4 commits pequenos (\"wip\", \"ajuste\", \"esqueci ponto\") e use `git rebase -i` (squash/fixup) para transformar em 1 commit limpo antes do PR.",
+          "steps": [
+            "Crie a branch de experimento.",
+            "Junte os commits com `rebase -i`.",
+            "Compare `git log` antes e depois."
+          ],
+          "definitionOfDone": [
+            "A branch final tem 1 commit claro.",
+            "Não alterou a `main` diretamente."
+          ]
+        },
+        {
+          "id": "gt3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Resgate via reflog e busca com bisect",
+          "description": "Apague uma branch ou dê `reset --hard` num repositório de teste e recupere o commit perdido usando `git reflog`.",
+          "steps": [
+            "Faça um commit novo e dê `git reset --hard HEAD~1`.",
+            "Localize o hash no `git reflog`.",
+            "Recupere criando uma branch naquele hash."
+          ],
+          "definitionOfDone": [
+            "O commit perdido volta intacto.",
+            "Os passos estão anotados no README."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "gt-fase-3-q1",
+          "prompt": "Qual comando desfaz um commit que já foi enviado para a branch `main` compartilhada sem reescrever o histórico?",
+          "reviewTopicId": "gt-desfazer",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`git revert`.",
+              "correct": true,
+              "explanation": "`revert` cria um novo commit inverso, seguro para branches compartilhadas."
+            },
+            {
+              "id": "b",
+              "text": "`git reset --hard` + `push --force`.",
+              "correct": false,
+              "explanation": "Reescrever a `main` quebra o repositório de todos os colegas."
+            },
+            {
+              "id": "c",
+              "text": "`git stash`.",
+              "correct": false,
+              "explanation": "`stash` guarda alterações locais não commitadas."
+            }
+          ]
+        },
+        {
+          "id": "gt-fase-3-q2",
+          "prompt": "Para que serve o `git bisect`?",
+          "reviewTopicId": "gt-reflog",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Fazer busca binária entre um commit bom e um ruim para achar exatamente qual commit introduziu um bug.",
+              "correct": true,
+              "explanation": "Em 1.000 commits, acha o culpado em cerca de 10 passos."
+            },
+            {
+              "id": "b",
+              "text": "Dividir um arquivo grande em dois.",
+              "correct": false,
+              "explanation": "Não divide arquivos."
+            },
+            {
+              "id": "c",
+              "text": "Apagar branches antigas.",
+              "correct": false,
+              "explanation": "Isso é `git branch -d`."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gt-fase-4",
+      "number": 4,
+      "badgeTitle": "Equipe",
+      "title": "Tags, stash, hooks e fluxo de trabalho",
+      "topics": [
+        {
+          "id": "gt-tags",
+          "level": "intermediario",
+          "hours": 3,
+          "title": "Tags anotadas e SemVer",
+          "description": "Marque versões lançadas com tags anotadas (`git tag -a v1.2.0 -m ...`) seguindo Versionamento Semântico (MAJOR.MINOR.PATCH) para saber exatamente o que está em produção.",
+          "tags": [
+            "Tags",
+            "SemVer"
+          ],
+          "prerequisites": [
+            "gt-remoto"
+          ],
+          "resources": [
+            {
+              "title": "Tags no Git (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Tags",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Semantic Versioning (pt-BR)",
+              "url": "https://semver.org/lang/pt-BR/",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "gt-stash",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "Stash e Worktrees para trocar de contexto",
+          "description": "Precisa corrigir um bug urgente na `main` no meio de uma feature inacabada? `git stash -u` guarda a bagunça temporariamente, ou `git worktree` abre outra branch numa pasta paralela sem mexer na atual.",
+          "tags": [
+            "stash",
+            "worktree"
+          ],
+          "prerequisites": [
+            "gt-branch"
+          ],
+          "resources": [
+            {
+              "title": "Stashing e Limpeza (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Ferramentas-do-Git-Stashing-e-Limpeza",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "git-worktree (Documentação oficial)",
+              "url": "https://git-scm.com/docs/git-worktree",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "gt-hooks",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Hooks locais e revisão de PR eficiente",
+          "description": "Hooks (`pre-commit`) rodam linter/testes rápidos antes de aceitar o commit. No PR, mantenha diffs pequenos e focados (ninguém revisa 2.000 linhas com atenção) e use `.gitignore` + `.gitattributes` para evitar lixo de SO.",
+          "tags": [
+            "Hooks",
+            "Code Review"
+          ],
+          "prerequisites": [
+            "gt-pr",
+            "gt-segredo"
+          ],
+          "resources": [
+            {
+              "title": "Hooks do Git (Pro Git pt-BR)",
+              "url": "https://git-scm.com/book/pt-br/v2/Customizando-o-Git-Hooks-do-Git",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Como revisar um Pull Request (Google)",
+              "url": "https://google.github.io/eng-practices/review/reviewer/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "gt4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "Troca rápida com stash",
+          "description": "Edite um arquivo sem commitar, guarde no `stash` com mensagem (`git stash push -m`), troque de branch, volte e aplique com `pop`.",
+          "steps": [
+            "Crie alteração não commitada.",
+            "Salve com mensagem descritiva no stash.",
+            "Recupere e confira `git status`."
+          ],
+          "definitionOfDone": [
+            "Sabe diferenciar `stash pop` de `stash apply`.",
+            "Não perde alterações."
+          ]
+        },
+        {
+          "id": "gt4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Release anotada com SemVer",
+          "description": "Crie duas tags anotadas (`v0.1.0` e `v0.1.1`) num repositório de estudo e gere o resumo de mudanças entre elas com `git log v0.1.0..v0.1.1`.",
+          "steps": [
+            "Crie tag anotada com `-a`.",
+            "Faça um commit de correção.",
+            "Crie a tag PATCH seguinte e liste o diff."
+          ],
+          "definitionOfDone": [
+            "Tags listadas com `git tag -n`.",
+            "Explica quando subir MAJOR, MINOR e PATCH."
+          ]
+        },
+        {
+          "id": "gt4-projeto-avancado",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Hook pre-commit de validação",
+          "description": "Configure um hook `pre-commit` que bloqueia o commit caso o comando de teste ou linter falhe, e documente por que o CI ainda é necessário.",
+          "steps": [
+            "Escreva o script em `.git/hooks/pre-commit` (ou via ferramenta).",
+            "Provoque uma falha para ver o bloqueio.",
+            "Corrija e commite normalmente."
+          ],
+          "definitionOfDone": [
+            "Hook executável (`chmod +x`).",
+            "Explica que hook local pode ser pulado com `--no-verify`, por isso o CI continua obrigatório."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "gt-fase-4-q1",
+          "prompt": "No Versionamento Semântico (`MAJOR.MINOR.PATCH`), quando você incrementa o número `MAJOR`?",
+          "reviewTopicId": "gt-tags",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Quando faz uma mudança incompatível na API pública (breaking change).",
+              "correct": true,
+              "explanation": "MINOR é recurso compatível; PATCH é correção compatível; MAJOR quebra compatibilidade."
+            },
+            {
+              "id": "b",
+              "text": "A cada correção de erro ortográfico no README.",
+              "correct": false,
+              "explanation": "Isso seria no máximo PATCH (ou nem gera release)."
+            },
+            {
+              "id": "c",
+              "text": "Todo dia primeiro do mês.",
+              "correct": false,
+              "explanation": "SemVer segue impacto na compatibilidade, não calendário."
+            }
+          ]
+        },
+        {
+          "id": "gt-fase-4-q2",
+          "prompt": "Por que hooks `pre-commit` locais não substituem as verificações no CI (GitHub Actions)?",
+          "reviewTopicId": "gt-hooks",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque hooks locais não são versionados automaticamente ao clonar e podem ser pulados com `--no-verify`.",
+              "correct": true,
+              "explanation": "O hook local dá feedback rápido, mas o CI é a garantia central do repositório."
+            },
+            {
+              "id": "b",
+              "text": "Porque hooks não conseguem rodar scripts.",
+              "correct": false,
+              "explanation": "Hooks são justamente scripts."
+            },
+            {
+              "id": "c",
+              "text": "Porque o GitHub apaga commits locais.",
+              "correct": false,
+              "explanation": "Não apaga."
             }
           ]
         }

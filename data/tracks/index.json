@@ -124,6 +124,42 @@
       ]
     },
     {
+      "id": "ciberseguranca",
+      "file": "ciberseguranca.json",
+      "group": "carreira",
+      "keywords": [
+        "seguranca",
+        "owasp",
+        "appsec",
+        "pentest",
+        "redes"
+      ]
+    },
+    {
+      "id": "cloud",
+      "file": "cloud.json",
+      "group": "carreira",
+      "keywords": [
+        "aws",
+        "nuvem",
+        "terraform",
+        "iam",
+        "serverless"
+      ]
+    },
+    {
+      "id": "arquitetura-software",
+      "file": "arquitetura-software.json",
+      "group": "carreira",
+      "keywords": [
+        "system design",
+        "arquitetura",
+        "microsservicos",
+        "cache",
+        "filas"
+      ]
+    },
+    {
       "id": "computacao",
       "file": "computacao.json",
       "group": "fundamentos",
@@ -146,6 +182,30 @@
       ]
     },
     {
+      "id": "banco-de-dados",
+      "file": "banco-de-dados.json",
+      "group": "fundamentos",
+      "keywords": [
+        "modelagem",
+        "normalizacao",
+        "indices",
+        "nosql",
+        "acid"
+      ]
+    },
+    {
+      "id": "engenharia-software",
+      "file": "engenharia-software.json",
+      "group": "fundamentos",
+      "keywords": [
+        "solid",
+        "clean code",
+        "design patterns",
+        "refatoracao",
+        "tdd"
+      ]
+    },
+    {
       "id": "python",
       "file": "python.json",
       "group": "tecnologia",
@@ -161,6 +221,38 @@
       "keywords": [
         "js",
         "javascript"
+      ]
+    },
+    {
+      "id": "typescript",
+      "file": "typescript.json",
+      "group": "tecnologia",
+      "keywords": [
+        "ts",
+        "typescript",
+        "tipos"
+      ]
+    },
+    {
+      "id": "react",
+      "file": "react.json",
+      "group": "tecnologia",
+      "keywords": [
+        "react",
+        "jsx",
+        "hooks",
+        "frontend"
+      ]
+    },
+    {
+      "id": "nodejs",
+      "file": "nodejs.json",
+      "group": "tecnologia",
+      "keywords": [
+        "node",
+        "nodejs",
+        "express",
+        "backend"
       ]
     },
     {
@@ -201,6 +293,17 @@
         "container",
         "compose",
         "conteiner"
+      ]
+    },
+    {
+      "id": "kubernetes",
+      "file": "kubernetes.json",
+      "group": "tecnologia",
+      "keywords": [
+        "k8s",
+        "kubernetes",
+        "pod",
+        "kubectl"
       ]
     }
   ]

@@ -1,0 +1,783 @@
+{
+  "id": "banco-de-dados",
+  "name": "Banco de Dados e Modelagem",
+  "tagline": "Modelar entidades, garantir integridade, indexar e escolher SQL ou NoSQL",
+  "description": "Além da sintaxe do SELECT: modelagem entidade-relacionamento, normalização, restrições, índices B-Tree, transações e níveis de isolamento, e quando usar NoSQL.",
+  "phases": [
+    {
+      "id": "bd-fase-1",
+      "number": 1,
+      "badgeTitle": "Modelagem",
+      "title": "Entidade-Relacionamento e Normalização",
+      "topics": [
+        {
+          "id": "bd-er",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Modelo Entidade-Relacionamento (ER) e cardinalidade",
+          "description": "Antes de criar tabelas, desenhe entidades, atributos e cardinalidades (1:1, 1:N, N:N). Relacionamento N:N (ex.: aluno e disciplina) sempre pede uma tabela associativa no meio.",
+          "tags": [
+            "Modelagem",
+            "ER"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "PostgreSQL — DDL Básico",
+              "url": "https://www.postgresql.org/docs/current/ddl-basics.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Modelo Entidade-Relacionamento (Wikipédia pt-BR)",
+              "url": "https://pt.wikipedia.org/wiki/Modelo_entidade_relacionamento",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "bd-normalizacao",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Formas Normais (1FN, 2FN, 3FN) e desnormalização",
+          "description": "Normalizar evita guardar o mesmo endereço em 50 linhas de pedido e atualizar só 1. Aprenda 1FN (sem lista numa célula), 2FN e 3FN — e quando desnormalizar de propósito para leitura rápida.",
+          "tags": [
+            "Normalização",
+            "3FN"
+          ],
+          "prerequisites": [
+            "bd-er"
+          ],
+          "resources": [
+            {
+              "title": "Normalização de dados (Wikipédia pt-BR)",
+              "url": "https://pt.wikipedia.org/wiki/Normaliza%C3%A7%C3%A3o_de_dados",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Esquemas e Tabelas (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "bd-integridade",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Chaves, restrições (Constraints) e tipos certos",
+          "description": "O banco é a última linha de defesa dos seus dados: use `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `NOT NULL`, `CHECK` e tipos exatos (`NUMERIC` para dinheiro, nunca `FLOAT`; `TIMESTAMPTZ` para datas).",
+          "tags": [
+            "Constraints",
+            "Integridade"
+          ],
+          "prerequisites": [
+            "bd-normalizacao"
+          ],
+          "resources": [
+            {
+              "title": "Constraints no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Tipos numéricos e monetários (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/datatype-numeric.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bd1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Modelo de biblioteca universitária",
+          "description": "Modele livros, exemplares, alunos e empréstimos com chaves primárias, estrangeiras e restrições que impeçam devolução anterior ao empréstimo.",
+          "steps": [
+            "Separe 'título do livro' de 'exemplar físico'.",
+            "Adicione `CHECK (devolvido_em >= emprestado_em)`.",
+            "Insira dados válidos e inválidos para testar."
+          ],
+          "definitionOfDone": [
+            "O banco recusa data de devolução inválida.",
+            "Diagrama ER simples no README."
+          ]
+        },
+        {
+          "id": "bd1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Normalizando uma planilha bagunçada",
+          "description": "Pegue uma tabela única com dados repetidos de clientes, pedidos e múltiplos produtos numa célula separada por vírgula e leve até a 3ª Forma Normal.",
+          "steps": [
+            "Quebre a lista por vírgula (1FN).",
+            "Separe pedido, item_pedido, produto e cliente.",
+            "Mostre como atualizar o nome do produto em 1 lugar só."
+          ],
+          "definitionOfDone": [
+            "Sem colunas multivaloradas.",
+            "Sem anomalia de atualização."
+          ]
+        },
+        {
+          "id": "bd1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Dinheiro com NUMERIC vs. FLOAT",
+          "description": "Demonstre no SQL um erro clássico de arredondamento usando `FLOAT`/`REAL` em somas financeiras e corrija com `NUMERIC(12,2)` (ou centavos inteiros).",
+          "steps": [
+            "Execute somas com ponto flutuante binário.",
+            "Compare com `NUMERIC` ou `BIGINT` em centavos.",
+            "Documente a regra escolhida."
+          ],
+          "definitionOfDone": [
+            "Diferença de precisão visível no resultado.",
+            "Regra clara para valores monetários."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bd-fase-1-q1",
+          "prompt": "Por que valores monetários não devem ser armazenados em colunas `FLOAT` ou `DOUBLE`?",
+          "reviewTopicId": "bd-integridade",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque ponto flutuante binário tem imprecisão de representação decimal (ex.: 0.1 + 0.2 != 0.3).",
+              "correct": true,
+              "explanation": "Use `NUMERIC`/`DECIMAL` ou inteiros em centavos para dinheiro."
+            },
+            {
+              "id": "b",
+              "text": "Porque `FLOAT` não aceita números positivos.",
+              "correct": false,
+              "explanation": "Aceita, o problema é precisão decimal exata."
+            },
+            {
+              "id": "c",
+              "text": "Porque SQL não soma `FLOAT`.",
+              "correct": false,
+              "explanation": "Soma, mas acumula erro de arredondamento."
+            }
+          ]
+        },
+        {
+          "id": "bd-fase-1-q2",
+          "prompt": "Como modelar um relacionamento N:N (ex.: estudantes e disciplinas) num banco relacional?",
+          "reviewTopicId": "bd-er",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Criando uma terceira tabela associativa (ex.: `matriculas`) com chaves estrangeiras para ambas.",
+              "correct": true,
+              "explanation": "Assim você evita repetir colunas (`disciplina1`, `disciplina2`) ou listas em texto."
+            },
+            {
+              "id": "b",
+              "text": "Colocando todos os IDs separados por vírgula numa coluna de texto.",
+              "correct": false,
+              "explanation": "Viola a 1ª Forma Normal e impede `FOREIGN KEY`."
+            },
+            {
+              "id": "c",
+              "text": "Usando apenas 1 tabela gigante.",
+              "correct": false,
+              "explanation": "Gera redundância e anomalias."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd-fase-2",
+      "number": 2,
+      "badgeTitle": "Performance",
+      "title": "Índices, planos de execução e tuning",
+      "topics": [
+        {
+          "id": "bd-indices",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Índices B-Tree, compostos e seletividade",
+          "description": "Índice acelera `WHERE`, `JOIN` e `ORDER BY`, mas deixa `INSERT`/`UPDATE` mais lentos e ocupa disco. Entenda a ordem das colunas num índice composto `(tenant_id, created_at)` e por que função na coluna (`LOWER(email)`) pode anular o índice.",
+          "tags": [
+            "Índices",
+            "B-Tree"
+          ],
+          "prerequisites": [
+            "bd-integridade"
+          ],
+          "resources": [
+            {
+              "title": "Indexes no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/indexes.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Use The Index, Luke",
+              "url": "https://use-the-index-luke.com/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "bd-explain",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "EXPLAIN ANALYZE e leitura de planos",
+          "description": "Aprenda a ler `Seq Scan`, `Index Scan`, `Index Only Scan`, `Hash Join` e `Nested Loop`. Otimize medindo o plano real, não adicionando índice no chute.",
+          "tags": [
+            "EXPLAIN",
+            "Query Plan"
+          ],
+          "prerequisites": [
+            "bd-indices"
+          ],
+          "resources": [
+            {
+              "title": "Using EXPLAIN (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/using-explain.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Visualizador de planos Explain Dalibo",
+              "url": "https://explain.dalibo.com/",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "bd-paginacao",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Paginação por cursor (keyset) vs. OFFSET",
+          "description": "`OFFSET 50000` obriga o banco a ler e descartar 50 mil linhas antes de entregar 20. Para feeds e tabelas grandes, use paginação por cursor (`WHERE id > ultimo_id LIMIT 20`).",
+          "tags": [
+            "Paginação",
+            "Performance"
+          ],
+          "prerequisites": [
+            "bd-explain"
+          ],
+          "resources": [
+            {
+              "title": "Use The Index, Luke — No-Offset Pagination",
+              "url": "https://use-the-index-luke.com/no-offset",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "LIMIT e OFFSET (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/queries-limit.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bd2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Comparando índice simples vs. composto",
+          "description": "Numa tabela com 200 mil registros, meça uma consulta filtrando por `status` e `data` com índice simples vs. índice composto.",
+          "steps": [
+            "Popule 200 mil linhas.",
+            "Rode `EXPLAIN ANALYZE` sem índice.",
+            "Compare com índice composto na ordem certa."
+          ],
+          "definitionOfDone": [
+            "Tempos e buffers lidos anotados.",
+            "Explica por que a ordem das colunas no índice importa."
+          ]
+        },
+        {
+          "id": "bd2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Paginação OFFSET vs. Keyset",
+          "description": "Compare o tempo de buscar a página 5.000 usando `OFFSET` contra `WHERE id > X LIMIT 20`.",
+          "steps": [
+            "Meça com `EXPLAIN ANALYZE`.",
+            "Registre a diferença de tempo e linhas lidas.",
+            "Documente quando `OFFSET` ainda é aceitável."
+          ],
+          "definitionOfDone": [
+            "Keyset é ordens de grandeza mais rápido em páginas fundas.",
+            "Trade-off (sem pular direto para página 42) explicado."
+          ]
+        },
+        {
+          "id": "bd2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Índice parcial e índice em expressão",
+          "description": "Crie um índice parcial (`WHERE ativo = true`) para consultas de itens ativos e um índice funcional para busca case-insensitive sem fazer `Seq Scan`.",
+          "steps": [
+            "Mostre `LOWER(email)` ignorando índice comum.",
+            "Crie índice em `LOWER(email)`.",
+            "Comprove uso com `EXPLAIN`."
+          ],
+          "definitionOfDone": [
+            "Tamanho menor do índice parcial demonstrado.",
+            "`EXPLAIN` confirma `Index Scan`."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bd-fase-2-q1",
+          "prompt": "Qual o custo de criar índices em TODAS as colunas de uma tabela?",
+          "reviewTopicId": "bd-indices",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Consome muito espaço em disco/RAM e deixa `INSERT`, `UPDATE` e `DELETE` mais lentos, pois cada índice precisa ser atualizado.",
+              "correct": true,
+              "explanation": "Índices devem ser criados com base nas consultas reais da aplicação."
+            },
+            {
+              "id": "b",
+              "text": "Nenhum, índices são gratuitos.",
+              "correct": false,
+              "explanation": "Têm custo de escrita e armazenamento."
+            },
+            {
+              "id": "c",
+              "text": "Impede o `SELECT` de funcionar.",
+              "correct": false,
+              "explanation": "Leituras podem até acelerar, o custo está nas escritas e memória."
+            }
+          ]
+        },
+        {
+          "id": "bd-fase-2-q2",
+          "prompt": "Por que `OFFSET 100000` fica lento em tabelas grandes?",
+          "reviewTopicId": "bd-paginacao",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque o banco precisa percorrer e contar as 100.000 primeiras linhas antes de descartá-las.",
+              "correct": true,
+              "explanation": "Paginação por cursor (keyset) vai direto ao ponto via índice."
+            },
+            {
+              "id": "b",
+              "text": "Porque SQL não aceita números maiores que 1000.",
+              "correct": false,
+              "explanation": "Aceita, mas o custo cresce linearmente com o offset."
+            },
+            {
+              "id": "c",
+              "text": "Porque apaga os registros pulados.",
+              "correct": false,
+              "explanation": "Não apaga."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd-fase-3",
+      "number": 3,
+      "badgeTitle": "Concorrência",
+      "title": "Transações, locks e isolamento",
+      "topics": [
+        {
+          "id": "bd-acid",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "ACID e níveis de isolamento",
+          "description": "Atomicidade, Consistência, Isolamento e Durabilidade. Entenda o que muda entre `READ COMMITTED`, `REPEATABLE READ` e `SERIALIZABLE` e anomalias como leitura suja e atualização perdida.",
+          "tags": [
+            "ACID",
+            "Isolamento"
+          ],
+          "prerequisites": [
+            "bd-integridade"
+          ],
+          "resources": [
+            {
+              "title": "Transaction Isolation (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Transações no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "bd-locks",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Locks, deadlocks e SELECT FOR UPDATE",
+          "description": "Quando duas transações disputam a última unidade de estoque ao mesmo tempo, sem `SELECT ... FOR UPDATE` ou atualização condicional atômica (`WHERE estoque >= qty`), você vende negativo.",
+          "tags": [
+            "Locks",
+            "Concorrência"
+          ],
+          "prerequisites": [
+            "bd-acid"
+          ],
+          "resources": [
+            {
+              "title": "Explicit Locking (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/explicit-locking.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Deadlocks no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-DEADLOCKS",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "bd-migrations",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Migrações seguras sem derrubar produção",
+          "description": "Adicionar `NOT NULL` sem padrão ou renomear coluna em uso trava a tabela ou quebra a versão antiga do app que ainda está rodando durante o deploy. Faça mudanças em passos compatíveis (expand-and-contract).",
+          "tags": [
+            "Migrations",
+            "Zero-downtime"
+          ],
+          "prerequisites": [
+            "bd-locks"
+          ],
+          "resources": [
+            {
+              "title": "CREATE INDEX CONCURRENTLY (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/sql-createindex.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Zero-downtime Migrations (Expand and Contract)",
+              "url": "https://martinfowler.com/bliki/ParallelChange.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bd3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Baixa de estoque sem saldo negativo",
+          "description": "Escreva um `UPDATE` atômico com `CHECK (estoque >= 0)` que impede duas compras simultâneas de deixarem o estoque negativo.",
+          "steps": [
+            "Crie a tabela com `CHECK`.",
+            "Execute `UPDATE ... SET estoque = estoque - 1 WHERE id = 1 AND estoque >= 1`.",
+            "Verifique linhas afetadas = 0 quando zerar."
+          ],
+          "definitionOfDone": [
+            "Nunca fica negativo mesmo sob concorrência.",
+            "Regra protegida no banco, não só no `if` do app."
+          ]
+        },
+        {
+          "id": "bd3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Reproduzindo um deadlock em dois terminais",
+          "description": "Abra duas sessões `psql`, bloqueie a linha A na sessão 1 e B na sessão 2, e tente cruzar os acessos para ver o banco detectar e abortar o deadlock.",
+          "steps": [
+            "Inicie `BEGIN` nas duas sessões.",
+            "Atualize registros em ordem oposta (1->2 vs 2->1).",
+            "Observe a mensagem de deadlock e explique como evitar (sempre travar na mesma ordem)."
+          ],
+          "definitionOfDone": [
+            "Deadlock reproduzido e registrado.",
+            "Solução por ordenação consistente explicada."
+          ]
+        },
+        {
+          "id": "bd3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Plano de migração expand-and-contract",
+          "description": "Escreva os 3 scripts SQL em sequência para renomear uma coluna em produção sem parar a aplicação.",
+          "steps": [
+            "Passo 1: adicionar coluna nova mantendo a antiga (dual write).",
+            "Passo 2: backfill dos dados antigos em lotes.",
+            "Passo 3: remover coluna antiga após deploy do código novo."
+          ],
+          "definitionOfDone": [
+            "Nenhum deploy intermediário quebra.",
+            "Backfill feito em lotes pequenos para evitar lock longo."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bd-fase-3-q1",
+          "prompt": "Como prevenir a maioria dos deadlocks entre duas transações que atualizam os mesmos recursos?",
+          "reviewTopicId": "bd-locks",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Garantindo que todas as transações adquiram os locks na mesma ordem determinística (ex.: por ID crescente).",
+              "correct": true,
+              "explanation": "Sem espera circular, não há deadlock."
+            },
+            {
+              "id": "b",
+              "text": "Desligando as chaves primárias.",
+              "correct": false,
+              "explanation": "Não resolve concorrência."
+            },
+            {
+              "id": "c",
+              "text": "Usando `SELECT *`.",
+              "correct": false,
+              "explanation": "Não tem relação."
+            }
+          ]
+        },
+        {
+          "id": "bd-fase-3-q2",
+          "prompt": "Por que `CREATE INDEX CONCURRENTLY` é útil em produção no PostgreSQL?",
+          "reviewTopicId": "bd-migrations",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Permite criar o índice sem bloquear escritas (`INSERT`/`UPDATE`/`DELETE`) na tabela inteira durante a construção.",
+              "correct": true,
+              "explanation": "Leva um pouco mais de tempo, mas não tira a tabela do ar."
+            },
+            {
+              "id": "b",
+              "text": "Cria o índice sem usar espaço em disco.",
+              "correct": false,
+              "explanation": "O índice final ocupa o mesmo espaço."
+            },
+            {
+              "id": "c",
+              "text": "Apaga índices antigos sozinho.",
+              "correct": false,
+              "explanation": "Não apaga."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd-fase-4",
+      "number": 4,
+      "badgeTitle": "Além do relacional",
+      "title": "NoSQL, documentos, chave-valor e escolha certa",
+      "topics": [
+        {
+          "id": "bd-nosql",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Documentos (MongoDB) vs. Relacional + JSONB",
+          "description": "Bancos de documentos guardam árvores JSON completas juntas (ótimo para catálogo flexível ou leitura de agregado inteiro, ruim para muitos relacionamentos cruzados). E lembre: PostgreSQL com `JSONB` resolve muitos casos híbridos sem outro banco.",
+          "tags": [
+            "NoSQL",
+            "JSONB"
+          ],
+          "prerequisites": [
+            "bd-normalizacao"
+          ],
+          "resources": [
+            {
+              "title": "JSON Types no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/datatype-json.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Data Modeling (MongoDB Docs)",
+              "url": "https://www.mongodb.com/docs/manual/data-modeling/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "bd-kv",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Chave-Valor (Redis) e séries temporais",
+          "description": "Use chave-valor em memória (Redis) para cache, sessões, contadores e filas rápidas com TTL — nunca como único lugar de dados que não podem se perder sem configurar persistência. Para métricas/sensores por tempo, conheça séries temporais.",
+          "tags": [
+            "Redis",
+            "Chave-Valor"
+          ],
+          "prerequisites": [
+            "bd-nosql"
+          ],
+          "resources": [
+            {
+              "title": "Redis Data Types",
+              "url": "https://redis.io/docs/latest/develop/data-types/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Persistência no Redis (RDB e AOF)",
+              "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "bd-escolha",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Critério de escolha: SQL, NoSQL ou poliglota",
+          "description": "Relacional é o padrão seguro quando você não sabe todas as perguntas futuras. Só adicione um segundo banco (Redis, Elastic, Mongo, ClickHouse) quando houver gargalo medido que o primeiro não resolve bem.",
+          "tags": [
+            "Arquitetura",
+            "Critério"
+          ],
+          "prerequisites": [
+            "bd-kv",
+            "bd-acid"
+          ],
+          "resources": [
+            {
+              "title": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/current/index.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Choosing a Database (System Design Primer)",
+              "url": "https://github.com/donnemartin/system-design-primer#database",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bd4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Atributos variáveis com JSONB",
+          "description": "Modele uma tabela `produtos` no PostgreSQL com colunas fixas (`id`, `nome`, `preco`) e uma coluna `JSONB` para especificações variáveis, indexada com GIN.",
+          "steps": [
+            "Insira produtos de categorias diferentes com atributos distintos.",
+            "Consulte filtrando por uma chave dentro do JSONB.",
+            "Crie índice GIN e veja o `EXPLAIN`."
+          ],
+          "definitionOfDone": [
+            "Combina integridade relacional com flexibilidade.",
+            "Consulta dentro do JSONB funciona."
+          ]
+        },
+        {
+          "id": "bd4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Ranking e sessão no Redis",
+          "description": "Use `Sorted Set` (`ZADD`/`ZREVRANGE`) do Redis para um ranking em tempo real e chaves com `EX` (TTL) para sessão expirável.",
+          "steps": [
+            "Suba Redis local no Docker.",
+            "Crie um ranking de pontuação.",
+            "Crie chave com expiração automática de 30s."
+          ],
+          "definitionOfDone": [
+            "Ranking retorna top 5 ordenado.",
+            "Chave expira sozinha após TTL."
+          ]
+        },
+        {
+          "id": "bd4-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Estudo comparativo: quando NÃO usar NoSQL",
+          "description": "Modele um sistema financeiro simples em documento vs. relacional e mostre onde transações multi-documento ou joins pesados tornam o modelo de documento mais complexo.",
+          "steps": [
+            "Compare os dois esquemas.",
+            "Mostre uma consulta analítica cruzada em ambos.",
+            "Escreva a recomendação final."
+          ],
+          "definitionOfDone": [
+            "Argumentação técnica sem torcida por ferramenta.",
+            "Custo operacional de manter 2 bancos considerado."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bd-fase-4-q1",
+          "prompt": "Qual o melhor ponto de partida quando os padrões de consulta futuros ainda vão mudar?",
+          "reviewTopicId": "bd-escolha",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Banco relacional normalizado (como PostgreSQL), porque permite novos joins e índices sem duplicar dados.",
+              "correct": true,
+              "explanation": "Modelos NoSQL costumam ser desenhados para consultas específicas já conhecidas."
+            },
+            {
+              "id": "b",
+              "text": "Subir 4 bancos diferentes no primeiro dia.",
+              "correct": false,
+              "explanation": "Complexidade operacional prematura."
+            },
+            {
+              "id": "c",
+              "text": "Guardar tudo em arquivos CSV.",
+              "correct": false,
+              "explanation": "Sem controle de concorrência nem índices."
+            }
+          ]
+        },
+        {
+          "id": "bd-fase-4-q2",
+          "prompt": "Quando `JSONB` no PostgreSQL costuma ser melhor do que adicionar um banco de documentos separado?",
+          "reviewTopicId": "bd-nosql",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Quando apenas parte do registro tem esquema flexível e o restante precisa de integridade, transações e joins relacionais.",
+              "correct": true,
+              "explanation": "Você evita sincronizar e operar dois sistemas de banco."
+            },
+            {
+              "id": "b",
+              "text": "Nunca: PostgreSQL não lê JSON.",
+              "correct": false,
+              "explanation": "PostgreSQL tem suporte nativo e indexação GIN para JSONB."
+            },
+            {
+              "id": "c",
+              "text": "Quando você quer substituir todas as colunas por uma única coluna JSON.",
+              "correct": false,
+              "explanation": "Colunas estruturadas conhecidas continuam melhores como colunas normais."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

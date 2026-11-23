@@ -22,8 +22,8 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "Projeto de algoritmos (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/",
+              "title": "Notação assintótica (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/assintotica.html",
               "lang": "pt",
               "kind": "leitura"
             },
@@ -50,14 +50,14 @@
           ],
           "resources": [
             {
-              "title": "Listas no Visualgo",
-              "url": "https://visualgo.net/en/list",
-              "lang": "en",
-              "kind": "pratica"
+              "title": "Vetores e endereços (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/pont.html",
+              "lang": "pt",
+              "kind": "leitura"
             },
             {
-              "title": "Algoritmos (Khan Academy)",
-              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms",
+              "title": "Notação assintótica (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms/asymptotic-notation/a/big-o-notation",
               "lang": "pt",
               "kind": "curso"
             }
@@ -77,16 +77,16 @@
           ],
           "resources": [
             {
-              "title": "Algoritmos (Khan Academy)",
-              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms",
+              "title": "Busca binária (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search",
               "lang": "pt",
               "kind": "curso"
             },
             {
-              "title": "Introduction to Algorithms (MIT OCW)",
-              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
-              "lang": "en",
-              "kind": "curso"
+              "title": "Busca binária (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/bubi.html",
+              "lang": "pt",
+              "kind": "leitura"
             }
           ]
         }
@@ -214,16 +214,16 @@
           ],
           "resources": [
             {
+              "title": "Listas encadeadas (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/lista.html",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
               "title": "Listas no Visualgo",
               "url": "https://visualgo.net/en/list",
               "lang": "en",
               "kind": "pratica"
-            },
-            {
-              "title": "Projeto de algoritmos (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/",
-              "lang": "pt",
-              "kind": "leitura"
             }
           ]
         },
@@ -241,10 +241,10 @@
           ],
           "resources": [
             {
-              "title": "Algoritmos (Khan Academy)",
-              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms",
+              "title": "Pilhas (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/pilha.html",
               "lang": "pt",
-              "kind": "curso"
+              "kind": "leitura"
             },
             {
               "title": "Estruturas de dados no freeCodeCamp",
@@ -268,16 +268,16 @@
           ],
           "resources": [
             {
-              "title": "Listas no Visualgo",
-              "url": "https://visualgo.net/en/list",
-              "lang": "en",
-              "kind": "pratica"
+              "title": "Filas (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/fila.html",
+              "lang": "pt",
+              "kind": "leitura"
             },
             {
-              "title": "Introduction to Algorithms (MIT OCW)",
-              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+              "title": "Filas no Visualgo",
+              "url": "https://visualgo.net/en/list?slide=4",
               "lang": "en",
-              "kind": "curso"
+              "kind": "pratica"
             }
           ]
         }
@@ -405,16 +405,16 @@
           ],
           "resources": [
             {
-              "title": "Visualgo",
-              "url": "https://visualgo.net/en/list",
-              "lang": "en",
-              "kind": "pratica"
+              "title": "Árvores binárias de busca (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/arvore.html",
+              "lang": "pt",
+              "kind": "leitura"
             },
             {
-              "title": "Introduction to Algorithms (MIT OCW)",
-              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+              "title": "BST no Visualgo",
+              "url": "https://visualgo.net/en/bst",
               "lang": "en",
-              "kind": "curso"
+              "kind": "pratica"
             }
           ]
         },
@@ -432,16 +432,16 @@
           ],
           "resources": [
             {
-              "title": "Big-O Cheat Sheet",
-              "url": "https://www.bigocheatsheet.com/",
-              "lang": "en",
+              "title": "Tabelas de dispersão / Hashing (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/hashing.html",
+              "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "Projeto de algoritmos (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/",
-              "lang": "pt",
-              "kind": "leitura"
+              "title": "Hash Table no Visualgo",
+              "url": "https://visualgo.net/en/hashtable",
+              "lang": "en",
+              "kind": "pratica"
             }
           ]
         },
@@ -465,10 +465,10 @@
               "kind": "leitura"
             },
             {
-              "title": "Introduction to Algorithms (MIT OCW)",
-              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+              "title": "Sorting no Visualgo",
+              "url": "https://visualgo.net/en/sorting",
               "lang": "en",
-              "kind": "curso"
+              "kind": "pratica"
             }
           ]
         },
@@ -487,16 +487,16 @@
           ],
           "resources": [
             {
-              "title": "Introduction to Algorithms (MIT OCW)",
-              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
-              "lang": "en",
+              "title": "Busca em largura BFS (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms/breadth-first-search/a/breadth-first-search-and-its-uses",
+              "lang": "pt",
               "kind": "curso"
             },
             {
-              "title": "Algoritmos (Khan Academy)",
-              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms",
-              "lang": "pt",
-              "kind": "curso"
+              "title": "Graph Traversal no Visualgo",
+              "url": "https://visualgo.net/en/dfsbfs",
+              "lang": "en",
+              "kind": "pratica"
             }
           ]
         }
@@ -599,6 +599,398 @@
               "text": "A ordem alfabética dos vértices.",
               "correct": false,
               "explanation": "Nome não é distância."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ed-fase-4",
+      "number": 4,
+      "badgeTitle": "Hierarquias",
+      "title": "Recursão, heaps e árvores balanceadas",
+      "topics": [
+        {
+          "id": "ed-recursao",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Recursão e pilha de chamadas",
+          "description": "Toda função recursiva precisa de um caso base que para e de um passo que reduz o problema. Desenhe a árvore de chamadas para enxergar trabalho repetido (como Fibonacci ingênuo) e limite da pilha.",
+          "tags": [
+            "Recursão",
+            "Call Stack"
+          ],
+          "prerequisites": [
+            "ed-pilha"
+          ],
+          "resources": [
+            {
+              "title": "Recursão (Khan Academy)",
+              "url": "https://pt.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/recursion",
+              "lang": "pt",
+              "kind": "curso"
+            },
+            {
+              "title": "Recursão (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/recu.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ed-heap",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Heap e Fila de Prioridade",
+          "description": "Quando você precisa sempre tirar o menor (ou maior) item sem reordenar tudo a cada inserção, o heap binário entrega o topo em O(1) e insere/remove em O(log n). Base para Top-K e escalonadores.",
+          "tags": [
+            "Heap",
+            "Priority Queue"
+          ],
+          "prerequisites": [
+            "ed-fila",
+            "ed-arvore"
+          ],
+          "resources": [
+            {
+              "title": "Heap binário no Visualgo",
+              "url": "https://visualgo.net/en/heap",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "Filas de prioridade (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/hpsrt.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ed-avl",
+          "level": "avancado",
+          "hours": 7,
+          "title": "Árvores balanceadas e B-Trees",
+          "description": "Árvore binária de busca sem equilíbrio vira lista ligada se você inserir dados já ordenados. AVL/Rubro-Negra mantêm altura O(log n) na RAM; B-Tree e B+Tree reduzem acessos a disco e movem os índices de quase todo banco de dados.",
+          "tags": [
+            "AVL",
+            "B-Tree"
+          ],
+          "prerequisites": [
+            "ed-arvore"
+          ],
+          "resources": [
+            {
+              "title": "Árvores AVL e balanceamento (Visualgo)",
+              "url": "https://visualgo.net/en/bst?slide=1",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "B-Tree Indexes no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/btree-intro.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ed4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Listar pastas recursivamente",
+          "description": "Escreva uma função recursiva que percorre uma árvore de diretórios (real ou simulada em objetos) e imprime a profundidade de cada item.",
+          "steps": [
+            "Defina o caso base (arquivo ou pasta vazia).",
+            "Passe a profundidade como parâmetro.",
+            "Teste com pelo menos 3 níveis."
+          ],
+          "definitionOfDone": [
+            "Funciona para árvore vazia e profunda.",
+            "Não entra em laço infinito."
+          ]
+        },
+        {
+          "id": "ed4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Os K maiores sem ordenar tudo",
+          "description": "Encontre os 5 maiores números de um fluxo de 100 mil números usando um min-heap de tamanho fixo 5 e compare com ordenar o vetor inteiro.",
+          "steps": [
+            "Implemente ou use o heap da linguagem.",
+            "Mantenha no máximo K elementos no heap.",
+            "Escreva a complexidade O(N log K) vs. O(N log N)."
+          ],
+          "definitionOfDone": [
+            "Os 5 maiores batem com a ordenação completa.",
+            "A análise de memória e tempo está no README."
+          ]
+        },
+        {
+          "id": "ed4-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Árvore degenerada vs. balanceada",
+          "description": "Insira os números de 1 a 1000 em ordem numa árvore binária de busca simples e meça a altura obtida; compare com uma árvore balanceada.",
+          "steps": [
+            "Meça a altura na inserção ordenada.",
+            "Embaralhe as chaves e meça de novo.",
+            "Explique por que o pior caso pede balanceamento."
+          ],
+          "definitionOfDone": [
+            "A altura próxima de 1000 vs. ~10 está demonstrada.",
+            "Explica em 3 linhas a rotação ou B-Tree."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ed-fase-4-q1",
+          "prompt": "Qual estrutura entrega os K maiores elementos de um fluxo gigante mantendo apenas K itens na memória?",
+          "reviewTopicId": "ed-heap",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Um min-heap de tamanho K.",
+              "correct": true,
+              "explanation": "O menor dos K maiores fica no topo e é trocado sempre que aparece alguém maior."
+            },
+            {
+              "id": "b",
+              "text": "Uma pilha simples.",
+              "correct": false,
+              "explanation": "Pilha não mantém ordem por valor."
+            },
+            {
+              "id": "c",
+              "text": "Uma tabela hash.",
+              "correct": false,
+              "explanation": "Hash não ordena nem acha o mínimo em O(1)."
+            }
+          ]
+        },
+        {
+          "id": "ed-fase-4-q2",
+          "prompt": "O que acontece numa árvore binária de busca comum se você inserir chaves já ordenadas (1, 2, 3, ..., N)?",
+          "reviewTopicId": "ed-avl",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Ela degenera em uma lista ligada com altura N e busca O(N).",
+              "correct": true,
+              "explanation": "Todos os nós caem sempre para o filho direito."
+            },
+            {
+              "id": "b",
+              "text": "Ela se balanceia automaticamente sem rotações.",
+              "correct": false,
+              "explanation": "Só árvores balanceadas (AVL, Red-Black) fazem rotações."
+            },
+            {
+              "id": "c",
+              "text": "Ela recusa a inserção.",
+              "correct": false,
+              "explanation": "Ela aceita, mas perde eficiência."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ed-fase-5",
+      "number": 5,
+      "badgeTitle": "Técnicas",
+      "title": "Dois ponteiros, guloso, DP e Dijkstra",
+      "topics": [
+        {
+          "id": "ed-guloso",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Dois ponteiros, janela deslizante e guloso",
+          "description": "Em vez de dois laços aninhados O(n²), dois ponteiros ou uma janela deslizante resolvem muitos problemas de vetor/string em O(n). Já algoritmos gulosos escolhem o melhor passo local — saiba provar quando funcionam e quando falham.",
+          "tags": [
+            "Two Pointers",
+            "Guloso"
+          ],
+          "prerequisites": [
+            "ed-busca",
+            "ed-ordena"
+          ],
+          "resources": [
+            {
+              "title": "Algoritmos gulosos (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/guloso.html",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Two Pointers Technique (USACO Guide)",
+              "url": "https://usaco.guide/silver/two-pointers",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "ed-dp",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Programação dinâmica e memoização",
+          "description": "Quando um problema recursivo recalcula os mesmos subproblemas várias vezes (como mochila ou menor número de moedas), guarde os resultados numa tabela (bottom-up) ou cache (top-down/memoização) e derrube o custo de exponencial para polinomial.",
+          "tags": [
+            "DP",
+            "Memoização"
+          ],
+          "prerequisites": [
+            "ed-recursao",
+            "ed-guloso"
+          ],
+          "resources": [
+            {
+              "title": "Programação Dinâmica (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/mochila.html",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Intro to Dynamic Programming (USACO Guide)",
+              "url": "https://usaco.guide/gold/intro-dp",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "ed-dijkstra",
+          "level": "avancado",
+          "hours": 7,
+          "title": "Caminho mínimo com peso (Dijkstra) e DAGs",
+          "description": "BFS acha menos saltos; quando as arestas têm custo positivo (tempo, distância), Dijkstra com fila de prioridade acha o menor custo total. Em grafos sem ciclo (DAGs), ordenação topológica resolve dependências como pré-requisitos de disciplinas.",
+          "tags": [
+            "Dijkstra",
+            "DAG"
+          ],
+          "prerequisites": [
+            "ed-grafo",
+            "ed-heap"
+          ],
+          "resources": [
+            {
+              "title": "Shortest Paths no Visualgo",
+              "url": "https://visualgo.net/en/sssp",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "Algoritmo de Dijkstra (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/dijkstra.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ed5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Soma alvo em vetor ordenado",
+          "description": "Encontre dois números num vetor ordenado que somam um alvo X usando dois ponteiros em O(n), comparando com a força bruta O(n²).",
+          "steps": [
+            "Implemente a versão com dois laços.",
+            "Implemente a versão com ponteiro no início e no fim.",
+            "Conte comparações para 1.000 elementos."
+          ],
+          "definitionOfDone": [
+            "As duas versões dão a mesma resposta.",
+            "Cobre o caso em que o par não existe."
+          ]
+        },
+        {
+          "id": "ed5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Troco mínimo: guloso vs. DP",
+          "description": "Mostre um sistema de moedas (ex.: 1, 3, 4 para troco 6) onde o algoritmo guloso erra e a programação dinâmica acerta o menor número de moedas.",
+          "steps": [
+            "Implemente o guloso.",
+            "Implemente a tabela de programação dinâmica.",
+            "Mostre o contraexemplo onde o guloso usa 3 moedas em vez de 2."
+          ],
+          "definitionOfDone": [
+            "O contraexemplo roda em teste automatizado.",
+            "Explica em duas linhas por que a DP acerta."
+          ]
+        },
+        {
+          "id": "ed5-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Rota mais rápida com Dijkstra",
+          "description": "Adicione tempos em minutos nas arestas do mapa de lugares da etapa anterior e calcule a rota mais rápida com Dijkstra + fila de prioridade.",
+          "steps": [
+            "Modele o grafo com pesos positivos.",
+            "Use fila de prioridade e reconstrua o caminho.",
+            "Compare a rota de menos saltos (BFS) com a mais rápida (Dijkstra)."
+          ],
+          "definitionOfDone": [
+            "Há pelo menos um caso em que BFS e Dijkstra escolhem caminhos diferentes.",
+            "Custo total e sequência de vértices aparecem na saída."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ed-fase-5-q1",
+          "prompt": "Qual condição precisa existir para usar Programação Dinâmica?",
+          "reviewTopicId": "ed-dp",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Subestrutura ótima e subproblemas sobrepostos (o mesmo subproblema é pedido várias vezes).",
+              "correct": true,
+              "explanation": "Guardar o resultado de subproblemas repetidos evita recalcular a mesma árvore exponencialmente."
+            },
+            {
+              "id": "b",
+              "text": "A entrada precisa ser um grafo sem arestas.",
+              "correct": false,
+              "explanation": "DP se aplica a sequências, árvores, tabelas e grafos."
+            },
+            {
+              "id": "c",
+              "text": "O problema não pode ter solução recursiva.",
+              "correct": false,
+              "explanation": "Na verdade, a recorrência costuma ser o ponto de partida da DP."
+            }
+          ]
+        },
+        {
+          "id": "ed-fase-5-q2",
+          "prompt": "O algoritmo de Dijkstra clássico assume o quê sobre os pesos das arestas?",
+          "reviewTopicId": "ed-dijkstra",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Que não existem arestas com peso negativo.",
+              "correct": true,
+              "explanation": "Com peso negativo, um caminho fechado como 'menor' ainda pode diminuir depois; aí entra Bellman-Ford."
+            },
+            {
+              "id": "b",
+              "text": "Que todos os pesos são iguais a 1.",
+              "correct": false,
+              "explanation": "Quando todos são 1, BFS já resolve sem heap."
+            },
+            {
+              "id": "c",
+              "text": "Que o grafo tem no máximo 10 vértices.",
+              "correct": false,
+              "explanation": "Não há limite fixo de vértices."
             }
           ]
         }

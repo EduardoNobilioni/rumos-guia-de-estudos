@@ -604,9 +604,15 @@
           ],
           "resources": [
             {
-              "title": "Acessibilidade no Flutter",
+              "title": "Accessibility in Flutter",
               "url": "https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility",
               "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Android Accessibility Guidelines",
+              "url": "https://developer.android.com/guide/topics/ui/accessibility?hl=pt-br",
+              "lang": "pt",
               "kind": "documentacao"
             }
           ],
@@ -626,8 +632,14 @@
           ],
           "resources": [
             {
-              "title": "Validação de formulário",
+              "title": "Build a form with validation (Flutter)",
               "url": "https://docs.flutter.dev/cookbook/forms/validation",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "Retrieve the value of a text field (Flutter)",
+              "url": "https://docs.flutter.dev/cookbook/forms/retrieve-input",
               "lang": "en",
               "kind": "pratica"
             }
@@ -849,20 +861,14 @@
           ],
           "resources": [
             {
-              "title": "Opções de estado no Flutter",
-              "url": "https://docs.flutter.dev/data-and-backend/state-mgmt/options",
-              "lang": "en",
-              "kind": "leitura"
-            },
-            {
-              "title": "Começando com Riverpod",
+              "title": "Documentação oficial do Riverpod",
               "url": "https://riverpod.dev/docs/introduction/getting_started",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "Pacote flutter_riverpod",
-              "url": "https://pub.dev/packages/flutter_riverpod",
+              "title": "Simple app state management (Flutter)",
+              "url": "https://docs.flutter.dev/data-and-backend/state-mgmt/simple",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -883,10 +889,16 @@
           ],
           "resources": [
             {
-              "title": "Rede no Flutter",
-              "url": "https://docs.flutter.dev/data-and-backend/networking",
+              "title": "SharedPreferences / Key-Value (Flutter)",
+              "url": "https://docs.flutter.dev/cookbook/persistence/key-value",
               "lang": "en",
-              "kind": "documentacao"
+              "kind": "pratica"
+            },
+            {
+              "title": "Offline-first app architecture (Android)",
+              "url": "https://developer.android.com/topic/architecture/data-layer/offline-first?hl=pt-br",
+              "lang": "pt",
+              "kind": "leitura"
             }
           ],
           "title": "Offline e rede ruim",
@@ -1104,15 +1116,15 @@
           ],
           "resources": [
             {
-              "title": "Publicar no Android Studio",
-              "url": "https://developer.android.com/studio/publish?hl=pt-br",
+              "title": "Preparar e lançar no Google Play (Android pt-BR)",
+              "url": "https://developer.android.com/studio/publish/preparing?hl=pt-br",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Diretrizes da App Store",
-              "url": "https://developer.apple.com/app-store/review/guidelines/",
-              "lang": "en",
+              "title": "App signing and Play Console (Android pt-BR)",
+              "url": "https://developer.android.com/studio/publish/app-signing?hl=pt-br",
+              "lang": "pt",
               "kind": "documentacao"
             }
           ],

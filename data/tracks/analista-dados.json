@@ -1,14 +1,14 @@
 {
   "id": "analista-dados",
   "name": "Analista de Dados",
-  "tagline": "Planilha, SQL e um painel que responde uma pergunta",
-  "description": "Para quem analisa mais do que modela: Excel, consulta SQL e Power BI. O recorte é achar o número e explicar, não treinar um modelo.",
+  "tagline": "Planilha, SQL, Power BI, estatística e entrega para decisão",
+  "description": "Para quem analisa dados para responder perguntas de negócio: Excel/Planilhas, SQL analítico, modelagem e DAX no Power BI, estatística prática, coortes, Python exploratório e testes A/B.",
   "phases": [
     {
       "id": "an-fase-1",
       "number": 1,
       "badgeTitle": "Planilha",
-      "title": "Excel e tabela dinâmica",
+      "title": "Excel, limpeza e tabela dinâmica",
       "topics": [
         {
           "id": "an-planilha",
@@ -17,12 +17,13 @@
           "title": "Célula, tipo e filtro",
           "description": "Texto guardado como texto, número como número, data como data. Filtro e ordenação respondem a pergunta pequena. Misturar tipo na coluna quebra a soma em silêncio.",
           "tags": [
-            "Excel"
+            "Excel",
+            "Planilhas"
           ],
           "prerequisites": [],
           "resources": [
             {
-              "title": "Excel",
+              "title": "Excel — suporte oficial",
               "url": "https://support.microsoft.com/pt-br/excel",
               "lang": "pt",
               "kind": "documentacao"
@@ -42,6 +43,34 @@
           ]
         },
         {
+          "id": "an-procv",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "PROCX/PROCV, SOMASES e limpeza de texto",
+          "description": "Cruze tabelas sem copiar na mão com PROCX (XLOOKUP) ou ÍNDICE+CORRESP. Use SOMASES/CONT.SES para resumir por critério e ARRUMAR/SUBSTITUIR para limpar espaços ocultos que impedem o cruzamento.",
+          "tags": [
+            "PROCX",
+            "Fórmulas"
+          ],
+          "prerequisites": [
+            "an-planilha"
+          ],
+          "resources": [
+            {
+              "title": "Função PROCX (Microsoft)",
+              "url": "https://support.microsoft.com/pt-br/office/procx-fun%C3%A7%C3%A3o-procx-b7fd680e-6d10-43e6-84f9-88eae8bf5929",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Função SOMASES (Microsoft)",
+              "url": "https://support.microsoft.com/pt-br/office/fun%C3%A7%C3%A3o-somases-c9e748f5-7ea7-455d-9406-611cebce642b",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
           "id": "an-dinamica",
           "level": "iniciante",
           "hours": 6,
@@ -55,10 +84,16 @@
           ],
           "resources": [
             {
-              "title": "Criar uma tabela dinâmica",
+              "title": "Criar uma tabela dinâmica (Microsoft pt-BR)",
               "url": "https://support.microsoft.com/pt-br/office/criar-uma-tabela-din%C3%A2mica-para-analisar-dados-de-planilha-a9a84538-bfe9-40a9-a8e9-f99134456576",
               "lang": "pt",
               "kind": "pratica"
+            },
+            {
+              "title": "Tabelas dinâmicas no Google Planilhas",
+              "url": "https://support.google.com/docs/answer/1272900",
+              "lang": "pt",
+              "kind": "documentacao"
             }
           ]
         },
@@ -69,17 +104,24 @@
           "title": "Gráfico com uma frase",
           "description": "O título diz a conclusão, não o tipo do gráfico. Eixo com zero mentiroso e pizza com doze fatias atrapalham. Um gráfico por pergunta.",
           "tags": [
-            "Gráfico"
+            "Gráfico",
+            "Visualização"
           ],
           "prerequisites": [
             "an-dinamica"
           ],
           "resources": [
             {
-              "title": "Excel",
-              "url": "https://support.microsoft.com/pt-br/excel",
+              "title": "Criar um gráfico no Excel (Microsoft pt-BR)",
+              "url": "https://support.microsoft.com/pt-br/office/criar-um-gr%C3%A1fico-do-in%C3%ADcio-ao-fim-0baf399e-dd61-4e18-8a73-b3fd5d5680c2",
               "lang": "pt",
               "kind": "documentacao"
+            },
+            {
+              "title": "Tipos de gráficos e quando usar (Google)",
+              "url": "https://support.google.com/docs/answer/190718",
+              "lang": "pt",
+              "kind": "leitura"
             }
           ]
         }
@@ -252,9 +294,10 @@
           "level": "intermediario",
           "hours": 5,
           "title": "Agregar",
-          "description": "GROUP BY muda a unidade da resposta: de aluno para turma, de venda para mês. Filtro de linha e filtro de grupo não são o mesmo passo.",
+          "description": "GROUP BY muda a unidade da resposta: de aluno para turma, de venda para mês. Filtro de linha (WHERE) e filtro de grupo (HAVING) não são o mesmo passo.",
           "tags": [
-            "GROUP BY"
+            "GROUP BY",
+            "HAVING"
           ],
           "prerequisites": [
             "an-join"
@@ -271,6 +314,34 @@
               "url": "https://sqlbolt.com/",
               "lang": "en",
               "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "an-sql-analitico",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "CTEs, CASE e Window Functions",
+          "description": "Use CASE WHEN para criar faixas e categorias, CTEs (WITH) para organizar consultas em etapas e Window Functions (ROW_NUMBER, LAG, soma acumulada) para comparar o mês atual com o anterior.",
+          "tags": [
+            "CTE",
+            "Window Functions"
+          ],
+          "prerequisites": [
+            "an-grupo"
+          ],
+          "resources": [
+            {
+              "title": "CTEs (WITH) no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/queries-with.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Expressões CASE no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/functions-conditional.html",
+              "lang": "en",
+              "kind": "documentacao"
             }
           ]
         }
@@ -382,7 +453,7 @@
       "id": "an-fase-3",
       "number": 3,
       "badgeTitle": "Painel",
-      "title": "Power BI e a frase",
+      "title": "Power BI, modelagem e DAX",
       "topics": [
         {
           "id": "an-bi",
@@ -415,20 +486,55 @@
           "id": "an-modelo",
           "level": "intermediario",
           "hours": 5,
-          "title": "Modelo do painel",
-          "description": "Relacione tabelas pela chave, não por colar coluna repetida em todo visual. Medida tem nome de negócio. \"Soma de SomaDeValor\" não é nome.",
+          "title": "Modelo do painel (Star Schema)",
+          "description": "Relacione tabelas fato e dimensão pela chave, não por colar coluna repetida em todo visual. Crie uma tabela calendário dedicada e dê nomes de negócio às medidas.",
           "tags": [
-            "Modelo"
+            "Modelo",
+            "Star Schema"
           ],
           "prerequisites": [
             "an-bi"
           ],
           "resources": [
             {
+              "title": "Noções básicas do esquema em estrela (Power BI)",
+              "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/star-schema",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
               "title": "Começar no serviço do Power BI",
               "url": "https://learn.microsoft.com/pt-br/power-bi/fundamentals/service-get-started",
               "lang": "pt",
               "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "an-dax",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "DAX essencial e contexto de filtro",
+          "description": "Diferencie coluna calculada (calculada linha a linha na carga) de medida (calculada na hora conforme os filtros da tela). Domine SUM, DIVIDE, CALCULATE e comparações de período (YoY/MoM).",
+          "tags": [
+            "DAX",
+            "Power BI"
+          ],
+          "prerequisites": [
+            "an-modelo"
+          ],
+          "resources": [
+            {
+              "title": "Noções básicas de DAX no Power BI",
+              "url": "https://learn.microsoft.com/pt-br/power-bi/transform-model/desktop-quickstart-learn-dax-basics",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Usar DAX no Power BI Desktop",
+              "url": "https://learn.microsoft.com/pt-br/training/paths/dax-power-bi/",
+              "lang": "pt",
+              "kind": "curso"
             }
           ]
         },
@@ -439,17 +545,24 @@
           "title": "Contar o que o painel diz",
           "description": "Escreva três frases que a pessoa leva embora. Se o painel não sustenta a frase, tire o visual ou mude a frase. Não esconda recorte: diga o período e o que ficou de fora.",
           "tags": [
-            "Narrativa"
+            "Narrativa",
+            "Storytelling"
           ],
           "prerequisites": [
             "an-modelo"
           ],
           "resources": [
             {
-              "title": "O que é o Power BI Desktop",
-              "url": "https://learn.microsoft.com/pt-br/power-bi/fundamentals/desktop-what-is-desktop",
+              "title": "Storytelling com dados (Data-to-Viz)",
+              "url": "https://www.data-to-viz.com/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Boas práticas de design de relatórios (Microsoft pt-BR)",
+              "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/report-design-tips",
               "lang": "pt",
-              "kind": "documentacao"
+              "kind": "leitura"
             }
           ]
         }
@@ -476,10 +589,10 @@
           "level": "intermediario",
           "hours": 10,
           "title": "Um painel, uma decisão",
-          "description": "Monte um painel com no máximo quatro visuais para uma pergunta de negócio fictícia, com período no título.",
+          "description": "Monte um painel com no máximo quatro visuais para uma pergunta de negócio fictícia, com tabela calendário e medidas DAX nomeadas.",
           "steps": [
             "Escreva a decisão antes.",
-            "Relacione as tabelas se houver mais de uma.",
+            "Relacione as tabelas em modelo estrela.",
             "Peça para alguém dizer o que entendeu sem a sua explicação."
           ],
           "definitionOfDone": [
@@ -532,26 +645,387 @@
         },
         {
           "id": "an-fase-3-q2",
-          "prompt": "O que precisa estar escrito junto do número?",
-          "reviewTopicId": "an-contar",
+          "prompt": "Quando preferir uma Medida DAX em vez de uma Coluna Calculada?",
+          "reviewTopicId": "an-dax",
           "choices": [
             {
               "id": "a",
-              "text": "O recorte: período, população e o que ficou de fora.",
+              "text": "Quando o cálculo depende dos filtros dinâmicos do painel (como margem %, média ou variação no período).",
               "correct": true,
-              "explanation": "Número sem recorte mente por omissão."
+              "explanation": "Medidas avaliam no contexto dos filtros da tela e não ocupam memória extra na tabela."
             },
             {
               "id": "b",
-              "text": "A versão do Power BI.",
+              "text": "Sempre que você quiser criar uma categoria fixa para usar em um segmentador.",
               "correct": false,
-              "explanation": "Versão não interpreta o dado."
+              "explanation": "Segmentadores/eixos de filtro pedem coluna na tabela."
             },
             {
               "id": "c",
-              "text": "O nome do arquivo .pbix.",
+              "text": "Nunca: coluna calculada substitui todas as medidas.",
               "correct": false,
-              "explanation": "Arquivo não é a pergunta."
+              "explanation": "Razões como SUM(A)/SUM(B) ficam erradas se somadas linha a linha em coluna."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "an-fase-4",
+      "number": 4,
+      "badgeTitle": "Estatística e Python",
+      "title": "Estatística de negócio, coortes e Python",
+      "topics": [
+        {
+          "id": "an-estatistica",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Estatística aplicada ao negócio",
+          "description": "Média de salário ou ticket engana quando poucos valores são altíssimos: use mediana e percentis (p75, p90). Entenda dispersão, sazonalidade e por que comparar fevereiro com janeiro sem ajustar dias úteis distorce a leitura.",
+          "tags": [
+            "Estatística",
+            "Percentis"
+          ],
+          "prerequisites": [
+            "an-grafico"
+          ],
+          "resources": [
+            {
+              "title": "Estatística e Probabilidade (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/math/statistics-probability",
+              "lang": "pt",
+              "kind": "curso"
+            },
+            {
+              "title": "Resumindo dados quantitativos (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/math/statistics-probability/summarizing-quantitative-data",
+              "lang": "pt",
+              "kind": "curso"
+            }
+          ]
+        },
+        {
+          "id": "an-metricas",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Funil, retenção e análise de coorte",
+          "description": "Total acumulado de cadastros sempre sobe (métrica de vaidade). Análise de negócio olha conversão em funil, churn e retenção por coorte (quem entrou em janeiro ainda volta em março?).",
+          "tags": [
+            "KPI",
+            "Coorte"
+          ],
+          "prerequisites": [
+            "an-sql-analitico",
+            "an-estatistica"
+          ],
+          "resources": [
+            {
+              "title": "Window Functions no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Análise de Coorte (Mixpanel guia conceitual)",
+              "url": "https://mixpanel.com/blog/cohort-analysis/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "an-python",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Python e Pandas além da planilha",
+          "description": "Quando o arquivo passa de centenas de milhares de linhas ou precisa cruzar várias fontes repetidamente, Python + Pandas resolve em segundos o que trava o Excel.",
+          "tags": [
+            "Python",
+            "Pandas"
+          ],
+          "prerequisites": [
+            "an-sql-analitico"
+          ],
+          "resources": [
+            {
+              "title": "10 minutos de Pandas",
+              "url": "https://pandas.pydata.org/docs/user_guide/10min.html",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "Tutorial do Python",
+              "url": "https://docs.python.org/pt-br/3/tutorial/index.html",
+              "lang": "pt",
+              "kind": "curso"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "an4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Média vs. Mediana em dados reais",
+          "description": "Pegue uma tabela de preços, salários ou tempos de atendimento e compare média, mediana e p90 mostrando por que a média sozinha engana.",
+          "steps": [
+            "Calcule média, mediana e p90.",
+            "Plote um histograma simples.",
+            "Escreva a recomendação de qual medida usar no relatório."
+          ],
+          "definitionOfDone": [
+            "Os três números estão lado a lado.",
+            "A explicação cabe em um parágrafo."
+          ]
+        },
+        {
+          "id": "an4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Tabela de retenção por coorte",
+          "description": "Em SQL ou Pandas, agrupe usuários pelo mês da primeira compra e calcule quantos % voltaram nos meses +1, +2 e +3.",
+          "steps": [
+            "Encontre o mês de entrada de cada cliente.",
+            "Calcule a diferença em meses para cada compra seguinte.",
+            "Monte a matriz de retenção."
+          ],
+          "definitionOfDone": [
+            "O mês 0 marca 100%.",
+            "Há uma conclusão sobre onde ocorre a maior queda."
+          ]
+        },
+        {
+          "id": "an4-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Limpeza automatizada com Pandas",
+          "description": "Substitua um processo manual de juntar 3 CSVs no Excel por um script Python que limpa tipos, trata nulos e gera o arquivo pronto para o BI.",
+          "steps": [
+            "Leia os 3 arquivos.",
+            "Padronize datas e categorias.",
+            "Exporte o resultado e registre quantas linhas caíram."
+          ],
+          "definitionOfDone": [
+            "Roda com um único comando.",
+            "Não altera os arquivos originais."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "an-fase-4-q1",
+          "prompt": "Por que \"total de usuários cadastrados desde o início\" costuma ser uma métrica de vaidade?",
+          "reviewTopicId": "an-metricas",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque ela só sobe, mesmo que todos os usuários tenham abandonado o produto na segunda semana.",
+              "correct": true,
+              "explanation": "Retenção e usuários ativos mostram saúde real; acumulado esconde abandono."
+            },
+            {
+              "id": "b",
+              "text": "Porque não dá para contar cadastros em SQL.",
+              "correct": false,
+              "explanation": "COUNT(*) conta facilmente, o problema é a utilidade para decisão."
+            },
+            {
+              "id": "c",
+              "text": "Porque números inteiros não cabem em gráficos.",
+              "correct": false,
+              "explanation": "Cabem normalmente."
+            }
+          ]
+        },
+        {
+          "id": "an-fase-4-q2",
+          "prompt": "Num conjunto onde 99 pessoas ganham R$ 2.000 e 1 ganha R$ 200.000, qual medida representa melhor o caso típico?",
+          "reviewTopicId": "an-estatistica",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Mediana (R$ 2.000).",
+              "correct": true,
+              "explanation": "A média seria puxada para quase R$ 4.000 por um único outlier."
+            },
+            {
+              "id": "b",
+              "text": "Média aritmética.",
+              "correct": false,
+              "explanation": "A média é muito sensível a valores extremos."
+            },
+            {
+              "id": "c",
+              "text": "Soma total.",
+              "correct": false,
+              "explanation": "Soma não representa o valor típico individual."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "an-fase-5",
+      "number": 5,
+      "badgeTitle": "Decisão",
+      "title": "Experimentação (Testes A/B) e documentação",
+      "topics": [
+        {
+          "id": "an-ab",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Teste A/B e causalidade",
+          "description": "Correlação não prova causa. Para saber se um novo layout aumentou vendas (e não foi só a Black Friday), sorteie grupo controle (A) e tratamento (B) ao mesmo tempo, defina o tamanho de amostra antes e evite espiar e parar o teste cedo.",
+          "tags": [
+            "Teste A/B",
+            "Causalidade"
+          ],
+          "prerequisites": [
+            "an-estatistica"
+          ],
+          "resources": [
+            {
+              "title": "Testes de significância (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/math/statistics-probability/significance-tests-one-sample",
+              "lang": "pt",
+              "kind": "curso"
+            },
+            {
+              "title": "Planejamento de experimentos (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/math/statistics-probability/designing-studies",
+              "lang": "pt",
+              "kind": "curso"
+            }
+          ]
+        },
+        {
+          "id": "an-documentacao",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Dicionário de dados e entrega executiva",
+          "description": "Se Marketing e Financeiro calculam \"receita\" de jeitos diferentes, o painel perde confiança. Documente a fórmula oficial, a fonte, a frequência de atualização e escreva o resumo executivo em 3 linhas antes dos detalhes.",
+          "tags": [
+            "Documentação",
+            "Governança"
+          ],
+          "prerequisites": [
+            "an-contar"
+          ],
+          "resources": [
+            {
+              "title": "Escrita clara para relatórios (18F Content Guide)",
+              "url": "https://guides.18f.gov/content-guide/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Documentar modelos no Power BI (Microsoft pt-BR)",
+              "url": "https://learn.microsoft.com/pt-br/power-bi/transform-model/desktop-modeling-view",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "an5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Dicionário de métricas",
+          "description": "Documente 5 métricas de um projeto (ex.: Ticket Médio, Churn, Conversão) com fórmula exata, tabela de origem e casos excluídos (ex.: pedidos cancelados).",
+          "steps": [
+            "Nomeie cada métrica.",
+            "Escreva a fórmula em português e em SQL.",
+            "Liste o que fica de fora do cálculo."
+          ],
+          "definitionOfDone": [
+            "Duas pessoas calculando com o dicionário chegam no mesmo número.",
+            "Exclusões estão explícitas."
+          ]
+        },
+        {
+          "id": "an5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Memorando de uma página",
+          "description": "Transforme um painel ou notebook inteiro num memorando executivo de 1 página: pergunta, resposta em 3 linhas, evidência principal e próximo passo recomendado.",
+          "steps": [
+            "Comece pela conclusão, não pela metodologia.",
+            "Inclua no máximo 2 gráficos.",
+            "Feche com uma recomendação prática."
+          ],
+          "definitionOfDone": [
+            "Um gestor entende a decisão em 2 minutos de leitura.",
+            "As limitações dos dados estão em nota curta."
+          ]
+        },
+        {
+          "id": "an5-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Desenho de um Teste A/B",
+          "description": "Escreva o plano completo de um experimento: hipótese, métrica primária, métrica de proteção (guardrail), divisão de tráfego e critério de decisão.",
+          "steps": [
+            "Formule a hipótese falsificável.",
+            "Escolha uma métrica de guarda (ex.: tempo de carregamento ou erro).",
+            "Explique por que não comparar apenas \"antes vs. depois\"."
+          ],
+          "definitionOfDone": [
+            "O plano prevê o que fazer se der empate.",
+            "Evita viés de seleção."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "an-fase-5-q1",
+          "prompt": "Por que comparar \"vendas antes da mudança\" vs. \"vendas depois da mudança\" é pior que um Teste A/B simultâneo?",
+          "reviewTopicId": "an-ab",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque fatores externos (dia da semana, feriado, campanha) mudam entre os dois períodos e se misturam ao efeito da mudança.",
+              "correct": true,
+              "explanation": "Rodar A e B ao mesmo tempo isola os efeitos do calendário."
+            },
+            {
+              "id": "b",
+              "text": "Porque não existe histórico de vendas.",
+              "correct": false,
+              "explanation": "Mesmo com histórico, o tempo traz variáveis confundidoras."
+            },
+            {
+              "id": "c",
+              "text": "Porque Testes A/B não usam estatística.",
+              "correct": false,
+              "explanation": "Usam testes de significância e controle de amostra."
+            }
+          ]
+        },
+        {
+          "id": "an-fase-5-q2",
+          "prompt": "Qual o objetivo de um dicionário de métricas no time?",
+          "reviewTopicId": "an-documentacao",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Garantir que todo mundo calcule e interprete o mesmo indicador com a mesma regra e exclusões.",
+              "correct": true,
+              "explanation": "Evita reuniões perdidas discutindo por que dois relatórios mostram números diferentes."
+            },
+            {
+              "id": "b",
+              "text": "Deixar o SQL mais lento.",
+              "correct": false,
+              "explanation": "É documentação de negócio."
+            },
+            {
+              "id": "c",
+              "text": "Esconder a fonte dos dados.",
+              "correct": false,
+              "explanation": "Ele justamente dá transparência à origem."
             }
           ]
         }

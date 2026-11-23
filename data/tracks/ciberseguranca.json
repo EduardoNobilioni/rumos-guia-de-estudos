@@ -1,0 +1,783 @@
+{
+  "id": "ciberseguranca",
+  "name": "Cibersegurança",
+  "tagline": "Defender sistemas na prática: rede, código, acesso e resposta a incidentes",
+  "description": "Segurança sem teatro: como redes e sistemas operacionais funcionam, criptografia aplicada, vulnerabilidades web (OWASP), privilégio mínimo, análise de logs e postura defensiva.",
+  "phases": [
+    {
+      "id": "sec-fase-1",
+      "number": 1,
+      "badgeTitle": "Fundação",
+      "title": "Rede, sistema e modelo de ameaça",
+      "topics": [
+        {
+          "id": "sec-ameaca",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Modelo de ameaça e tríade CIA",
+          "description": "Segurança não é \"instalar um antivírus\": é proteger Confidencialidade, Integridade e Disponibilidade sabendo o que você tem de valioso, quem pode atacar e qual o impacto real.",
+          "tags": [
+            "CIA",
+            "Threat Modeling"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "Threat Modeling (OWASP)",
+              "url": "https://owasp.org/www-community/Threat_Modeling",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Tríade CIA e fundamentos (NIST)",
+              "url": "https://csrc.nist.gov/glossary/term/confidentiality",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "sec-rede",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "TCP/IP, portas, DNS e firewall",
+          "description": "Não dá para defender o que você não enxerga na rede. Entenda endereços privados vs. públicos, portas TCP/UDP, DNS e como regras de firewall bloqueiam superfície desnecessária.",
+          "tags": [
+            "Rede",
+            "Firewall"
+          ],
+          "prerequisites": [
+            "sec-ameaca"
+          ],
+          "resources": [
+            {
+              "title": "Como a Web funciona (MDN)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "UFW — Ubuntu Server Guide",
+              "url": "https://ubuntu.com/server/docs/firewalls",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "sec-linux",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Linux, usuários, permissões e SSH",
+          "description": "Princípio do menor privilégio no sistema: separar usuário comum de `root`, proteger chaves SSH, entender `chmod`/`chown` e não rodar aplicações web como administrador.",
+          "tags": [
+            "Linux",
+            "Privilégio mínimo"
+          ],
+          "prerequisites": [
+            "sec-rede"
+          ],
+          "resources": [
+            {
+              "title": "OpenSSH — manual básico",
+              "url": "https://www.openssh.com/manual.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Guia de permissões Linux (Red Hat)",
+              "url": "https://www.redhat.com/en/blog/linux-file-permissions-explained",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "sec1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Modelo de ameaça de um app simples",
+          "description": "Desenhe um sistema de notas ou agenda e liste 5 ameaças reais (ex.: roubo de sessão, vazamento de banco) com uma mitigação prática para cada.",
+          "steps": [
+            "Desenhe os fluxos de entrada e saída.",
+            "Pergunte: o que pode dar errado aqui?",
+            "Priorize pelo impacto."
+          ],
+          "definitionOfDone": [
+            "Cada ameaça tem uma ação defensiva concreta.",
+            "Não há promessa genérica de \"sistema 100% seguro\"."
+          ]
+        },
+        {
+          "id": "sec1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Endurecimento (hardening) de uma VM Linux",
+          "description": "Configure uma máquina virtual ou container Linux desabilitando login por senha no SSH, habilitando firewall apenas nas portas necessárias e rodando serviço sem `root`.",
+          "steps": [
+            "Configure acesso exclusivo por chave SSH.",
+            "Bloqueie portas extras no `ufw`.",
+            "Valide com `ss -tulpn`."
+          ],
+          "definitionOfDone": [
+            "Checklist de antes e depois documentado.",
+            "Nenhuma porta administrativa desnecessária exposta."
+          ]
+        },
+        {
+          "id": "sec1-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Análise de captura de tráfego local",
+          "description": "Compare na sua máquina local uma requisição HTTP simples vs. HTTPS (usando Wireshark/tcpdump em loopback) para provar por que HTTP expõe credenciais.",
+          "steps": [
+            "Suba um servidor HTTP local de teste.",
+            "Capture o pacote de um POST.",
+            "Compare com uma conexão TLS."
+          ],
+          "definitionOfDone": [
+            "Mostra o payload legível no HTTP e cifrado no HTTPS.",
+            "Captura feita apenas em ambiente próprio."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "sec-fase-1-q1",
+          "prompt": "O que significa o princípio do menor privilégio?",
+          "reviewTopicId": "sec-linux",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Dar a cada usuário ou processo apenas as permissões mínimas necessárias para cumprir sua função.",
+              "correct": true,
+              "explanation": "Se um processo for comprometido, o estrago fica contido."
+            },
+            {
+              "id": "b",
+              "text": "Rodar tudo como root para evitar erros de permissão.",
+              "correct": false,
+              "explanation": "Isso maximiza o impacto de qualquer falha."
+            },
+            {
+              "id": "c",
+              "text": "Remover todas as senhas do sistema.",
+              "correct": false,
+              "explanation": "Autenticação continua necessária."
+            }
+          ]
+        },
+        {
+          "id": "sec-fase-1-q2",
+          "prompt": "Na tríade CIA, o que garante que um dado não foi alterado sem autorização no caminho?",
+          "reviewTopicId": "sec-ameaca",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Integridade.",
+              "correct": true,
+              "explanation": "Confidencialidade protege contra leitura indevida; Integridade contra alteração; Disponibilidade garante acesso."
+            },
+            {
+              "id": "b",
+              "text": "Disponibilidade.",
+              "correct": false,
+              "explanation": "Disponibilidade trata de o sistema estar no ar."
+            },
+            {
+              "id": "c",
+              "text": "Compressão.",
+              "correct": false,
+              "explanation": "Compressão reduz tamanho, não valida integridade."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-fase-2",
+      "number": 2,
+      "badgeTitle": "Criptografia e Acesso",
+      "title": "Criptografia aplicada, senhas e IAM",
+      "topics": [
+        {
+          "id": "sec-cripto",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Hash, criptografia simétrica, assimétrica e TLS",
+          "description": "Não invente algoritmo criptográfico: entenda quando usar hash (integridade/SHA-256), cifra simétrica (AES-GCM para dados), assimétrica/assinatura (RSA/Ed25519 para troca de chave e identidade) e TLS 1.3.",
+          "tags": [
+            "Criptografia",
+            "TLS"
+          ],
+          "prerequisites": [
+            "sec-rede"
+          ],
+          "resources": [
+            {
+              "title": "Transport Layer Security (MDN)",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Cryptographic Storage Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "sec-senhas",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Armazenamento de senhas e gestão de segredos",
+          "description": "SHA-256 puro NÃO serve para senha porque é rápido demais para força bruta em GPU. Use Argon2id ou bcrypt com salt único. Segredos de API ficam em variáveis de ambiente ou cofre, nunca no Git.",
+          "tags": [
+            "Argon2",
+            "Segredos"
+          ],
+          "prerequisites": [
+            "sec-cripto"
+          ],
+          "resources": [
+            {
+              "title": "Password Storage Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Secrets Management Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "sec-iam",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Autenticação, OAuth2/OIDC e MFA",
+          "description": "Diferencie autenticação (quem é) de autorização (o que pode). Entenda cookies HttpOnly/SameSite vs. JWT, por que MFA barra a maioria dos roubos de conta e como RBAC organiza papéis.",
+          "tags": [
+            "OAuth2",
+            "MFA"
+          ],
+          "prerequisites": [
+            "sec-senhas"
+          ],
+          "resources": [
+            {
+              "title": "Authentication Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Session Management Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "sec2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Verificador de integridade com SHA-256",
+          "description": "Implemente um script que gera e confere checksums SHA-256 de arquivos e explique por que SHA-256 serve para arquivo, mas não para senha.",
+          "steps": [
+            "Calcule o hash de um arquivo.",
+            "Mude 1 byte e observe o efeito avalanche.",
+            "Escreva a diferença entre hash rápido e hash de senha."
+          ],
+          "definitionOfDone": [
+            "Detecta alteração de 1 único caractere.",
+            "Explicação clara no README."
+          ]
+        },
+        {
+          "id": "sec2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Fluxo de login com Argon2/bcrypt e cookie seguro",
+          "description": "Monte um protótipo de login usando Argon2 ou bcrypt, sessão em cookie `HttpOnly` + `SameSite=Lax` e proteção contra tentativa repetida (rate limit).",
+          "steps": [
+            "Gere hash com salt automático.",
+            "Configure flags `HttpOnly` e `SameSite` no cookie.",
+            "Limite tentativas seguidas de senha errada."
+          ],
+          "definitionOfDone": [
+            "Senha não aparece em logs nem em texto plano.",
+            "JavaScript no navegador não lê o cookie de sessão."
+          ]
+        },
+        {
+          "id": "sec2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Varredura de segredos no histórico Git",
+          "description": "Crie um repositório de teste com uma chave falsa commitada, detecte com ferramenta de secret scanning (como gitleaks) e documente como rotacionar a chave.",
+          "steps": [
+            "Simule um token falso num commit antigo.",
+            "Rode o scanner no histórico inteiro.",
+            "Documente por que apenas apagar no último commit não basta."
+          ],
+          "definitionOfDone": [
+            "O scanner aponta o commit exato.",
+            "Inclui passo de revogação da credencial."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "sec-fase-2-q1",
+          "prompt": "Por que Argon2id ou bcrypt são recomendados para guardar senhas em vez de SHA-256?",
+          "reviewTopicId": "sec-senhas",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque são propositalmente lentos e custosos em memória/CPU, além de incluírem salt, dificultando força bruta.",
+              "correct": true,
+              "explanation": "SHA-256 calcula bilhões de hashes por segundo em GPU."
+            },
+            {
+              "id": "b",
+              "text": "Porque bcrypt permite descriptografar a senha original para enviar por e-mail.",
+              "correct": false,
+              "explanation": "Ambos são funções de mão única (hashes), não criptografia reversível."
+            },
+            {
+              "id": "c",
+              "text": "Porque SHA-256 não funciona em texto.",
+              "correct": false,
+              "explanation": "Funciona em qualquer sequência de bytes."
+            }
+          ]
+        },
+        {
+          "id": "sec-fase-2-q2",
+          "prompt": "O que a flag `HttpOnly` em um cookie de sessão impede?",
+          "reviewTopicId": "sec-iam",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Que scripts JavaScript na página (`document.cookie`) leiam o token de sessão em caso de XSS.",
+              "correct": true,
+              "explanation": "O navegador continua enviando o cookie nas requisições HTTP, mas o JS não acessa."
+            },
+            {
+              "id": "b",
+              "text": "Que o navegador envie o cookie em requisições HTTPS.",
+              "correct": false,
+              "explanation": "Quem exige HTTPS é a flag `Secure`."
+            },
+            {
+              "id": "c",
+              "text": "Ataques de força bruta na senha.",
+              "correct": false,
+              "explanation": "Isso é mitigado com rate limiting e MFA."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-fase-3",
+      "number": 3,
+      "badgeTitle": "AppSec",
+      "title": "Segurança de aplicações (OWASP Top 10)",
+      "topics": [
+        {
+          "id": "sec-owasp",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "OWASP Top 10: Injeção, XSS e Controle de Acesso",
+          "description": "As falhas mais comuns continuam sendo Broken Access Control (IDOR), Injeção (SQLi/Command Injection) e XSS. Aprenda a causa raiz de cada uma e como corrigir no código.",
+          "tags": [
+            "OWASP",
+            "AppSec"
+          ],
+          "prerequisites": [
+            "sec-iam"
+          ],
+          "resources": [
+            {
+              "title": "OWASP Top 10",
+              "url": "https://owasp.org/www-project-top-ten/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Cross Site Scripting Prevention (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "sec-cabecalhos",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "CORS, CSRF e Content Security Policy (CSP)",
+          "description": "CORS não é firewall de API — ele relaxa a política de mesma origem do navegador. Entenda como CSRF explora cookies automáticos e como CSP reduz o impacto de XSS.",
+          "tags": [
+            "CORS",
+            "CSP",
+            "CSRF"
+          ],
+          "prerequisites": [
+            "sec-owasp"
+          ],
+          "resources": [
+            {
+              "title": "Content Security Policy (MDN)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/CSP",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "CORS (MDN)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/CORS",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "sec-supply-chain",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Segurança de dependências e containers",
+          "description": "Boa parte do seu código vem de pacotes de terceiros (`npm`, `pip`, imagens Docker). Rode auditoria de dependências (SCA), fixe versões com lockfile e não rode containers como root.",
+          "tags": [
+            "Supply Chain",
+            "SCA"
+          ],
+          "prerequisites": [
+            "sec-linux"
+          ],
+          "resources": [
+            {
+              "title": "Docker Security Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Vulnerable and Outdated Components (OWASP)",
+              "url": "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "sec3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Corrigindo XSS e SQLi num laboratório local",
+          "description": "Crie um mini app intencionalmente vulnerável apenas em `localhost` com 1 SQLi e 1 XSS, demonstre o risco e aplique a correção (prepared statement + escape).",
+          "steps": [
+            "Implemente a versão vulnerável isolada localmente.",
+            "Mostre a entrada que quebra.",
+            "Corrija e reteste com a mesma entrada."
+          ],
+          "definitionOfDone": [
+            "Antes e depois documentados.",
+            "Zero testes contra sites de terceiros."
+          ]
+        },
+        {
+          "id": "sec3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Cabeçalhos de segurança HTTP",
+          "description": "Configure CSP restritiva, `X-Content-Type-Options: nosniff` e CORS específico (sem `*` com credenciais) numa API/site seu.",
+          "steps": [
+            "Adicione os cabeçalhos na resposta.",
+            "Verifique no DevTools ou `curl -I`.",
+            "Teste um script inline bloqueado pela CSP."
+          ],
+          "definitionOfDone": [
+            "CSP bloqueia script não autorizado.",
+            "CORS permite apenas a origem esperada."
+          ]
+        },
+        {
+          "id": "sec3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Esteira DevSecOps básica",
+          "description": "Adicione análise estática (SAST) e checagem de dependências vulneráveis (Dependabot / `npm audit` / Trivy) no GitHub Actions.",
+          "steps": [
+            "Configure SAST ou scanner de dependências no workflow.",
+            "Simule uma falha de severidade alta.",
+            "Documente como avaliar falsos positivos."
+          ],
+          "definitionOfDone": [
+            "O workflow roda automaticamente em PRs.",
+            "Política de severidade escrita."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "sec-fase-3-q1",
+          "prompt": "Qual a função real do CORS em uma API web?",
+          "reviewTopicId": "sec-cabecalhos",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Instruir o navegador sobre quais origens podem ler a resposta via JavaScript, relaxando a Same-Origin Policy.",
+              "correct": true,
+              "explanation": "CORS não impede `curl`, Postman ou scripts no servidor de chamarem sua API; autenticação continua obrigatória."
+            },
+            {
+              "id": "b",
+              "text": "Criptografar o banco de dados.",
+              "correct": false,
+              "explanation": "É um mecanismo de cabeçalhos HTTP no navegador."
+            },
+            {
+              "id": "c",
+              "text": "Substituir o login do usuário.",
+              "correct": false,
+              "explanation": "Não substitui autenticação."
+            }
+          ]
+        },
+        {
+          "id": "sec-fase-3-q2",
+          "prompt": "Qual categoria ocupa o topo do OWASP Top 10 por permitir ações ou leitura de dados além do permitido ao usuário?",
+          "reviewTopicId": "sec-owasp",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Broken Access Control (Quebra de Controle de Acesso).",
+              "correct": true,
+              "explanation": "Inclui IDOR, elevação de privilégio e falta de checagem de autorização no servidor."
+            },
+            {
+              "id": "b",
+              "text": "Falta de modo escuro.",
+              "correct": false,
+              "explanation": "Tema visual não é vulnerabilidade."
+            },
+            {
+              "id": "c",
+              "text": "Uso de JSON em vez de XML.",
+              "correct": false,
+              "explanation": "Formato de serialização não é a causa."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-fase-4",
+      "number": 4,
+      "badgeTitle": "Defesa",
+      "title": "Logs, detecção e resposta a incidentes",
+      "topics": [
+        {
+          "id": "sec-logs",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Logs de segurança e trilha de auditoria",
+          "description": "Sem log você não sabe se foi invadido nem o que foi acessado. Registre logins (sucesso e falha), mudanças de permissão e erros de autorização — mas NUNCA registre senhas, tokens ou CPFs inteiros nos logs.",
+          "tags": [
+            "Logs",
+            "Auditoria"
+          ],
+          "prerequisites": [
+            "sec-owasp"
+          ],
+          "resources": [
+            {
+              "title": "Logging Cheat Sheet (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Security Logging and Monitoring Failures (OWASP)",
+              "url": "https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "sec-incidentes",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Resposta a incidentes e pós-mortem",
+          "description": "Quando algo dá errado: detectar, conter (revogar chave, isolar host), erradicar a causa raiz, recuperar a partir de backup testado e escrever pós-mortem sem caça às bruxas.",
+          "tags": [
+            "Incidentes",
+            "Blue Team"
+          ],
+          "prerequisites": [
+            "sec-logs"
+          ],
+          "resources": [
+            {
+              "title": "Incident Handling Guide (NIST SP 800-61)",
+              "url": "https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Post-Incident Reviews (Google SRE)",
+              "url": "https://sre.google/sre-book/postmortem-culture/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "sec-backup",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Backups testados e continuidade",
+          "description": "Backup que nunca foi restaurado é apenas esperança. Siga a regra 3-2-1 (3 cópias, 2 mídias, 1 fora do ambiente/imutável) para sobreviver a ransomware ou erro humano.",
+          "tags": [
+            "Backup",
+            "Resiliência"
+          ],
+          "prerequisites": [
+            "sec-ameaca"
+          ],
+          "resources": [
+            {
+              "title": "Backup Best Practices (CISA)",
+              "url": "https://www.cisa.gov/stopransomware",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Data Backup and Recovery (NIST)",
+              "url": "https://www.cisa.gov/resources-tools/resources/data-backup-options",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "sec4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Auditoria de logs sem vazar segredo",
+          "description": "Revise os logs de uma aplicação sua garantindo que eventos de autenticação têm timestamp, usuário e IP, e que nenhum token ou senha aparece.",
+          "steps": [
+            "Defina o formato JSON de log de auditoria.",
+            "Crie filtro que mascara cabeçalho `Authorization`.",
+            "Teste disparando login válido e inválido."
+          ],
+          "definitionOfDone": [
+            "Eventos críticos ficam registrados.",
+            "Zero credenciais nos logs."
+          ]
+        },
+        {
+          "id": "sec4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Simulação de restauração de backup",
+          "description": "Faça backup de um banco PostgreSQL ou pasta de dados, apague o ambiente de teste e prove o tempo e a integridade da restauração do zero.",
+          "steps": [
+            "Gere o dump/backup.",
+            "Destrua o container de teste.",
+            "Restaure e valide a contagem de registros."
+          ],
+          "definitionOfDone": [
+            "Comando de restore testado e documentado.",
+            "Tempo gasto (RTO) anotado."
+          ]
+        },
+        {
+          "id": "sec4-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Playbook de chave vazada",
+          "description": "Escreva um runbook passo a passo para o caso de um token de produção vazar no GitHub: contenção, rotação, busca em logs por uso indevido e prevenção.",
+          "steps": [
+            "Liste os passos nos primeiros 15 minutos.",
+            "Inclua checagem de logs de acesso.",
+            "Defina medida preventiva (pre-commit / secret scanning)."
+          ],
+          "definitionOfDone": [
+            "Qualquer pessoa do time consegue seguir o playbook sob pressão.",
+            "Ordem prioriza revogar antes de limpar histórico."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "sec-fase-4-q1",
+          "prompt": "Se uma chave de API de produção foi enviada por engano para um repositório público no GitHub, qual é a primeira ação?",
+          "reviewTopicId": "sec-incidentes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Revogar/rotacionar a chave imediatamente no provedor e só depois limpar o histórico.",
+              "correct": true,
+              "explanation": "Bots varrem commits públicos em segundos; apagar o commit depois não invalida a chave já copiada."
+            },
+            {
+              "id": "b",
+              "text": "Fazer um novo commit apagando a linha e esperar ninguém notar.",
+              "correct": false,
+              "explanation": "A chave continua visível no histórico do Git."
+            },
+            {
+              "id": "c",
+              "text": "Desligar o monitor.",
+              "correct": false,
+              "explanation": "Não resolve o vazamento."
+            }
+          ]
+        },
+        {
+          "id": "sec-fase-4-q2",
+          "prompt": "O que NUNCA deve ir para os logs de aplicação?",
+          "reviewTopicId": "sec-logs",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Senhas, tokens de sessão/API e chaves privadas.",
+              "correct": true,
+              "explanation": "Logs costumam ser lidos por várias pessoas e ferramentas; segredos lá viram vazamento."
+            },
+            {
+              "id": "b",
+              "text": "Timestamp e código de status HTTP.",
+              "correct": false,
+              "explanation": "São essenciais para diagnóstico."
+            },
+            {
+              "id": "c",
+              "text": "ID da requisição (correlation ID).",
+              "correct": false,
+              "explanation": "Ajuda a rastrear erros."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

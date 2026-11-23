@@ -1,0 +1,533 @@
+{
+  "id": "typescript",
+  "name": "TypeScript",
+  "tagline": "JavaScript com tipos estáticos para errar no editor, não em produção",
+  "description": "Trilha objetiva de TypeScript para usar junto com Front-end, Node.js ou Full-Stack: inferência, interfaces, unions, narrowing, generics e validação na borda.",
+  "phases": [
+    {
+      "id": "ts-fase-1",
+      "number": 1,
+      "badgeTitle": "Tipos Base",
+      "title": "Inferência, tipos e narrowing",
+      "topics": [
+        {
+          "id": "ts-basico",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Tipos básicos, inferência e tsconfig",
+          "description": "TypeScript não exige anotar tudo: deixe o compilador inferir o óbvio e ative `strict: true` no `tsconfig.json`. Evite `any` — quando não souber o tipo ainda, use `unknown`.",
+          "tags": [
+            "TypeScript",
+            "strict"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "TypeScript Handbook — The Basics",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/basic-types.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "TSConfig Reference — strict",
+              "url": "https://www.typescriptlang.org/tsconfig/#strict",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ts-unions",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Unions, Literals e Narrowing",
+          "description": "Modele estados reais com discriminated unions (`{ status: 'ok', data: ... } | { status: 'erro', msg: ... }`) e deixe o `if`/`switch` afunilar o tipo automaticamente (narrowing).",
+          "tags": [
+            "Union Types",
+            "Narrowing"
+          ],
+          "prerequisites": [
+            "ts-basico"
+          ],
+          "resources": [
+            {
+              "title": "Narrowing (TypeScript Handbook)",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Unions e Intersection Types",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ts-objetos",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "type, interface e readonly",
+          "description": "Use `interface` ou `type` para descrever contratos de objetos e funções, `readonly` para proteger propriedades de mutação acidental e `as const` para listas literais.",
+          "tags": [
+            "interface",
+            "type"
+          ],
+          "prerequisites": [
+            "ts-basico"
+          ],
+          "resources": [
+            {
+              "title": "Object Types (TypeScript Handbook)",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/objects.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Type vs. Interface (TypeScript Handbook)",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ts1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Projeto estrito sem any",
+          "description": "Configure um projeto com `strict: true` e `noImplicitAny: true` e modele uma lista de tarefas tipada.",
+          "steps": [
+            "Inicie com `tsc --init` e ative `strict`.",
+            "Crie tipos para Tarefa e Filtro.",
+            "Rode `tsc --noEmit` sem erros."
+          ],
+          "definitionOfDone": [
+            "Zero `any` no código.",
+            "`tsc --noEmit` passa limpo."
+          ]
+        },
+        {
+          "id": "ts1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Estado de requisição sem campos impossíveis",
+          "description": "Modele carregamento, sucesso e erro como discriminated union em vez de três booleanos soltos (`loading`, `hasError`, `data`).",
+          "steps": [
+            "Defina o union por campo `status`.",
+            "Escreva função renderizadora usando `switch` exaustivo.",
+            "Prove que `data` não existe quando `status === 'erro'`."
+          ],
+          "definitionOfDone": [
+            "Estados inválidos não compilam.",
+            "Checagem exaustiva com `never`."
+          ]
+        },
+        {
+          "id": "ts1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Migrando um módulo JS para TS",
+          "description": "Pegue um módulo JavaScript pequeno, renomeie para `.ts` e elimine todos os erros de `strictNullChecks` tratando `null`/`undefined` explicitamente.",
+          "steps": [
+            "Habilite `strictNullChecks`.",
+            "Corrija acessos inseguros a propriedades opcionais.",
+            "Documente os bugs potenciais que o compilador revelou."
+          ],
+          "definitionOfDone": [
+            "Compila com `strict: true`.",
+            "Testes continuam passando."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ts-fase-1-q1",
+          "prompt": "Qual a diferença entre `any` e `unknown` em TypeScript?",
+          "reviewTopicId": "ts-basico",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`any` desliga a checagem de tipos; `unknown` exige que você verifique/afunile o tipo antes de usar o valor.",
+              "correct": true,
+              "explanation": "`unknown` é o tipo seguro para dados externos antes da validação."
+            },
+            {
+              "id": "b",
+              "text": "São exatamente iguais.",
+              "correct": false,
+              "explanation": "`unknown` protege; `any` ignora erros."
+            },
+            {
+              "id": "c",
+              "text": "`unknown` só aceita strings.",
+              "correct": false,
+              "explanation": "Qualquer valor pode ser atribuído a `unknown`, mas não pode ser usado sem narrowing."
+            }
+          ]
+        },
+        {
+          "id": "ts-fase-1-q2",
+          "prompt": "Por que usar discriminated unions para modelar estados (loading/success/error)?",
+          "reviewTopicId": "ts-unions",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para tornar estados impossíveis (como erro e sucesso ao mesmo tempo) irrepresentáveis no tipo.",
+              "correct": true,
+              "explanation": "O compilador passa a garantir que você só acesse `data` no ramo de sucesso."
+            },
+            {
+              "id": "b",
+              "text": "Para deixar o arquivo JS final maior.",
+              "correct": false,
+              "explanation": "Tipos somem na compilação para JS."
+            },
+            {
+              "id": "c",
+              "text": "Para evitar usar `switch` ou `if`.",
+              "correct": false,
+              "explanation": "Eles justamente trabalham juntos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ts-fase-2",
+      "number": 2,
+      "badgeTitle": "Composição",
+      "title": "Generics, Utility Types e Validação",
+      "topics": [
+        {
+          "id": "ts-generics",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Generics e Utility Types (Pick, Omit, Partial)",
+          "description": "Generics (`<T>`) permitem funções e respostas de API reutilizáveis sem perder o tipo específico. Utility types (`Pick`, `Omit`, `Partial`, `Record`) derivam DTOs sem repetir campos.",
+          "tags": [
+            "Generics",
+            "Utility Types"
+          ],
+          "prerequisites": [
+            "ts-objetos"
+          ],
+          "resources": [
+            {
+              "title": "Generics (TypeScript Handbook)",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Utility Types (TypeScript Docs)",
+              "url": "https://www.typescriptlang.org/docs/handbook/utility-types.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ts-runtime",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Tipos somem em runtime: validação na borda (Zod)",
+          "description": "TypeScript NÃO valida JSON que chega da rede ou formulário em produção — tipos são apagados na compilação. Na borda (API/localStorage), valide em runtime com esquemas como Zod (`z.infer`).",
+          "tags": [
+            "Zod",
+            "Validação"
+          ],
+          "prerequisites": [
+            "ts-generics",
+            "ts-unions"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do Zod",
+              "url": "https://zod.dev/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Type Predicates (Narrowing)",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ts2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "DTOs derivados sem duplicar código",
+          "description": "A partir de uma interface `Usuario`, derive `CriarUsuarioDTO` (sem `id`) e `AtualizarUsuarioDTO` (campos opcionais) usando `Omit` e `Partial`.",
+          "steps": [
+            "Defina o tipo base `Usuario`.",
+            "Derive os DTOs com utility types.",
+            "Teste passando um objeto inválido para ver o erro do compilador."
+          ],
+          "definitionOfDone": [
+            "Mudar um campo em `Usuario` reflete automaticamente nos DTOs.",
+            "Compila limpo."
+          ]
+        },
+        {
+          "id": "ts2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Wrapper genérico de resposta paginada",
+          "description": "Crie um tipo genérico `Pagina<T>` e uma função `fetchJson<T>(url, schema)` que valida o JSON recebido com Zod antes de devolver `T`.",
+          "steps": [
+            "Defina `Pagina<T>` com `items: T[]` e `total: number`.",
+            "Valide a resposta da rede em runtime.",
+            "Teste com JSON malformado retornando erro tratado."
+          ],
+          "definitionOfDone": [
+            "Sem `as Tipo` cego em `response.json()`.",
+            "Erro de schema capturado em runtime."
+          ]
+        },
+        {
+          "id": "ts2-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Type guards customizados",
+          "description": "Escreva funções `isProduto(x: unknown): x is Produto` sem usar bibliotecas externas e cubra com testes unitários.",
+          "steps": [
+            "Valide objeto não nulo e tipos das propriedades.",
+            "Use dentro de `filter` para afunilar `unknown[]`.",
+            "Teste com entradas inválidas."
+          ],
+          "definitionOfDone": [
+            "Zero `any` dentro do guard.",
+            "Testes cobrem casos falsos."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ts-fase-2-q1",
+          "prompt": "O TypeScript impede que uma API externa devolva um campo faltando em produção?",
+          "reviewTopicId": "ts-runtime",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Não, porque tipos TypeScript são removidos na compilação para JavaScript; é preciso validar em runtime na borda.",
+              "correct": true,
+              "explanation": "Use Zod, Valibot ou checagens manuais ao ler dados de rede ou usuário."
+            },
+            {
+              "id": "b",
+              "text": "Sim, o navegador lê as interfaces `.ts` automaticamente.",
+              "correct": false,
+              "explanation": "O navegador executa apenas JavaScript."
+            },
+            {
+              "id": "c",
+              "text": "Sim, se usar `interface` em vez de `type`.",
+              "correct": false,
+              "explanation": "Ambos somem no JavaScript gerado."
+            }
+          ]
+        },
+        {
+          "id": "ts-fase-2-q2",
+          "prompt": "O que `Pick<Usuario, 'id' | 'nome'>` produz?",
+          "reviewTopicId": "ts-generics",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Um novo tipo contendo apenas as propriedades `id` e `nome` de `Usuario`.",
+              "correct": true,
+              "explanation": "`Pick` seleciona; `Omit` remove."
+            },
+            {
+              "id": "b",
+              "text": "Remove `id` e `nome`.",
+              "correct": false,
+              "explanation": "Isso seria `Omit`."
+            },
+            {
+              "id": "c",
+              "text": "Torna todas as propriedades opcionais.",
+              "correct": false,
+              "explanation": "Isso seria `Partial`."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ts-fase-3",
+      "number": 3,
+      "badgeTitle": "Ecossistema",
+      "title": "TypeScript no React, Node e Ferramentas",
+      "topics": [
+        {
+          "id": "ts-ecossistema",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Tipagem em React, Node e módulos (.d.ts)",
+          "description": "Entenda arquivos de declaração (`.d.ts`), `@types/*`, tipagem de eventos/props em React e configuração de `moduleResolution` para ESM moderno no Node e Vite.",
+          "tags": [
+            "ESM",
+            ".d.ts"
+          ],
+          "prerequisites": [
+            "ts-runtime"
+          ],
+          "resources": [
+            {
+              "title": "TypeScript with React (React Docs)",
+              "url": "https://react.dev/learn/typescript",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Declaration Files (.d.ts)",
+              "url": "https://www.typescriptlang.org/docs/handbook/2/type-declarations.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ts-linter",
+          "level": "avancado",
+          "hours": 4,
+          "title": "typescript-eslint e checagem no CI",
+          "description": "Configure `tsc --noEmit` e `typescript-eslint` na esteira de CI para bloquear código com `no-floating-promises` (Promise esquecida sem `await`) e `no-explicit-any`.",
+          "tags": [
+            "ESLint",
+            "CI"
+          ],
+          "prerequisites": [
+            "ts-ecossistema"
+          ],
+          "resources": [
+            {
+              "title": "typescript-eslint — Getting Started",
+              "url": "https://typescripteslint.io/getting-started/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "no-floating-promises (typescript-eslint)",
+              "url": "https://typescripteslint.io/rules/no-floating-promises/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ts3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Variáveis de ambiente tipadas",
+          "description": "Valide `process.env` na inicialização da aplicação usando Zod + TypeScript para falhar na hora se faltar uma variável obrigatória.",
+          "steps": [
+            "Defina schema de `PORT`, `DATABASE_URL`.",
+            "Exporte `env` tipado.",
+            "Teste subindo sem `DATABASE_URL`."
+          ],
+          "definitionOfDone": [
+            "Erro claro na subida quando falta variável.",
+            "Autocompletar funcionando em `env.`."
+          ]
+        },
+        {
+          "id": "ts3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Biblioteca tipada publicada ou empacotada",
+          "description": "Configure um pequeno pacote TypeScript gerando `.js` e `.d.ts` no `dist/` e importe em outro projeto local conferindo o autocompletar.",
+          "steps": [
+            "Configure `declaration: true` no `tsconfig.json`.",
+            "Rode o build gerando `.d.ts`.",
+            "Consuma o pacote num script de teste."
+          ],
+          "definitionOfDone": [
+            "Tipos aparecem no consumidor sem ler o código-fonte.",
+            "Exports configurados no `package.json`."
+          ]
+        },
+        {
+          "id": "ts3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "CI barrando Promise esquecida",
+          "description": "Configure `typescript-eslint` com `no-floating-promises` e demonstre no workflow que uma `async` chamada sem `await` ou `.catch` quebra o lint.",
+          "steps": [
+            "Configure lint com type-checking.",
+            "Provoque uma floating promise.",
+            "Corrija e passe no CI."
+          ],
+          "definitionOfDone": [
+            "`npm run lint` e `tsc --noEmit` no workflow.",
+            "Zero erros no estado final."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ts-fase-3-q1",
+          "prompt": "Para que servem arquivos `.d.ts`?",
+          "reviewTopicId": "ts-ecossistema",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Descrever apenas as assinaturas de tipos de código JavaScript já compilado, sem conter implementação executável.",
+              "correct": true,
+              "explanation": "É assim que bibliotecas JS publicadas no npm oferecem autocompletar em TS."
+            },
+            {
+              "id": "b",
+              "text": "Guardar estilos CSS do projeto.",
+              "correct": false,
+              "explanation": "Não tem relação com CSS."
+            },
+            {
+              "id": "c",
+              "text": "Substituir o `package.json`.",
+              "correct": false,
+              "explanation": "Não substitui."
+            }
+          ]
+        },
+        {
+          "id": "ts-fase-3-q2",
+          "prompt": "Qual comando verifica todos os tipos do projeto sem gerar arquivos `.js`?",
+          "reviewTopicId": "ts-linter",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`tsc --noEmit`.",
+              "correct": true,
+              "explanation": "Ideal para rodar rápido no CI junto com o bundler (Vite/esbuild)."
+            },
+            {
+              "id": "b",
+              "text": "`npm audit`.",
+              "correct": false,
+              "explanation": "Audita vulnerabilidades de pacotes."
+            },
+            {
+              "id": "c",
+              "text": "`node --version`.",
+              "correct": false,
+              "explanation": "Apenas exibe a versão do Node."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

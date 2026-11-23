@@ -325,10 +325,16 @@
           ],
           "resources": [
             {
-              "title": "Biblioteca de probabilidade (Khan Academy)",
+              "title": "Probabilidade (Khan Academy pt-BR)",
               "url": "https://pt.khanacademy.org/math/statistics-probability/probability-library",
               "lang": "pt",
               "kind": "curso"
+            },
+            {
+              "title": "Seeing Theory — Visualização de Probabilidade",
+              "url": "https://seeing-theory.brown.edu/basic-probability/index.html",
+              "lang": "en",
+              "kind": "pratica"
             }
           ],
           "title": "Probabilidade básica",
@@ -516,10 +522,16 @@
           ],
           "resources": [
             {
-              "title": "NumPy para quem está começando",
+              "title": "NumPy: the absolute basics for beginners",
               "url": "https://numpy.org/doc/stable/user/absolute_beginners.html",
               "lang": "en",
-              "kind": "leitura"
+              "kind": "documentacao"
+            },
+            {
+              "title": "NumPy Quickstart",
+              "url": "https://numpy.org/doc/stable/user/quickstart.html",
+              "lang": "en",
+              "kind": "pratica"
             }
           ],
           "title": "NumPy",
@@ -568,8 +580,14 @@
           ],
           "resources": [
             {
-              "title": "Dados ausentes no Pandas",
+              "title": "Working with missing data (Pandas)",
               "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Reshaping and pivot tables (Pandas)",
+              "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -764,10 +782,16 @@
           ],
           "resources": [
             {
-              "title": "Início rápido do Matplotlib",
+              "title": "Quick start guide (Matplotlib)",
               "url": "https://matplotlib.org/stable/users/explain/quick_start.html",
               "lang": "en",
-              "kind": "leitura"
+              "kind": "documentacao"
+            },
+            {
+              "title": "Plot types (Matplotlib)",
+              "url": "https://matplotlib.org/stable/plot_types/index.html",
+              "lang": "en",
+              "kind": "pratica"
             }
           ],
           "title": "Matplotlib",
@@ -815,8 +839,14 @@
           ],
           "resources": [
             {
-              "title": "Introdução ao Seaborn",
-              "url": "https://seaborn.pydata.org/tutorial/introduction.html",
+              "title": "Data-to-Viz (escolha do gráfico certo)",
+              "url": "https://www.data-to-viz.com/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Fundamentals of Data Visualization (Claus Wilke)",
+              "url": "https://clauswilke.com/dataviz/",
               "lang": "en",
               "kind": "leitura"
             }
@@ -1206,10 +1236,16 @@
           ],
           "resources": [
             {
-              "title": "Planejando estudos (Khan Academy)",
-              "url": "https://pt.khanacademy.org/math/statistics-probability/designing-studies",
-              "lang": "pt",
-              "kind": "curso"
+              "title": "Data-to-Viz — Perguntas e Gráficos",
+              "url": "https://www.data-to-viz.com/caveats.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Statistical Thinking (Think Stats)",
+              "url": "https://greenteapress.com/wp/think-stats-2e/",
+              "lang": "en",
+              "kind": "leitura"
             }
           ],
           "title": "Da pergunta ao recorte",
@@ -1228,8 +1264,14 @@
           ],
           "resources": [
             {
-              "title": "Início rápido do Matplotlib",
-              "url": "https://matplotlib.org/stable/users/explain/quick_start.html",
+              "title": "Escrita clara para relatórios (18F Content Guide)",
+              "url": "https://guides.18f.gov/content-guide/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Boas práticas de visualização (Datawrapper)",
+              "url": "https://academy.datawrapper.de/",
               "lang": "en",
               "kind": "leitura"
             }
@@ -1252,14 +1294,14 @@
           ],
           "resources": [
             {
-              "title": "Começando com scikit-learn",
-              "url": "https://scikit-learn.org/stable/getting_started.html",
+              "title": "Kaggle Learn — Intro to Machine Learning",
+              "url": "https://www.kaggle.com/learn/intro-to-machine-learning",
               "lang": "en",
-              "kind": "leitura"
+              "kind": "curso"
             },
             {
-              "title": "Notebooks no VS Code",
-              "url": "https://code.visualstudio.com/docs/datascience/jupyter-notebooks",
+              "title": "Pipelines e estimadores compostos (scikit-learn)",
+              "url": "https://scikit-learn.org/stable/modules/compose.html",
               "lang": "en",
               "kind": "documentacao"
             }

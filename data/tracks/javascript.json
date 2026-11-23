@@ -22,22 +22,16 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "Guia JavaScript (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide",
+              "title": "Gramática e tipos (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Grammar_and_types",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Tipos (javascript.info)",
-              "url": "https://javascript.info/types",
-              "lang": "en",
-              "kind": "leitura"
-            },
-            {
-              "title": "Primeiros passos (javascript.info)",
+              "title": "JavaScript.info — Fundamentos",
               "url": "https://javascript.info/first-steps",
               "lang": "en",
-              "kind": "leitura"
+              "kind": "curso"
             }
           ]
         },
@@ -55,14 +49,14 @@
           ],
           "resources": [
             {
-              "title": "Funções (javascript.info)",
-              "url": "https://javascript.info/function-basics",
-              "lang": "en",
-              "kind": "leitura"
+              "title": "Funções em JavaScript (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Functions",
+              "lang": "pt",
+              "kind": "documentacao"
             },
             {
-              "title": "Guia JavaScript (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide",
+              "title": "Arrow functions (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Functions/Arrow_functions",
               "lang": "pt",
               "kind": "documentacao"
             }
@@ -83,16 +77,16 @@
           ],
           "resources": [
             {
-              "title": "Guia JavaScript (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide",
+              "title": "Array.prototype.map e filter (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Estruturas no freeCodeCamp",
-              "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures-v8/",
-              "lang": "en",
-              "kind": "curso"
+              "title": "Trabalhando com objetos (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Working_with_objects",
+              "lang": "pt",
+              "kind": "documentacao"
             }
           ]
         }
@@ -220,10 +214,16 @@
           ],
           "resources": [
             {
-              "title": "Módulos (MDN)",
+              "title": "Módulos JavaScript (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Modules",
               "lang": "pt",
               "kind": "documentacao"
+            },
+            {
+              "title": "import e export (JavaScript.info)",
+              "url": "https://javascript.info/import-export",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         },
@@ -241,16 +241,16 @@
           ],
           "resources": [
             {
-              "title": "Async (javascript.info)",
-              "url": "https://javascript.info/async",
-              "lang": "en",
-              "kind": "leitura"
+              "title": "JavaScript Assíncrono (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Async_JS",
+              "lang": "pt",
+              "kind": "curso"
             },
             {
-              "title": "Fetch (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch",
-              "lang": "pt",
-              "kind": "documentacao"
+              "title": "Promises e async/await (JavaScript.info)",
+              "url": "https://javascript.info/async-await",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         },
@@ -269,10 +269,16 @@
           ],
           "resources": [
             {
-              "title": "Node.js, introdução",
-              "url": "https://nodejs.org/pt/learn/getting-started/introduction-to-nodejs",
+              "title": "Controle de fluxo e tratamento de erros (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Control_flow_and_error_handling",
               "lang": "pt",
               "kind": "documentacao"
+            },
+            {
+              "title": "try..catch (JavaScript.info)",
+              "url": "https://javascript.info/try-catch",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         }
@@ -375,6 +381,395 @@
               "text": "Substituir o HTML.",
               "correct": false,
               "explanation": "Não é marcação."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "js-fase-3",
+      "number": 3,
+      "badgeTitle": "Navegador e Rede",
+      "title": "Escopo, DOM e fetch",
+      "topics": [
+        {
+          "id": "js-escopo",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Escopo, closures e `this`",
+          "description": "Entenda como uma função lembra das variáveis onde foi criada (closure) e por que `this` muda dependendo de como a função é chamada (ou é herdado em arrow functions).",
+          "tags": [
+            "Closure",
+            "Escopo"
+          ],
+          "prerequisites": [
+            "js-funcao"
+          ],
+          "resources": [
+            {
+              "title": "Closures (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Closures",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Escopo e this (JavaScript.info)",
+              "url": "https://javascript.info/object-methods",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "js-dom",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "DOM, eventos e delegação",
+          "description": "Selecione elementos com `querySelector`, escute eventos com `addEventListener`, evite `innerHTML` com texto do usuário (use `textContent` contra XSS) e use delegação de eventos em listas.",
+          "tags": [
+            "DOM",
+            "Eventos"
+          ],
+          "prerequisites": [
+            "js-escopo"
+          ],
+          "resources": [
+            {
+              "title": "Manipulando documentos DOM (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Scripting/DOM_scripting",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Delegação de eventos (JavaScript.info)",
+              "url": "https://javascript.info/event-delegation",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "js-fetch",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Fetch API e respostas HTTP",
+          "description": "`fetch` só rejeita a Promise em erro de rede — status 404 ou 500 ainda entram no `.then`/linha seguinte! Sempre cheque `response.ok` antes de ler `response.json()`.",
+          "tags": [
+            "fetch",
+            "HTTP"
+          ],
+          "prerequisites": [
+            "js-async",
+            "js-erro"
+          ],
+          "resources": [
+            {
+              "title": "Usando Fetch API (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "AbortController (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/API/AbortController",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "js3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Lista de tarefas sem innerHTML inseguro",
+          "description": "Crie uma lista interativa no navegador usando `textContent` e delegação de eventos no elemento pai.",
+          "steps": [
+            "Adicione e remova itens via `addEventListener`.",
+            "Teste inserir `<script>alert(1)</script>` como texto.",
+            "Confirme que aparece como texto literal."
+          ],
+          "definitionOfDone": [
+            "Um único listener no container cuida dos cliques nos botões.",
+            "Nenhuma tag HTML digitada é executada."
+          ]
+        },
+        {
+          "id": "js3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Busca com estados de carregamento e erro",
+          "description": "Consuma uma API pública com `fetch`, tratando `response.ok === false`, rede offline e botão desabilitado durante o pedido.",
+          "steps": [
+            "Mostre estado de carregando.",
+            "Simule uma URL 404 e exiba mensagem clara.",
+            "Use `AbortController` para cancelar pedido antigo."
+          ],
+          "definitionOfDone": [
+            "404 não quebra com erro de `JSON.parse`.",
+            "Erro aparece para quem usa."
+          ]
+        },
+        {
+          "id": "js3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Debounce e closure na prática",
+          "description": "Implemente uma função `debounce(fn, ms)` usando closure e `setTimeout` para não disparar busca a cada tecla digitada.",
+          "steps": [
+            "Escreva `debounce` pura.",
+            "Aplique num campo de busca.",
+            "Conte quantas chamadas foram evitadas."
+          ],
+          "definitionOfDone": [
+            "Digitar rápido dispara apenas 1 chamada após a pausa.",
+            "Preserva argumentos da função original."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "js-fase-3-q1",
+          "prompt": "Quando o servidor responde HTTP 404 ou 500, o que a função `fetch` faz?",
+          "reviewTopicId": "js-fetch",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Resolve a Promise normalmente com `response.ok === false`; você precisa checar o status.",
+              "correct": true,
+              "explanation": "`fetch` só rejeita quando a rede falha ou o pedido é abortado."
+            },
+            {
+              "id": "b",
+              "text": "Lança exceção automaticamente no `catch`.",
+              "correct": false,
+              "explanation": "Diferente de bibliotecas como Axios, `fetch` não lança erro para 4xx/5xx."
+            },
+            {
+              "id": "c",
+              "text": "Tenta novamente 5 vezes sozinho.",
+              "correct": false,
+              "explanation": "Não há retry automático."
+            }
+          ]
+        },
+        {
+          "id": "js-fase-3-q2",
+          "prompt": "Por que usar `textContent` em vez de `innerHTML` ao exibir texto digitado pelo usuário?",
+          "reviewTopicId": "js-dom",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para evitar execução de scripts injetados (XSS).",
+              "correct": true,
+              "explanation": "`textContent` trata o conteúdo apenas como texto plano."
+            },
+            {
+              "id": "b",
+              "text": "Porque `innerHTML` não aceita acentos.",
+              "correct": false,
+              "explanation": "Aceita, o problema é segurança."
+            },
+            {
+              "id": "c",
+              "text": "Porque `textContent` aplica CSS automaticamente.",
+              "correct": false,
+              "explanation": "Não aplica CSS."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "js-fase-4",
+      "number": 4,
+      "badgeTitle": "Ferramentas",
+      "title": "Node.js, testes e qualidade",
+      "topics": [
+        {
+          "id": "js-node",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Node.js, npm e package.json",
+          "description": "JavaScript fora do navegador: entenda `package.json`, scripts, dependências vs. `devDependencies`, `package-lock.json` e a diferença entre CommonJS (`require`) e ES Modules (`import`).",
+          "tags": [
+            "Node.js",
+            "npm"
+          ],
+          "prerequisites": [
+            "js-modulo"
+          ],
+          "resources": [
+            {
+              "title": "Introdução ao Node.js",
+              "url": "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "package.json (npm Docs)",
+              "url": "https://docs.npmjs.com/cli/v10/configuring-npm/package-json",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "js-teste",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Testes unitários em JavaScript",
+          "description": "Separe funções puras de efeitos de DOM/rede e teste-as com `node --test` (nativo do Node) ou Vitest. Teste bordas: lista vazia, `null`, string vazia.",
+          "tags": [
+            "Testes",
+            "node:test"
+          ],
+          "prerequisites": [
+            "js-node"
+          ],
+          "resources": [
+            {
+              "title": "Test runner nativo do Node.js",
+              "url": "https://nodejs.org/api/test.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Guia do Vitest",
+              "url": "https://vitest.dev/guide/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "js-lint",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "ESLint, Prettier e DevTools",
+          "description": "Use o depurador (breakpoints e inspeção de variáveis) em vez de encher o código de `console.log` esquecidos. Linter pega variáveis não usadas e bugs sutis; formatador acaba com discussão de estilo.",
+          "tags": [
+            "ESLint",
+            "Debug"
+          ],
+          "prerequisites": [
+            "js-node"
+          ],
+          "resources": [
+            {
+              "title": "Depurar JavaScript no Chrome DevTools",
+              "url": "https://developer.chrome.com/docs/devtools/javascript/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Documentação do ESLint",
+              "url": "https://eslint.org/docs/latest/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "js4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Projeto Node com ES Modules",
+          "description": "Inicie um projeto com `npm init`, configure `\"type\": \"module\"` e um script `npm start` que lê argumentos da linha de comando.",
+          "steps": [
+            "Crie `package.json`.",
+            "Separe a lógica em dois arquivos usando `import`/`export`.",
+            "Rode com `npm start`."
+          ],
+          "definitionOfDone": [
+            "Funciona sem CommonJS.",
+            "Script roda limpo."
+          ]
+        },
+        {
+          "id": "js4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Suíte com node --test",
+          "description": "Escreva um módulo de validação ou formatação e crie pelo menos 6 testes usando `node:test` e `node:assert/strict`.",
+          "steps": [
+            "Cubra casos válidos e inválidos.",
+            "Configure `\"test\": \"node --test\"` no `package.json`.",
+            "Rode `npm test`."
+          ],
+          "definitionOfDone": [
+            "Zero dependências externas necessárias.",
+            "Todos os 6 testes passam."
+          ]
+        },
+        {
+          "id": "js4-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Caçando bug com breakpoint",
+          "description": "Documente o uso de breakpoint condicional e Call Stack no DevTools (ou VS Code) para encontrar um bug num laço ou função assíncrona.",
+          "steps": [
+            "Insira um bug proposital na iteração 50 de um laço.",
+            "Use breakpoint condicional em vez de 50 `console.log`.",
+            "Registre a pilha de chamadas encontrada."
+          ],
+          "definitionOfDone": [
+            "O passo a passo do debug está documentado.",
+            "O código final não tem `console.log` sobrando."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "js-fase-4-q1",
+          "prompt": "Para que serve o arquivo `package-lock.json`?",
+          "reviewTopicId": "js-node",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Travar as versões exatas das dependências instaladas para todo mundo e o CI instalarem a mesma árvore.",
+              "correct": true,
+              "explanation": "Evita o clássico 'na minha máquina funciona' por atualização menor de pacote."
+            },
+            {
+              "id": "b",
+              "text": "Guardar senhas de produção.",
+              "correct": false,
+              "explanation": "Nunca guarde segredos no repositório."
+            },
+            {
+              "id": "c",
+              "text": "Minificar o código para o navegador.",
+              "correct": false,
+              "explanation": "Quem faz bundle/minificação é Vite/esbuild."
+            }
+          ]
+        },
+        {
+          "id": "js-fase-4-q2",
+          "prompt": "Por que separar lógica pura de manipulação de DOM ajuda nos testes?",
+          "reviewTopicId": "js-teste",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque funções puras rodam rápido direto no Node sem precisar simular navegador.",
+              "correct": true,
+              "explanation": "Testes ficam mais simples, rápidos e estáveis."
+            },
+            {
+              "id": "b",
+              "text": "Porque funções puras não podem ter parâmetros.",
+              "correct": false,
+              "explanation": "Elas justamente recebem entradas e devolvem saídas previsíveis."
+            },
+            {
+              "id": "c",
+              "text": "Porque o DOM não aceita eventos.",
+              "correct": false,
+              "explanation": "O DOM aceita eventos, mas testá-lo é mais custoso."
             }
           ]
         }

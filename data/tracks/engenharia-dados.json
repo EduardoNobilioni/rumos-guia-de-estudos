@@ -2,13 +2,13 @@
   "id": "engenharia-dados",
   "name": "Engenharia de Dados",
   "tagline": "Levar o dado de um lugar a outro, com qualidade e repetição",
-  "description": "Para quem prepara o dado que outras pessoas analisam: arquivo, API, modelo, verificação e um fluxo que roda de novo amanhã.",
+  "description": "Para quem prepara o dado que outras pessoas analisam: arquivo, API, modelo, transformação, processamento em escala, verificação e um fluxo que roda de novo amanhã.",
   "phases": [
     {
       "id": "en-fase-1",
       "number": 1,
       "badgeTitle": "Base",
-      "title": "SQL e arquivo",
+      "title": "SQL, arquivos e qualidade",
       "topics": [
         {
           "id": "en-sql",
@@ -17,7 +17,8 @@
           "title": "Tabela que aguenta consulta",
           "description": "Tipo, chave e uma tabela por fato. O analista agradece nome estável. Coluna \"obs\" com três significados diferentes vira dívida na primeira semana.",
           "tags": [
-            "SQL"
+            "SQL",
+            "DDL"
           ],
           "prerequisites": [],
           "resources": [
@@ -42,7 +43,8 @@
           "title": "CSV, tipo e codificação",
           "description": "CSV mente: separador, aspas, acento e data. Abra uma amostra, declare a codificação e registre quantas linhas você recusou.",
           "tags": [
-            "CSV"
+            "CSV",
+            "Python"
           ],
           "prerequisites": [
             "en-sql"
@@ -63,27 +65,56 @@
           ]
         },
         {
-          "id": "en-qualidade",
-          "level": "intermediario",
-          "hours": 5,
-          "title": "Qualidade mínima",
-          "description": "Nulo, duplicata e intervalo impossível. Uma verificação que falha o fluxo vale mais do que um painel que absorve lixo. Escreva a regra ao lado do código.",
+          "id": "en-formatos",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "JSON, Parquet e compressão",
+          "description": "CSV é texto plano sem esquema. JSON aninha objeto, mas repete chave em toda linha. Parquet guarda por coluna com tipo e compressão: lê só as colunas que a consulta pediu.",
           "tags": [
-            "Qualidade"
+            "Parquet",
+            "JSON"
           ],
           "prerequisites": [
             "en-arquivo"
           ],
           "resources": [
             {
-              "title": "10 minutos de Pandas",
-              "url": "https://pandas.pydata.org/docs/user_guide/10min.html",
+              "title": "Apache Parquet — conceitos",
+              "url": "https://parquet.apache.org/docs/overview/",
               "lang": "en",
-              "kind": "pratica"
+              "kind": "documentacao"
             },
             {
-              "title": "Tutorial SQL do PostgreSQL",
-              "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+              "title": "Módulo json do Python",
+              "url": "https://docs.python.org/pt-br/3/library/json.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "en-qualidade",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Qualidade mínima",
+          "description": "Nulo, duplicata e intervalo impossível. Uma verificação que falha o fluxo vale mais do que um painel que absorve lixo. Escreva a regra ao lado do código.",
+          "tags": [
+            "Qualidade",
+            "Validação"
+          ],
+          "prerequisites": [
+            "en-arquivo"
+          ],
+          "resources": [
+            {
+              "title": "Constraints no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Dados faltantes no Pandas",
+              "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -168,26 +199,26 @@
         },
         {
           "id": "en-fase-1-q2",
-          "prompt": "Por que abrir uma amostra antes de carregar o arquivo inteiro?",
-          "reviewTopicId": "en-arquivo",
+          "prompt": "Por que Parquet costuma ser muito mais rápido que CSV em consultas analíticas?",
+          "reviewTopicId": "en-formatos",
           "choices": [
             {
               "id": "a",
-              "text": "Porque separador, acento e data aparecem cedo e quebram a carga.",
+              "text": "Porque guarda os dados por coluna e com tipos, permitindo ler só as colunas necessárias.",
               "correct": true,
-              "explanation": "Amostra não substitui a regra, mas evita surpresa óbvia."
+              "explanation": "Em formato colunar, você pula colunas que não entraram no SELECT."
             },
             {
               "id": "b",
-              "text": "Porque CSV não tem linha quebrada.",
+              "text": "Porque Parquet não permite números negativos.",
               "correct": false,
-              "explanation": "CSV pode quebrar linha no meio de um campo entre aspas."
+              "explanation": "Parquet suporta os tipos numéricos normalmente."
             },
             {
               "id": "c",
-              "text": "Porque o banco adivinha a codificação.",
+              "text": "Porque é um arquivo de texto sem cabeçalho.",
               "correct": false,
-              "explanation": "Quem declara é você."
+              "explanation": "Parquet é binário e guarda o esquema dentro do próprio arquivo."
             }
           ]
         }
@@ -197,14 +228,14 @@
       "id": "en-fase-2",
       "number": 2,
       "badgeTitle": "Movimento",
-      "title": "API, modelo analítico e repetição",
+      "title": "API, ingestão, modelo e orquestração",
       "topics": [
         {
           "id": "en-api",
           "level": "intermediario",
           "hours": 6,
           "title": "Coletar de uma API",
-          "description": "Leia a página da API: autenticação, limite e o campo que indica a próxima página. Guarde a resposta bruta ou o suficiente para repetir. Não raspe HTML se a API existe. Se raspar, respeite robots.txt, intervalo e os termos, e não entre em área privada.",
+          "description": "Leia a página da API: autenticação, limite e o campo que indica a próxima página. Guarde a resposta bruta ou o suficiente para repetir. Não raspe HTML se a API existe.",
           "tags": [
             "API",
             "Coleta"
@@ -234,23 +265,52 @@
           ]
         },
         {
+          "id": "en-cdc",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Carga incremental e idempotência",
+          "description": "Copiar a tabela inteira toda noite não escala. Leia só o que mudou (por data de atualização ou log de alterações/CDC) e garanta que rodar duas vezes o mesmo lote não duplique linhas.",
+          "tags": [
+            "Incremental",
+            "Idempotência"
+          ],
+          "prerequisites": [
+            "en-api"
+          ],
+          "resources": [
+            {
+              "title": "PostgreSQL — Logical Replication",
+              "url": "https://www.postgresql.org/docs/current/logical-replication.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "MERGE no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/sql-merge.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
           "id": "en-modelo",
           "level": "intermediario",
           "hours": 6,
           "title": "Modelo para análise",
           "description": "Separe o fato (uma linha por evento) da dimensão (o que descreve). Nome estável. A consulta do analista não deveria precisar adivinhar coluna.",
           "tags": [
-            "Modelo"
+            "Modelo",
+            "Star Schema"
           ],
           "prerequisites": [
             "en-sql"
           ],
           "resources": [
             {
-              "title": "DDL no PostgreSQL",
-              "url": "https://www.postgresql.org/docs/current/ddl-basics.html",
-              "lang": "en",
-              "kind": "documentacao"
+              "title": "Esquema em estrela (Microsoft Learn pt-BR)",
+              "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/star-schema",
+              "lang": "pt",
+              "kind": "leitura"
             },
             {
               "title": "Joins no PostgreSQL",
@@ -265,13 +325,14 @@
           "level": "avancado",
           "hours": 6,
           "title": "Rodar de novo",
-          "description": "O fluxo tem hora, log e uma forma de reprocessar um dia sem apagar o mês. Agenda pode ser cron no começo. Airflow entra quando há várias etapas e dependência de verdade. Ferramenta não substitui a regra de qualidade.",
+          "description": "O fluxo tem hora, log e uma forma de reprocessar um dia sem apagar o mês. Agenda pode ser cron no começo. Airflow entra quando há várias etapas e dependência de verdade.",
           "tags": [
             "Orquestração",
             "Airflow"
           ],
           "prerequisites": [
-            "en-qualidade"
+            "en-qualidade",
+            "en-cdc"
           ],
           "resources": [
             {
@@ -342,26 +403,26 @@
       "quiz": [
         {
           "id": "en-fase-2-q1",
-          "prompt": "Quando a raspagem de HTML fica para depois?",
-          "reviewTopicId": "en-api",
+          "prompt": "O que significa um pipeline ser idempotente?",
+          "reviewTopicId": "en-cdc",
           "choices": [
             {
               "id": "a",
-              "text": "Quando existe API ou arquivo oficial da mesma informação.",
+              "text": "Rodar o mesmo lote mais de uma vez produz o mesmo estado final, sem duplicar dados.",
               "correct": true,
-              "explanation": "Menos fragilidade e menos briga com o termo de uso."
+              "explanation": "Sem idempotência, qualquer reprocessamento após falha suja a tabela."
             },
             {
               "id": "b",
-              "text": "Quando o site tem muito CSS.",
+              "text": "Rodar o pipeline o mais rápido possível.",
               "correct": false,
-              "explanation": "CSS não é o critério."
+              "explanation": "Velocidade não garante segurança ao reprocessar."
             },
             {
               "id": "c",
-              "text": "Sempre: API é coisa de empresa grande.",
+              "text": "Apagar o banco inteiro antes de cada execução.",
               "correct": false,
-              "explanation": "API pequena também conta."
+              "explanation": "Apagar tudo é destrutivo e inviável em tabelas grandes."
             }
           ]
         },
@@ -387,6 +448,562 @@
               "text": "A senha do banco no código.",
               "correct": false,
               "explanation": "Segredo no código vaza."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "en-fase-3",
+      "number": 3,
+      "badgeTitle": "Transformação",
+      "title": "SQL analítico, dbt e contratos",
+      "topics": [
+        {
+          "id": "en-window",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "CTEs e Window Functions",
+          "description": "Nem tudo se resolve com GROUP BY. Funções de janela (ROW_NUMBER, LAG, soma acumulada) calculam sobre vizinhos mantendo o detalhe de cada linha. CTEs quebram consultas gigantes em passos legíveis.",
+          "tags": [
+            "SQL",
+            "Window Functions"
+          ],
+          "prerequisites": [
+            "en-modelo"
+          ],
+          "resources": [
+            {
+              "title": "Window Functions no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "CTEs (WITH) no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/queries-with.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "en-dbt",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Transformação modular com dbt",
+          "description": "Trate SQL de transformação como código: versionado no Git, com referências entre modelos (ref), testes declarativos de unicidade/nulo e documentação gerada do próprio projeto.",
+          "tags": [
+            "dbt",
+            "ELT"
+          ],
+          "prerequisites": [
+            "en-window"
+          ],
+          "resources": [
+            {
+              "title": "O que é dbt (documentação oficial)",
+              "url": "https://docs.getdbt.com/docs/introduction",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Testes de dados no dbt",
+              "url": "https://docs.getdbt.com/docs/build/data-tests",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "en-contratos",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Contratos de dados e evolução de esquema",
+          "description": "Quando o time do app renomeia uma coluna sem avisar, o painel cai. Contrato define tipos obrigatórios, valores aceitos e quem responde pela quebra antes do dado chegar ao consumidor.",
+          "tags": [
+            "Contratos",
+            "Schema"
+          ],
+          "prerequisites": [
+            "en-dbt"
+          ],
+          "resources": [
+            {
+              "title": "Model Contracts no dbt",
+              "url": "https://docs.getdbt.com/docs/mesh/govern/model-contracts",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Schema Evolution (Delta / Iceberg conceitos)",
+              "url": "https://iceberg.apache.org/docs/latest/evolution/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "en3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Consulta em camadas com CTE",
+          "description": "Pegue uma consulta com subconsultas aninhadas e reescreva usando CTEs nomeadas para limpeza, filtro e agregação.",
+          "steps": [
+            "Separe a limpeza inicial numa CTE.",
+            "Calcule a métrica final na última etapa.",
+            "Explique cada etapa em uma linha."
+          ],
+          "definitionOfDone": [
+            "O resultado numérico bate com a consulta original.",
+            "Nenhuma subconsulta aninhada obscura."
+          ]
+        },
+        {
+          "id": "en3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 10,
+          "title": "Projeto dbt com testes",
+          "description": "Crie um mini-projeto dbt (com DuckDB ou PostgreSQL) com modelos staging e mart, e testes automáticos de chave única e não nulo.",
+          "steps": [
+            "Modele uma camada staging limpando tipos.",
+            "Crie um mart com fato e dimensão.",
+            "Rode `dbt test` e mostre o log."
+          ],
+          "definitionOfDone": [
+            "Os modelos constroem sem erro.",
+            "Pelo menos 4 testes de dados passam."
+          ]
+        },
+        {
+          "id": "en3-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Quebra controlada de contrato",
+          "description": "Simule uma mudança de tipo ou coluna faltante na origem e faça o contrato bloquear a publicação antes de afetar o mart.",
+          "steps": [
+            "Declare o contrato com tipos explícitos.",
+            "Altere a origem propositalmente.",
+            "Registre a falha do build."
+          ],
+          "definitionOfDone": [
+            "A quebra é barrada antes do consumidor final.",
+            "O processo de migração está documentado."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "en-fase-3-q1",
+          "prompt": "Qual a vantagem de uma Window Function sobre o GROUP BY tradicional?",
+          "reviewTopicId": "en-window",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Permite calcular rankings e acumulados mantendo todas as linhas originais na saída.",
+              "correct": true,
+              "explanation": "Você calcula sobre uma janela sem colapsar o grão da tabela."
+            },
+            {
+              "id": "b",
+              "text": "Dispensa índices e chaves na tabela.",
+              "correct": false,
+              "explanation": "Performance continua dependendo da estrutura e particionamento."
+            },
+            {
+              "id": "c",
+              "text": "Só funciona em arquivos CSV.",
+              "correct": false,
+              "explanation": "É recurso padrão do SQL em bancos relacionais e analíticos."
+            }
+          ]
+        },
+        {
+          "id": "en-fase-3-q2",
+          "prompt": "Por que usar testes declarativos (como not_null e unique) nas transformações SQL?",
+          "reviewTopicId": "en-dbt",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para detectar duplicação causada por JOIN errado ou dado faltante antes de publicar o painel.",
+              "correct": true,
+              "explanation": "Um JOIN 1:N esquecido multiplica valores sem dar erro de sintaxe."
+            },
+            {
+              "id": "b",
+              "text": "Para substituir o backup do banco.",
+              "correct": false,
+              "explanation": "Teste valida integridade lógica, não substitui backup."
+            },
+            {
+              "id": "c",
+              "text": "Para acelerar o download de arquivos.",
+              "correct": false,
+              "explanation": "Testes rodam sobre os modelos já transformados."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "en-fase-4",
+      "number": 4,
+      "badgeTitle": "Escala",
+      "title": "Lakehouse, processamento distribuído e streaming",
+      "topics": [
+        {
+          "id": "en-lake",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Data Lake e camadas (Bronze, Silver, Gold)",
+          "description": "Separar dado bruto (Bronze), limpo/tipado (Silver) e pronto para negócio (Gold) evita refazer extração cara quando uma regra muda. Particione por data sem gerar milhões de arquivos minúsculos.",
+          "tags": [
+            "Data Lake",
+            "Lakehouse"
+          ],
+          "prerequisites": [
+            "en-formatos",
+            "en-dbt"
+          ],
+          "resources": [
+            {
+              "title": "Apache Iceberg — visão geral",
+              "url": "https://iceberg.apache.org/docs/latest/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Delta Lake — introdução",
+              "url": "https://docs.delta.io/latest/delta-intro.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "en-spark",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Processamento em escala: DuckDB e Spark",
+          "description": "Não suba um cluster Spark para 2 GB de dados: DuckDB ou Polars resolvem numa máquina só. Quando passar de dezenas/centenas de GB ou precisar distribuir memória, entenda partições, shuffle e skew no Spark.",
+          "tags": [
+            "Spark",
+            "DuckDB"
+          ],
+          "prerequisites": [
+            "en-lake"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do DuckDB",
+              "url": "https://duckdb.org/docs/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Guia de SQL/DataFrames do PySpark",
+              "url": "https://spark.apache.org/docs/latest/sql-getting-started.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "en-streaming",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Streaming e mensageria de eventos",
+          "description": "Lote roda de hora em hora; streaming processa evento conforme chega. Entenda tópico, partição, offset, consumidor atrasado e a diferença entre hora do evento e hora do processamento.",
+          "tags": [
+            "Kafka",
+            "Streaming"
+          ],
+          "prerequisites": [
+            "en-orquestra"
+          ],
+          "resources": [
+            {
+              "title": "Apache Kafka — introdução",
+              "url": "https://kafka.apache.org/intro",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Structured Streaming (Spark)",
+              "url": "https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "en4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Camadas Bronze, Silver e Gold locais",
+          "description": "Organize um conjunto de dados público em três pastas locais (bruto, limpo em Parquet, agregado) com scripts independentes.",
+          "steps": [
+            "Salve o bruto sem alterar.",
+            "Gere a camada Silver tipada em Parquet.",
+            "Crie uma tabela Gold respondendo a duas perguntas."
+          ],
+          "definitionOfDone": [
+            "É possível apagar Silver e Gold e reconstruir só a partir de Bronze.",
+            "Os tamanhos dos arquivos estão comparados no README."
+          ]
+        },
+        {
+          "id": "en4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 10,
+          "title": "Benchmark DuckDB vs. Pandas",
+          "description": "Processe alguns milhões de linhas em Parquet comparando tempo e pico de memória entre DuckDB e Pandas.",
+          "steps": [
+            "Gere ou baixe um dataset com alguns milhões de linhas.",
+            "Execute a mesma agregação nas duas ferramentas.",
+            "Meça tempo e uso de RAM."
+          ],
+          "definitionOfDone": [
+            "Os resultados batem exatamente.",
+            "A tabela comparativa está documentada."
+          ]
+        },
+        {
+          "id": "en4-projeto-avancado",
+          "level": "avancado",
+          "hours": 12,
+          "title": "Produtor e consumidor com atraso",
+          "description": "Simule eventos chegando fora de ordem numa fila (ou tópico Kafka local) e agregue por janela de tempo do evento.",
+          "steps": [
+            "Envie eventos com timestamps atrasados.",
+            "Agregue por janela de 1 minuto.",
+            "Mostre como lidar com evento que chega tarde."
+          ],
+          "definitionOfDone": [
+            "O consumidor reinicia sem perder o offset.",
+            "O comportamento com dado atrasado está explicado."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "en-fase-4-q1",
+          "prompt": "Por que guardar a camada Bronze sem transformar antes?",
+          "reviewTopicId": "en-lake",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para poder reprocessar com regras novas sem depender da API ou sistema de origem de novo.",
+              "correct": true,
+              "explanation": "A camada bruta é o seu seguro contra bug de transformação."
+            },
+            {
+              "id": "b",
+              "text": "Porque analistas devem consultar direto a camada Bronze.",
+              "correct": false,
+              "explanation": "Analistas consomem preferencialmente Silver/Gold já limpos e modelados."
+            },
+            {
+              "id": "c",
+              "text": "Porque Parquet não aceita transformação.",
+              "correct": false,
+              "explanation": "Parquet aceita qualquer transformação em lote ou streaming."
+            }
+          ]
+        },
+        {
+          "id": "en-fase-4-q2",
+          "prompt": "Quando faz sentido evitar Spark e preferir processamento em nó único (como DuckDB)?",
+          "reviewTopicId": "en-spark",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Quando os dados cabem no disco/memória de uma máquina só, evitando custo e complexidade de rede/cluster.",
+              "correct": true,
+              "explanation": "Distribuir dados pequenos costuma ser mais lento que processar localmente."
+            },
+            {
+              "id": "b",
+              "text": "Quando você precisa processar petabytes por hora em dezenas de nós.",
+              "correct": false,
+              "explanation": "Aí sim o processamento distribuído é necessário."
+            },
+            {
+              "id": "c",
+              "text": "Nunca: Spark é obrigatório em qualquer volume.",
+              "correct": false,
+              "explanation": "Complexidade sem necessidade gera custo e manutenção à toa."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "en-fase-5",
+      "number": 5,
+      "badgeTitle": "Produção",
+      "title": "Observabilidade, governança e custo",
+      "topics": [
+        {
+          "id": "en-observabilidade",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Observabilidade e linhagem de dados",
+          "description": "Saber que o job rodou não basta: monitore frescor (quanto tempo faz desde a última carga), volume, distribuição e linhagem (quais painéis quebram se esta tabela atrasar).",
+          "tags": [
+            "Observabilidade",
+            "Linhagem"
+          ],
+          "prerequisites": [
+            "en-orquestra",
+            "en-dbt"
+          ],
+          "resources": [
+            {
+              "title": "OpenLineage — conceitos",
+              "url": "https://openlineage.io/docs/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Source freshness no dbt",
+              "url": "https://docs.getdbt.com/docs/build/sources#snapshotting-source-data-freshness",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "en-governanca",
+          "level": "avancado",
+          "hours": 5,
+          "title": "LGPD, segurança e controle de custo",
+          "description": "Dado pessoal (PII) precisa de propósito, mascaramento ou anonimização e controle de acesso por papel. Na nuvem, `SELECT *` sem filtro de partição custa caro: eduque e coloque limites.",
+          "tags": [
+            "LGPD",
+            "FinOps"
+          ],
+          "prerequisites": [
+            "en-lake"
+          ],
+          "resources": [
+            {
+              "title": "Texto oficial da LGPD (Lei 13.709)",
+              "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Boas práticas de custo no BigQuery",
+              "url": "https://cloud.google.com/bigquery/docs/best-practices-costs",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "en5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Mapa de linhagem no papel",
+          "description": "Desenhe de onde cada tabela do seu projeto vem e quais consultas ou painéis dependem dela.",
+          "steps": [
+            "Liste as fontes.",
+            "Desenhe as setas até as tabelas finais.",
+            "Marque qual tabela é crítica se atrasar."
+          ],
+          "definitionOfDone": [
+            "O diagrama está legível no README.",
+            "Cada tabela tem um responsável."
+          ]
+        },
+        {
+          "id": "en5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Alerta de frescor e volume",
+          "description": "Adicione uma checagem automática que avisa se uma tabela ficou mais de 24h sem atualização ou caiu 30% em volume.",
+          "steps": [
+            "Defina o SLA da tabela.",
+            "Simule um atraso.",
+            "Capture o alerta no log ou webhook."
+          ],
+          "definitionOfDone": [
+            "O alerta dispara quando o limite é violado.",
+            "Não há falso positivo na execução normal."
+          ]
+        },
+        {
+          "id": "en5-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Anonimização de PII na camada Silver",
+          "description": "Receba uma tabela com CPF/e-mail na Bronze e publique na Silver/Gold apenas com hash com salt ou mascaramento, documentando o porquê.",
+          "steps": [
+            "Identifique as colunas sensíveis.",
+            "Aplique hash ou remoção antes do Gold.",
+            "Restrinja acesso à camada Bronze."
+          ],
+          "definitionOfDone": [
+            "Nenhuma coluna sensível aparece aberta no Gold.",
+            "O join por usuário ainda funciona se usar hash consistente."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "en-fase-5-q1",
+          "prompt": "O que o monitoramento de frescor (freshness) detecta?",
+          "reviewTopicId": "en-observabilidade",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Se o dado parou de chegar dentro do prazo esperado, mesmo que o pipeline não tenha dado erro.",
+              "correct": true,
+              "explanation": "Um job pode rodar com sucesso lendo 0 linhas novas da origem."
+            },
+            {
+              "id": "b",
+              "text": "Se a fonte do site está bonita.",
+              "correct": false,
+              "explanation": "Frescor mede atraso temporal da atualização dos dados."
+            },
+            {
+              "id": "c",
+              "text": "Se o código tem comentários.",
+              "correct": false,
+              "explanation": "Comentários são verificados em revisão de código."
+            }
+          ]
+        },
+        {
+          "id": "en-fase-5-q2",
+          "prompt": "Qual o risco de liberar acesso irrestrito à camada Bronze para todo mundo?",
+          "reviewTopicId": "en-governanca",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Exposição de dados pessoais (PII) ainda não mascarados e consultas caras sem particionamento.",
+              "correct": true,
+              "explanation": "Bronze guarda o dado cru; PII e governança precisam ser tratados antes do consumo amplo."
+            },
+            {
+              "id": "b",
+              "text": "Nenhum, todo dado deve ser público internamente.",
+              "correct": false,
+              "explanation": "Princípio do menor privilégio e LGPD exigem controle de acesso."
+            },
+            {
+              "id": "c",
+              "text": "O arquivo Parquet corrompe se mais de uma pessoa ler.",
+              "correct": false,
+              "explanation": "Leitura concorrente não corrompe Parquet."
             }
           ]
         }

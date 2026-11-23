@@ -22,14 +22,14 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "SQLBolt",
+              "title": "Introdução a SELECT (SQLBolt)",
               "url": "https://sqlbolt.com/lesson/select_queries_introduction",
               "lang": "en",
               "kind": "pratica"
             },
             {
-              "title": "Tutorial SQL do PostgreSQL",
-              "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+              "title": "Consultando uma tabela (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/tutorial-select.html",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -76,10 +76,16 @@
           ],
           "resources": [
             {
-              "title": "Agregação no PostgreSQL",
+              "title": "Funções de agregação (PostgreSQL)",
               "url": "https://www.postgresql.org/docs/current/tutorial-agg.html",
               "lang": "en",
               "kind": "documentacao"
+            },
+            {
+              "title": "Agregações no SQLBolt",
+              "url": "https://sqlbolt.com/lesson/select_queries_with_aggregates",
+              "lang": "en",
+              "kind": "pratica"
             }
           ]
         }
@@ -207,8 +213,14 @@
           ],
           "resources": [
             {
-              "title": "DDL no PostgreSQL",
+              "title": "DDL Básico (PostgreSQL)",
               "url": "https://www.postgresql.org/docs/current/ddl-basics.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Chaves e Constraints (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -229,9 +241,15 @@
           "resources": [
             {
               "title": "Índices no PostgreSQL",
-              "url": "https://www.postgresql.org/docs/current/indexes.html",
+              "url": "https://www.postgresql.org/docs/current/indexes-intro.html",
               "lang": "en",
               "kind": "documentacao"
+            },
+            {
+              "title": "Use The Index, Luke",
+              "url": "https://use-the-index-luke.com/",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         },
@@ -249,16 +267,16 @@
           ],
           "resources": [
             {
-              "title": "Tutorial SQL do PostgreSQL",
-              "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+              "title": "COALESCE e NULLIF (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/functions-conditional.html#FUNCTIONS-COALESCE-NVL-IFNULL",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "SQLite, SELECT",
-              "url": "https://sqlite.org/lang_select.html",
+              "title": "Expressões com NULL (SQLBolt)",
+              "url": "https://sqlbolt.com/lesson/select_queries_with_nulls",
               "lang": "en",
-              "kind": "documentacao"
+              "kind": "pratica"
             }
           ]
         }
@@ -361,6 +379,394 @@
               "text": "Obrigatório para ter chave primária.",
               "correct": false,
               "explanation": "Chave primária já cria o índice dela."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sq-fase-3",
+      "number": 3,
+      "badgeTitle": "Analítico",
+      "title": "CTEs, CASE e Window Functions",
+      "topics": [
+        {
+          "id": "sq-cte",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "CTEs (WITH) e subconsultas legíveis",
+          "description": "Em vez de aninhar três `SELECT` dentro de `FROM`, quebre em etapas nomeadas com `WITH`. Cada CTE vira uma tabela temporária lógica que outra pessoa lê de cima para baixo.",
+          "tags": [
+            "CTE",
+            "WITH"
+          ],
+          "prerequisites": [
+            "sq-agg"
+          ],
+          "resources": [
+            {
+              "title": "CTEs (WITH) no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/queries-with.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Subqueries no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/functions-subquery.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "sq-case",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "CASE WHEN, datas e texto",
+          "description": "Crie faixas (ex.: pequeno/médio/grande) com `CASE WHEN`, conte condicional com `COUNT(*) FILTER (WHERE ...)` ou `SUM(CASE ...)` e trunque datas por mês (`DATE_TRUNC`) sem quebrar o fuso.",
+          "tags": [
+            "CASE",
+            "Datas"
+          ],
+          "prerequisites": [
+            "sq-select"
+          ],
+          "resources": [
+            {
+              "title": "Expressões condicionais CASE (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/functions-conditional.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Funções de data e hora (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/functions-datetime.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "sq-window",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Window Functions (OVER, PARTITION BY)",
+          "description": "Calcule ranking por categoria (`ROW_NUMBER`, `DENSE_RANK`), comparação com o mês anterior (`LAG`) e total acumulado sem colapsar as linhas como o `GROUP BY` faz.",
+          "tags": [
+            "Window Functions",
+            "OVER"
+          ],
+          "prerequisites": [
+            "sq-cte"
+          ],
+          "resources": [
+            {
+              "title": "Window Functions (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Lista de Window Functions (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/functions-window.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "sq3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Faixas com CASE WHEN",
+          "description": "Classifique pedidos ou notas em três faixas com `CASE WHEN` e conte quantos itens caíram em cada faixa numa única consulta.",
+          "steps": [
+            "Cubra o caso `ELSE` explicitamente.",
+            "Agrupe pela faixa criada.",
+            "Confira se a soma das faixas bate com o total."
+          ],
+          "definitionOfDone": [
+            "Nenhum registro cai em NULL por falta de faixa.",
+            "Contagem total confere."
+          ]
+        },
+        {
+          "id": "sq3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Top 3 por categoria com ROW_NUMBER",
+          "description": "Use uma CTE com `ROW_NUMBER() OVER (PARTITION BY categoria ORDER BY valor DESC)` para listar apenas os 3 maiores de cada categoria.",
+          "steps": [
+            "Escreva a CTE numerando dentro de cada grupo.",
+            "Filtre `rn <= 3` na consulta externa.",
+            "Teste empate usando `DENSE_RANK` e compare."
+          ],
+          "definitionOfDone": [
+            "Funciona para qualquer número de categorias.",
+            "Diferença entre `ROW_NUMBER` e `DENSE_RANK` está anotada."
+          ]
+        },
+        {
+          "id": "sq3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Variação mês a mês com LAG",
+          "description": "Agrupe vendas por mês numa CTE e use `LAG()` para calcular a diferença percentual em relação ao mês anterior.",
+          "steps": [
+            "Agrupe por mês com `DATE_TRUNC`.",
+            "Aplique `LAG(total) OVER (ORDER BY mes)`.",
+            "Trate o primeiro mês (que tem `LAG` nulo) e divisão por zero com `NULLIF`."
+          ],
+          "definitionOfDone": [
+            "Não dá erro de divisão por zero.",
+            "Os números batem com conferência manual."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "sq-fase-3-q1",
+          "prompt": "Qual a diferença entre `GROUP BY` e `PARTITION BY` numa Window Function?",
+          "reviewTopicId": "sq-window",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`GROUP BY` reduz o resultado a uma linha por grupo; `PARTITION BY` calcula sobre o grupo mantendo cada linha original.",
+              "correct": true,
+              "explanation": "Window functions preservam o detalhe da linha."
+            },
+            {
+              "id": "b",
+              "text": "`PARTITION BY` apaga a tabela original.",
+              "correct": false,
+              "explanation": "É apenas uma cláusula de leitura."
+            },
+            {
+              "id": "c",
+              "text": "São sinônimos exatos.",
+              "correct": false,
+              "explanation": "Mudam completamente a quantidade de linhas retornadas."
+            }
+          ]
+        },
+        {
+          "id": "sq-fase-3-q2",
+          "prompt": "Por que usar CTEs (`WITH`) em consultas complexas?",
+          "reviewTopicId": "sq-cte",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para dividir a lógica em blocos nomeados e legíveis, facilitando revisão e manutenção.",
+              "correct": true,
+              "explanation": "Legibilidade reduz bugs em consultas longas."
+            },
+            {
+              "id": "b",
+              "text": "Para dispensar chaves primárias.",
+              "correct": false,
+              "explanation": "Modelagem continua necessária."
+            },
+            {
+              "id": "c",
+              "text": "Para gravar dados sem permissão.",
+              "correct": false,
+              "explanation": "Respeita as mesmas permissões."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sq-fase-4",
+      "number": 4,
+      "badgeTitle": "Produção",
+      "title": "Transações, EXPLAIN e segurança",
+      "topics": [
+        {
+          "id": "sq-transacao",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Transações (ACID), COMMIT e ROLLBACK",
+          "description": "Quando duas atualizações precisam acontecer juntas (debitar uma conta e creditar outra), envolva em `BEGIN ... COMMIT`. Se algo falhar no meio, `ROLLBACK` desfaz tudo sem deixar estado quebrado.",
+          "tags": [
+            "Transações",
+            "ACID"
+          ],
+          "prerequisites": [
+            "sq-modelo"
+          ],
+          "resources": [
+            {
+              "title": "Transações no PostgreSQL",
+              "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Níveis de Isolamento (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "sq-explain",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Ler EXPLAIN ANALYZE",
+          "description": "Não chute por que a consulta está lenta: rode `EXPLAIN ANALYZE` e veja se o banco está fazendo `Seq Scan` numa tabela de milhões de linhas, onde está o custo real e se o índice está sendo usado.",
+          "tags": [
+            "EXPLAIN",
+            "Performance"
+          ],
+          "prerequisites": [
+            "sq-indice"
+          ],
+          "resources": [
+            {
+              "title": "Usando EXPLAIN (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/using-explain.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Explain Dalibo (visualizador)",
+              "url": "https://explain.dalibo.com/",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "sq-seguranca",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "SQL Injection e privilégio mínimo",
+          "description": "Nunca concatene entrada do usuário numa string SQL — use sempre consultas parametrizadas (`$1`, `?`). No banco, crie usuários separados para o app (sem `DROP TABLE` ou superusuário).",
+          "tags": [
+            "Segurança",
+            "SQLi"
+          ],
+          "prerequisites": [
+            "sq-select"
+          ],
+          "resources": [
+            {
+              "title": "SQL Injection Prevention (OWASP)",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Papéis e privilégios (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/user-manag.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "sq4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Teste de ROLLBACK no terminal",
+          "description": "Abra uma transação com `BEGIN`, faça um `UPDATE` ou `DELETE`, confira com `SELECT` e desfaça com `ROLLBACK` provando que nada mudou depois.",
+          "steps": [
+            "Inicie com `BEGIN;`.",
+            "Altere uma linha.",
+            "Rode `ROLLBACK;` e confira a tabela original."
+          ],
+          "definitionOfDone": [
+            "Os prints ou log dos passos estão anotados.",
+            "Explica quando usar `COMMIT` vs `ROLLBACK`."
+          ]
+        },
+        {
+          "id": "sq4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Antes e depois no EXPLAIN ANALYZE",
+          "description": "Gere 100 mil linhas numa tabela sem índice, meça uma busca com `EXPLAIN ANALYZE`, crie o índice e compare o plano de execução.",
+          "steps": [
+            "Popule 100 mil linhas (ex.: `generate_series`).",
+            "Rode `EXPLAIN ANALYZE` buscando por uma coluna.",
+            "Crie o índice e rode de novo."
+          ],
+          "definitionOfDone": [
+            "Mostra mudança de `Seq Scan` para `Index Scan` (ou `Bitmap`).",
+            "Tempos comparados."
+          ]
+        },
+        {
+          "id": "sq4-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Consulta parametrizada segura",
+          "description": "Mostre um exemplo pequeno em Python ou Node com string concatenada vulnerável e a versão corrigida usando parâmetros preparados (`$1` / `?`).",
+          "steps": [
+            "Teste entrada maliciosa localmente na versão vulnerável.",
+            "Substitua por query parametrizada.",
+            "Teste a mesma entrada provando que virou texto literal."
+          ],
+          "definitionOfDone": [
+            "Nenhuma concatenação resta no código final.",
+            "A explicação de por que o driver separa código de dado está clara."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "sq-fase-4-q1",
+          "prompt": "O que `EXPLAIN ANALYZE` faz diferente de apenas `EXPLAIN`?",
+          "reviewTopicId": "sq-explain",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Executa de fato a consulta e mostra os tempos e contagens de linhas reais além da estimativa.",
+              "correct": true,
+              "explanation": "Atenção: por executar de verdade, envolva `UPDATE`/`DELETE` em `BEGIN ... ROLLBACK` ao analisar."
+            },
+            {
+              "id": "b",
+              "text": "Cria índices automaticamente.",
+              "correct": false,
+              "explanation": "Ele apenas diagnostica."
+            },
+            {
+              "id": "c",
+              "text": "Apaga linhas duplicadas.",
+              "correct": false,
+              "explanation": "Não altera dados sozinho."
+            }
+          ]
+        },
+        {
+          "id": "sq-fase-4-q2",
+          "prompt": "Qual a defesa principal contra SQL Injection?",
+          "reviewTopicId": "sq-seguranca",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Consultas parametrizadas (prepared statements), separando o comando SQL dos valores.",
+              "correct": true,
+              "explanation": "Assim o valor do usuário nunca é interpretado como instrução SQL."
+            },
+            {
+              "id": "b",
+              "text": "Esconder o nome da tabela no front-end.",
+              "correct": false,
+              "explanation": "Segurança por obscuridade não impede injeção."
+            },
+            {
+              "id": "c",
+              "text": "Remover todas as aspas com `replace` manual.",
+              "correct": false,
+              "explanation": "Filtros manuais costumam ter brechas; parâmetros resolvem na raiz."
             }
           ]
         }

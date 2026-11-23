@@ -1,0 +1,756 @@
+{
+  "id": "cloud",
+  "name": "Cloud e Arquitetura em Nuvem",
+  "tagline": "Projetar, publicar e controlar custos na nuvem sem clicar no painel às cegas",
+  "description": "Da conta zero à infraestrutura versionada: modelos IaaS/PaaS/Serverless, IAM e privilégio mínimo, redes VPC, armazenamento e bancos gerenciados, Terraform e FinOps.",
+  "phases": [
+    {
+      "id": "cl-fase-1",
+      "number": 1,
+      "badgeTitle": "Base",
+      "title": "Modelos de nuvem, IAM e orçamento",
+      "topics": [
+        {
+          "id": "cl-modelos",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Regiões, zonas, IaaS, PaaS e Serverless",
+          "description": "Entenda a diferença entre alugar máquina virtual (IaaS), plataforma gerenciada (PaaS) e função sob demanda (Serverless), além de regiões e zonas de disponibilidade para não perder tudo numa queda de prédio.",
+          "tags": [
+            "Cloud",
+            "Regiões"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "AWS Overview (IaaS, PaaS, Regiões)",
+              "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/introduction.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Regiões e Zonas de Disponibilidade (AWS pt-BR)",
+              "url": "https://aws.amazon.com/pt/about-aws/global-infrastructure/regions_az/",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "cl-iam",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "IAM, MFA na conta raiz e privilégio mínimo",
+          "description": "A primeira regra da nuvem: ative MFA na conta raiz e nunca a use no dia a dia. Crie usuários/papéis (Roles) com permissões exatas e evite chaves de acesso permanentes quando houver papéis temporários.",
+          "tags": [
+            "IAM",
+            "Segurança"
+          ],
+          "prerequisites": [
+            "cl-modelos"
+          ],
+          "resources": [
+            {
+              "title": "Melhores práticas de segurança no IAM (AWS pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/best-practices.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "O que é IAM? (AWS pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/introduction.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "cl-finops",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Alertas de cobrança e FinOps inicial",
+          "description": "Nuvem cobra por hora ligada, tráfego de saída e armazenamento esquecido. Configure alerta de faturamento (Billing Alarm) antes de subir qualquer recurso e apague o que não está usando.",
+          "tags": [
+            "FinOps",
+            "Custo"
+          ],
+          "prerequisites": [
+            "cl-iam"
+          ],
+          "resources": [
+            {
+              "title": "Cost Optimization Pillar (AWS Well-Architected)",
+              "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Criar alarme de faturamento (AWS pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html",
+              "lang": "pt",
+              "kind": "pratica"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cl1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "Conta segura com alerta de gasto",
+          "description": "Documente a criação de uma conta de nuvem (ou plano gratuito) com MFA na conta raiz, usuário administrativo separado e alerta de orçamento de US$ 1.",
+          "steps": [
+            "Ative MFA no root.",
+            "Crie usuário ou SSO sem usar root.",
+            "Configure alarme de orçamento."
+          ],
+          "definitionOfDone": [
+            "Nenhuma chave root foi gerada.",
+            "Alarme de custo ativo."
+          ]
+        },
+        {
+          "id": "cl1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Política IAM restrita a um bucket",
+          "description": "Escreva uma política JSON do IAM que permite apenas leitura (`GetObject`) em um único bucket específico, negando todo o resto.",
+          "steps": [
+            "Evite `Action: '*'` e `Resource: '*'`.",
+            "Especifique o ARN do bucket.",
+            "Teste ou valide a política no simulador."
+          ],
+          "definitionOfDone": [
+            "Política versionada no repositório.",
+            "Explica a diferença entre usuário e Role."
+          ]
+        },
+        {
+          "id": "cl1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Comparativo de custo IaaS vs. PaaS vs. Serverless",
+          "description": "Use a calculadora oficial de um provedor para estimar o custo mensal de uma API pequena nos três modelos e justifique qual escolher.",
+          "steps": [
+            "Estime 100 mil requisições/mês.",
+            "Inclua banco de dados e tráfego de saída.",
+            "Escreva quando cada modelo compensa."
+          ],
+          "definitionOfDone": [
+            "Planilha ou tabela comparativa no README.",
+            "Considera custo operacional além da fatura."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cl-fase-1-q1",
+          "prompt": "Qual a prática correta para a conta raiz (root) de um provedor de nuvem?",
+          "reviewTopicId": "cl-iam",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Ativar MFA, não gerar chaves de acesso para ela e usá-la apenas em tarefas excepcionais de conta.",
+              "correct": true,
+              "explanation": "A conta raiz tem poder irrestrito e não pode ser limitada por políticas IAM."
+            },
+            {
+              "id": "b",
+              "text": "Compartilhar a senha da conta raiz com todo o time.",
+              "correct": false,
+              "explanation": "Cada pessoa deve ter seu próprio acesso com privilégio mínimo."
+            },
+            {
+              "id": "c",
+              "text": "Colocar a chave root no `.env` do GitHub.",
+              "correct": false,
+              "explanation": "Vaza a conta inteira em segundos."
+            }
+          ]
+        },
+        {
+          "id": "cl-fase-1-q2",
+          "prompt": "Por que distribuir uma aplicação em mais de uma Zona de Disponibilidade (AZ)?",
+          "reviewTopicId": "cl-modelos",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para manter o serviço no ar mesmo se um data center isolado sofrer falha de energia ou rede.",
+              "correct": true,
+              "explanation": "AZs são data centers fisicamente separados dentro da mesma região."
+            },
+            {
+              "id": "b",
+              "text": "Para dobrar o preço sem benefício.",
+              "correct": false,
+              "explanation": "Traz alta disponibilidade."
+            },
+            {
+              "id": "c",
+              "text": "Para dispensar HTTPS.",
+              "correct": false,
+              "explanation": "Não tem relação com TLS."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cl-fase-2",
+      "number": 2,
+      "badgeTitle": "Rede e Dados",
+      "title": "VPC, armazenamento e bancos gerenciados",
+      "topics": [
+        {
+          "id": "cl-vpc",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "VPC, sub-redes públicas/privadas e Security Groups",
+          "description": "Banco de dados nunca vai para sub-rede pública com IP aberto para `0.0.0.0/0`. Separe sub-rede pública (Load Balancer) da privada (aplicação e banco) e controle tráfego por Security Group.",
+          "tags": [
+            "VPC",
+            "Redes"
+          ],
+          "prerequisites": [
+            "cl-iam"
+          ],
+          "resources": [
+            {
+              "title": "O que é Amazon VPC (pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/what-is-amazon-vpc.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Security Groups na VPC (AWS pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/vpc-security-groups.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "cl-storage",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Object Storage (S3) e CDN",
+          "description": "Disco de máquina virtual (EBS) some ou fica preso a uma zona; arquivos de usuários (fotos, PDFs, backups) vão para Object Storage (S3/Cloud Storage) com acesso privado e URLs assinadas.",
+          "tags": [
+            "S3",
+            "CDN"
+          ],
+          "prerequisites": [
+            "cl-modelos"
+          ],
+          "resources": [
+            {
+              "title": "O que é o Amazon S3 (pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonS3/latest/userguide/Welcome.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "O que é uma CDN? (Cloudflare pt-BR)",
+              "url": "https://www.cloudflare.com/pt-br/learning/cdn/what-is-a-cdn/",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "cl-rds",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Bancos gerenciados (RDS) e snapshots",
+          "description": "Subir PostgreSQL na mão numa VM exige cuidar de patch, backup e failover. Bancos gerenciados automatizam backups pontuais e réplicas, mas você ainda responde por índices, conexões e tamanho.",
+          "tags": [
+            "RDS",
+            "Banco de Dados"
+          ],
+          "prerequisites": [
+            "cl-vpc"
+          ],
+          "resources": [
+            {
+              "title": "Amazon RDS — conceitos básicos (pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/Welcome.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Multi-AZ Deployments no RDS (AWS pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cl2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Desenho de rede em 2 camadas",
+          "description": "Desenhe uma VPC com CIDR `/16`, duas sub-redes públicas (para Load Balancer) e duas privadas (para app e banco) em duas AZs.",
+          "steps": [
+            "Defina os blocos CIDR sem sobreposição.",
+            "Marque por onde entra o tráfego HTTPS.",
+            "Explique como a sub-rede privada fala com o banco."
+          ],
+          "definitionOfDone": [
+            "O banco não tem IP público.",
+            "Diagrama claro no README."
+          ]
+        },
+        {
+          "id": "cl2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Upload privado com URL pré-assinada",
+          "description": "Em vez de deixar um bucket S3 (ou MinIO local) público, gere uma URL pré-assinada temporária de 5 minutos para baixar um arquivo privado.",
+          "steps": [
+            "Bloqueie acesso público no bucket.",
+            "Gere a URL assinada via SDK ou CLI.",
+            "Prove que após expirar ela retorna 403."
+          ],
+          "definitionOfDone": [
+            "Bucket permanece privado.",
+            "Acesso funciona apenas dentro da validade."
+          ]
+        },
+        {
+          "id": "cl2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Security Groups encadeados",
+          "description": "Configure regras onde o Security Group do Banco aceita porta 5432 APENAS vinda do Security Group da Aplicação (sem liberar CIDR amplo).",
+          "steps": [
+            "Crie SG-LB, SG-App e SG-DB.",
+            "Referencie ID do SG anterior como origem.",
+            "Documente a cadeia completa."
+          ],
+          "definitionOfDone": [
+            "Nenhum `0.0.0.0/0` na porta 5432.",
+            "Regra documentada em código (Terraform ou CLI)."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cl-fase-2-q1",
+          "prompt": "Por que guardar uploads de usuários em Object Storage (S3) em vez do disco local do servidor?",
+          "reviewTopicId": "cl-storage",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque servidores na nuvem são efêmeros e escalam horizontalmente; o disco local não é compartilhado entre instâncias.",
+              "correct": true,
+              "explanation": "Se você subir duas instâncias da API, uma não enxerga o disco local da outra."
+            },
+            {
+              "id": "b",
+              "text": "Porque S3 é um banco relacional SQL.",
+              "correct": false,
+              "explanation": "S3 armazena objetos/arquivos, não tabelas relacionais."
+            },
+            {
+              "id": "c",
+              "text": "Porque arquivos no S3 são obrigatoriamente públicos.",
+              "correct": false,
+              "explanation": "Por padrão são privados."
+            }
+          ]
+        },
+        {
+          "id": "cl-fase-2-q2",
+          "prompt": "Onde um banco de dados gerenciado deve ficar dentro de uma VPC?",
+          "reviewTopicId": "cl-vpc",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Em sub-rede privada, acessível apenas pela aplicação e sem IP público.",
+              "correct": true,
+              "explanation": "Reduz drasticamente a superfície de ataque."
+            },
+            {
+              "id": "b",
+              "text": "Em sub-rede pública com porta 5432 aberta para `0.0.0.0/0`.",
+              "correct": false,
+              "explanation": "Expõe o banco para ataques da internet inteira."
+            },
+            {
+              "id": "c",
+              "text": "Fora de qualquer rede.",
+              "correct": false,
+              "explanation": "Precisa de rede privada para a aplicação conectar."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cl-fase-3",
+      "number": 3,
+      "badgeTitle": "Automação",
+      "title": "Computação, Serverless e IaC (Terraform)",
+      "topics": [
+        {
+          "id": "cl-compute",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Containers gerenciados, Auto Scaling e Load Balancer",
+          "description": "Em vez de manter uma única VM manualmente, coloque um Load Balancer (ALB) terminando TLS na frente de múltiplas instâncias/containers gerenciados (ECS/Cloud Run) com Auto Scaling baseado em carga.",
+          "tags": [
+            "Load Balancer",
+            "Containers"
+          ],
+          "prerequisites": [
+            "cl-vpc"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do Google Cloud Run",
+              "url": "https://cloud.google.com/run/docs",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "O que é Elastic Load Balancing? (AWS pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "cl-serverless",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Serverless e arquitetura orientada a eventos",
+          "description": "Funções (Lambda/Cloud Functions) e filas (SQS) brilham em tarefas pontuais, webhooks e picos irregulares. Atenção ao cold start, timeouts e limite de conexões simultâneas no banco.",
+          "tags": [
+            "Serverless",
+            "Filas"
+          ],
+          "prerequisites": [
+            "cl-storage"
+          ],
+          "resources": [
+            {
+              "title": "O que é o AWS Lambda (pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/lambda/latest/dg/welcome.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "O que é Amazon SQS? (pt-BR)",
+              "url": "https://docs.aws.amazon.com/pt_br/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "cl-terraform",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Infraestrutura como Código com Terraform",
+          "description": "Clicar no console não deixa histórico nem repete em outro ambiente. Descreva VPC, buckets e bancos em arquivos `.tf`, revise o `terraform plan` no PR e guarde o `tfstate` remoto com lock.",
+          "tags": [
+            "Terraform",
+            "IaC"
+          ],
+          "prerequisites": [
+            "cl-vpc",
+            "cl-compute"
+          ],
+          "resources": [
+            {
+              "title": "Tutoriais oficiais do Terraform",
+              "url": "https://developer.hashicorp.com/terraform/tutorials",
+              "lang": "en",
+              "kind": "curso"
+            },
+            {
+              "title": "Terraform State & Remote Backends",
+              "url": "https://developer.hashicorp.com/terraform/language/state",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cl3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Site estático com CDN e HTTPS",
+          "description": "Publique um site estático usando bucket + CDN (ou Cloudflare Pages/GitHub Pages) com redirecionamento automático para HTTPS.",
+          "steps": [
+            "Suba os arquivos estáticos.",
+            "Configure página de erro e cache.",
+            "Valide o certificado HTTPS."
+          ],
+          "definitionOfDone": [
+            "HTTP redireciona para HTTPS.",
+            "Cabeçalhos de cache conferidos."
+          ]
+        },
+        {
+          "id": "cl3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "API em container serverless (Cloud Run / Fargate)",
+          "description": "Empacote uma API simples em Docker e publique num serviço de container gerenciado com escala para zero ou mínimo de instâncias.",
+          "steps": [
+            "Configure variável de ambiente sem segredo no Dockerfile.",
+            "Defina healthcheck.",
+            "Teste a URL pública gerada."
+          ],
+          "definitionOfDone": [
+            "Build e deploy documentados.",
+            "Logs aparecem no painel do provedor."
+          ]
+        },
+        {
+          "id": "cl3-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Ambiente reproduzível com Terraform",
+          "description": "Crie um módulo Terraform (podendo testar contra LocalStack ou conta free tier) que sobe rede + bucket privado e destrói tudo limpo com `terraform destroy`.",
+          "steps": [
+            "Separe variáveis em `variables.tf`.",
+            "Execute `terraform plan` e `apply`.",
+            "Rode `terraform destroy` para não deixar custo."
+          ],
+          "definitionOfDone": [
+            "Código formatado com `terraform fmt`.",
+            "`.tfstate` não foi commitado no Git."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cl-fase-3-q1",
+          "prompt": "Por que o arquivo `terraform.tfstate` nunca deve ser commitado no Git como texto comum?",
+          "reviewTopicId": "cl-terraform",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque ele pode conter segredos em texto claro (como senhas de banco) e precisa de bloqueio compartilhado entre membros do time.",
+              "correct": true,
+              "explanation": "Use backend remoto criptografado (como S3 + lock) com acesso restrito."
+            },
+            {
+              "id": "b",
+              "text": "Porque o Git não aceita arquivos JSON.",
+              "correct": false,
+              "explanation": "O problema é segurança e concorrência de estado."
+            },
+            {
+              "id": "c",
+              "text": "Porque o Terraform apaga o código se houver tfstate.",
+              "correct": false,
+              "explanation": "Não apaga."
+            }
+          ]
+        },
+        {
+          "id": "cl-fase-3-q2",
+          "prompt": "Qual o papel do Load Balancer na frente de instâncias com Auto Scaling?",
+          "reviewTopicId": "cl-compute",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Distribuir tráfego entre instâncias saudáveis, terminar TLS e esconder IPs individuais que nascem e morrem.",
+              "correct": true,
+              "explanation": "Permite escalar e substituir máquinas sem o cliente perceber."
+            },
+            {
+              "id": "b",
+              "text": "Substituir o banco de dados.",
+              "correct": false,
+              "explanation": "Ele roteia tráfego de rede."
+            },
+            {
+              "id": "c",
+              "text": "Compilar código Java.",
+              "correct": false,
+              "explanation": "Não compila código."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cl-fase-4",
+      "number": 4,
+      "badgeTitle": "Operação",
+      "title": "Observabilidade, resiliência e multi-ambiente",
+      "topics": [
+        {
+          "id": "cl-observabilidade",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Logs centralizados, métricas e alarmes",
+          "description": "Em múltiplas instâncias, não dá para dar SSH e olhar arquivo local. Envie logs estruturados para um coletor central (CloudWatch/Cloud Logging) e crie alarmes para taxa de erro 5xx e latência alta.",
+          "tags": [
+            "Observabilidade",
+            "Alarmes"
+          ],
+          "prerequisites": [
+            "cl-compute"
+          ],
+          "resources": [
+            {
+              "title": "OpenTelemetry — conceitos",
+              "url": "https://opentelemetry.io/docs/concepts/what-is-opentelemetry/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Monitoring & Alerting (Google SRE)",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "cl-ambientes",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Ambientes isolados (dev, staging, prod) e tags",
+          "description": "Nunca misture dados de teste com produção na mesma conta/banco. Use tags obrigatórias (`env`, `owner`, `cost-center`) em todo recurso para saber quem criou e quanto cada projeto custa.",
+          "tags": [
+            "Governança",
+            "Tags"
+          ],
+          "prerequisites": [
+            "cl-terraform",
+            "cl-finops"
+          ],
+          "resources": [
+            {
+              "title": "Tagging Best Practices (AWS)",
+              "url": "https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/tagging-best-practices.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Organizando múltiplos ambientes (AWS)",
+              "url": "https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cl4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Padrão de tags de custo",
+          "description": "Defina uma convenção de tags obrigatórias (`project`, `env`, `owner`) e aplique no seu código Terraform via `default_tags`.",
+          "steps": [
+            "Liste as 4 tags mínimas.",
+            "Configure `default_tags` no provider.",
+            "Verifique no `terraform plan`."
+          ],
+          "definitionOfDone": [
+            "Todo recurso criado recebe as tags automaticamente.",
+            "Convenção documentada."
+          ]
+        },
+        {
+          "id": "cl4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Alarme de erro 5xx e latência",
+          "description": "Defina um painel e um alarme que dispara se a taxa de HTTP 5xx passar de 2% em 5 minutos, com runbook do que checar primeiro.",
+          "steps": [
+            "Defina o limiar e a janela de tempo.",
+            "Escreva o runbook de triagem.",
+            "Teste o disparo com erro simulado em staging."
+          ],
+          "definitionOfDone": [
+            "Alarme tem ação clara (não é ruído).",
+            "Runbook linkado."
+          ]
+        },
+        {
+          "id": "cl4-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Workspaces ou pastas para dev e prod",
+          "description": "Estruture seu projeto Terraform para gerar um ambiente `dev` barato e um `prod` redundante a partir do mesmo módulo reutilizável.",
+          "steps": [
+            "Parametrize tamanho da instância e multi-AZ.",
+            "Separe os arquivos de estado de `dev` e `prod`.",
+            "Valide `terraform plan` nos dois ambientes."
+          ],
+          "definitionOfDone": [
+            "Alterar `dev` não ameaça derrubar `prod`.",
+            "Estados completamente isolados."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cl-fase-4-q1",
+          "prompt": "Para que servem tags consistentes (`env`, `owner`, `project`) nos recursos em nuvem?",
+          "reviewTopicId": "cl-ambientes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Rastrear custos por projeto, identificar responsáveis e automatizar políticas de desligamento fora de hora.",
+              "correct": true,
+              "explanation": "Sem tags, a fatura vira um bloco único impossível de otimizar."
+            },
+            {
+              "id": "b",
+              "text": "Acelerar a CPU da máquina virtual.",
+              "correct": false,
+              "explanation": "Tags são metadados administrativos."
+            },
+            {
+              "id": "c",
+              "text": "Substituir o Security Group.",
+              "correct": false,
+              "explanation": "Tags organizam, não filtram tráfego por si só."
+            }
+          ]
+        },
+        {
+          "id": "cl-fase-4-q2",
+          "prompt": "Por que logs devem ser enviados para um serviço centralizado na nuvem em vez de ficarem só no disco da instância?",
+          "reviewTopicId": "cl-observabilidade",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque se a instância falhar ou for substituída pelo Auto Scaling, os logs locais somem junto.",
+              "correct": true,
+              "explanation": "Centralizar permite investigar incidentes após a máquina morrer."
+            },
+            {
+              "id": "b",
+              "text": "Porque o Linux não grava arquivos de texto.",
+              "correct": false,
+              "explanation": "Grava, mas o ciclo de vida da instância na nuvem é efêmero."
+            },
+            {
+              "id": "c",
+              "text": "Para esconder erros 500.",
+              "correct": false,
+              "explanation": "É justamente para enxergá-los."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

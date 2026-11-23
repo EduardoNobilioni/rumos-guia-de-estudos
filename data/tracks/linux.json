@@ -22,16 +22,16 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "The Missing Semester",
-              "url": "https://missing.csail.mit.edu/",
+              "title": "Linha de comando para iniciantes (Ubuntu)",
+              "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
               "lang": "en",
               "kind": "curso"
             },
             {
-              "title": "Comandos de shell (Debian)",
-              "url": "https://wiki.debian.org/pt_BR/ShellCommands",
-              "lang": "pt",
-              "kind": "leitura"
+              "title": "Linux Journey — Getting Started",
+              "url": "https://linuxjourney.com/lesson/the-shell",
+              "lang": "en",
+              "kind": "pratica"
             }
           ]
         },
@@ -76,15 +76,15 @@
           ],
           "resources": [
             {
-              "title": "Manual do Bash",
-              "url": "https://www.gnu.org/software/bash/manual/bash.html",
+              "title": "The Missing Semester — Shell Tools",
+              "url": "https://missing.csail.mit.edu/2020/shell-tools/",
               "lang": "en",
-              "kind": "documentacao"
+              "kind": "curso"
             },
             {
-              "title": "Bash (Debian)",
-              "url": "https://manpages.debian.org/bookworm/bash/bash.1.pt.html",
-              "lang": "pt",
+              "title": "GNU grep manual",
+              "url": "https://www.gnu.org/software/grep/manual/grep.html",
+              "lang": "en",
               "kind": "documentacao"
             }
           ]
@@ -213,10 +213,16 @@
           ],
           "resources": [
             {
-              "title": "The Missing Semester",
-              "url": "https://missing.csail.mit.edu/",
+              "title": "Linux Journey — Processos",
+              "url": "https://linuxjourney.com/lesson/monitor-processes-ps-command",
               "lang": "en",
-              "kind": "curso"
+              "kind": "leitura"
+            },
+            {
+              "title": "Variáveis de ambiente no Bash (GNU)",
+              "url": "https://www.gnu.org/software/bash/manual/html_node/Shell-Parameters.html",
+              "lang": "en",
+              "kind": "documentacao"
             }
           ]
         },
@@ -234,15 +240,15 @@
           ],
           "resources": [
             {
-              "title": "The Missing Semester",
-              "url": "https://missing.csail.mit.edu/",
+              "title": "curl — tutorial oficial",
+              "url": "https://curl.se/docs/httpscripting.html",
               "lang": "en",
-              "kind": "curso"
+              "kind": "documentacao"
             },
             {
-              "title": "Visão geral do HTTP (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Overview",
-              "lang": "pt",
+              "title": "Linux Journey — Network Troubleshooting",
+              "url": "https://linuxjourney.com/lesson/network-troubleshooting",
+              "lang": "en",
               "kind": "leitura"
             }
           ]
@@ -261,10 +267,16 @@
           ],
           "resources": [
             {
-              "title": "Manual do Bash",
+              "title": "Manual do GNU Bash",
               "url": "https://www.gnu.org/software/bash/manual/bash.html",
               "lang": "en",
               "kind": "documentacao"
+            },
+            {
+              "title": "ShellCheck (analisador de scripts)",
+              "url": "https://www.shellcheck.net/",
+              "lang": "en",
+              "kind": "pratica"
             }
           ]
         }
@@ -367,6 +379,396 @@
               "text": "A senha do sudo dentro do arquivo.",
               "correct": false,
               "explanation": "Senha no arquivo vaza."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lx-fase-3",
+      "number": 3,
+      "badgeTitle": "Administração",
+      "title": "Permissões, serviços e disco",
+      "topics": [
+        {
+          "id": "lx-permissoes",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Permissões, dono e sudo (chmod/chown)",
+          "description": "Entenda leitura (`r`), escrita (`w`) e execução (`x`) para dono, grupo e outros (`755`, `644`). Nunca resolva erro de permissão dando `chmod 777` em produção: ajuste o dono (`chown`) ou grupo.",
+          "tags": [
+            "Permissões",
+            "chmod"
+          ],
+          "prerequisites": [
+            "lx-arquivo"
+          ],
+          "resources": [
+            {
+              "title": "Guia de permissões Linux (Red Hat)",
+              "url": "https://www.redhat.com/en/blog/linux-file-permissions-explained",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Linux Journey — Permissions",
+              "url": "https://linuxjourney.com/lesson/file-permissions",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "lx-systemd",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Serviços com systemd e journalctl",
+          "description": "Em servidores, aplicações rodam como serviços gerenciados pelo `systemd`: `systemctl status/restart/enable` e logs centralizados com `journalctl -u servico -f`.",
+          "tags": [
+            "systemd",
+            "journalctl"
+          ],
+          "prerequisites": [
+            "lx-processo"
+          ],
+          "resources": [
+            {
+              "title": "systemd (Arch Wiki)",
+              "url": "https://wiki.archlinux.org/title/Systemd",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Using journalctl (DigitalOcean)",
+              "url": "https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "lx-disco",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Disco, links simbólicos e compactação",
+          "description": "Ache o que encheu o disco com `df -h` e `du -sh *`, crie links simbólicos (`ln -s`) para apontar versões ou configs e empacote arquivos com `tar -czf` / `tar -xzf`.",
+          "tags": [
+            "Disco",
+            "tar"
+          ],
+          "prerequisites": [
+            "lx-arquivo"
+          ],
+          "resources": [
+            {
+              "title": "Linux Journey — Filesystem & Disk Usage",
+              "url": "https://linuxjourney.com/lesson/disk-usage",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "GNU tar manual",
+              "url": "https://www.gnu.org/software/tar/manual/tar.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "lx3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Mapa de uso do disco",
+          "description": "Use `df -h` e `du -sh` numa pasta de trabalho para identificar os 5 maiores subdiretórios e compactar logs antigos em `.tar.gz`.",
+          "steps": [
+            "Liste o espaço livre da partição.",
+            "Ordene as maiores pastas com `du` + `sort`.",
+            "Compacte um diretório de teste e extraia em outro."
+          ],
+          "definitionOfDone": [
+            "Comandos reproduzíveis anotados.",
+            "Sabe diferenciar tamanho aparente de uso em disco."
+          ]
+        },
+        {
+          "id": "lx3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Script com permissão mínima",
+          "description": "Crie um usuário ou grupo de teste, um arquivo de segredo com `chmod 600` e um script executável `750`, provando quem consegue ler e quem é barrado.",
+          "steps": [
+            "Aplique `chmod 600` no arquivo de segredo.",
+            "Aplique `chmod 750` no script.",
+            "Documente o significado de cada dígito octal."
+          ],
+          "definitionOfDone": [
+            "Não usa `777` em nenhum arquivo.",
+            "Explica a diferença entre `rwx` em arquivo vs. em diretório."
+          ]
+        },
+        {
+          "id": "lx3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Serviço simples no systemd",
+          "description": "Escreva um unit file `.service` para rodar um script ou servidor HTTP simples com reinício automático em falha e leia seus logs no `journalctl`.",
+          "steps": [
+            "Defina `ExecStart`, `Restart=on-failure` e `User=` não-root.",
+            "Inicie e confira `systemctl status`.",
+            "Mate o processo e observe o `systemd` subir de novo."
+          ],
+          "definitionOfDone": [
+            "O serviço reinicia sozinho após falha.",
+            "Logs aparecem no `journalctl`."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "lx-fase-3-q1",
+          "prompt": "O que significa `chmod 600 arquivo.env`?",
+          "reviewTopicId": "lx-permissoes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Apenas o dono pode ler e escrever; grupo e outros não têm nenhuma permissão.",
+              "correct": true,
+              "explanation": "6 = leitura (4) + escrita (2); 0 = nenhuma permissão."
+            },
+            {
+              "id": "b",
+              "text": "Qualquer usuário da máquina pode executar o arquivo.",
+              "correct": false,
+              "explanation": "600 não dá permissão de execução nem acesso a terceiros."
+            },
+            {
+              "id": "c",
+              "text": "O arquivo será apagado em 600 segundos.",
+              "correct": false,
+              "explanation": "É máscara de permissão, não tempo."
+            }
+          ]
+        },
+        {
+          "id": "lx-fase-3-q2",
+          "prompt": "Qual comando verifica se a partição raiz `/` está sem espaço livre?",
+          "reviewTopicId": "lx-disco",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`df -h`.",
+              "correct": true,
+              "explanation": "`df` mostra espaço livre/usado dos sistemas de arquivos montados; `du` soma arquivos de uma pasta."
+            },
+            {
+              "id": "b",
+              "text": "`ps aux`.",
+              "correct": false,
+              "explanation": "`ps` lista processos."
+            },
+            {
+              "id": "c",
+              "text": "`chmod`.",
+              "correct": false,
+              "explanation": "`chmod` altera permissões."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lx-fase-4",
+      "number": 4,
+      "badgeTitle": "Operação",
+      "title": "SSH, rede local e diagnóstico",
+      "topics": [
+        {
+          "id": "lx-ssh",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "SSH, chaves, scp e ~/.ssh/config",
+          "description": "Acesse máquinas remotas com chave pública/privada (`ssh-keygen`), nunca com senha repetida. Configure atalhos em `~/.ssh/config`, copie arquivos com `scp`/`rsync` e use túnel local (`-L`) quando precisar acessar porta interna.",
+          "tags": [
+            "SSH",
+            "rsync"
+          ],
+          "prerequisites": [
+            "lx-rede",
+            "lx-permissoes"
+          ],
+          "resources": [
+            {
+              "title": "OpenSSH — manual básico",
+              "url": "https://www.openssh.com/manual.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Conectando com SSH (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/authentication/connecting-to-github-with-ssh",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "lx-firewall",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Portas abertas, ss e firewall (ufw)",
+          "description": "Antes de abrir o navegador, veja quem está escutando na máquina com `ss -tulpn` (se escuta em `127.0.0.1` só aceita local; `0.0.0.0` aceita rede). Feche portas desnecessárias com `ufw` ou `nftables`.",
+          "tags": [
+            "ss",
+            "Firewall"
+          ],
+          "prerequisites": [
+            "lx-rede"
+          ],
+          "resources": [
+            {
+              "title": "UFW — Ubuntu Server Guide",
+              "url": "https://ubuntu.com/server/docs/firewalls",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "ss — Socket Statistics (man7)",
+              "url": "https://man7.org/linux/man-pages/man8/ss.8.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "lx-logs",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Diagnóstico de sistema (CPU, RAM, I/O)",
+          "description": "Quando o servidor fica lento, siga um roteiro: `uptime` (load average), `free -h` (RAM e swap/OOM), `vmstat`/`top`/`htop` (CPU vs. espera de disco `iowait`) e logs em `/var/log`.",
+          "tags": [
+            "Diagnóstico",
+            "Logs"
+          ],
+          "prerequisites": [
+            "lx-processo",
+            "lx-texto"
+          ],
+          "resources": [
+            {
+              "title": "Linux Performance Analysis in 60s (Brendan Gregg)",
+              "url": "https://netflixtechblog.com/linux-performance-analysis-in-60-000-milliseconds-accc10403c55",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Linux Journey — Logging",
+              "url": "https://linuxjourney.com/lesson/system-logging",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "lx4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Configuração limpa de SSH",
+          "description": "Gere um par de chaves Ed25519 e monte um arquivo `~/.ssh/config` documentado (sem publicar a chave privada!).",
+          "steps": [
+            "Rode `ssh-keygen -t ed25519`.",
+            "Confira que a chave privada tem permissão `600`.",
+            "Escreva um bloco `Host` de exemplo."
+          ],
+          "definitionOfDone": [
+            "Nenhuma chave privada entra no Git.",
+            "Sabe a diferença entre `id_ed25519` e `id_ed25519.pub`."
+          ]
+        },
+        {
+          "id": "lx4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Auditoria de portas locais",
+          "description": "Suba dois servidores locais (um em `127.0.0.1` e outro em `0.0.0.0`) e use `ss -tulpn` para provar a diferença de exposição.",
+          "steps": [
+            "Liste todas as portas TCP em `LISTEN`.",
+            "Identifique o PID/processo dono de cada porta.",
+            "Explique o risco de subir banco de dados em `0.0.0.0` sem firewall."
+          ],
+          "definitionOfDone": [
+            "Saída do `ss` anotada e explicada.",
+            "Ambos os processos encerrados ao final."
+          ]
+        },
+        {
+          "id": "lx4-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Roteiro de triagem em 60 segundos",
+          "description": "Monte um checklist executável (ou script read-only) com os comandos de triagem de CPU, memória, disco e últimas falhas do `journalctl`.",
+          "steps": [
+            "Inclua `uptime`, `free -h`, `df -h` e `ss`.",
+            "Teste numa VM ou container Linux.",
+            "Interprete cada saída com um exemplo."
+          ],
+          "definitionOfDone": [
+            "O roteiro não altera nada no sistema (somente leitura).",
+            "Explica o que é `swap` e OOM Killer."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "lx-fase-4-q1",
+          "prompt": "Qual a diferença entre um serviço escutando em `127.0.0.1:5432` e `0.0.0.0:5432`?",
+          "reviewTopicId": "lx-firewall",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`127.0.0.1` aceita conexões apenas da própria máquina; `0.0.0.0` escuta em todas as interfaces de rede disponíveis.",
+              "correct": true,
+              "explanation": "Bancos locais devem escutar em `127.0.0.1` salvo quando protegidos por rede privada/firewall."
+            },
+            {
+              "id": "b",
+              "text": "`0.0.0.0` significa que o serviço está desligado.",
+              "correct": false,
+              "explanation": "Significa 'qualquer endereço IPv4 da máquina'."
+            },
+            {
+              "id": "c",
+              "text": "`127.0.0.1` é mais lento por usar criptografia.",
+              "correct": false,
+              "explanation": "Loopback é até mais rápido por não sair para a placa de rede."
+            }
+          ]
+        },
+        {
+          "id": "lx-fase-4-q2",
+          "prompt": "Qual arquivo da chave SSH você pode enviar para um servidor ou cadastrar no GitHub?",
+          "reviewTopicId": "lx-ssh",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Apenas a chave pública (`.pub`).",
+              "correct": true,
+              "explanation": "A chave privada nunca sai da sua máquina."
+            },
+            {
+              "id": "b",
+              "text": "A chave privada sem extensão.",
+              "correct": false,
+              "explanation": "Vazar a chave privada compromete todos os acessos."
+            },
+            {
+              "id": "c",
+              "text": "As duas juntas no mesmo e-mail.",
+              "correct": false,
+              "explanation": "Nunca compartilhe a privada."
             }
           ]
         }

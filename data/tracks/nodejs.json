@@ -1,0 +1,533 @@
+{
+  "id": "nodejs",
+  "name": "Node.js",
+  "tagline": "JavaScript no servidor: Event Loop, streams, APIs e operação",
+  "description": "Trilha focada no runtime Node.js: módulos ESM, Event Loop sem bloqueio, streams de arquivo, HTTP/Express/Fastify, testes nativos e variáveis de ambiente.",
+  "phases": [
+    {
+      "id": "nd-fase-1",
+      "number": 1,
+      "badgeTitle": "Runtime",
+      "title": "Event Loop, módulos e arquivos",
+      "topics": [
+        {
+          "id": "nd-loop",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Event Loop e por que não bloquear a thread",
+          "description": "Node.js executa seu JavaScript numa única thread principal. I/O assíncrono (rede, banco, arquivo) escala muito bem, mas um loop CPU-pesado síncrono (`fs.readFileSync` gigante ou cálculo longo) trava todos os clientes.",
+          "tags": [
+            "Event Loop",
+            "Async"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "The Node.js Event Loop",
+              "url": "https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Blocking vs Non-Blocking (Node.js)",
+              "url": "https://nodejs.org/en/learn/asynchronous-work/overview-of-blocking-vs-non-blocking",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "nd-esm",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "ES Modules, npm e Node moderno",
+          "description": "Use `\"type\": \"module\"` com `import`/`export` e imports prefixados (`node:fs`, `node:path`). Aproveite recursos nativos do Node atual (`fetch`, `node --watch`, `--env-file`, `node --test`) antes de instalar pacotes extras.",
+          "tags": [
+            "ESM",
+            "npm"
+          ],
+          "prerequisites": [
+            "nd-loop"
+          ],
+          "resources": [
+            {
+              "title": "Introduction to Node.js",
+              "url": "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "ECMAScript Modules (Node.js Docs)",
+              "url": "https://nodejs.org/api/esm.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "nd-streams",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Buffers, Streams e arquivos grandes",
+          "description": "Ler um CSV de 2 GB com `fs.promises.readFile` explode a memória do processo. Use `createReadStream` e `pipeline` (`node:stream/promises`) para processar pedaço por pedaço com uso constante de RAM.",
+          "tags": [
+            "Streams",
+            "Buffer"
+          ],
+          "prerequisites": [
+            "nd-esm"
+          ],
+          "resources": [
+            {
+              "title": "Streams (Node.js Docs)",
+              "url": "https://nodejs.org/api/stream.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Backpressuring in Streams (Node.js)",
+              "url": "https://nodejs.org/en/learn/modules/backpressuring-in-streams",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "nd1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "CLI de leitura de logs sem dependências",
+          "description": "Crie um script Node ESM puro que lê um arquivo, conta ocorrências e escreve um resumo usando apenas `node:fs/promises` e `node:path`.",
+          "steps": [
+            "Use `process.argv` para receber o caminho do arquivo.",
+            "Trate erro `ENOENT` com mensagem clara.",
+            "Retorne exit code 1 se falhar."
+          ],
+          "definitionOfDone": [
+            "Zero pacotes no `node_modules`.",
+            "Funciona com `node index.js arquivo.log`."
+          ]
+        },
+        {
+          "id": "nd1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Processando arquivo grande com Stream",
+          "description": "Gere um arquivo de texto de ~200 MB e processe linha a linha com `readline` + `createReadStream`, medindo `process.memoryUsage().rss`.",
+          "steps": [
+            "Gere o arquivo de teste localmente.",
+            "Compare o pico de memória entre `readFile` e `createReadStream`.",
+            "Limpe o arquivo temporário ao final."
+          ],
+          "definitionOfDone": [
+            "Memória permanece baixa e estável com Stream.",
+            "Números comparados no README."
+          ]
+        },
+        {
+          "id": "nd1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Demonstrando bloqueio do Event Loop",
+          "description": "Suba um servidor HTTP simples com uma rota `/rapida` e outra `/bloqueante` (cálculo síncrono pesado) e mostre como a `/rapida` congela enquanto a outra roda — e como `worker_threads` resolve.",
+          "steps": [
+            "Teste as duas rotas em paralelo.",
+            "Mova o cálculo pesado para `Worker` (`node:worker_threads`).",
+            "Prove que `/rapida` volta a responder na hora."
+          ],
+          "definitionOfDone": [
+            "Diferença de latência medida e documentada.",
+            "Worker encerra limpo."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "nd-fase-1-q1",
+          "prompt": "Por que evitar `fs.readFileSync` dentro de rotas de um servidor HTTP em Node.js?",
+          "reviewTopicId": "nd-loop",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque ele bloqueia a thread principal do Event Loop até terminar de ler o arquivo, impedindo outras requisições de avançarem.",
+              "correct": true,
+              "explanation": "Use `fs.promises.readFile` ou streams para manter o Event Loop livre."
+            },
+            {
+              "id": "b",
+              "text": "Porque `readFileSync` não existe no Linux.",
+              "correct": false,
+              "explanation": "Existe em todas as plataformas, mas é síncrono."
+            },
+            {
+              "id": "c",
+              "text": "Porque só lê arquivos JSON.",
+              "correct": false,
+              "explanation": "Lê qualquer arquivo."
+            }
+          ]
+        },
+        {
+          "id": "nd-fase-1-q2",
+          "prompt": "Qual a vantagem de usar Streams para ler e transformar um arquivo de 1 GB?",
+          "reviewTopicId": "nd-streams",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Processar em pedaços (chunks) sem precisar carregar o arquivo inteiro na memória RAM de uma vez.",
+              "correct": true,
+              "explanation": "Mantém o uso de memória pequeno e constante."
+            },
+            {
+              "id": "b",
+              "text": "Apagar o arquivo automaticamente após a leitura.",
+              "correct": false,
+              "explanation": "Não apaga o arquivo."
+            },
+            {
+              "id": "c",
+              "text": "Converter texto em TypeScript.",
+              "correct": false,
+              "explanation": "Não tem relação."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nd-fase-2",
+      "number": 2,
+      "badgeTitle": "APIs",
+      "title": "Servidores HTTP, middlewares e validação",
+      "topics": [
+        {
+          "id": "nd-http",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "HTTP nativo, Express ou Fastify",
+          "description": "Entenda como `req` e `res` funcionam no `node:http` antes de usar Express ou Fastify. Estruture rotas separadas de controladores e serviços, com middleware central de erro.",
+          "tags": [
+            "Express",
+            "Fastify",
+            "HTTP"
+          ],
+          "prerequisites": [
+            "nd-esm"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do Express",
+              "url": "https://expressjs.com/pt-br/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Documentação do Fastify",
+              "url": "https://fastify.dev/docs/latest/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "nd-erros",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Erros assíncronos, shutdown gracioso e env",
+          "description": "Em Express 4, erro dentro de `async` não capturado pode derrubar o processo se não passar ao `next(err)`. Trate `SIGTERM`/`SIGINT` para fechar o servidor HTTP e conexões do banco antes de encerrar o container.",
+          "tags": [
+            "Graceful Shutdown",
+            "Erros"
+          ],
+          "prerequisites": [
+            "nd-http"
+          ],
+          "resources": [
+            {
+              "title": "Error Handling no Express",
+              "url": "https://expressjs.com/en/guide/error-handling.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Process Signals (SIGTERM/SIGINT no Node)",
+              "url": "https://nodejs.org/api/process.html#signal-events",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "nd2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "API REST mínima com validação",
+          "description": "Crie um CRUD simples em Express ou Fastify validando o corpo da requisição e devolvendo status 201, 400 e 404 corretos.",
+          "steps": [
+            "Valide entrada antes de chamar o serviço.",
+            "Centralize tratamento de erro num middleware final.",
+            "Teste com `curl`."
+          ],
+          "definitionOfDone": [
+            "Corpo inválido retorna 400 com mensagem clara.",
+            "Sem stack trace na resposta de produção."
+          ]
+        },
+        {
+          "id": "nd2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Graceful Shutdown no SIGTERM",
+          "description": "Configure o servidor Node para escutar `SIGTERM`, parar de aceitar novas conexões (`server.close`), aguardar requisições em curso e fechar o pool do banco.",
+          "steps": [
+            "Simule uma rota que leva 2 segundos.",
+            "Envie `SIGTERM` no meio da requisição.",
+            "Prove que a resposta termina antes do processo sair."
+          ],
+          "definitionOfDone": [
+            "Zero conexões cortadas abruptamente.",
+            "Log indica início e fim do encerramento."
+          ]
+        },
+        {
+          "id": "nd2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Rate limit e Helmet na borda",
+          "description": "Proteja uma API Node com cabeçalhos de segurança (`helmet`), limite de tamanho de JSON (`100kb`) e rate limiting por IP.",
+          "steps": [
+            "Configure `express.json({ limit: '100kb' })`.",
+            "Adicione `helmet` e rate limiter.",
+            "Teste enviando payload gigante e rajada de pedidos."
+          ],
+          "definitionOfDone": [
+            "Payload gigante retorna 413.",
+            "Excesso de pedidos retorna 429."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "nd-fase-2-q1",
+          "prompt": "Para que serve o Graceful Shutdown (tratar `SIGTERM`) numa API Node.js?",
+          "reviewTopicId": "nd-erros",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Parar de aceitar novas requisições, terminar as que já estão em andamento e fechar conexões com banco antes de encerrar.",
+              "correct": true,
+              "explanation": "Evita erros 502 para usuários durante deploys ou reinícios de container."
+            },
+            {
+              "id": "b",
+              "text": "Apagar o `node_modules` ao sair.",
+              "correct": false,
+              "explanation": "Não toca em arquivos do projeto."
+            },
+            {
+              "id": "c",
+              "text": "Reiniciar o computador do usuário.",
+              "correct": false,
+              "explanation": "Encerra apenas o processo Node."
+            }
+          ]
+        },
+        {
+          "id": "nd-fase-2-q2",
+          "prompt": "Por que limitar o tamanho máximo do corpo JSON (`limit: '100kb'`) numa API?",
+          "reviewTopicId": "nd-http",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para evitar que um cliente malicioso ou bugado envie payloads de dezenas de MB e esgote a memória do servidor.",
+              "correct": true,
+              "explanation": "Protege contra negação de serviço simples (DoS)."
+            },
+            {
+              "id": "b",
+              "text": "Porque JSON não aceita mais de 100 KB por padrão na especificação.",
+              "correct": false,
+              "explanation": "Não há limite na especificação; é proteção operacional da API."
+            },
+            {
+              "id": "c",
+              "text": "Para transformar JSON em XML.",
+              "correct": false,
+              "explanation": "Não converte formato."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nd-fase-3",
+      "number": 3,
+      "badgeTitle": "Qualidade",
+      "title": "Testes nativos e operação",
+      "topics": [
+        {
+          "id": "nd-testes",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Testes com node:test e testes de rota HTTP",
+          "description": "Use o runner nativo `node --test` (ou Vitest) para regras de negócio e `supertest` ou `app.inject` (Fastify) para testar rotas HTTP sem precisar abrir porta de rede fixa.",
+          "tags": [
+            "node:test",
+            "Testes"
+          ],
+          "prerequisites": [
+            "nd-http"
+          ],
+          "resources": [
+            {
+              "title": "Node.js Test Runner (node:test)",
+              "url": "https://nodejs.org/api/test.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Assert Module (node:assert)",
+              "url": "https://nodejs.org/api/assert.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "nd-logs",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Logs estruturados (Pino) e depuração",
+          "description": "Em produção, `console.log` solto dificulta filtrar erros. Use logger JSON rápido (como `pino`) com nível (`info`/`error`) e ID da requisição, escrevendo para `stdout`.",
+          "tags": [
+            "Logs",
+            "Pino"
+          ],
+          "prerequisites": [
+            "nd-erros"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do Pino",
+              "url": "https://getpino.io/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Logs no 12-Factor App (pt-BR)",
+              "url": "https://12factor.net/pt_br/logs",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "nd3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Separando `app` de `server.listen`",
+          "description": "Exporte a instância da aplicação separada do `listen()` para que os testes importem o `app` direto sem conflito de porta.",
+          "steps": [
+            "Mova `listen()` para `server.js`.",
+            "Exporte `app` em `app.js`.",
+            "Escreva 3 testes de rota."
+          ],
+          "definitionOfDone": [
+            "Testes rodam em paralelo sem erro `EADDRINUSE`.",
+            "`npm test` passa limpo."
+          ]
+        },
+        {
+          "id": "nd3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Logs JSON com requestId",
+          "description": "Adicione um middleware que gera/lê `X-Request-Id` e inclui esse ID em todas as linhas de log estruturado daquela requisição.",
+          "steps": [
+            "Use `crypto.randomUUID()` quando o cabeçalho não vier.",
+            "Logue início, fim, status e duração em ms.",
+            "Redija (omita) campos como `password` e `authorization`."
+          ],
+          "definitionOfDone": [
+            "Saída em JSON válido por linha.",
+            "Nenhuma credencial aparece no log."
+          ]
+        },
+        {
+          "id": "nd3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Dockerfile Node enxuto para produção",
+          "description": "Empacote a API Node usando imagem `node:20-alpine` (ou `slim`), `npm ci --omit=dev` e usuário `node` (não-root).",
+          "steps": [
+            "Configure `.dockerignore` ignorando `node_modules` e `.env`.",
+            "Instale apenas dependências de produção.",
+            "Rode com `USER node`."
+          ],
+          "definitionOfDone": [
+            "`whoami` dentro do container retorna `node`.",
+            "Container responde `/health`."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "nd-fase-3-q1",
+          "prompt": "Por que separar a criação do `app` da chamada `server.listen(port)`?",
+          "reviewTopicId": "nd-testes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para que testes de rota possam importar o `app` e rodar em memória/porta aleatória sem colisão de porta.",
+              "correct": true,
+              "explanation": "Evita `EADDRINUSE` quando o servidor já está rodando ou em testes paralelos."
+            },
+            {
+              "id": "b",
+              "text": "Porque `listen()` não funciona em arquivos ESM.",
+              "correct": false,
+              "explanation": "Funciona normalmente."
+            },
+            {
+              "id": "c",
+              "text": "Para remover o Express do projeto.",
+              "correct": false,
+              "explanation": "É apenas organização de código."
+            }
+          ]
+        },
+        {
+          "id": "nd-fase-3-q2",
+          "prompt": "Qual a vantagem de logs estruturados em JSON em vez de texto livre com `console.log`?",
+          "reviewTopicId": "nd-logs",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Permite filtrar e agregar automaticamente por `status`, `requestId` ou `level` em ferramentas de observabilidade.",
+              "correct": true,
+              "explanation": "Texto solto exige regex frágil para buscar erros em produção."
+            },
+            {
+              "id": "b",
+              "text": "Porque JSON ocupa menos espaço que uma palavra.",
+              "correct": false,
+              "explanation": "O ganho é ser pesquisável e estruturado."
+            },
+            {
+              "id": "c",
+              "text": "Porque `console.log` não funciona em Linux.",
+              "correct": false,
+              "explanation": "Funciona, mas sem estrutura."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

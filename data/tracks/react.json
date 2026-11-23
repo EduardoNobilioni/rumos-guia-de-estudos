@@ -1,0 +1,532 @@
+{
+  "id": "react",
+  "name": "React",
+  "tagline": "Interfaces declarativas, estado previsível, efeitos limpos e testes",
+  "description": "Trilha focada em React moderno: componentes e props, estado e imutabilidade, hooks sem armadilhas, rotas, formulários, acesso a dados e testes de componente.",
+  "phases": [
+    {
+      "id": "rc-fase-1",
+      "number": 1,
+      "badgeTitle": "Base",
+      "title": "Componentes, JSX e estado",
+      "topics": [
+        {
+          "id": "rc-componentes",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Componentes, JSX e props",
+          "description": "Pense na UI como função dos dados. Quebre telas grandes em componentes pequenos, passe dados por `props` (somente leitura) e use `key` estável (ID do item, nunca o índice do array em listas dinâmicas).",
+          "tags": [
+            "JSX",
+            "Props"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "Descrevendo a UI (React Docs pt-BR)",
+              "url": "https://pt-br.react.dev/learn/describing-the-ui",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Renderizando Listas e Keys (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/rendering-lists",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "rc-estado",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "useState, eventos e imutabilidade",
+          "description": "Nunca altere um array ou objeto de estado diretamente (`items.push(...)` não dispara re-render!). Crie novas cópias (`[...items, novo]`) e não duplique no estado o que pode ser calculado durante o render.",
+          "tags": [
+            "useState",
+            "Imutabilidade"
+          ],
+          "prerequisites": [
+            "rc-componentes"
+          ],
+          "resources": [
+            {
+              "title": "Adicionando Interatividade (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/adding-interactivity",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Atualizando Arrays no Estado (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/updating-arrays-in-state",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "rc-compartilhar",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Elevação de estado e composição (children)",
+          "description": "Quando dois irmãos precisam do mesmo dado, suba o estado para o pai comum. Antes de recorrer a Context ou Redux para evitar passar props por 2 níveis, use composição com `children`.",
+          "tags": [
+            "Composição",
+            "Estado"
+          ],
+          "prerequisites": [
+            "rc-estado"
+          ],
+          "resources": [
+            {
+              "title": "Compartilhando Estado entre Componentes (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/sharing-state-between-components",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Passando JSX como children (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/passing-props-to-a-component#passing-jsx-as-children",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "rc1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Filtro de catálogo sem estado redundante",
+          "description": "Crie uma lista pesquisável e ordenável onde a lista filtrada é calculada na hora a partir da busca, e não guardada num segundo `useState`.",
+          "steps": [
+            "Guarde apenas a lista original e o texto de busca no estado.",
+            "Calcule os itens filtrados no corpo do componente.",
+            "Use `key={item.id}`."
+          ],
+          "definitionOfDone": [
+            "Zero `useEffect` para sincronizar lista filtrada.",
+            "Funciona com lista vazia."
+          ]
+        },
+        {
+          "id": "rc1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Carrinho com useReducer",
+          "description": "Modele adicionar, remover e alterar quantidade num carrinho usando `useReducer` para manter as regras de transição fora do JSX.",
+          "steps": [
+            "Escreva a função `reducer` pura.",
+            "Teste o `reducer` diretamente sem precisar renderizar React.",
+            "Conecte nos botões da interface."
+          ],
+          "definitionOfDone": [
+            "Quantidade nunca fica menor que 1 (ou remove ao zerar).",
+            "Total calculado como valor derivado."
+          ]
+        },
+        {
+          "id": "rc1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Modal acessível com composição",
+          "description": "Construa um componente `Dialog` reutilizável usando `children`, foco preso ou elemento `<dialog>` nativo e fechamento com `Esc`.",
+          "steps": [
+            "Use `<dialog>` nativo ou gerencie retorno do foco ao fechar.",
+            "Aceite conteúdo arbitrário via `children`.",
+            "Teste navegação só pelo teclado."
+          ],
+          "definitionOfDone": [
+            "Fecha com `Esc`.",
+            "Tem `aria-labelledby`."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "rc-fase-1-q1",
+          "prompt": "Por que evitar o índice do array (`index`) como `key` numa lista onde itens são adicionados, removidos ou reordenados?",
+          "reviewTopicId": "rc-componentes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque quando a ordem muda, o índice muda de dono e o React reaproveita o estado interno (como inputs) do item errado.",
+              "correct": true,
+              "explanation": "Use sempre um ID único e estável pertencente ao dado."
+            },
+            {
+              "id": "b",
+              "text": "Porque o JSX proíbe números em `key`.",
+              "correct": false,
+              "explanation": "Ele aceita números, mas o bug é semântico na reconciliação."
+            },
+            {
+              "id": "c",
+              "text": "Porque `key` altera a cor do texto.",
+              "correct": false,
+              "explanation": "Não afeta estilo."
+            }
+          ]
+        },
+        {
+          "id": "rc-fase-1-q2",
+          "prompt": "Se você tem `preco` e `quantidade` no estado, o que fazer com `total`?",
+          "reviewTopicId": "rc-estado",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Calcular `const total = preco * quantidade` direto no render, sem criar outro `useState`.",
+              "correct": true,
+              "explanation": "Evita estados dessincronizados e renders extras."
+            },
+            {
+              "id": "b",
+              "text": "Criar `useState(0)` e atualizar com `useEffect`.",
+              "correct": false,
+              "explanation": "É um antipadrão clássico que causa render duplo e bugs."
+            },
+            {
+              "id": "c",
+              "text": "Salvar no `localStorage` a cada soma.",
+              "correct": false,
+              "explanation": "Desnecessário para dado derivado."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc-fase-2",
+      "number": 2,
+      "badgeTitle": "Efeitos e Dados",
+      "title": "useEffect, rotas e formulários",
+      "topics": [
+        {
+          "id": "rc-effects",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "useEffect: só para sincronizar com o mundo externo",
+          "description": "`useEffect` não é para transformar dados nem responder clique de usuário. Use apenas para sincronizar com sistema externo (timer, DOM, WebSocket) e sempre retorne função de limpeza (cleanup).",
+          "tags": [
+            "useEffect",
+            "Hooks"
+          ],
+          "prerequisites": [
+            "rc-compartilhar"
+          ],
+          "resources": [
+            {
+              "title": "Você pode não precisar de um Effect (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/you-might-not-need-an-effect",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Sincronizando com Effects (React pt-BR)",
+              "url": "https://pt-br.react.dev/learn/synchronizing-with-effects",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "rc-dados",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Busca de dados, cache de servidor e formulários",
+          "description": "Buscar dados na mão com `useEffect` exige tratar condição de corrida (AbortController), cache, erro e loading. Entenda ferramentas como TanStack Query para estado de servidor e validação clara em formulários.",
+          "tags": [
+            "TanStack Query",
+            "Formulários"
+          ],
+          "prerequisites": [
+            "rc-effects"
+          ],
+          "resources": [
+            {
+              "title": "TanStack Query — Overview",
+              "url": "https://tanstack.com/query/latest/docs/framework/react/overview",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "React Hook Form — Get Started",
+              "url": "https://react-hook-form.com/get-started",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "rc2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Relógio/Cronômetro com cleanup",
+          "description": "Crie um cronômetro com `setInterval` dentro de `useEffect` garantindo que pausar ou desmontar o componente limpa o intervalo sem vazar memória.",
+          "steps": [
+            "Retorne `() => clearInterval(id)` no Effect.",
+            "Teste em `StrictMode` (que monta/desmonta 2x em dev).",
+            "Confirme que não acelera o relógio."
+          ],
+          "definitionOfDone": [
+            "Funciona perfeitamente com `React.StrictMode` ativo.",
+            "Sem timers duplicados."
+          ]
+        },
+        {
+          "id": "rc2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Busca com AbortController (sem race condition)",
+          "description": "Implemente busca em API enquanto o usuário digita e cancele requisições antigas para que uma resposta lenta de 'a' não sobrescreva 'ab'.",
+          "steps": [
+            "Passe `signal` do `AbortController` para o `fetch`.",
+            "Aborte no cleanup do efeito (ou use TanStack Query).",
+            "Trate erro de abort sem exibir alerta falso."
+          ],
+          "definitionOfDone": [
+            "Respostas fora de ordem não corrompem a tela.",
+            "Estados de loading e erro visíveis."
+          ]
+        },
+        {
+          "id": "rc2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Formulário multi-campo com validação acessível",
+          "description": "Construa um formulário com validação no envio e ao sair do campo (`onBlur`), ligando mensagens de erro via `aria-describedby` e `aria-invalid`.",
+          "steps": [
+            "Associe `<label>` a cada campo.",
+            "Mostre erro claro abaixo do campo inválido.",
+            "Mova o foco para o primeiro campo com erro ao tentar enviar."
+          ],
+          "definitionOfDone": [
+            "Totalmente operável por teclado.",
+            "Erros anunciados para leitor de tela."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "rc-fase-2-q1",
+          "prompt": "Por que o `React.StrictMode` executa efeitos duas vezes em modo de desenvolvimento?",
+          "reviewTopicId": "rc-effects",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para revelar efeitos sem função de limpeza (cleanup) ou que não são resilientes a desmontar e remontar.",
+              "correct": true,
+              "explanation": "Em produção roda 1 vez; em dev ele testa se seu cleanup funciona."
+            },
+            {
+              "id": "b",
+              "text": "Porque é um bug do React que dobra o uso em produção também.",
+              "correct": false,
+              "explanation": "É intencional e só ocorre em desenvolvimento."
+            },
+            {
+              "id": "c",
+              "text": "Para renderizar CSS duas vezes.",
+              "correct": false,
+              "explanation": "Não tem relação com CSS."
+            }
+          ]
+        },
+        {
+          "id": "rc-fase-2-q2",
+          "prompt": "Qual o benefício de bibliotecas como TanStack Query sobre `fetch` manual dentro de `useEffect`?",
+          "reviewTopicId": "rc-dados",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Gerencia cache, deduplicação de requisições, retentativas, revalidação e estados de erro/loading automaticamente.",
+              "correct": true,
+              "explanation": "Evita reescrever dezenas de linhas propensas a race conditions."
+            },
+            {
+              "id": "b",
+              "text": "Dispensa ter um servidor back-end.",
+              "correct": false,
+              "explanation": "Continua consumindo sua API."
+            },
+            {
+              "id": "c",
+              "text": "Substitui o HTML.",
+              "correct": false,
+              "explanation": "É para estado assíncrono de servidor."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rc-fase-3",
+      "number": 3,
+      "badgeTitle": "Qualidade",
+      "title": "Testes, performance e roteamento",
+      "topics": [
+        {
+          "id": "rc-testes",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Testes de componente com Testing Library",
+          "description": "Teste como o usuário usa (buscando por `getByRole`, `getByLabelText`, texto visível e clicando), nunca testando nomes de classes CSS ou estado interno do componente.",
+          "tags": [
+            "Testing Library",
+            "Vitest"
+          ],
+          "prerequisites": [
+            "rc-dados"
+          ],
+          "resources": [
+            {
+              "title": "React Testing Library — Intro",
+              "url": "https://testing-library.com/docs/react-testing-library/intro/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Which query should I use? (Testing Library)",
+              "url": "https://testing-library.com/docs/queries/about/#priority",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "rc-perf",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Performance real (Code Splitting e Profiling)",
+          "description": "Não saia colocando `useMemo`/`useCallback` em tudo por reflexo — eles têm custo. Primeiro meça com React DevTools Profiler, mova estado para perto de onde é usado e use `React.lazy` para dividir rotas pesadas.",
+          "tags": [
+            "Performance",
+            "Lazy"
+          ],
+          "prerequisites": [
+            "rc-compartilhar"
+          ],
+          "resources": [
+            {
+              "title": "React.lazy (React Docs pt-BR)",
+              "url": "https://pt-br.react.dev/reference/react/lazy",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "React Developer Tools",
+              "url": "https://pt-br.react.dev/learn/react-developer-tools",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "rc3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Testes centrados em acessibilidade",
+          "description": "Escreva 4 testes com Vitest + React Testing Library usando apenas `getByRole` e `getByLabelText` para um componente de formulário.",
+          "steps": [
+            "Use `userEvent` para digitar e enviar.",
+            "Valide mensagem de erro quando campo está vazio.",
+            "Valide chamada de callback no envio válido."
+          ],
+          "definitionOfDone": [
+            "Zero `querySelector` ou `getByTestId` desnecessário.",
+            "Todos os testes passam."
+          ]
+        },
+        {
+          "id": "rc3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Rotas com carregamento sob demanda",
+          "description": "Configure roteamento com React Router (ou Next.js) dividindo uma página pesada via `React.lazy` + `Suspense` com fallback acessível.",
+          "steps": [
+            "Configure 3 rotas.",
+            "Carregue uma delas com `React.lazy`.",
+            "Confira na aba Network do DevTools o chunk separado."
+          ],
+          "definitionOfDone": [
+            "Bundle inicial não carrega a rota pesada.",
+            "Fallback aparece durante a carga."
+          ]
+        },
+        {
+          "id": "rc3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Isolando re-renders sem memo prematuro",
+          "description": "Mostre um componente lento re-renderizando a cada tecla digitada num input irmão e resolva movendo o estado do input para dentro do próprio componente filho.",
+          "steps": [
+            "Reproduza o render lento no Profiler.",
+            "Mova o estado local para baixo (colocation).",
+            "Meça novamente sem usar `React.memo`."
+          ],
+          "definitionOfDone": [
+            "Componente pesado para de re-renderizar ao digitar.",
+            "Antes e depois documentados."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "rc-fase-3-q1",
+          "prompt": "Qual seletor da Testing Library deve ser sua primeira escolha?",
+          "reviewTopicId": "rc-testes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`getByRole` (com nome acessível), pois valida semântica e acessibilidade junto com o comportamento.",
+              "correct": true,
+              "explanation": "Se `getByRole('button', { name: 'Salvar' })` falha, usuários de leitor de tela também teriam problema."
+            },
+            {
+              "id": "b",
+              "text": "`container.querySelector('.btn-primary')`.",
+              "correct": false,
+              "explanation": "Quebra se a classe CSS mudar e não testa acessibilidade."
+            },
+            {
+              "id": "c",
+              "text": "`getByTestId` para tudo.",
+              "correct": false,
+              "explanation": "Deixe `testId` apenas como último recurso."
+            }
+          ]
+        },
+        {
+          "id": "rc-fase-3-q2",
+          "prompt": "Qual costuma ser a melhor forma de evitar que um componente pesado re-renderize quando um input digita?",
+          "reviewTopicId": "rc-perf",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Descer o estado do input para um componente menor (state colocation) ou usar `children`.",
+              "correct": true,
+              "explanation": "Mais simples e limpo do que espalhar `useMemo` e `React.memo` pelo código."
+            },
+            {
+              "id": "b",
+              "text": "Envolver todas as variáveis em `useCallback`.",
+              "correct": false,
+              "explanation": "Sozinho não impede o componente pai de re-renderizar."
+            },
+            {
+              "id": "c",
+              "text": "Desligar o DOM.",
+              "correct": false,
+              "explanation": "Impossível em uma aplicação web."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

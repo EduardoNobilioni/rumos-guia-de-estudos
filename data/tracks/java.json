@@ -1,8 +1,8 @@
 {
   "id": "java",
   "name": "Java e Spring Boot",
-  "tagline": "Back-end em Java, da linguagem ao serviço REST",
-  "description": "Para quem a faculdade ensina Java e o estágio pede Spring. A trilha fica no serviço: objeto, coleção, API, banco, teste e um deploy repetível.",
+  "tagline": "Back-end em Java, da linguagem ao serviço REST em produção",
+  "description": "Para quem a faculdade ensina Java e o estágio pede Spring. Da base da linguagem ao serviço completo: coleções, Maven/Gradle, Streams, REST, JPA sem N+1, Spring Security, testes e deploy.",
   "phases": [
     {
       "id": "jv-fase-1",
@@ -29,10 +29,10 @@
               "kind": "documentacao"
             },
             {
-              "title": "Orientação a objetos (dev.java)",
-              "url": "https://dev.java/learn/oop/",
-              "lang": "pt",
-              "kind": "leitura"
+              "title": "Getting Started with Java (dev.java)",
+              "url": "https://dev.java/learn/getting-started/",
+              "lang": "en",
+              "kind": "curso"
             }
           ]
         },
@@ -43,7 +43,8 @@
           "title": "Objeto, classe e herança curta",
           "description": "Classe descreve. Objeto é o caso. Composição (um objeto tem outro) resolve mais exercício do que uma árvore de herança. Herança cabe quando o tipo realmente é um caso do outro.",
           "tags": [
-            "OOP"
+            "OOP",
+            "Composição"
           ],
           "prerequisites": [
             "jv-sintaxe"
@@ -64,13 +65,42 @@
           ]
         },
         {
+          "id": "jv-excecoes",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Exceções e Optional",
+          "description": "Checked vs. unchecked: não capture `Exception` genérica para engolir o erro em silêncio. Use `Optional` no retorno de buscas que podem não achar nada, em vez de devolver `null` surpresa.",
+          "tags": [
+            "Exceções",
+            "Optional"
+          ],
+          "prerequisites": [
+            "jv-oo"
+          ],
+          "resources": [
+            {
+              "title": "Exceções em Java (dev.java)",
+              "url": "https://dev.java/learn/exceptions/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Optional (API Java 21)",
+              "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
           "id": "jv-colecoes",
           "level": "intermediario",
           "hours": 6,
           "title": "List, Set e Map",
-          "description": "List guarda ordem e repetição. Set não repete. Map busca por chave. Escolher List para tudo funciona até a busca ficar ingênua. A coleção pronta já foi testada: implemente a sua só para aprender.",
+          "description": "List guarda ordem e repetição. Set não repete. Map busca por chave. Escolher List para tudo funciona até a busca ficar ingênua. Lembre de `equals` e `hashCode` quando usar objeto como chave.",
           "tags": [
-            "Coleções"
+            "Coleções",
+            "Estruturas"
           ],
           "prerequisites": [
             "jv-oo"
@@ -198,19 +228,77 @@
       "id": "jv-fase-2",
       "number": 2,
       "badgeTitle": "Serviço",
-      "title": "Spring Boot e REST",
+      "title": "Build, Spring Boot e REST",
       "topics": [
+        {
+          "id": "jv-maven",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Maven ou Gradle e ciclo de build",
+          "description": "Ninguém compila projeto Java real na mão com `javac`. Entenda `pom.xml` ou `build.gradle`, escopo de dependências, wrapper (`./mvnw`) e como gerar um JAR executável.",
+          "tags": [
+            "Maven",
+            "Gradle"
+          ],
+          "prerequisites": [
+            "jv-sintaxe"
+          ],
+          "resources": [
+            {
+              "title": "Maven in 5 Minutes",
+              "url": "https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Spring Initializr",
+              "url": "https://start.spring.io/",
+              "lang": "en",
+              "kind": "pratica"
+            }
+          ]
+        },
+        {
+          "id": "jv-streams",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Streams, Lambdas e Records",
+          "description": "Use `record` para DTOs imutáveis sem boilerplate de getters/setters. Streams (`map`, `filter`, `collect`) expressam transformações de coleção com clareza — sem abusar de lógica complexa dentro de lambda.",
+          "tags": [
+            "Streams",
+            "Records"
+          ],
+          "prerequisites": [
+            "jv-colecoes"
+          ],
+          "resources": [
+            {
+              "title": "Records em Java (dev.java)",
+              "url": "https://dev.java/learn/records/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Stream API (dev.java)",
+              "url": "https://dev.java/learn/api/streams/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
         {
           "id": "jv-spring",
           "level": "intermediario",
           "hours": 8,
           "title": "Spring Boot sobe a aplicação",
-          "description": "O Spring Boot junta servidor, configuração e injeção de dependência. Você escreve o controlador e a regra. Anotação demais sem você saber o que ela faz vira magia. Suba o guia oficial e leia o que foi gerado.",
+          "description": "O Spring Boot junta servidor, configuração e injeção de dependência. Você escreve o controlador e a regra. Prefira injeção por construtor a `@Autowired` em campo privado.",
           "tags": [
-            "Spring Boot"
+            "Spring Boot",
+            "DI"
           ],
           "prerequisites": [
-            "jv-colecoes"
+            "jv-colecoes",
+            "jv-maven"
           ],
           "resources": [
             {
@@ -254,61 +342,6 @@
               "kind": "leitura"
             }
           ]
-        },
-        {
-          "id": "jv-dados",
-          "level": "avancado",
-          "hours": 8,
-          "title": "Banco e migração",
-          "description": "A tabela sobrevive ao processo. A migração versiona o esquema. Não edite tabela de produção na mão sem deixar o arquivo que repete a mudança. Transação cobre o que tem que valer junto.",
-          "tags": [
-            "JPA",
-            "SQL"
-          ],
-          "prerequisites": [
-            "jv-rest"
-          ],
-          "resources": [
-            {
-              "title": "SQL introdutório (PostgreSQL)",
-              "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
-              "lang": "en",
-              "kind": "documentacao"
-            },
-            {
-              "title": "Testes no Spring Boot",
-              "url": "https://docs.spring.io/spring-boot/reference/testing/index.html",
-              "lang": "en",
-              "kind": "documentacao"
-            }
-          ]
-        },
-        {
-          "id": "jv-teste",
-          "level": "intermediario",
-          "hours": 6,
-          "title": "JUnit no serviço",
-          "description": "Teste a regra sem subir a web. Teste uma rota com o apoio do Spring quando o HTTP faz parte do contrato. Nome do teste diz o caso, não \"test1\".",
-          "tags": [
-            "JUnit"
-          ],
-          "prerequisites": [
-            "jv-rest"
-          ],
-          "resources": [
-            {
-              "title": "Guia do JUnit 5",
-              "url": "https://junit.org/junit5/docs/current/user-guide/",
-              "lang": "en",
-              "kind": "documentacao"
-            },
-            {
-              "title": "Testes no Spring Boot",
-              "url": "https://docs.spring.io/spring-boot/reference/testing/index.html",
-              "lang": "en",
-              "kind": "documentacao"
-            }
-          ]
         }
       ],
       "projects": [
@@ -317,7 +350,7 @@
           "level": "iniciante",
           "hours": 6,
           "title": "JSON no terminal, ainda",
-          "description": "Antes do Spring, serialize uma lista de objetos para uma saída previsível e leia de volta. O objetivo é separar dado de impressão.",
+          "description": "Antes do Spring, serialize uma lista de objetos (ou `record`) para uma saída previsível com Maven e leia de volta. O objetivo é separar dado de impressão.",
           "steps": [
             "Defina o formato dos campos.",
             "Mostre um objeto e uma lista vazia.",
@@ -325,7 +358,7 @@
           ],
           "definitionOfDone": [
             "A saída de exemplo está no README.",
-            "O programa não depende de rede."
+            "O projeto compila com `./mvnw test`."
           ]
         },
         {
@@ -335,7 +368,7 @@
           "title": "API de reservas",
           "description": "Crie, liste e cancele uma reserva simples. Status corretos. Um teste de JUnit cobre a regra de conflito de horário.",
           "steps": [
-            "Modele o recurso.",
+            "Modele o recurso com DTO `record`.",
             "Recuse sobreposição.",
             "Documente três chamadas com curl ou similar."
           ],
@@ -389,6 +422,230 @@
         },
         {
           "id": "jv-fase-2-q2",
+          "prompt": "Para que serve usar `record` em um DTO de entrada ou saída?",
+          "reviewTopicId": "jv-streams",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Declarar uma estrutura imutável de dados com construtor, equals e hashCode sem boilerplate.",
+              "correct": true,
+              "explanation": "Records modelam portadores de dados transparentes e imutáveis."
+            },
+            {
+              "id": "b",
+              "text": "Conectar direto no PostgreSQL sem driver.",
+              "correct": false,
+              "explanation": "Conexão com banco continua precisando de JDBC/driver."
+            },
+            {
+              "id": "c",
+              "text": "Substituir o Maven no projeto.",
+              "correct": false,
+              "explanation": "Record é um recurso da linguagem Java."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv-fase-3",
+      "number": 3,
+      "badgeTitle": "Contrato e Dados",
+      "title": "Validação, banco, migração e JUnit",
+      "topics": [
+        {
+          "id": "jv-validacao",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Bean Validation e erros padronizados",
+          "description": "Valide entrada na borda com `@Valid`, `@NotBlank`, `@Positive` e centralize exceções com `@RestControllerAdvice` devolvendo JSON estruturado (como ProblemDetail) em vez de stack trace.",
+          "tags": [
+            "Validation",
+            "ProblemDetail"
+          ],
+          "prerequisites": [
+            "jv-rest",
+            "jv-excecoes"
+          ],
+          "resources": [
+            {
+              "title": "Validating Form Input (Spring Guide)",
+              "url": "https://spring.io/guides/gs/validating-form-input",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "Error Responses no Spring Framework",
+              "url": "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "jv-dados",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Banco e migração (Flyway / Liquibase)",
+          "description": "A tabela sobrevive ao processo. A migração versiona o esquema (Flyway/Liquibase). Não use `ddl-auto=update` em produção. Transação (`@Transactional`) cobre o que tem que valer junto.",
+          "tags": [
+            "JPA",
+            "SQL",
+            "Flyway"
+          ],
+          "prerequisites": [
+            "jv-rest"
+          ],
+          "resources": [
+            {
+              "title": "SQL introdutório (PostgreSQL)",
+              "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Database Migrations (Spring Boot)",
+              "url": "https://docs.spring.io/spring-boot/how-to/data-initialization.html#howto.data-initialization.migration-tool",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "jv-jpa-n1",
+          "level": "avancado",
+          "hours": 6,
+          "title": "JPA sem armadilhas (N+1 e paginação)",
+          "description": "Entenda o problema N+1: buscar 50 pedidos e disparar 50 SELECTs extras pelos itens. Use `JOIN FETCH`, `@EntityGraph`, projeções DTO e paginação (`Pageable`) desde o começo.",
+          "tags": [
+            "JPA",
+            "Performance"
+          ],
+          "prerequisites": [
+            "jv-dados"
+          ],
+          "resources": [
+            {
+              "title": "Spring Data JPA — Queries",
+              "url": "https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "N+1 Query Problem (Baeldung)",
+              "url": "https://www.baeldung.com/hibernate-n-plus-one",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "jv-teste",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "JUnit e Mockito no serviço",
+          "description": "Teste a regra sem subir a web. Teste uma rota com o apoio do Spring (`@WebMvcTest`) quando o HTTP faz parte do contrato. Nome do teste diz o caso, não \"test1\".",
+          "tags": [
+            "JUnit",
+            "Mockito"
+          ],
+          "prerequisites": [
+            "jv-rest"
+          ],
+          "resources": [
+            {
+              "title": "Guia do JUnit 5",
+              "url": "https://junit.org/junit5/docs/current/user-guide/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Testes no Spring Boot",
+              "url": "https://docs.spring.io/spring-boot/reference/testing/index.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "jv3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Respostas de erro limpas",
+          "description": "Adicione Bean Validation e `@RestControllerAdvice` numa API para retornar HTTP 400 com lista de campos inválidos.",
+          "steps": [
+            "Anote o DTO com regras de entrada.",
+            "Capture `MethodArgumentNotValidException`.",
+            "Teste enviando campo vazio."
+          ],
+          "definitionOfDone": [
+            "Nenhum stack trace aparece na resposta HTTP.",
+            "O cliente sabe exatamente qual campo falhou."
+          ]
+        },
+        {
+          "id": "jv3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 10,
+          "title": "Listagem paginada sem N+1",
+          "description": "Ligue `spring.jpa.show-sql=true`, provoque um N+1 numa relação 1:N e corrija com `JOIN FETCH` ou projeção.",
+          "steps": [
+            "Conte quantos SELECTs rodam antes da correção.",
+            "Aplique `JOIN FETCH` ou DTO projection.",
+            "Adicione paginação com `Pageable`."
+          ],
+          "definitionOfDone": [
+            "A listagem roda em 1 ou 2 queries fixas, independente do tamanho da página.",
+            "Antes e depois estão no README."
+          ]
+        },
+        {
+          "id": "jv3-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Regra transacional testada",
+          "description": "Implemente uma transferência ou baixa de estoque com `@Transactional` e prove com teste que uma falha no meio reverte tudo.",
+          "steps": [
+            "Execute duas escritas no mesmo método.",
+            "Force uma exceção após a primeira escrita.",
+            "Verifique no banco que a primeira foi desfeita."
+          ],
+          "definitionOfDone": [
+            "O rollback é comprovado por teste automatizado.",
+            "Não há inconsistência parcial."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "jv-fase-3-q1",
+          "prompt": "O que é o problema N+1 no JPA/Hibernate?",
+          "reviewTopicId": "jv-jpa-n1",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Executar 1 consulta para listar N registros e mais N consultas extras para carregar associações de cada um.",
+              "correct": true,
+              "explanation": "Em produção com páginas de 100 itens, isso vira 101 idas ao banco."
+            },
+            {
+              "id": "b",
+              "text": "Ter mais de uma tabela no banco de dados.",
+              "correct": false,
+              "explanation": "Relações entre tabelas são normais; o problema é como carregá-las."
+            },
+            {
+              "id": "c",
+              "text": "Erro de compilação por falta de ponto e vírgula.",
+              "correct": false,
+              "explanation": "É um problema de performance em tempo de execução."
+            }
+          ]
+        },
+        {
+          "id": "jv-fase-3-q2",
           "prompt": "O que um teste de unidade da regra não precisa?",
           "reviewTopicId": "jv-teste",
           "choices": [
@@ -409,6 +666,340 @@
               "text": "Um nome que explica o caso.",
               "correct": false,
               "explanation": "Nome opaco atrapalha o colega."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv-fase-4",
+      "number": 4,
+      "badgeTitle": "Segurança",
+      "title": "Spring Security e testes de integração",
+      "topics": [
+        {
+          "id": "jv-security",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Spring Security, JWT e autorização",
+          "description": "Autenticação diz quem você é; autorização diz o que você pode fazer. Configure `SecurityFilterChain` stateless para API, hash de senha com BCrypt e diferencie 401 de 403.",
+          "tags": [
+            "Security",
+            "JWT"
+          ],
+          "prerequisites": [
+            "jv-rest",
+            "jv-dados"
+          ],
+          "resources": [
+            {
+              "title": "Spring Security — arquitetura Servlet",
+              "url": "https://docs.spring.io/spring-security/reference/servlet/architecture.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "OAuth2 Resource Server (JWT)",
+              "url": "https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "jv-testcontainers",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Testes de integração com Testcontainers",
+          "description": "Testar contra banco em memória (H2) esconde diferenças de SQL real do PostgreSQL. Use Testcontainers com `@SpringBootTest` para validar migrações Flyway, queries nativas e rotas autenticadas de verdade.",
+          "tags": [
+            "Testcontainers",
+            "Integração"
+          ],
+          "prerequisites": [
+            "jv-teste",
+            "jv-dados"
+          ],
+          "resources": [
+            {
+              "title": "Testcontainers no Spring Boot",
+              "url": "https://docs.spring.io/spring-boot/reference/testing/testcontainers.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Testcontainers para Java",
+              "url": "https://java.testcontainers.org/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "jv4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Senha com BCrypt",
+          "description": "Crie um cadastro simples que nunca grava senha em texto plano e valida login comparando o hash.",
+          "steps": [
+            "Use `BCryptPasswordEncoder`.",
+            "Garanta que o campo de senha não volta no JSON de resposta.",
+            "Teste senha certa e senha errada."
+          ],
+          "definitionOfDone": [
+            "O banco guarda apenas o hash.",
+            "A resposta de usuário omite a senha."
+          ]
+        },
+        {
+          "id": "jv4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 10,
+          "title": "Rotas protegidas por papel",
+          "description": "Proteja uma API com JWT stateless diferenciando rotas públicas, rotas de usuário autenticado (401 sem token) e rotas de admin (403 para usuário comum).",
+          "steps": [
+            "Configure `SecurityFilterChain` sem sessão HTTP.",
+            "Proteja `/admin/**` por papel.",
+            "Teste os três cenários (sem token, usuário comum, admin)."
+          ],
+          "definitionOfDone": [
+            "401 e 403 retornam nos casos certos.",
+            "Nenhum segredo JWT fica hardcoded no código."
+          ]
+        },
+        {
+          "id": "jv4-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Suíte ponta a ponta com PostgreSQL real",
+          "description": "Suba um PostgreSQL descartável via Testcontainers e execute migração + chamada HTTP autenticada num único teste de integração.",
+          "steps": [
+            "Configure `@ServiceConnection` ou `DynamicPropertySource`.",
+            "Rode as migrações Flyway automaticamente.",
+            "Valide criação e leitura via HTTP."
+          ],
+          "definitionOfDone": [
+            "O teste passa sem banco instalado manualmente na máquina.",
+            "Funciona no CI (GitHub Actions)."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "jv-fase-4-q1",
+          "prompt": "Qual a diferença entre HTTP 401 e HTTP 403 no Spring Security?",
+          "reviewTopicId": "jv-security",
+          "choices": [
+            {
+              "id": "a",
+              "text": "401 indica falta de autenticação válida; 403 indica usuário autenticado sem permissão para o recurso.",
+              "correct": true,
+              "explanation": "Quem não tem token válido leva 401; quem tem token mas não tem papel leva 403."
+            },
+            {
+              "id": "b",
+              "text": "São exatamente iguais.",
+              "correct": false,
+              "explanation": "Distinguir os dois ajuda cliente e auditoria."
+            },
+            {
+              "id": "c",
+              "text": "403 significa servidor fora do ar.",
+              "correct": false,
+              "explanation": "Servidor fora do ar é 5xx."
+            }
+          ]
+        },
+        {
+          "id": "jv-fase-4-q2",
+          "prompt": "Por que preferir Testcontainers ao H2 em testes de integração?",
+          "reviewTopicId": "jv-testcontainers",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque testa contra o mesmo motor de banco da produção, evitando surpresas de dialeto SQL e migração.",
+              "correct": true,
+              "explanation": "H2 aceita ou recusa coisas diferentes de PostgreSQL/MySQL."
+            },
+            {
+              "id": "b",
+              "text": "Porque Testcontainers não precisa de Docker.",
+              "correct": false,
+              "explanation": "Ele justamente sobe containers Docker descartáveis."
+            },
+            {
+              "id": "c",
+              "text": "Porque substitui testes de unidade.",
+              "correct": false,
+              "explanation": "Complementa; testes de unidade continuam sendo a base rápida."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jv-fase-5",
+      "number": 5,
+      "badgeTitle": "Produção",
+      "title": "Observabilidade, concorrência e deploy",
+      "topics": [
+        {
+          "id": "jv-actuator",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Actuator, logs e métricas",
+          "description": "Em produção você precisa saber se o serviço está vivo (`/actuator/health`), quanto tempo cada rota leva (Micrometer) e amarrar linhas de log pelo ID da requisição.",
+          "tags": [
+            "Actuator",
+            "Observabilidade"
+          ],
+          "prerequisites": [
+            "jv-spring"
+          ],
+          "resources": [
+            {
+              "title": "Spring Boot Actuator",
+              "url": "https://docs.spring.io/spring-boot/reference/actuator/index.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Observability no Spring Boot",
+              "url": "https://docs.spring.io/spring-boot/reference/actuator/observability.html",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "jv-concorrencia",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Virtual Threads e processamento assíncrono",
+          "description": "Java 21 trouxe Virtual Threads (`spring.threads.virtual.enabled=true`) para escalar I/O bloqueante sem complicar o código. Para tarefas longas (e-mail, PDF), use fila de mensagens em vez de segurar a requisição HTTP.",
+          "tags": [
+            "Virtual Threads",
+            "Mensageria"
+          ],
+          "prerequisites": [
+            "jv-actuator"
+          ],
+          "resources": [
+            {
+              "title": "Virtual Threads (Oracle Java 21)",
+              "url": "https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Spring Boot — Virtual Threads",
+              "url": "https://docs.spring.io/spring-boot/reference/features/spring-application.html#features.spring-application.virtual-threads",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "jv5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Healthcheck e perfil de ambiente",
+          "description": "Separe `application.yml` de desenvolvimento e produção via variáveis de ambiente e exponha `/actuator/health`.",
+          "steps": [
+            "Tire senhas fixas do arquivo de configuração.",
+            "Exponha apenas `health` e `info`.",
+            "Suba o JAR com variáveis de ambiente."
+          ],
+          "definitionOfDone": [
+            "Nenhuma credencial está commitada.",
+            "`/actuator/health` responde UP."
+          ]
+        },
+        {
+          "id": "jv5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Docker multi-stage do serviço",
+          "description": "Empacote a API Spring Boot em um Dockerfile multi-stage (build com Maven, runtime só com JRE enxuto) junto com o PostgreSQL no Compose.",
+          "steps": [
+            "Use imagem JDK só no estágio de build.",
+            "Rode com usuário não-root na imagem final.",
+            "Suba API + banco com `docker compose up`."
+          ],
+          "definitionOfDone": [
+            "A imagem final não carrega código-fonte nem Maven.",
+            "Healthcheck do Compose aguarda o banco ficar pronto."
+          ]
+        },
+        {
+          "id": "jv5-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Tarefa longa fora do HTTP",
+          "description": "Receba um pedido de relatório retornando HTTP 202 Accepted e processe em segundo plano (ou fila), permitindo consultar o status depois.",
+          "steps": [
+            "Crie endpoint que retorna 202 com ID do trabalho.",
+            "Processe de forma assíncrona.",
+            "Crie endpoint GET para consultar conclusão."
+          ],
+          "definitionOfDone": [
+            "A requisição POST responde imediatamente.",
+            "Falha no processamento marca o status como erro visível."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "jv-fase-5-q1",
+          "prompt": "Por que não expor todos os endpoints do Spring Boot Actuator abertos na internet?",
+          "reviewTopicId": "jv-actuator",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque endpoints como `/env` ou `/heapdump` podem vazar variáveis, segredos e memória da aplicação.",
+              "correct": true,
+              "explanation": "Exponha apenas o necessário (como health) e proteja o restante."
+            },
+            {
+              "id": "b",
+              "text": "Porque o Actuator desliga o banco de dados.",
+              "correct": false,
+              "explanation": "Ele monitora, não desliga."
+            },
+            {
+              "id": "c",
+              "text": "Porque não funciona com JSON.",
+              "correct": false,
+              "explanation": "Ele responde em JSON por padrão."
+            }
+          ]
+        },
+        {
+          "id": "jv-fase-5-q2",
+          "prompt": "Quando faz sentido devolver HTTP 202 e processar em fila em vez de na thread da requisição?",
+          "reviewTopicId": "jv-concorrencia",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Em tarefas demoradas ou sujeitas a falha externa (envio de e-mail, geração de arquivo grande).",
+              "correct": true,
+              "explanation": "Evita timeout no cliente e permite retentativa controlada."
+            },
+            {
+              "id": "b",
+              "text": "Em qualquer consulta simples por ID no banco.",
+              "correct": false,
+              "explanation": "Leitura rápida deve responder síncrona com 200."
+            },
+            {
+              "id": "c",
+              "text": "Para evitar escrever testes.",
+              "correct": false,
+              "explanation": "Fluxos assíncronos também precisam de testes."
             }
           ]
         }

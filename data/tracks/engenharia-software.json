@@ -1,0 +1,754 @@
+{
+  "id": "engenharia-software",
+  "name": "Engenharia de Software e Boas Práticas",
+  "tagline": "Escrever código que outra pessoa consegue mudar daqui a seis meses",
+  "description": "Princípios que valem em qualquer linguagem: clareza, coesão, SOLID sem dogma, padrões de projeto úteis, refatoração segura, testes, code review e documentação.",
+  "phases": [
+    {
+      "id": "es-fase-1",
+      "number": 1,
+      "badgeTitle": "Clareza",
+      "title": "Legibilidade, coesão e acoplamento",
+      "topics": [
+        {
+          "id": "es-clareza",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Nomes claros, funções curtas e retorno antecipado",
+          "description": "Código é lido muito mais vezes do que escrito. Prefira nomes que dizem o porquê, reduza aninhamento com early return (guard clauses) e comente o motivo não óbvio, não o que o `if` já mostra.",
+          "tags": [
+            "Clean Code",
+            "Legibilidade"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "Google Engineering Practices — Code Review",
+              "url": "https://google.github.io/eng-practices/review/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Guard Clauses (Refactoring Guru)",
+              "url": "https://refactoring.guru/pt-br/replace-nested-conditional-with-guard-clauses",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-coesao",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Coesão, acoplamento e separação de responsabilidades",
+          "description": "Alta coesão significa manter junto o que muda junto; baixo acoplamento significa poder trocar o banco ou o gateway de pagamento sem reescrever a regra de negócio.",
+          "tags": [
+            "Coesão",
+            "Acoplamento"
+          ],
+          "prerequisites": [
+            "es-clareza"
+          ],
+          "resources": [
+            {
+              "title": "Coesão e Acoplamento (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap5.html",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Separação de responsabilidades (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/PresentationDomainDataLayering.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-duplicacao",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "DRY sem abstração prematura (Regra dos Três)",
+          "description": "Duas funções parecidas hoje podem evoluir para direções diferentes amanhã. Duplicação acidental vale extrair; abstração errada é pior que duplicação. Espere ver o padrão 3 vezes antes de generalizar.",
+          "tags": [
+            "DRY",
+            "YAGNI"
+          ],
+          "prerequisites": [
+            "es-coesao"
+          ],
+          "resources": [
+            {
+              "title": "The Wrong Abstraction (Sandi Metz)",
+              "url": "https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "YAGNI (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/Yagni.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "es1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Achatando um código aninhado",
+          "description": "Pegue uma função com 4 níveis de `if/else` aninhados e reescreva usando retorno antecipado (guard clauses) e funções auxiliares nomeadas.",
+          "steps": [
+            "Escreva testes antes de mexer.",
+            "Inverta as validações para retornar erro cedo.",
+            "Compare a legibilidade antes e depois."
+          ],
+          "definitionOfDone": [
+            "Todos os testes continuam passando.",
+            "Aninhamento máximo de 1–2 níveis."
+          ]
+        },
+        {
+          "id": "es1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Separando regra de negócio de I/O",
+          "description": "Extraia a lógica de cálculo ou validação de dentro de uma rota HTTP ou script de banco para uma função/módulo puro testável sem rede.",
+          "steps": [
+            "Identifique o que depende de HTTP/banco.",
+            "Mova o cálculo puro para outro arquivo.",
+            "Escreva 4 testes unitários sem mocks."
+          ],
+          "definitionOfDone": [
+            "A regra roda sem subir servidor nem banco.",
+            "A rota só traduz entrada e saída."
+          ]
+        },
+        {
+          "id": "es1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Desfazendo uma abstração errada",
+          "description": "Mostre um exemplo de função cheia de flags booleanas (`modoEspecial`, `ignorarTaxa`) e separe em duas funções simples e específicas.",
+          "steps": [
+            "Crie ou ache uma função com 3+ flags.",
+            "Inline e divida em caminhos claros.",
+            "Documente por que o código ficou mais fácil de manter."
+          ],
+          "definitionOfDone": [
+            "Zero flags booleanas controlando fluxo.",
+            "Testes cobrindo ambos os casos."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "es-fase-1-q1",
+          "prompt": "Qual o risco de generalizar cedo demais para seguir DRY à risca?",
+          "reviewTopicId": "es-duplicacao",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Criar uma abstração acoplada cheia de parâmetros condicionais quando os dois casos na verdade tinham regras diferentes.",
+              "correct": true,
+              "explanation": "Às vezes, código parecido não representa o mesmo conceito de negócio."
+            },
+            {
+              "id": "b",
+              "text": "O compilador recusa funções curtas.",
+              "correct": false,
+              "explanation": "O problema é acoplamento semântico, não compilador."
+            },
+            {
+              "id": "c",
+              "text": "O Git não rastreia arquivos novos.",
+              "correct": false,
+              "explanation": "Não tem relação."
+            }
+          ]
+        },
+        {
+          "id": "es-fase-1-q2",
+          "prompt": "Para que servem 'guard clauses' (retorno antecipado)?",
+          "reviewTopicId": "es-clareza",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Tratar casos inválidos ou de borda logo no início da função, reduzindo aninhamento de `if/else`.",
+              "correct": true,
+              "explanation": "O fluxo principal fica alinhado à esquerda e fácil de ler."
+            },
+            {
+              "id": "b",
+              "text": "Substituir testes automatizados.",
+              "correct": false,
+              "explanation": "Melhoram legibilidade, não substituem testes."
+            },
+            {
+              "id": "c",
+              "text": "Impedir que a função retorne valores.",
+              "correct": false,
+              "explanation": "Elas justamente retornam cedo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "es-fase-2",
+      "number": 2,
+      "badgeTitle": "Design",
+      "title": "SOLID, Padrões de Projeto e Injeção de Dependência",
+      "topics": [
+        {
+          "id": "es-solid",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "SOLID na prática (sem dogma)",
+          "description": "Entenda a intenção prática dos 5 princípios — especialmente Responsabilidade Única (SRP), Substituição de Liskov (não quebrar o contrato do pai) e Inversão de Dependência (depender de interface, não da classe concreta do banco).",
+          "tags": [
+            "SOLID",
+            "Design"
+          ],
+          "prerequisites": [
+            "es-coesao"
+          ],
+          "resources": [
+            {
+              "title": "Princípios de Projeto (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap5.html#princ%C3%ADpios-de-projeto",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Refactoring Guru — Princípios SOLID/Design",
+              "url": "https://refactoring.guru/pt-br/design-patterns",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-patterns",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Padrões de projeto que você realmente usa",
+          "description": "Não decore 23 padrões para forçar num Hello World. Domine os mais úteis no dia a dia: Strategy (trocar regra de cálculo), Adapter (isolar biblioteca externa), Factory e Decorator/Middleware.",
+          "tags": [
+            "Design Patterns",
+            "Strategy"
+          ],
+          "prerequisites": [
+            "es-solid"
+          ],
+          "resources": [
+            {
+              "title": "Catálogo de Design Patterns (Refactoring Guru pt-BR)",
+              "url": "https://refactoring.guru/pt-br/design-patterns/catalog",
+              "lang": "pt",
+              "kind": "leitura"
+            },
+            {
+              "title": "Padrões de Projeto (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap6.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-di",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Injeção de dependência e testabilidade",
+          "description": "Em vez de uma função instanciar `new GatewayDePagamentoReal()` dentro dela, receba a dependência por parâmetro (ou construtor). Assim, nos testes você passa um dublê falso sem tocar na internet.",
+          "tags": [
+            "DI",
+            "Testabilidade"
+          ],
+          "prerequisites": [
+            "es-solid"
+          ],
+          "resources": [
+            {
+              "title": "Inversion of Control / DI (Martin Fowler)",
+              "url": "https://martinfowler.com/articles/injection.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Injeção de Dependência (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap6.html#inje%C3%A7%C3%A3o-de-depend%C3%AAncia",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "es2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Trocando `if/else` por Strategy",
+          "description": "Implemente cálculo de frete ou desconto com 3 modalidades usando um mapa de estratégias em vez de um `switch` gigante crescente.",
+          "steps": [
+            "Defina uma assinatura comum para o cálculo.",
+            "Registre as 3 estratégias num dicionário/mapa.",
+            "Adicione uma 4ª modalidade sem editar o código chamador."
+          ],
+          "definitionOfDone": [
+            "Sem `switch` repetido.",
+            "Testes cobrem todas as modalidades."
+          ]
+        },
+        {
+          "id": "es2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Adapter para serviço externo",
+          "description": "Envolva uma API externa (ex.: envio de e-mail ou CEP) atrás de um Adapter próprio para que a aplicação não conheça os detalhes do SDK terceiro.",
+          "steps": [
+            "Defina a interface do seu domínio.",
+            "Implemente o Adapter real e um Fake em memória.",
+            "Rode os testes de caso de uso usando o Fake."
+          ],
+          "definitionOfDone": [
+            "Testes rodam 100% offline.",
+            "Trocar de provedor só mexe no Adapter."
+          ]
+        },
+        {
+          "id": "es2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Inversão de dependência sem framework",
+          "description": "Construa um pequeno fluxo de pedido usando injeção de dependência manual (por construtor/função) provando que DI é um padrão de design, não magia de framework.",
+          "steps": [
+            "Separe domínio de repositório e notificador.",
+            "Monte o grafo de objetos no `main` (composition root).",
+            "Teste com dublês simples."
+          ],
+          "definitionOfDone": [
+            "Zero frameworks de DI.",
+            "Domínio não importa biblioteca de banco."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "es-fase-2-q1",
+          "prompt": "Qual o principal benefício prático da Injeção de Dependência?",
+          "reviewTopicId": "es-di",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Desacoplar o código de implementações concretas e facilitar testes passando dublês/fakes por parâmetro.",
+              "correct": true,
+              "explanation": "Você não precisa de um framework complexo para usar DI; passar por parâmetro já é DI."
+            },
+            {
+              "id": "b",
+              "text": "Eliminar todas as classes e funções.",
+              "correct": false,
+              "explanation": "Organiza a relação entre elas."
+            },
+            {
+              "id": "c",
+              "text": "Deixar o banco de dados mais rápido.",
+              "correct": false,
+              "explanation": "É sobre estrutura e testabilidade."
+            }
+          ]
+        },
+        {
+          "id": "es-fase-2-q2",
+          "prompt": "Para que serve o padrão Adapter?",
+          "reviewTopicId": "es-patterns",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Traduzir a interface de uma biblioteca ou serviço externo para o formato que o seu domínio espera.",
+              "correct": true,
+              "explanation": "Protege seu código se a biblioteca externa mudar de API."
+            },
+            {
+              "id": "b",
+              "text": "Garantir que só exista uma instância global (Singleton).",
+              "correct": false,
+              "explanation": "Isso é Singleton."
+            },
+            {
+              "id": "c",
+              "text": "Comprimir imagens.",
+              "correct": false,
+              "explanation": "Não tem relação."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "es-fase-3",
+      "number": 3,
+      "badgeTitle": "Evolução",
+      "title": "Refatoração, testes e dívida técnica",
+      "topics": [
+        {
+          "id": "es-refatoracao",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Refatoração segura em passos pequenos",
+          "description": "Refatorar é melhorar a estrutura interna sem mudar o comportamento externo. Nunca refatore sem rede de proteção (testes) e faça commits pequenos em vez de reescrever o sistema inteiro numa branch de 3 semanas.",
+          "tags": [
+            "Refatoração",
+            "Code Smells"
+          ],
+          "prerequisites": [
+            "es-clareza"
+          ],
+          "resources": [
+            {
+              "title": "Catálogo de Refatoração (Martin Fowler)",
+              "url": "https://refactoring.com/catalog/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Refatoração (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap9.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-testes",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Testes de comportamento, TDD e dublês",
+          "description": "Teste o comportamento público, não detalhes privados da implementação — senão qualquer refatoração quebra os testes. Entenda a diferença entre Stub, Fake e Mock e quando TDD (Teste -> Código -> Refatoração) ajuda.",
+          "tags": [
+            "Testes",
+            "TDD"
+          ],
+          "prerequisites": [
+            "es-di"
+          ],
+          "resources": [
+            {
+              "title": "Mocks Aren't Stubs (Martin Fowler)",
+              "url": "https://martinfowler.com/articles/mocksArentStubs.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Testes (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap8.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-divida",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Dívida técnica consciente vs. bagunça",
+          "description": "Dívida técnica é pegar um atalho deliberado para entregar mais cedo sabendo o custo dos juros depois — não é escrever código ruim por pressa infinita. Registre a dívida e pague em pequenas parcelas no código que muda com frequência.",
+          "tags": [
+            "Dívida Técnica",
+            "Qualidade"
+          ],
+          "prerequisites": [
+            "es-refatoracao"
+          ],
+          "resources": [
+            {
+              "title": "Technical Debt Quadrant (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/TechnicalDebtQuadrant.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Dívida Técnica (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/TechnicalDebt.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "es3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Ciclo TDD em uma regra de negócio",
+          "description": "Implemente um validador ou calculador de tarifas usando TDD estrito: escreva 1 teste que falha, faça passar com o mínimo, e refatore.",
+          "steps": [
+            "Liste 5 casos de teste antes de codar.",
+            "Faça um por um (Red-Green-Refactor).",
+            "Registre cada passo em commits pequenos."
+          ],
+          "definitionOfDone": [
+            "Histórico mostra a evolução passo a passo.",
+            "Todos os testes passam."
+          ]
+        },
+        {
+          "id": "es3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Testes de caracterização em código legado",
+          "description": "Pegue uma função confusa sem testes, escreva testes que fixam o comportamento atual dela (mesmo feio) e só então refatore em segurança.",
+          "steps": [
+            "Cubra entradas normais e bordas antes de editar a função.",
+            "Refatore extraindo métodos claros.",
+            "Garanta que nenhum teste quebrou."
+          ],
+          "definitionOfDone": [
+            "Os testes passam antes e depois da refatoração.",
+            "Zero mudança acidental de comportamento."
+          ]
+        },
+        {
+          "id": "es3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Plano de pagamento de dívida técnica",
+          "description": "Analise um projeto existente, identifique 3 hotspots (arquivos que mudam muito e têm alta complexidade) e proponha um plano incremental sem parar novas entregas.",
+          "steps": [
+            "Use `git log` para achar arquivos mais alterados.",
+            "Avalie acoplamento neles.",
+            "Proponha 3 passos pequenos de melhoria."
+          ],
+          "definitionOfDone": [
+            "Priorização baseada em frequência de mudança, não gosto pessoal.",
+            "Não propõe 'reescrever tudo do zero'."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "es-fase-3-q1",
+          "prompt": "O que caracteriza uma refatoração verdadeira?",
+          "reviewTopicId": "es-refatoracao",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Melhorar a estrutura interna do código preservando o comportamento observável externo.",
+              "correct": true,
+              "explanation": "Se você muda funcionalidades ao mesmo tempo, não sabe o que quebrou se um teste falhar."
+            },
+            {
+              "id": "b",
+              "text": "Adicionar três telas novas no mesmo PR.",
+              "correct": false,
+              "explanation": "Isso é nova funcionalidade."
+            },
+            {
+              "id": "c",
+              "text": "Trocar o código sem rodar testes.",
+              "correct": false,
+              "explanation": "Sem testes, é apenas reescrita arriscada."
+            }
+          ]
+        },
+        {
+          "id": "es-fase-3-q2",
+          "prompt": "Por que testes acoplados a detalhes internos privados (em vez de comportamento público) atrapalham?",
+          "reviewTopicId": "es-testes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque quebram toda vez que você refatora a implementação interna, mesmo com a funcionalidade intacta.",
+              "correct": true,
+              "explanation": "Isso desestimula refatoração e gera falsos alarmes."
+            },
+            {
+              "id": "b",
+              "text": "Porque testes de comportamento não existem.",
+              "correct": false,
+              "explanation": "São a forma mais resiliente de testar."
+            },
+            {
+              "id": "c",
+              "text": "Porque impedem o código de compilar.",
+              "correct": false,
+              "explanation": "Compilam, mas ficam frágeis."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "es-fase-4",
+      "number": 4,
+      "badgeTitle": "Colaboração",
+      "title": "Code Review, documentação e trabalho em time",
+      "topics": [
+        {
+          "id": "es-review",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Code Review construtivo e PRs pequenos",
+          "description": "Revisão de código não é caça a erros de vírgula (deixe isso para o linter). Foque em clareza, bordas esquecidas, segurança e design. Como autor, abra PRs pequenos com contexto e como testar.",
+          "tags": [
+            "Code Review",
+            "Colaboração"
+          ],
+          "prerequisites": [
+            "es-clareza"
+          ],
+          "resources": [
+            {
+              "title": "How to Do a Code Review (Google)",
+              "url": "https://google.github.io/eng-practices/review/reviewer/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Small CLs / PRs pequenos (Google)",
+              "url": "https://google.github.io/eng-practices/review/developer/small-cls.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "es-docs",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Documentação viva: README, contratos e runbooks",
+          "description": "Documentação que mente é pior que nenhuma. Mantenha no repositório apenas o essencial que muda junto com o código: como rodar local, variáveis necessárias, arquitetura básica e runbooks de operação.",
+          "tags": [
+            "Documentação",
+            "README"
+          ],
+          "prerequisites": [
+            "es-review"
+          ],
+          "resources": [
+            {
+              "title": "Write the Docs — Documentation Guide",
+              "url": "https://www.writethedocs.org/guide/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "The Good Docs Project — Templates",
+              "url": "https://www.thegooddocsproject.dev/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "es4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "README que funciona do zero",
+          "description": "Pegue um repositório seu, clone em uma pasta nova e siga o próprio README passo a passo anotando tudo que faltava para rodar.",
+          "steps": [
+            "Clone em diretório limpo.",
+            "Execute apenas os comandos do README.",
+            "Corrija dependências, variáveis e comandos de teste faltantes."
+          ],
+          "definitionOfDone": [
+            "Qualquer pessoa sobe o projeto em menos de 5 minutos.",
+            "Tem exemplo de `.env.example`."
+          ]
+        },
+        {
+          "id": "es4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Template de Pull Request e checklist",
+          "description": "Crie um `.github/pull_request_template.md` enxuto com O quê, Por quê, Como testar e Riscos, e aplique em um PR real ou simulado.",
+          "steps": [
+            "Escreva o template sem burocracia excessiva.",
+            "Inclua passo de verificação manual/automatizada.",
+            "Preencha num PR de exemplo."
+          ],
+          "definitionOfDone": [
+            "Template curto e útil.",
+            "Facilita a vida de quem revisa."
+          ]
+        },
+        {
+          "id": "es4-projeto-avancado",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Guia de revisão do time",
+          "description": "Escreva um guia curto diferenciando bloqueadores (bug, segurança, falta de teste) de sugestões opcionais (`nit:`) para acelerar PRs sem atrito.",
+          "steps": [
+            "Defina o que bloqueia aprovação.",
+            "Adote prefixos claros (`nit:`, `sugestão:`, `bloqueador:`).",
+            "Automatize estilo com linter fora da revisão humana."
+          ],
+          "definitionOfDone": [
+            "Regras cabem em 1 página.",
+            "Foca em respeito e clareza técnica."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "es-fase-4-q1",
+          "prompt": "O que deve ser automatizado em vez de discutido manualmente no Code Review?",
+          "reviewTopicId": "es-review",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Formatação, indentação, ponto e vírgula e regras básicas de estilo (via Prettier/ESLint/Ruff).",
+              "correct": true,
+              "explanation": "Deixa os revisores humanos livres para focar em lógica, design e casos de borda."
+            },
+            {
+              "id": "b",
+              "text": "Decisões de regras de negócio.",
+              "correct": false,
+              "explanation": "Regras de negócio exigem entendimento humano."
+            },
+            {
+              "id": "c",
+              "text": "Clareza dos nomes de domínio.",
+              "correct": false,
+              "explanation": "Nomes de domínio são avaliados por pessoas."
+            }
+          ]
+        },
+        {
+          "id": "es-fase-4-q2",
+          "prompt": "Por que manter a documentação próxima do código no mesmo repositório?",
+          "reviewTopicId": "es-docs",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para que possa ser atualizada no mesmo Pull Request quando o código ou configuração mudam.",
+              "correct": true,
+              "explanation": "Documentação em wikis separadas costuma ficar desatualizada rapidamente."
+            },
+            {
+              "id": "b",
+              "text": "Para aumentar o tamanho do build.",
+              "correct": false,
+              "explanation": "Arquivos Markdown não vão para o bundle de produção."
+            },
+            {
+              "id": "c",
+              "text": "Porque o Git proíbe código sem Markdown.",
+              "correct": false,
+              "explanation": "Não proíbe; é uma boa prática de manutenção."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

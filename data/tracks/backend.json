@@ -324,16 +324,16 @@
           ],
           "resources": [
             {
-              "title": "Métodos HTTP (MDN)",
+              "title": "Métodos de requisição HTTP (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Methods",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Códigos de status HTTP (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status",
-              "lang": "pt",
-              "kind": "documentacao"
+              "title": "Best Practices for Designing a Pragmatic RESTful API",
+              "url": "https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api",
+              "lang": "en",
+              "kind": "leitura"
             }
           ],
           "title": "Desenho de API REST",
@@ -860,8 +860,14 @@
           ],
           "resources": [
             {
-              "title": "Folha de autorização da OWASP",
+              "title": "Authorization Cheat Sheet (OWASP)",
               "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Broken Access Control (OWASP Top 10)",
+              "url": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
               "lang": "en",
               "kind": "leitura"
             }
@@ -1395,8 +1401,14 @@
           ],
           "resources": [
             {
-              "title": "Tutorial de RabbitMQ em JavaScript",
-              "url": "https://www.rabbitmq.com/tutorials/tutorial-one-javascript",
+              "title": "BullMQ — Guia de filas com Redis",
+              "url": "https://docs.bullmq.io/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "RabbitMQ — Tutorials",
+              "url": "https://www.rabbitmq.com/tutorials",
               "lang": "en",
               "kind": "pratica"
             }
@@ -1555,13 +1567,13 @@
           ],
           "resources": [
             {
-              "title": "Os doze fatores",
+              "title": "Os Doze Fatores (12factor pt-BR)",
               "url": "https://12factor.net/pt_br/",
               "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "Configuração",
+              "title": "Configuração no 12-Factor (pt-BR)",
               "url": "https://12factor.net/pt_br/config",
               "lang": "pt",
               "kind": "leitura"

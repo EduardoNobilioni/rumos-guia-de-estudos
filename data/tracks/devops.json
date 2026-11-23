@@ -22,6 +22,12 @@
               "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
               "lang": "en",
               "kind": "curso"
+            },
+            {
+              "title": "Linux Journey — Getting Started",
+              "url": "https://linuxjourney.com/lesson/the-shell",
+              "lang": "en",
+              "kind": "pratica"
             }
           ],
           "title": "Linux essencial",
@@ -93,10 +99,16 @@
           ],
           "resources": [
             {
-              "title": "Linha de comando para iniciantes (Ubuntu)",
-              "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
+              "title": "Manual do GNU Bash",
+              "url": "https://www.gnu.org/software/bash/manual/bash.html",
               "lang": "en",
-              "kind": "curso"
+              "kind": "documentacao"
+            },
+            {
+              "title": "ShellCheck (analisador de shell scripts)",
+              "url": "https://www.shellcheck.net/",
+              "lang": "en",
+              "kind": "pratica"
             }
           ],
           "title": "Shell e scripts curtos",
@@ -308,8 +320,14 @@
           ],
           "resources": [
             {
-              "title": "Conventional Commits",
+              "title": "Conventional Commits (pt-BR)",
               "url": "https://www.conventionalcommits.org/pt-br/v1.0.0/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Semantic Versioning (pt-BR)",
+              "url": "https://semver.org/lang/pt-BR/",
               "lang": "pt",
               "kind": "leitura"
             }
@@ -668,10 +686,16 @@
           ],
           "resources": [
             {
-              "title": "Entenda o GitHub Actions",
+              "title": "Understanding GitHub Actions (Docs pt-BR)",
               "url": "https://docs.github.com/pt/actions/get-started/understand-github-actions",
               "lang": "pt",
               "kind": "documentacao"
+            },
+            {
+              "title": "Continuous Integration (Martin Fowler)",
+              "url": "https://martinfowler.com/articles/continuousIntegration.html",
+              "lang": "en",
+              "kind": "leitura"
             }
           ],
           "title": "O que a esteira faz",
@@ -1342,20 +1366,14 @@
           ],
           "resources": [
             {
-              "title": "Guia inicial do Nginx",
-              "url": "https://nginx.org/en/docs/beginners_guide.html",
+              "title": "Nginx Reverse Proxy (Docs)",
+              "url": "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "Balanceamento no Nginx",
-              "url": "https://nginx.org/en/docs/http/load_balancing.html",
-              "lang": "en",
-              "kind": "documentacao"
-            },
-            {
-              "title": "Começando com Let's Encrypt",
-              "url": "https://letsencrypt.org/pt-br/getting-started/",
+              "title": "Let's Encrypt — Como funciona o TLS gratuito",
+              "url": "https://letsencrypt.org/pt-br/how-it-works/",
               "lang": "pt",
               "kind": "leitura"
             }

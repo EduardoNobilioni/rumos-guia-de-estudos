@@ -51,7 +51,7 @@
           ],
           "resources": [
             {
-              "title": "Nand2Tetris",
+              "title": "Nand2Tetris (Do hardware ao software)",
               "url": "https://www.nand2tetris.org/",
               "lang": "en",
               "kind": "curso"
@@ -79,16 +79,16 @@
           ],
           "resources": [
             {
-              "title": "Sistema operacional (Wikipédia)",
+              "title": "Sistema operacional (Wikipédia pt-BR)",
               "url": "https://pt.wikipedia.org/wiki/Sistema_operacional",
               "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "The Missing Semester",
-              "url": "https://missing.csail.mit.edu/",
+              "title": "OSTEP — Introdução aos SOs",
+              "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/intro.pdf",
               "lang": "en",
-              "kind": "curso"
+              "kind": "leitura"
             }
           ]
         }
@@ -217,15 +217,15 @@
           ],
           "resources": [
             {
-              "title": "Como a Web funciona (MDN)",
+              "title": "Como a Web funciona (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
               "lang": "pt",
               "kind": "leitura"
             },
             {
-              "title": "CS50",
-              "url": "https://cs50.harvard.edu/x/",
-              "lang": "en",
+              "title": "Redes de Computadores (Khan Academy pt-BR)",
+              "url": "https://pt.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:the-internet",
+              "lang": "pt",
               "kind": "curso"
             }
           ]
@@ -245,7 +245,7 @@
           ],
           "resources": [
             {
-              "title": "Visão geral do HTTP (MDN)",
+              "title": "Visão geral do HTTP (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Overview",
               "lang": "pt",
               "kind": "documentacao"
@@ -273,13 +273,13 @@
           ],
           "resources": [
             {
-              "title": "Como a Web funciona (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
+              "title": "Mensagens HTTP (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Messages",
               "lang": "pt",
-              "kind": "leitura"
+              "kind": "documentacao"
             },
             {
-              "title": "Métodos HTTP (MDN)",
+              "title": "Métodos HTTP (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Methods",
               "lang": "pt",
               "kind": "documentacao"
@@ -437,8 +437,8 @@
           ],
           "resources": [
             {
-              "title": "Projeto de algoritmos (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/",
+              "title": "Análise de algoritmos (IME-USP)",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/assintotica.html",
               "lang": "pt",
               "kind": "leitura"
             },
@@ -464,10 +464,10 @@
           ],
           "resources": [
             {
-              "title": "CS50",
-              "url": "https://cs50.harvard.edu/x/",
+              "title": "Depuração no CS50",
+              "url": "https://cs50.harvard.edu/x/2024/notes/1/",
               "lang": "en",
-              "kind": "curso"
+              "kind": "leitura"
             },
             {
               "title": "Introdução com Python (MIT OCW)",
@@ -576,6 +576,397 @@
               "text": "Pedir a resposta completa antes de ler a primeira linha.",
               "correct": false,
               "explanation": "Ler custa menos do que terceirizar o diagnóstico."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs-fase-4",
+      "number": 4,
+      "badgeTitle": "Sistema",
+      "title": "Concorrência, memória e persistência",
+      "topics": [
+        {
+          "id": "cs-threads",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Threads, concorrência e condição de corrida",
+          "description": "Processos são isolados; threads compartilham memória no mesmo processo. Quando duas threads escrevem no mesmo lugar sem coordenação, nasce uma condição de corrida. Locks resolvem, mas mal usados geram deadlock.",
+          "tags": [
+            "Concorrência",
+            "Threads"
+          ],
+          "prerequisites": [
+            "cs-so"
+          ],
+          "resources": [
+            {
+              "title": "OSTEP — Concurrency: An Introduction",
+              "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "OSTEP — Locks",
+              "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "cs-mem-virtual",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Memória virtual, paginação e cache de CPU",
+          "description": "Seu programa enxerga um endereço contínuo, mas o SO traduz para páginas na RAM (ou disco). Ler um vetor em sequência aproveita o cache L1/L2 da CPU e é ordens de grandeza mais rápido que pular ponteiros espalhados.",
+          "tags": [
+            "Memória Virtual",
+            "Cache"
+          ],
+          "prerequisites": [
+            "cs-cpu",
+            "cs-so"
+          ],
+          "resources": [
+            {
+              "title": "OSTEP — Address Spaces (Memória Virtual)",
+              "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "OSTEP — Paging",
+              "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "cs-persistencia",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Arquivos, UTF-8 e durabilidade",
+          "description": "Gravar em arquivo parece simples até faltar luz no meio da escrita. Entenda codificação UTF-8 (por que acento quebra quando tratado como Latin-1), buffers do sistema e por que bancos de dados usam log de escrita (WAL).",
+          "tags": [
+            "UTF-8",
+            "I/O"
+          ],
+          "prerequisites": [
+            "cs-bits",
+            "cs-so"
+          ],
+          "resources": [
+            {
+              "title": "The Absolute Minimum Every Software Developer Must Know About Unicode",
+              "url": "https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "UTF-8 (MDN Glossário)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Glossary/UTF-8",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cs4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "UTF-8 vs. ISO-8859-1 na prática",
+          "description": "Salve um texto com acentos em UTF-8 e leia declarando Latin-1 (e vice-versa) para enxergar o mojibake e documentar como corrigir.",
+          "steps": [
+            "Crie um arquivo com \"ação, coração, São Paulo\".",
+            "Inspecione os bytes em hexadecimal.",
+            "Mostre a leitura errada e a leitura certa."
+          ],
+          "definitionOfDone": [
+            "Os bytes diferentes de ASCII estão anotados.",
+            "Explica por que não se deve sair dando replace em caracter estranho."
+          ]
+        },
+        {
+          "id": "cs4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Condição de corrida reproduzida",
+          "description": "Dispare duas threads incrementando o mesmo contador 100 mil vezes sem lock, mostre o resultado perdido e depois corrija com mutex/lock.",
+          "steps": [
+            "Rode sem sincronização e registre o total errado.",
+            "Adicione lock ou operação atômica.",
+            "Compare os resultados e o tempo."
+          ],
+          "definitionOfDone": [
+            "A versão sem lock erra de forma reproduzível.",
+            "A versão com lock sempre chega em 200 mil."
+          ]
+        },
+        {
+          "id": "cs4-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Localidade de cache em matriz",
+          "description": "Percorra uma matriz grande linha por linha e depois coluna por coluna na mesma linguagem, medindo a diferença de tempo por localidade espacial.",
+          "steps": [
+            "Aloque uma matriz grande (ex.: 4096x4096).",
+            "Some por linha e some por coluna.",
+            "Explique o motivo ligado à linha de cache."
+          ],
+          "definitionOfDone": [
+            "As duas ordens dão a mesma soma.",
+            "A diferença de tempo está documentada."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cs-fase-4-q1",
+          "prompt": "O que causa uma condição de corrida (race condition)?",
+          "reviewTopicId": "cs-threads",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Duas execuções concorrentes acessam e modificam o mesmo estado compartilhado sem sincronização.",
+              "correct": true,
+              "explanation": "O resultado passa a depender da ordem imprevisível em que o escalonador alterna as threads."
+            },
+            {
+              "id": "b",
+              "text": "Um computador ter mais de um núcleo de CPU.",
+              "correct": false,
+              "explanation": "Ter múltiplos núcleos é hardware; o bug vem do acesso compartilhado sem coordenação."
+            },
+            {
+              "id": "c",
+              "text": "Usar variáveis locais dentro de uma função.",
+              "correct": false,
+              "explanation": "Cada thread tem sua própria pilha para variáveis locais."
+            }
+          ]
+        },
+        {
+          "id": "cs-fase-4-q2",
+          "prompt": "Por que um texto com acento vira \"Ã§Ã£o\" ao abrir um arquivo?",
+          "reviewTopicId": "cs-persistencia",
+          "choices": [
+            {
+              "id": "a",
+              "text": "O arquivo foi gravado em UTF-8, mas foi lido como se fosse Latin-1/Windows-1252.",
+              "correct": true,
+              "explanation": "UTF-8 usa 2 bytes para 'ç' e 'ã', que em Latin-1 aparecem como dois símbolos separados."
+            },
+            {
+              "id": "b",
+              "text": "O disco rígido corrompeu os setores.",
+              "correct": false,
+              "explanation": "Os bytes estão intactos, só a tabela de decodificação foi trocada."
+            },
+            {
+              "id": "c",
+              "text": "Porque UTF-8 não suporta português.",
+              "correct": false,
+              "explanation": "UTF-8 suporta todo o padrão Unicode."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs-fase-5",
+      "number": 5,
+      "badgeTitle": "Base completa",
+      "title": "Transporte seguro, compilação e terminal",
+      "topics": [
+        {
+          "id": "cs-tcp-tls",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "TCP, UDP e TLS (o cadeado)",
+          "description": "TCP garante entrega e ordem (bom para HTTP e banco); UDP manda rápido sem garantia de volta (bom para chamada de vídeo e DNS). TLS criptografa o canal e prova a identidade do servidor com certificados.",
+          "tags": [
+            "TCP",
+            "TLS"
+          ],
+          "prerequisites": [
+            "cs-rede"
+          ],
+          "resources": [
+            {
+              "title": "Transport Layer Security (MDN)",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "TCP vs UDP (Cloudflare Learning)",
+              "url": "https://www.cloudflare.com/pt-br/learning/ddos/glossary/user-datagram-protocol-udp/",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "cs-compilador",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Compiladores, interpretadores e VMs",
+          "description": "Código-fonte vira tokens, árvore sintática (AST) e depois binário nativo (C/Rust), bytecode numa VM (JVM/Python) ou compilação JIT (V8/JS). Entender isso tira o medo de mensagens de linker e runtime.",
+          "tags": [
+            "Compilador",
+            "Runtime"
+          ],
+          "prerequisites": [
+            "cs-cpu",
+            "cs-algo"
+          ],
+          "resources": [
+            {
+              "title": "Crafting Interpreters (Robert Nystrom)",
+              "url": "https://craftinginterpreters.com/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Crafting Interpreters — Scanning",
+              "url": "https://craftinginterpreters.com/scanning.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "cs-shell-git",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Terminal, pipes e controle de versão",
+          "description": "Programas no terminal lêem `stdin`, escrevem em `stdout` e `stderr` e devolvem um código de saída (0 é sucesso). Pipes (`|`) ligam ferramentas pequenas; Git registra a história do seu código.",
+          "tags": [
+            "Shell",
+            "Git"
+          ],
+          "prerequisites": [
+            "cs-so"
+          ],
+          "resources": [
+            {
+              "title": "The Missing Semester (MIT)",
+              "url": "https://missing.csail.mit.edu/",
+              "lang": "en",
+              "kind": "curso"
+            },
+            {
+              "title": "Pro Git em português",
+              "url": "https://git-scm.com/book/pt-br/v2",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cs5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Pipeline de texto no terminal",
+          "description": "Combine comandos simples com pipe (`|`) para filtrar, ordenar e contar ocorrências num arquivo de log sem abrir editor gráfico.",
+          "steps": [
+            "Gere um log fictício com 50 linhas.",
+            "Filtre apenas linhas de erro.",
+            "Conte os erros mais frequentes com redirecionamento."
+          ],
+          "definitionOfDone": [
+            "O comando inteiro cabe em uma linha.",
+            "Distingue saída padrão de saída de erro."
+          ]
+        },
+        {
+          "id": "cs5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Inspecionando um handshake TLS",
+          "description": "Use `curl -v` ou `openssl s_client` num site público para ler versão do TLS, emissor do certificado e validade, explicando cada parte.",
+          "steps": [
+            "Capture a saída do handshake.",
+            "Identifique a autoridade certificadora.",
+            "Explique o que acontece se o certificado expirar."
+          ],
+          "definitionOfDone": [
+            "Os campos do certificado estão explicados em português.",
+            "Não há exposição de segredos locais."
+          ]
+        },
+        {
+          "id": "cs5-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Avaliador de expressões aritméticas",
+          "description": "Escreva um tokenizador e avaliador simples para expressões como `3 + 4 * (2 - 1)` respeitando precedência, sem usar `eval()`.",
+          "steps": [
+            "Separe números, operadores e parênteses (lexer).",
+            "Converta ou avalie respeitando `*` antes de `+`.",
+            "Cubra erro de sintaxe com mensagem clara."
+          ],
+          "definitionOfDone": [
+            "Testes cobrem precedência e parênteses.",
+            "Não usa `eval` da linguagem."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cs-fase-5-q1",
+          "prompt": "Qual a diferença principal entre TCP e UDP?",
+          "reviewTopicId": "cs-tcp-tls",
+          "choices": [
+            {
+              "id": "a",
+              "text": "TCP garante entrega ordenada com retransmissão; UDP envia datagramas sem garantia de entrega ou ordem, priorizando baixa latência.",
+              "correct": true,
+              "explanation": "Por isso web e bancos usam TCP (ou QUIC sobre UDP com confiabilidade) e vídeo ao vivo costuma tolerar UDP."
+            },
+            {
+              "id": "b",
+              "text": "UDP é criptografado e TCP não.",
+              "correct": false,
+              "explanation": "Criptografia vem de camadas como TLS/DTLS."
+            },
+            {
+              "id": "c",
+              "text": "TCP só funciona em rede local.",
+              "correct": false,
+              "explanation": "TCP funciona na internet inteira."
+            }
+          ]
+        },
+        {
+          "id": "cs-fase-5-q2",
+          "prompt": "Para que serve o código de saída (exit code) de um programa no terminal?",
+          "reviewTopicId": "cs-shell-git",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Informar ao shell ou ao script que o chamou se terminou com sucesso (0) ou erro (diferente de 0).",
+              "correct": true,
+              "explanation": "É assim que `&&` e pipelines de CI sabem que um passo falhou."
+            },
+            {
+              "id": "b",
+              "text": "Medir quantos megabytes de RAM foram usados.",
+              "correct": false,
+              "explanation": "É apenas um inteiro de status."
+            },
+            {
+              "id": "c",
+              "text": "Fechar a janela do navegador.",
+              "correct": false,
+              "explanation": "Não tem relação com navegador."
             }
           ]
         }

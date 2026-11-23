@@ -1,0 +1,532 @@
+{
+  "id": "kubernetes",
+  "name": "Kubernetes",
+  "tagline": "Orquestrar containers sem perder a simplicidade antes da hora",
+  "description": "Complemento de Docker para quando um servidor só não basta: Pods, Deployments, Services, ConfigMaps/Secrets, probes, Ingress e diagnóstico com kubectl.",
+  "phases": [
+    {
+      "id": "k8s-fase-1",
+      "number": 1,
+      "badgeTitle": "Objetos",
+      "title": "Arquitetura, Pods, Deployments e Services",
+      "topics": [
+        {
+          "id": "k8s-quando",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Quando usar Kubernetes (e quando NÃO usar)",
+          "description": "Kubernetes resolve orquestração em múltiplos nós, rolling updates e auto-recuperação. Para um projeto pequeno ou 1 VPS, Docker Compose ou PaaS costuma ser muito mais simples e barato.",
+          "tags": [
+            "Kubernetes",
+            "Arquitetura"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "O que é Kubernetes (Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/overview/what-is-kubernetes/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Componentes do Kubernetes (Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/overview/components/",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "k8s-pod-deploy",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Pods, ReplicaSets e Deployments",
+          "description": "Pod é a menor unidade (geralmente 1 container), mas é efêmero: não crie Pods soltos. Use um `Deployment` para declarar quantas réplicas deseja e atualizar versões sem derrubar tudo (rolling update).",
+          "tags": [
+            "Pod",
+            "Deployment"
+          ],
+          "prerequisites": [
+            "k8s-quando"
+          ],
+          "resources": [
+            {
+              "title": "Deployments (Kubernetes Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/workloads/controllers/deployment/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Pods (Kubernetes Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/workloads/pods/",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "k8s-service",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Services (ClusterIP, NodePort, LoadBalancer) e DNS",
+          "description": "IP de Pod muda toda hora quando ele reinicia. Um `Service` dá um nome DNS estável e balanceia tráfego entre os Pods selecionados por `labels`.",
+          "tags": [
+            "Service",
+            "DNS"
+          ],
+          "prerequisites": [
+            "k8s-pod-deploy"
+          ],
+          "resources": [
+            {
+              "title": "Service (Kubernetes Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/services-networking/service/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "DNS para Services e Pods (Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/services-networking/dns-pod-service/",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "k8s1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Cluster local com kind ou minikube",
+          "description": "Suba um cluster Kubernetes local (kind, k3d ou minikube), liste nós e namespaces com `kubectl` e publique um Deployment nginx com 2 réplicas.",
+          "steps": [
+            "Crie o cluster local.",
+            "Aplique um manifesto YAML de Deployment.",
+            "Apague 1 Pod na mão e veja o Deployment criar outro."
+          ],
+          "definitionOfDone": [
+            "`kubectl get pods` mostra 2/2 Running.",
+            "Manifesto YAML versionado."
+          ]
+        },
+        {
+          "id": "k8s1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Rolling update e rollback",
+          "description": "Atualize a imagem de um Deployment para uma versão com erro simulado, observe o rollout travar e faça rollback com `kubectl rollout undo`.",
+          "steps": [
+            "Suba v1 funcionando.",
+            "Atualize para uma imagem quebrada.",
+            "Execute `kubectl rollout undo` e valide."
+          ],
+          "definitionOfDone": [
+            "Serviço volta para v1 rapidamente.",
+            "Histórico do rollout conferido."
+          ]
+        },
+        {
+          "id": "k8s1-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Comunicação entre dois serviços via DNS interno",
+          "description": "Suba uma API e um Redis em Pods separados ligados apenas por `Service` tipo `ClusterIP`, acessando o Redis pelo nome do Service.",
+          "steps": [
+            "Crie `Service` ClusterIP para o Redis.",
+            "Aponte a API para `redis:6379`.",
+            "Teste com `kubectl port-forward`."
+          ],
+          "definitionOfDone": [
+            "Nenhum IP de Pod hardcoded.",
+            "Redis não fica exposto fora do cluster."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "k8s-fase-1-q1",
+          "prompt": "Por que criar um `Deployment` em vez de criar um `Pod` diretamente?",
+          "reviewTopicId": "k8s-pod-deploy",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque o Deployment garante o número de réplicas (recria se um nó/Pod cair) e gerencia atualizações graduais e rollbacks.",
+              "correct": true,
+              "explanation": "Um Pod isolado que morre não volta sozinho."
+            },
+            {
+              "id": "b",
+              "text": "Porque Pods não podem rodar containers Docker.",
+              "correct": false,
+              "explanation": "Deployments justamente criam Pods."
+            },
+            {
+              "id": "c",
+              "text": "Porque Deployment dispensa `Service`.",
+              "correct": false,
+              "explanation": "Você ainda precisa de `Service` para endereço estável."
+            }
+          ]
+        },
+        {
+          "id": "k8s-fase-1-q2",
+          "prompt": "Como um `Service` sabe para quais Pods enviar tráfego?",
+          "reviewTopicId": "k8s-service",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Por meio de `selector` combinando com as `labels` dos Pods.",
+              "correct": true,
+              "explanation": "Se as labels não baterem, o `Endpoints` do Service fica vazio."
+            },
+            {
+              "id": "b",
+              "text": "Por IP fixo gravado no Dockerfile.",
+              "correct": false,
+              "explanation": "IPs de Pods são dinâmicos."
+            },
+            {
+              "id": "c",
+              "text": "Pelo nome do autor do YAML.",
+              "correct": false,
+              "explanation": "Usa labels/seletores."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "k8s-fase-2",
+      "number": 2,
+      "badgeTitle": "Configuração",
+      "title": "ConfigMaps, Secrets, Probes e Recursos",
+      "topics": [
+        {
+          "id": "k8s-config",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "ConfigMap e Secret (Base64 não é criptografia!)",
+          "description": "Separe configuração da imagem usando `ConfigMap` e `Secret`. Atenção: `Secret` padrão no Kubernetes usa Base64 (fácil de decodificar), portanto nunca commite `Secret` real no Git e ative criptografia no etcd.",
+          "tags": [
+            "ConfigMap",
+            "Secret"
+          ],
+          "prerequisites": [
+            "k8s-pod-deploy"
+          ],
+          "resources": [
+            {
+              "title": "Secrets (Kubernetes Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/configuration/secret/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "ConfigMaps (Kubernetes Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/configuration/configmap/",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "k8s-probes",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Liveness, Readiness probes e Requests/Limits",
+          "description": "`readinessProbe` diz quando o Pod pode receber tráfego do Service; `livenessProbe` reinicia se o processo travou. Sempre defina `requests` e `limits` de CPU/memória para um Pod não derrubar o nó inteiro (OOMKilled).",
+          "tags": [
+            "Probes",
+            "Resources"
+          ],
+          "prerequisites": [
+            "k8s-service"
+          ],
+          "resources": [
+            {
+              "title": "Configure Liveness, Readiness and Startup Probes",
+              "url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Resource Management (Requests/Limits)",
+              "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "k8s2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Injetando ConfigMap no Pod",
+          "description": "Passe variáveis não sensíveis via `ConfigMap` para um Deployment sem alterar a imagem Docker.",
+          "steps": [
+            "Crie o `ConfigMap`.",
+            "Referencie via `envFrom` no Deployment.",
+            "Confirme o valor com `kubectl exec ... env`."
+          ],
+          "definitionOfDone": [
+            "Mesma imagem roda com configurações diferentes.",
+            "YAML validado com `kubectl apply --dry-run=client`."
+          ]
+        },
+        {
+          "id": "k8s2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Readiness vs. Liveness na prática",
+          "description": "Configure uma API com `/health/ready` e `/health/live` e prove que enquanto `ready` falha, o Pod não é reiniciado mas sai do balanceamento do Service.",
+          "steps": [
+            "Adicione ambas as probes no Deployment.",
+            "Simule dependência lenta no `/ready`.",
+            "Observe `kubectl describe pod` e `kubectl get endpoints`."
+          ],
+          "definitionOfDone": [
+            "Pod continua vivo durante falha de readiness.",
+            "Tráfego não cai no Pod não pronto."
+          ]
+        },
+        {
+          "id": "k8s2-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Requests, Limits e simulação de OOMKilled",
+          "description": "Defina `limits.memory: 64Mi` num Pod de teste, provoque alocação acima disso e identifique o evento `OOMKilled` (exit code 137).",
+          "steps": [
+            "Configure `requests` e `limits`.",
+            "Rode script que aloca memória crescente.",
+            "Inspecione o motivo em `kubectl describe pod`."
+          ],
+          "definitionOfDone": [
+            "Status `OOMKilled` registrado e explicado.",
+            "Diferença entre `requests` e `limits` documentada."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "k8s-fase-2-q1",
+          "prompt": "Qual a diferença entre `readinessProbe` e `livenessProbe`?",
+          "reviewTopicId": "k8s-probes",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`readinessProbe` remove o Pod do Service temporariamente sem reiniciar; `livenessProbe` reinicia o container quando falha.",
+              "correct": true,
+              "explanation": "Se o banco está lento, reiniciar o Pod em loop (liveness) só piora; use readiness."
+            },
+            {
+              "id": "b",
+              "text": "São exatamente a mesma coisa.",
+              "correct": false,
+              "explanation": "Têm ações distintas."
+            },
+            {
+              "id": "c",
+              "text": "`livenessProbe` cria um Load Balancer externo.",
+              "correct": false,
+              "explanation": "Não cria rede externa."
+            }
+          ]
+        },
+        {
+          "id": "k8s-fase-2-q2",
+          "prompt": "Um manifesto `Secret` do Kubernetes é seguro para commitar direto no Git porque vem em Base64?",
+          "reviewTopicId": "k8s-config",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Não: Base64 é apenas codificação reversível trivialmente, não criptografia.",
+              "correct": true,
+              "explanation": "Use External Secrets, Sealed Secrets ou cofre externo, nunca texto/Base64 real no Git."
+            },
+            {
+              "id": "b",
+              "text": "Sim, Base64 é criptografia forte.",
+              "correct": false,
+              "explanation": "Qualquer `base64 -d` decodifica na hora."
+            },
+            {
+              "id": "c",
+              "text": "Sim, se o repositório for privado.",
+              "correct": false,
+              "explanation": "Mesmo em repositório privado, é má prática commitar segredos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "k8s-fase-3",
+      "number": 3,
+      "badgeTitle": "Operação",
+      "title": "Ingress, escalabilidade e diagnóstico",
+      "topics": [
+        {
+          "id": "k8s-ingress",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Ingress, TLS e roteamento HTTP",
+          "description": "Em vez de pagar um LoadBalancer para cada serviço, um `Ingress` (Nginx/Traefik/Gateway API) roteia domínios e caminhos (`/api`, `/`) para os Services internos e gerencia TLS (ex.: cert-manager).",
+          "tags": [
+            "Ingress",
+            "TLS"
+          ],
+          "prerequisites": [
+            "k8s-service"
+          ],
+          "resources": [
+            {
+              "title": "Ingress (Kubernetes Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/concepts/services-networking/ingress/",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "cert-manager (TLS automático no Kubernetes)",
+              "url": "https://cert-manager.io/docs/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "k8s-debug",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Diagnóstico com kubectl (describe, logs, events)",
+          "description": "Pod não sobe (`Pending`, `ImagePullBackOff`, `CrashLoopBackOff`)? Não chute: rode `kubectl describe pod`, `kubectl logs --previous` e `kubectl get events` para ler o motivo exato.",
+          "tags": [
+            "kubectl",
+            "Debug"
+          ],
+          "prerequisites": [
+            "k8s-probes"
+          ],
+          "resources": [
+            {
+              "title": "Debug Running Pods (Kubernetes Docs)",
+              "url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "kubectl Cheat Sheet (Docs pt-BR)",
+              "url": "https://kubernetes.io/pt-br/docs/reference/kubectl/cheatsheet/",
+              "lang": "pt",
+              "kind": "pratica"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "k8s3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Guia de triagem CrashLoopBackOff",
+          "description": "Provoque propositalmente 3 erros comuns (`ImagePullBackOff`, `CrashLoopBackOff` e `Pending` por recurso exagerado) e documente qual comando revela cada um.",
+          "steps": [
+            "Teste imagem inexistente.",
+            "Teste container que sai com código 1.",
+            "Peça 999 CPUs em `requests`."
+          ],
+          "definitionOfDone": [
+            "Cada estado tem causa e comando de diagnóstico.",
+            "Ambiente limpo ao final."
+          ]
+        },
+        {
+          "id": "k8s3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Roteamento por caminho com Ingress",
+          "description": "Configure um Ingress Controller local roteando `/api` para o serviço de back-end e `/` para o front-end num mesmo host.",
+          "steps": [
+            "Instale Ingress Nginx no cluster local.",
+            "Crie o manifesto `Ingress` com dois `paths`.",
+            "Teste ambos os caminhos com `curl`."
+          ],
+          "definitionOfDone": [
+            "Um único ponto de entrada atende ambos os serviços.",
+            "Manifesto versionado."
+          ]
+        },
+        {
+          "id": "k8s3-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "HorizontalPodAutoscaler (HPA)",
+          "description": "Configure um HPA que escala um Deployment de 1 para até 4 réplicas quando a CPU passa de 50%, usando `metrics-server`.",
+          "steps": [
+            "Defina `resources.requests.cpu` (obrigatório para HPA).",
+            "Aplique o manifesto `HorizontalPodAutoscaler`.",
+            "Gere carga e observe `kubectl get hpa -w`."
+          ],
+          "definitionOfDone": [
+            "Escala sobe sob carga e volta após pausa.",
+            "Explica por que `requests` é obrigatório para porcentagem de CPU."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "k8s-fase-3-q1",
+          "prompt": "Qual comando mostra o log da execução ANTERIOR de um container que está em `CrashLoopBackOff`?",
+          "reviewTopicId": "k8s-debug",
+          "choices": [
+            {
+              "id": "a",
+              "text": "`kubectl logs <pod> --previous`.",
+              "correct": true,
+              "explanation": "Muito útil quando o container cai rápido antes de você conseguir olhar."
+            },
+            {
+              "id": "b",
+              "text": "`kubectl delete pod`.",
+              "correct": false,
+              "explanation": "Apaga o Pod junto com os logs."
+            },
+            {
+              "id": "c",
+              "text": "`kubectl get nodes`.",
+              "correct": false,
+              "explanation": "Lista apenas os nós do cluster."
+            }
+          ]
+        },
+        {
+          "id": "k8s-fase-3-q2",
+          "prompt": "O que significa um Pod preso no estado `Pending`?",
+          "reviewTopicId": "k8s-debug",
+          "choices": [
+            {
+              "id": "a",
+              "text": "O agendador ainda não conseguiu alocar o Pod em nenhum nó (ex.: falta CPU/RAM ou PVC pendente).",
+              "correct": true,
+              "explanation": "`kubectl describe pod` mostra a razão exata na seção Events."
+            },
+            {
+              "id": "b",
+              "text": "A aplicação já está rodando e respondendo HTTP 200.",
+              "correct": false,
+              "explanation": "Isso seria `Running` e `Ready`."
+            },
+            {
+              "id": "c",
+              "text": "O código JavaScript tem erro de sintaxe.",
+              "correct": false,
+              "explanation": "Erro dentro do app gera `CrashLoopBackOff` após iniciar."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

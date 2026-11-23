@@ -22,16 +22,16 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "Começando com Docker",
-              "url": "https://docs.docker.com/get-started/",
+              "title": "O que é um container? (Docker Docs)",
+              "url": "https://docs.docker.com/get-started/docker-overview/",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "O que é um contêiner",
-              "url": "https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/",
+              "title": "Play with Docker (laboratório no navegador)",
+              "url": "https://labs.play-with-docker.com/",
               "lang": "en",
-              "kind": "leitura"
+              "kind": "pratica"
             }
           ]
         },
@@ -49,16 +49,16 @@
           ],
           "resources": [
             {
-              "title": "Referência do Dockerfile",
+              "title": "Referência de Dockerfile",
               "url": "https://docs.docker.com/reference/dockerfile/",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "Dockerfile",
-              "url": "https://docs.docker.com/engine/reference/builder/",
+              "title": "Escrevendo seu primeiro Dockerfile",
+              "url": "https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/",
               "lang": "en",
-              "kind": "documentacao"
+              "kind": "curso"
             }
           ]
         },
@@ -213,8 +213,14 @@
           ],
           "resources": [
             {
-              "title": "Começando com Docker",
-              "url": "https://docs.docker.com/get-started/",
+              "title": "Persistindo dados da aplicação (Docker)",
+              "url": "https://docs.docker.com/get-started/workshop/05_persisting_data/",
+              "lang": "en",
+              "kind": "pratica"
+            },
+            {
+              "title": "Bind mounts vs. Volumes (Docker Docs)",
+              "url": "https://docs.docker.com/engine/storage/volumes/",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -234,8 +240,14 @@
           ],
           "resources": [
             {
-              "title": "Referência do Dockerfile",
-              "url": "https://docs.docker.com/reference/dockerfile/",
+              "title": "Build secrets no Docker",
+              "url": "https://docs.docker.com/build/building/secrets/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Variáveis de ambiente no Compose",
+              "url": "https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables/",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -255,10 +267,16 @@
           ],
           "resources": [
             {
-              "title": "Workshop do Docker",
-              "url": "https://docs.docker.com/get-started/workshop/",
+              "title": "Usando .dockerignore",
+              "url": "https://docs.docker.com/build/concepts/context/#dockerignore-files",
               "lang": "en",
-              "kind": "pratica"
+              "kind": "documentacao"
+            },
+            {
+              "title": "Otimizando tamanho de imagens",
+              "url": "https://docs.docker.com/build/building/best-practices/",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         }
@@ -361,6 +379,395 @@
               "text": "É o método recomendado.",
               "correct": false,
               "explanation": "Não é o método recomendado: a camada guarda o texto."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dk-fase-3",
+      "number": 3,
+      "badgeTitle": "Rede e Build",
+      "title": "Redes, multi-stage e healthcheck",
+      "topics": [
+        {
+          "id": "dk-rede",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Redes bridge e DNS entre containers",
+          "description": "Dentro de um container, `localhost` é o próprio container, não a sua máquina nem o banco! Em uma rede Compose ou bridge customizada, containers se acham pelo nome do serviço (ex.: `postgres:5432`).",
+          "tags": [
+            "Rede",
+            "DNS"
+          ],
+          "prerequisites": [
+            "dk-compose"
+          ],
+          "resources": [
+            {
+              "title": "Networking in Compose (Docker Docs)",
+              "url": "https://docs.docker.com/compose/how-tos/networking/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Bridge networks (Docker Docs)",
+              "url": "https://docs.docker.com/engine/network/drivers/bridge/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "dk-multistage",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Multi-stage build e usuário não-root",
+          "description": "Use um estágio para compilar (`builder` com SDK pesado) e outro estágio limpo (`alpine` ou `distroless`) só com o binário/bundle final. E configure `USER` não-root para limitar estrago se a aplicação for invadida.",
+          "tags": [
+            "Multi-stage",
+            "Segurança"
+          ],
+          "prerequisites": [
+            "dk-tamanho"
+          ],
+          "resources": [
+            {
+              "title": "Multi-stage builds (Docker Docs)",
+              "url": "https://docs.docker.com/build/building/multi-stage/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Rodar containers sem root",
+              "url": "https://docs.docker.com/engine/security/rootless/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "dk-health",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Healthcheck, dependência e limites",
+          "description": "`depends_on` sozinho só espera o container iniciar, não o banco aceitar conexões. Combine `healthcheck` com `condition: service_healthy` e defina limites de memória para um container não derrubar o host.",
+          "tags": [
+            "Healthcheck",
+            "Compose"
+          ],
+          "prerequisites": [
+            "dk-compose"
+          ],
+          "resources": [
+            {
+              "title": "Compose Startup Order (Docker Docs)",
+              "url": "https://docs.docker.com/compose/how-tos/startup-order/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Limites de memória e CPU (Docker Docs)",
+              "url": "https://docs.docker.com/engine/containers/resource_constraints/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "dk3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "App falando com banco pelo nome do serviço",
+          "description": "Conecte dois serviços no `compose.yml` sem usar IP fixo e mostre por que `localhost` falha dentro do container do app.",
+          "steps": [
+            "Suba um serviço de banco e um cliente.",
+            "Conecte usando o nome do serviço como host.",
+            "Documente a porta interna vs. porta publicada no host."
+          ],
+          "definitionOfDone": [
+            "Funciona com `docker compose up` sem editar `/etc/hosts`.",
+            "Não expõe porta do banco se não precisar."
+          ]
+        },
+        {
+          "id": "dk3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Compose com healthcheck real",
+          "description": "Faça o container da API esperar o PostgreSQL ficar `healthy` (`pg_isready`) antes de iniciar, evitando erro de conexão recusada na subida.",
+          "steps": [
+            "Adicione `healthcheck` no serviço do banco.",
+            "Configure `depends_on` com `condition: service_healthy`.",
+            "Reinicie do zero e confira os logs."
+          ],
+          "definitionOfDone": [
+            "A API não cai por tentar conectar antes do banco estar pronto.",
+            "`docker compose ps` mostra `(healthy)`."
+          ]
+        },
+        {
+          "id": "dk3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Imagem enxuta e não-root",
+          "description": "Transforme um Dockerfile simples em multi-stage rodando com usuário sem privilégios de root e compare o tamanho final com `docker images`.",
+          "steps": [
+            "Meça o tamanho antes.",
+            "Separe estágio de build e runtime + `USER` não-root.",
+            "Confirme dentro do container com `whoami`."
+          ],
+          "definitionOfDone": [
+            "Redução clara no tamanho da imagem.",
+            "`whoami` não retorna `root`."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "dk-fase-3-q1",
+          "prompt": "Dentro de um container da API no Docker Compose, por que conectar no banco usando `localhost:5432` falha?",
+          "reviewTopicId": "dk-rede",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque `localhost` aponta para o próprio container da API, e não para o container do banco.",
+              "correct": true,
+              "explanation": "Use o nome do serviço definido no `compose.yml`."
+            },
+            {
+              "id": "b",
+              "text": "Porque Docker não suporta TCP.",
+              "correct": false,
+              "explanation": "Suporta normalmente."
+            },
+            {
+              "id": "c",
+              "text": "Porque a porta 5432 é reservada para HTTP.",
+              "correct": false,
+              "explanation": "5432 é a porta padrão do PostgreSQL."
+            }
+          ]
+        },
+        {
+          "id": "dk-fase-3-q2",
+          "prompt": "Para que serve o multi-stage build no Dockerfile?",
+          "reviewTopicId": "dk-multistage",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Compilar/empacotar num estágio com ferramentas de build e copiar só o artefato final para uma imagem de runtime menor e mais segura.",
+              "correct": true,
+              "explanation": "Compiladores e dependências de desenvolvimento não vão para produção."
+            },
+            {
+              "id": "b",
+              "text": "Rodar dois bancos de dados no mesmo container.",
+              "correct": false,
+              "explanation": "Cada container deve ter um processo/serviço principal."
+            },
+            {
+              "id": "c",
+              "text": "Apagar todos os volumes do host.",
+              "correct": false,
+              "explanation": "Não toca em volumes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dk-fase-4",
+      "number": 4,
+      "badgeTitle": "Produção",
+      "title": "Depuração, registry e cache no CI",
+      "topics": [
+        {
+          "id": "dk-debug",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Depurar containers (logs, exec, inspect)",
+          "description": "Container morreu na hora? Olhe `docker logs`, inspecione configuração/rede com `docker inspect`, entre no ambiente rodando com `docker exec -it ... sh` e limpe lixo antigo com `docker system df`.",
+          "tags": [
+            "Debug",
+            "Logs"
+          ],
+          "prerequisites": [
+            "dk-rede"
+          ],
+          "resources": [
+            {
+              "title": "docker logs (Docker CLI)",
+              "url": "https://docs.docker.com/reference/cli/docker/container/logs/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "docker exec (Docker CLI)",
+              "url": "https://docs.docker.com/reference/cli/docker/container/exec/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "dk-registry",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Registries, tags e vulnerabilidades",
+          "description": "Evite depender da tag `:latest` em produção — ela muda sem aviso. Use tags com versão ou SHA de commit e escaneie imagens base para corrigir vulnerabilidades conhecidas (CVEs).",
+          "tags": [
+            "Registry",
+            "Tags"
+          ],
+          "prerequisites": [
+            "dk-multistage"
+          ],
+          "resources": [
+            {
+              "title": "Compartilhando imagens (Docker Docs)",
+              "url": "https://docs.docker.com/get-started/workshop/04_sharing_app/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "GitHub Container Registry (GitHub Docs pt-BR)",
+              "url": "https://docs.github.com/pt/packages/working-with-a-github-packages-registry/working-with-the-container-registry",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "dk-ci",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Cache de camadas e build no CI",
+          "description": "A ordem das instruções no `Dockerfile` define a velocidade do build: copie `package.json`/`requirements.txt` e instale dependências ANTES de copiar o código-fonte, para reaproveitar o cache quando só o código muda.",
+          "tags": [
+            "Cache",
+            "CI"
+          ],
+          "prerequisites": [
+            "dk-file",
+            "dk-multistage"
+          ],
+          "resources": [
+            {
+              "title": "Cache de build no Docker",
+              "url": "https://docs.docker.com/build/cache/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Build e push com GitHub Actions",
+              "url": "https://docs.docker.com/build/ci/github-actions/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "dk4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Ordem de cache no Dockerfile",
+          "description": "Reordene um Dockerfile para instalar dependências antes de `COPY . .` e meça a diferença de tempo ao alterar 1 linha de código.",
+          "steps": [
+            "Faça o build frio.",
+            "Altere um arquivo de código e meça o segundo build.",
+            "Explique quais camadas deram `CACHED`."
+          ],
+          "definitionOfDone": [
+            "A instalação de pacotes não roda de novo ao editar só o código.",
+            "Tempos comparados no README."
+          ]
+        },
+        {
+          "id": "dk4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Checklist de diagnóstico de container",
+          "description": "Simule um container que cai por variável de ambiente faltando e documente o passo a passo usando `ps -a`, `logs` e `inspect`.",
+          "steps": [
+            "Provoque o erro de saída (exit code diferente de 0).",
+            "Capture `docker ps -a` e `docker logs`.",
+            "Corrija e valide."
+          ],
+          "definitionOfDone": [
+            "Mostra como achar o motivo mesmo depois que o container já parou.",
+            "Não tem segredo impresso no log."
+          ]
+        },
+        {
+          "id": "dk4-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Esteira de build e publicação de imagem",
+          "description": "Crie um workflow do GitHub Actions que constrói a imagem Docker, roda os testes e publica no GitHub Container Registry (GHCR) com tag do commit.",
+          "steps": [
+            "Configure `docker/build-push-action`.",
+            "Use tag baseada em `github.sha` além de `main`.",
+            "Ative cache de camadas do Actions."
+          ],
+          "definitionOfDone": [
+            "Workflow versionado em `.github/workflows/`.",
+            "Não usa `:latest` como única referência."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "dk-fase-4-q1",
+          "prompt": "Por que copiar `package.json` e rodar `npm install` antes de `COPY . .` no Dockerfile?",
+          "reviewTopicId": "dk-ci",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Para reaproveitar a camada em cache das dependências sempre que apenas o código da aplicação mudar.",
+              "correct": true,
+              "explanation": "Qualquer camada alterada invalida o cache de todas as instruções seguintes."
+            },
+            {
+              "id": "b",
+              "text": "Porque `COPY . .` apaga o `package.json`.",
+              "correct": false,
+              "explanation": "Não apaga; é uma otimização de cache de camadas."
+            },
+            {
+              "id": "c",
+              "text": "Porque o Docker exige essa ordem para compilar.",
+              "correct": false,
+              "explanation": "Funciona em outra ordem, só fica muito mais lento."
+            }
+          ]
+        },
+        {
+          "id": "dk-fase-4-q2",
+          "prompt": "Por que evitar fixar apenas a tag `:latest` em ambientes de produção?",
+          "reviewTopicId": "dk-registry",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque `:latest` é mutável: dois servidores podem baixar imagens diferentes e dificulta rollback exato.",
+              "correct": true,
+              "explanation": "Versões semânticas ou SHA garantem exatamente qual código está rodando."
+            },
+            {
+              "id": "b",
+              "text": "Porque `:latest` não funciona no Linux.",
+              "correct": false,
+              "explanation": "Funciona, mas não é determinística."
+            },
+            {
+              "id": "c",
+              "text": "Porque imagens `:latest` ocupam 10 vezes mais espaço.",
+              "correct": false,
+              "explanation": "É apenas um ponteiro de tag para uma imagem."
             }
           ]
         }

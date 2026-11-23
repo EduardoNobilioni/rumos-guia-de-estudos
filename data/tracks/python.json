@@ -22,16 +22,16 @@
           "prerequisites": [],
           "resources": [
             {
-              "title": "Tutorial do Python",
-              "url": "https://docs.python.org/pt-br/3/tutorial/index.html",
+              "title": "Introdução informal ao Python (Docs pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/tutorial/introduction.html",
               "lang": "pt",
-              "kind": "curso"
+              "kind": "documentacao"
             },
             {
-              "title": "Python 3 — mundo 1 (Curso em Vídeo)",
-              "url": "https://www.youtube.com/playlist?list=PLHz_AreHm4dm6wYOIW20Nyg12TAjmMGT-",
-              "lang": "pt",
-              "kind": "video"
+              "title": "Python para Desenvolvedores (FreeCodeCamp)",
+              "url": "https://www.freecodecamp.org/learn/scientific-computing-with-python/",
+              "lang": "en",
+              "kind": "curso"
             }
           ]
         },
@@ -49,16 +49,16 @@
           ],
           "resources": [
             {
-              "title": "Controle de fluxo",
+              "title": "Mais ferramentas de controle de fluxo (Python pt-BR)",
               "url": "https://docs.python.org/pt-br/3/tutorial/controlflow.html",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Python 3 — mundo 1 (Curso em Vídeo)",
-              "url": "https://www.youtube.com/playlist?list=PLHz_AreHm4dm6wYOIW20Nyg12TAjmMGT-",
-              "lang": "pt",
-              "kind": "video"
+              "title": "Condicionais e laços (CS50 Python)",
+              "url": "https://cs50.harvard.edu/python/2022/notes/1/",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         },
@@ -76,16 +76,16 @@
           ],
           "resources": [
             {
-              "title": "Controle de fluxo",
-              "url": "https://docs.python.org/pt-br/3/tutorial/controlflow.html",
+              "title": "Definindo funções (Python pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/tutorial/controlflow.html#defining-functions",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "CS50 Python",
-              "url": "https://cs50.harvard.edu/python/",
+              "title": "Funções e variáveis (CS50 Python)",
+              "url": "https://cs50.harvard.edu/python/2022/notes/0/",
               "lang": "en",
-              "kind": "curso"
+              "kind": "leitura"
             }
           ]
         }
@@ -213,14 +213,14 @@
           ],
           "resources": [
             {
-              "title": "Tutorial do Python",
-              "url": "https://docs.python.org/pt-br/3/tutorial/index.html",
+              "title": "Leitura e escrita de arquivos (Python pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/tutorial/inputoutput.html#reading-and-writing-files",
               "lang": "pt",
-              "kind": "curso"
+              "kind": "documentacao"
             },
             {
-              "title": "Erros e exceções",
-              "url": "https://docs.python.org/pt-br/3/tutorial/errors.html",
+              "title": "Módulo csv (Python pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/library/csv.html",
               "lang": "pt",
               "kind": "documentacao"
             }
@@ -240,10 +240,16 @@
           ],
           "resources": [
             {
-              "title": "Erros e exceções",
+              "title": "Erros e exceções (Python pt-BR)",
               "url": "https://docs.python.org/pt-br/3/tutorial/errors.html",
               "lang": "pt",
               "kind": "documentacao"
+            },
+            {
+              "title": "Exceções (CS50 Python)",
+              "url": "https://cs50.harvard.edu/python/2022/notes/3/",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         },
@@ -288,7 +294,13 @@
           ],
           "resources": [
             {
-              "title": "unittest",
+              "title": "Documentação do pytest",
+              "url": "https://docs.pytest.org/en/stable/getting-started.html",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "unittest na biblioteca padrão (Python pt-BR)",
               "url": "https://docs.python.org/pt-br/3/library/unittest.html",
               "lang": "pt",
               "kind": "documentacao"
@@ -394,6 +406,397 @@
               "text": "Porque arquivo não gera erro.",
               "correct": false,
               "explanation": "Gera, e o tipo importa."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "py-fase-3",
+      "number": 3,
+      "badgeTitle": "Estrutura",
+      "title": "Coleções, objetos e tipagem",
+      "topics": [
+        {
+          "id": "py-estruturas",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Dicionários, conjuntos e comprehensions",
+          "description": "Use `dict` para buscar por chave em O(1) e `set` para unicidade. List/dict comprehensions simplificam transformações curtas, mas evite aninhar três níveis numa linha só.",
+          "tags": [
+            "dict",
+            "set",
+            "Comprehensions"
+          ],
+          "prerequisites": [
+            "py-funcao"
+          ],
+          "resources": [
+            {
+              "title": "Estruturas de dados (Python pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/tutorial/datastructures.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "List Comprehensions (Real Python)",
+              "url": "https://realpython.com/list-comprehension-python/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "py-oo",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Classes, métodos e dataclasses",
+          "description": "Nem tudo precisa virar classe, mas quando dados e regras andam juntos, `@dataclass` elimina boilerplate de `__init__` e `__repr__`. Prefira composição à herança profunda.",
+          "tags": [
+            "OOP",
+            "dataclass"
+          ],
+          "prerequisites": [
+            "py-estruturas"
+          ],
+          "resources": [
+            {
+              "title": "Classes (Tutorial Python)",
+              "url": "https://docs.python.org/pt-br/3/tutorial/classes.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "dataclasses (Biblioteca padrão)",
+              "url": "https://docs.python.org/pt-br/3/library/dataclasses.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "py-typing",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Type hints e linting (ruff / mypy)",
+          "description": "Anotar tipos em funções (`def soma(a: int, b: int) -> int:`) documenta o contrato e permite ao editor e ao `mypy`/`pyright` pegar bugs antes de rodar.",
+          "tags": [
+            "Typing",
+            "Ruff"
+          ],
+          "prerequisites": [
+            "py-oo"
+          ],
+          "resources": [
+            {
+              "title": "Módulo typing",
+              "url": "https://docs.python.org/pt-br/3/library/typing.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Documentação do Ruff",
+              "url": "https://docs.astral.sh/ruff/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "py3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Contador de frequência de palavras",
+          "description": "Leia um arquivo de texto, normalize minúsculas/pontuação e liste as 10 palavras mais frequentes usando `dict` ou `Counter`.",
+          "steps": [
+            "Ignore palavras vazias.",
+            "Ordene por contagem decrescente.",
+            "Teste com texto vazio."
+          ],
+          "definitionOfDone": [
+            "Resultado bate com exemplo pequeno conferido à mão.",
+            "Não usa biblioteca externa."
+          ]
+        },
+        {
+          "id": "py3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Agenda tipada com dataclass",
+          "description": "Modele contatos e compromissos com `@dataclass` e type hints completos, validados com `mypy` ou `ruff`.",
+          "steps": [
+            "Crie dataclasses imutáveis (`frozen=True`) quando fizer sentido.",
+            "Adicione busca por data.",
+            "Rode o verificador de tipos sem erros."
+          ],
+          "definitionOfDone": [
+            "Todas as funções públicas têm type hints.",
+            "Testes cobrem conflito de horário."
+          ]
+        },
+        {
+          "id": "py3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Gerador de relatório com streaming",
+          "description": "Processe um arquivo grande linha a linha usando geradores (`yield`) para manter o uso de memória constante.",
+          "steps": [
+            "Escreva uma função geradora que filtra linhas.",
+            "Compare uso de memória com carregar tudo em lista.",
+            "Cubra com testes unitários."
+          ],
+          "definitionOfDone": [
+            "Não carrega o arquivo inteiro na RAM.",
+            "O README explica `yield` em uma frase."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "py-fase-3-q1",
+          "prompt": "Qual a vantagem de usar `set` em vez de `list` para checar se um item já foi visto?",
+          "reviewTopicId": "py-estruturas",
+          "choices": [
+            {
+              "id": "a",
+              "text": "A busca `x in conjunto` é O(1) em média, enquanto na lista percorre elemento por elemento.",
+              "correct": true,
+              "explanation": "Em milhares de itens, a diferença entre `set` e `list` é enorme."
+            },
+            {
+              "id": "b",
+              "text": "Porque `set` mantém a ordem exata e aceita duplicatas.",
+              "correct": false,
+              "explanation": "`set` remove duplicatas e não é indexado por posição."
+            },
+            {
+              "id": "c",
+              "text": "Porque `list` não aceita strings.",
+              "correct": false,
+              "explanation": "`list` aceita qualquer objeto."
+            }
+          ]
+        },
+        {
+          "id": "py-fase-3-q2",
+          "prompt": "Type hints em Python mudam o comportamento em tempo de execução por padrão?",
+          "reviewTopicId": "py-typing",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Não: o interpretador não bloqueia tipos errados sozinho; ferramentas estáticas (mypy/pyright) e bibliotecas como Pydantic os usam.",
+              "correct": true,
+              "explanation": "Por isso rodar o type checker no CI faz diferença."
+            },
+            {
+              "id": "b",
+              "text": "Sim, o Python vira linguagem compilada estática.",
+              "correct": false,
+              "explanation": "A tipagem continua dinâmica em runtime."
+            },
+            {
+              "id": "c",
+              "text": "Sim, e tornam o código 10x mais lento.",
+              "correct": false,
+              "explanation": "Anotações têm impacto desprezível."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "py-fase-4",
+      "number": 4,
+      "badgeTitle": "Prática",
+      "title": "HTTP, CLI e empacotamento",
+      "topics": [
+        {
+          "id": "py-http",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "APIs HTTP e JSON com requests/httpx",
+          "description": "Sempre defina `timeout` nas requisições HTTP (sem timeout o script pode travar para sempre). Cheque `response.raise_for_status()` e trate falhas de rede separadas de JSON inválido.",
+          "tags": [
+            "HTTP",
+            "JSON"
+          ],
+          "prerequisites": [
+            "py-erro",
+            "py-ambiente"
+          ],
+          "resources": [
+            {
+              "title": "Requests — Quickstart",
+              "url": "https://requests.readthedocs.io/en/latest/user/quickstart/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Módulo json do Python",
+              "url": "https://docs.python.org/pt-br/3/library/json.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "py-cli",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Ferramentas de linha de comando (argparse)",
+          "description": "Transforme scripts cheios de variáveis fixas em ferramentas com argumentos (`argparse` ou `typer`), `--help` claro, `if __name__ == '__main__':` e códigos de saída adequados.",
+          "tags": [
+            "CLI",
+            "argparse"
+          ],
+          "prerequisites": [
+            "py-arquivo"
+          ],
+          "resources": [
+            {
+              "title": "Tutorial do argparse (Python pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/howto/argparse.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Módulo sys e argumentos (Python pt-BR)",
+              "url": "https://docs.python.org/pt-br/3/library/sys.html",
+              "lang": "pt",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "py-pacotes",
+          "level": "avancado",
+          "hours": 5,
+          "title": "pyproject.toml e empacotamento moderno",
+          "description": "Organize seu código em `src/`, declare dependências e metadados em `pyproject.toml` e use ferramentas modernas como `uv` ou `pip` para instalar o projeto de forma reproduzível.",
+          "tags": [
+            "pyproject.toml",
+            "uv"
+          ],
+          "prerequisites": [
+            "py-ambiente",
+            "py-teste"
+          ],
+          "resources": [
+            {
+              "title": "Packaging Python Projects",
+              "url": "https://packaging.python.org/en/latest/tutorials/packaging-projects/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Documentação do uv",
+              "url": "https://docs.astral.sh/uv/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "py4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "CLI de conversão de arquivos",
+          "description": "Crie um script com `argparse` que recebe `--entrada`, `--saida` e uma flag opcional `--resumo`.",
+          "steps": [
+            "Configure `--help` descritivo.",
+            "Valide se o arquivo de entrada existe.",
+            "Devolva exit code 1 em erro."
+          ],
+          "definitionOfDone": [
+            "Funciona rodando `python cli.py --help`.",
+            "Não tem caminho absoluto da sua máquina."
+          ]
+        },
+        {
+          "id": "py4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Cliente resiliente de API pública",
+          "description": "Consulte uma API pública com `timeout`, tratamento de erro HTTP e teste automatizado usando mock da resposta.",
+          "steps": [
+            "Separe a função que faz o pedido da que processa o JSON.",
+            "Simule status 500 e timeout no `pytest`.",
+            "Salve o resultado formatado."
+          ],
+          "definitionOfDone": [
+            "Testes rodam offline com mock.",
+            "Timeout está explícito na chamada."
+          ]
+        },
+        {
+          "id": "py4-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Pacote instalável com pyproject.toml",
+          "description": "Estruture um projeto em `src/` com `pyproject.toml`, ponto de entrada CLI (`[project.scripts]`), `ruff` e `pytest`.",
+          "steps": [
+            "Crie a estrutura `src/meu_pacote/`.",
+            "Instale em modo editável (`pip install -e .` ou `uv`).",
+            "Execute o comando instalado direto do terminal."
+          ],
+          "definitionOfDone": [
+            "O comando roda sem `python -m`.",
+            "`pytest` e `ruff` passam limpos."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "py-fase-4-q1",
+          "prompt": "Por que sempre passar `timeout=` em chamadas com `requests` ou `httpx`?",
+          "reviewTopicId": "py-http",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque sem timeout o script pode ficar travado indefinidamente se o servidor remoto não responder.",
+              "correct": true,
+              "explanation": "O padrão do `requests` é esperar para sempre."
+            },
+            {
+              "id": "b",
+              "text": "Para acelerar a velocidade da internet.",
+              "correct": false,
+              "explanation": "Ele limita a espera, não acelera a rede."
+            },
+            {
+              "id": "c",
+              "text": "Para desativar HTTPS.",
+              "correct": false,
+              "explanation": "TLS continua ativo."
+            }
+          ]
+        },
+        {
+          "id": "py-fase-4-q2",
+          "prompt": "Para que serve `if __name__ == '__main__':` em um arquivo Python?",
+          "reviewTopicId": "py-cli",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Executar o bloco principal apenas quando o arquivo é rodado diretamente, e não quando é importado por outro módulo ou teste.",
+              "correct": true,
+              "explanation": "Sem isso, um `import` acaba disparando o programa inteiro."
+            },
+            {
+              "id": "b",
+              "text": "Definir o nome do autor do arquivo.",
+              "correct": false,
+              "explanation": "`__name__` é preenchido pelo próprio Python."
+            },
+            {
+              "id": "c",
+              "text": "Criar um ambiente virtual automaticamente.",
+              "correct": false,
+              "explanation": "Não tem relação com venv."
             }
           ]
         }

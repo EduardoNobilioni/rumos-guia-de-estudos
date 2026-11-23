@@ -1,0 +1,727 @@
+{
+  "id": "arquitetura-software",
+  "name": "Arquitetura de Software e System Design",
+  "tagline": "Tomar decisões de estrutura, escala e trade-offs sem copiar hype",
+  "description": "Como estruturar sistemas que crescem sem virar nó: monólito modular vs. microsserviços, contratos e idempotência, cache, mensageria, resiliência e ADRs.",
+  "phases": [
+    {
+      "id": "ar-fase-1",
+      "number": 1,
+      "badgeTitle": "Estrutura",
+      "title": "Requisitos, limites e monólito modular",
+      "topics": [
+        {
+          "id": "ar-requisitos",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Requisitos não funcionais e trade-offs",
+          "description": "Arquitetura é escolher o que sacrificar. Latência, consistência, custo, disponibilidade e simplicidade do time competem entre si. Toda decisão começa perguntando: quantos usuários, qual o pico e o que pode falhar?",
+          "tags": [
+            "Trade-offs",
+            "System Design"
+          ],
+          "prerequisites": [],
+          "resources": [
+            {
+              "title": "System Design Primer — Performance vs Scalability",
+              "url": "https://github.com/donnemartin/system-design-primer#performance-vs-scalability",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Requisitos de Arquitetura (Engenharia de Software Moderna)",
+              "url": "https://engsoftmoderna.info/cap7.html",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ar-modular",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Monólito modular vs. microsserviços",
+          "description": "Se você não consegue manter fronteiras limpas dentro de um único projeto, quebrar em 10 microsserviços só cria um monólito distribuído mais lento e caro. Comece com monólito modular e extraia serviços só quando houver motivo real (escala independente, deploy isolado).",
+          "tags": [
+            "Modularidade",
+            "Microsserviços"
+          ],
+          "prerequisites": [
+            "ar-requisitos"
+          ],
+          "resources": [
+            {
+              "title": "MonolithFirst (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/MonolithFirst.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Microservices Trade-Offs (Martin Fowler)",
+              "url": "https://martinfowler.com/articles/microservice-trade-offs.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ar-adr",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "ADRs (Registros de Decisão Arquitetural)",
+          "description": "Daqui a 6 meses ninguém lembra por que escolheram PostgreSQL ou Redis. Um ADR curto (Contexto, Decisão, Alternativas descartadas e Consequências) resolve isso em 1 página no repositório.",
+          "tags": [
+            "ADR",
+            "Documentação"
+          ],
+          "prerequisites": [
+            "ar-requisitos"
+          ],
+          "resources": [
+            {
+              "title": "Documenting Architecture Decisions (Michael Nygard)",
+              "url": "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "ADR GitHub Organization (templates)",
+              "url": "https://adr.github.io/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ar1-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Primeiro ADR de um projeto",
+          "description": "Escreva um ADR de 1 página justificando uma escolha técnica real de um projeto seu (banco, framework ou hospedagem).",
+          "steps": [
+            "Descreva o contexto e restrições.",
+            "Liste 2 alternativas consideradas.",
+            "Registre os pontos negativos aceitos."
+          ],
+          "definitionOfDone": [
+            "Cabe em 1 tela de leitura.",
+            "Não esconde desvantagens da opção escolhida."
+          ]
+        },
+        {
+          "id": "ar1-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Separação em módulos com fronteira",
+          "description": "Pegue uma aplicação com 2 domínios (ex.: Pedidos e Estoque) no mesmo repositório e proíba que um importe diretamente as tabelas/repositórios internos do outro.",
+          "steps": [
+            "Exponha apenas uma interface pública por módulo.",
+            "Mantenha tabelas separadas logicamente.",
+            "Documente o diagrama C4 de containers/componentes."
+          ],
+          "definitionOfDone": [
+            "Comunicação entre módulos só pela interface pública.",
+            "Diagrama C4 no README."
+          ]
+        },
+        {
+          "id": "ar1-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Estimativa de capacidade (back-of-the-envelope)",
+          "description": "Calcule QPS médio e de pico, banda e crescimento anual de armazenamento em disco para um encurtador de URLs ou feed simples.",
+          "steps": [
+            "Estime usuários ativos e requisições por segundo.",
+            "Calcule tamanho médio do registro x 5 anos.",
+            "Aponte o primeiro gargalo provável."
+          ],
+          "definitionOfDone": [
+            "Contas explícitas passo a passo.",
+            "Premissas declaradas."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ar-fase-1-q1",
+          "prompt": "Qual o risco de adotar microsserviços logo no dia 1 de um time pequeno?",
+          "reviewTopicId": "ar-modular",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Pagar o custo de rede, deploy distribuído, consistência eventual e observabilidade antes mesmo de validar o domínio.",
+              "correct": true,
+              "explanation": "Fronteiras erradas em microsserviços são muito mais caras de refatorar do que num monólito modular."
+            },
+            {
+              "id": "b",
+              "text": "Microsserviços não permitem usar banco relacional.",
+              "correct": false,
+              "explanation": "Permitem, mas exigem isolamento de dados entre serviços."
+            },
+            {
+              "id": "c",
+              "text": "Microsserviços não funcionam em Linux.",
+              "correct": false,
+              "explanation": "Funcionam normalmente."
+            }
+          ]
+        },
+        {
+          "id": "ar-fase-1-q2",
+          "prompt": "Para que serve um ADR (Architecture Decision Record)?",
+          "reviewTopicId": "ar-adr",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Registrar o contexto, a decisão e os trade-offs aceitos no momento em que uma escolha importante foi feita.",
+              "correct": true,
+              "explanation": "Ajuda futuros membros do time a entender o porquê antes de querer trocar tudo."
+            },
+            {
+              "id": "b",
+              "text": "Substituir testes automatizados.",
+              "correct": false,
+              "explanation": "É documentação de decisão."
+            },
+            {
+              "id": "c",
+              "text": "Gerar código SQL automaticamente.",
+              "correct": false,
+              "explanation": "É um documento em texto/Markdown."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ar-fase-2",
+      "number": 2,
+      "badgeTitle": "Comunicação",
+      "title": "APIs, contratos, cache e dados em escala",
+      "topics": [
+        {
+          "id": "ar-contratos",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Contratos, versionamento e idempotência",
+          "description": "Em redes reais, requisições chegam duplicadas por retry. Operações críticas (como pagamento) precisam de chave de idempotência para não cobrar duas vezes. Evolua APIs sem quebrar clientes antigos.",
+          "tags": [
+            "Idempotência",
+            "Contratos"
+          ],
+          "prerequisites": [
+            "ar-requisitos"
+          ],
+          "resources": [
+            {
+              "title": "Idempotency Keys (Stripe Engineering)",
+              "url": "https://stripe.com/blog/idempotency",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Making retries safe with idempotent APIs (AWS)",
+              "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ar-cache",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Estratégias de cache (CDN, aplicação, Redis)",
+          "description": "Cache acelera leitura e alivia o banco, mas traz o problema de invalidação. Entenda cache-aside, TTL, cache stampede e quando NÃO cachear (dados altamente voláteis ou privados sem chave de usuário).",
+          "tags": [
+            "Cache",
+            "Redis"
+          ],
+          "prerequisites": [
+            "ar-requisitos"
+          ],
+          "resources": [
+            {
+              "title": "HTTP Caching (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Caching",
+              "lang": "pt",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Caching Strategies (System Design Primer)",
+              "url": "https://github.com/donnemartin/system-design-primer#cache",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ar-dados-escala",
+          "level": "avancado",
+          "hours": 7,
+          "title": "Replicação, particionamento e CAP/Consistência",
+          "description": "Quando um único nó de banco não dá conta: réplicas de leitura escalam `SELECT`s (com atraso de replicação!), e sharding/particionamento divide escritas por chave — pagando o preço de joins e transações distribuídas.",
+          "tags": [
+            "Replicação",
+            "Sharding"
+          ],
+          "prerequisites": [
+            "ar-cache"
+          ],
+          "resources": [
+            {
+              "title": "System Design Primer — Database",
+              "url": "https://github.com/donnemartin/system-design-primer#database",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "CAP Theorem (IBM)",
+              "url": "https://www.ibm.com/topics/cap-theorem",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ar2-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Endpoint idempotente",
+          "description": "Implemente um endpoint `POST /pagamentos` que aceita um cabeçalho `Idempotency-Key` e devolve o mesmo resultado sem criar duplicata se chamado 3 vezes seguidas.",
+          "steps": [
+            "Guarde a chave usada e o resultado.",
+            "Envie a mesma requisição 3 vezes.",
+            "Prove que só 1 registro foi criado."
+          ],
+          "definitionOfDone": [
+            "Chaves diferentes criam registros diferentes.",
+            "Chave repetida não duplica efeito colateral."
+          ]
+        },
+        {
+          "id": "ar2-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Cache-aside com invalidação",
+          "description": "Coloque Redis na frente de uma consulta pesada com TTL e invalide a chave quando o dado for atualizado.",
+          "steps": [
+            "Meça tempo de cache miss vs. cache hit.",
+            "Atualize o registro e apague/atualize a chave.",
+            "Trate o caso de Redis fora do ar sem derrubar a leitura (fallback)."
+          ],
+          "definitionOfDone": [
+            "Leitura após atualização não serve dado velho.",
+            "Queda do cache não retorna 500."
+          ]
+        },
+        {
+          "id": "ar2-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Desenho de leitura vs. escrita separadas",
+          "description": "Projete a arquitetura de um feed ou painel com 95% de leitura e 5% de escrita usando réplica de leitura e cache, explicando como lidar com atraso de replicação após o usuário editar seu próprio perfil.",
+          "steps": [
+            "Desenhe o fluxo de escrita no primário e leitura na réplica.",
+            "Aponte o bug de 'read-your-own-writes'.",
+            "Proponha a solução (ler do primário por alguns segundos ou do cache)."
+          ],
+          "definitionOfDone": [
+            "Trade-off de consistência eventual explicado.",
+            "Fluxo completo desenhado."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ar-fase-2-q1",
+          "prompt": "Para que serve uma chave de idempotência em requisições POST?",
+          "reviewTopicId": "ar-contratos",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Garantir que retentativas de rede da mesma operação não executem o efeito (como uma cobrança) duas vezes.",
+              "correct": true,
+              "explanation": "Essencial quando o cliente não sabe se o servidor recebeu antes de perder a conexão."
+            },
+            {
+              "id": "b",
+              "text": "Acelerar a renderização de CSS.",
+              "correct": false,
+              "explanation": "É um conceito de contrato de API."
+            },
+            {
+              "id": "c",
+              "text": "Substituir HTTPS.",
+              "correct": false,
+              "explanation": "Não tem relação com transporte cifrado."
+            }
+          ]
+        },
+        {
+          "id": "ar-fase-2-q2",
+          "prompt": "Qual o principal cuidado ao escalar leituras usando réplicas assíncronas do banco?",
+          "reviewTopicId": "ar-dados-escala",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Lidar com o atraso de replicação (replication lag), onde uma escrita recente ainda não apareceu na réplica.",
+              "correct": true,
+              "explanation": "O usuário salva um dado, recarrega a página e acha que sumiu se ler da réplica atrasada."
+            },
+            {
+              "id": "b",
+              "text": "Réplicas não aceitam `SELECT`.",
+              "correct": false,
+              "explanation": "Elas servem justamente para leitura."
+            },
+            {
+              "id": "c",
+              "text": "Réplicas apagam o banco primário.",
+              "correct": false,
+              "explanation": "Não apagam."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ar-fase-3",
+      "number": 3,
+      "badgeTitle": "Assíncrono",
+      "title": "Filas, eventos e resiliência",
+      "topics": [
+        {
+          "id": "ar-filas",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Filas, Dead Letter Queues e Outbox",
+          "description": "Use filas para desacoplar trabalho lento ou absorver picos (leveling). Toda fila precisa de política de retry com backoff e Dead Letter Queue (DLQ) para mensagens envenenadas não travarem o consumidor.",
+          "tags": [
+            "Filas",
+            "DLQ"
+          ],
+          "prerequisites": [
+            "ar-contratos"
+          ],
+          "resources": [
+            {
+              "title": "Dead Letter Channel (EIP)",
+              "url": "https://www.enterpriseintegrationpatterns.com/patterns/messaging/DeadLetterChannel.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Transactional Outbox Pattern",
+              "url": "https://microservices.io/patterns/data/transactional-outbox.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "ar-resiliencia",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Timeouts, Retries, Rate Limit e Circuit Breaker",
+          "description": "Se um serviço parceiro trava, chamadas sem timeout derrubam seu servidor junto (falha em cascata). Defina timeouts curtos, retry com exponential backoff + jitter, rate limiting e circuit breaker.",
+          "tags": [
+            "Resiliência",
+            "Rate Limit"
+          ],
+          "prerequisites": [
+            "ar-filas"
+          ],
+          "resources": [
+            {
+              "title": "Timeouts, retries, and backoff with jitter (AWS)",
+              "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Circuit Breaker (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/CircuitBreaker.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ar3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Backoff exponencial com jitter",
+          "description": "Implemente uma função de retentativa com backoff exponencial + aleatoriedade (jitter) e explique por que tentar tudo ao mesmo tempo piora uma queda.",
+          "steps": [
+            "Implemente a função com limite de 4 tentativas.",
+            "Adicione jitter aleatório.",
+            "Explique o efeito 'thundering herd'."
+          ],
+          "definitionOfDone": [
+            "Tempos crescentes comprovados no log.",
+            "Não entra em loop infinito."
+          ]
+        },
+        {
+          "id": "ar3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Produtor, consumidor e DLQ",
+          "description": "Monte uma fila (RabbitMQ, Redis Streams ou SQS local) onde mensagens que falham 3 vezes vão para uma Dead Letter Queue para inspeção.",
+          "steps": [
+            "Envie 5 mensagens válidas e 1 inválida.",
+            "Configure 3 tentativas antes de mover para DLQ.",
+            "Mostre as 5 processadas e 1 na DLQ."
+          ],
+          "definitionOfDone": [
+            "A mensagem com erro não trava as outras.",
+            "DLQ preservada para reprocessamento."
+          ]
+        },
+        {
+          "id": "ar3-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Rate Limiter por cliente",
+          "description": "Implemente um limitador de taxa (Token Bucket ou Sliding Window com Redis) que retorna HTTP 429 + `Retry-After` quando um cliente excede o limite.",
+          "steps": [
+            "Escolha o algoritmo (Token Bucket).",
+            "Retorne cabeçalhos de limite restante.",
+            "Teste disparando rajada de requisições."
+          ],
+          "definitionOfDone": [
+            "Retorna 429 após o limite.",
+            "Volta a aceitar após a janela."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ar-fase-3-q1",
+          "prompt": "Para que serve adicionar jitter (aleatoriedade) no backoff entre retentativas?",
+          "reviewTopicId": "ar-resiliencia",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Evitar que milhares de clientes tentem reconectar exatamente no mesmo segundo e derrubem o servidor que está se recuperando.",
+              "correct": true,
+              "explanation": "Sem jitter, todos os clientes sincronizam a próxima onda de tráfego."
+            },
+            {
+              "id": "b",
+              "text": "Para aumentar o tamanho do JSON.",
+              "correct": false,
+              "explanation": "Atua apenas no intervalo de espera."
+            },
+            {
+              "id": "c",
+              "text": "Para ignorar erros 400.",
+              "correct": false,
+              "explanation": "Erros 4xx de validação nem devem receber retry."
+            }
+          ]
+        },
+        {
+          "id": "ar-fase-3-q2",
+          "prompt": "Qual o papel de uma Dead Letter Queue (DLQ)?",
+          "reviewTopicId": "ar-filas",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Isolar mensagens que falharam repetidamente para análise posterior, sem travar a fila principal.",
+              "correct": true,
+              "explanation": "Impede que uma única mensagem corrompida bloqueie todas as seguintes."
+            },
+            {
+              "id": "b",
+              "text": "Apagar mensagens silenciosamente na chegada.",
+              "correct": false,
+              "explanation": "Ela justamente preserva para investigação e reprocesso."
+            },
+            {
+              "id": "c",
+              "text": "Substituir o banco de dados.",
+              "correct": false,
+              "explanation": "É um padrão de mensageria."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ar-fase-4",
+      "number": 4,
+      "badgeTitle": "Prática",
+      "title": "Estudos de caso completos de System Design",
+      "topics": [
+        {
+          "id": "ar-observabilidade",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Rastreamento distribuído (Tracing) e SLOs",
+          "description": "Quando uma requisição passa por API Gateway, Serviço A e Fila B, logs soltos não bastam: propague um `trace_id` (OpenTelemetry) e defina SLIs/SLOs realistas (99.9%, não 100%).",
+          "tags": [
+            "Tracing",
+            "SLO"
+          ],
+          "prerequisites": [
+            "ar-resiliencia"
+          ],
+          "resources": [
+            {
+              "title": "Service Level Objectives (Google SRE Book)",
+              "url": "https://sre.google/sre-book/service-level-objectives/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Distributed Tracing (OpenTelemetry)",
+              "url": "https://opentelemetry.io/docs/concepts/signals/traces/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "ar-casos",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Desenho ponta a ponta: estudo de casos clássicos",
+          "description": "Treine estruturar problemas abertos em 4 passos: 1) requisitos e escala, 2) API e modelo de dados, 3) desenho de alto nível, 4) gargalos e mitigação (ex.: notificações, feed, upload de vídeo, chat).",
+          "tags": [
+            "System Design",
+            "Casos"
+          ],
+          "prerequisites": [
+            "ar-dados-escala",
+            "ar-observabilidade"
+          ],
+          "resources": [
+            {
+              "title": "System Design Primer — Solutions",
+              "url": "https://github.com/donnemartin/system-design-primer#system-design-topics-start-here",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "C4 Model for Visualising Software Architecture",
+              "url": "https://c4model.com/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ar4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Definindo SLIs e SLOs",
+          "description": "Para um sistema que você conhece, escreva 2 SLIs mensuráveis (disponibilidade e latência p95) e o orçamento de erro mensal de um SLO de 99,9%.",
+          "steps": [
+            "Calcule quantos minutos de queda 99,9% permite no mês (~43 min).",
+            "Defina o que conta como requisição bem-sucedida.",
+            "Explique por que buscar 100% trava entregas."
+          ],
+          "definitionOfDone": [
+            "Contas do error budget conferidas.",
+            "SLI e SLO claramente diferenciados."
+          ]
+        },
+        {
+          "id": "ar4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Design completo: Encurtador de URLs",
+          "description": "Escreva a especificação arquitetural de um encurtador de URLs: API, geração de código curto, banco, cache para redirecionamento 302/301 e proteção contra abuso.",
+          "steps": [
+            "Compare 301 (cacheado no navegador) vs. 302 (passa pelo servidor).",
+            "Escolha estratégia de ID único.",
+            "Desenhe o caminho de leitura com cache."
+          ],
+          "definitionOfDone": [
+            "Trade-off 301 vs. 302 explicado.",
+            "Inclui diagrama e estimativa de armazenamento."
+          ]
+        },
+        {
+          "id": "ar4-projeto-avancado",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Design completo: Sistema de notificações",
+          "description": "Projete um sistema que envia e-mail, push e SMS respeitando preferências do usuário, rate limit por provedor e retentativas sem duplicar envio.",
+          "steps": [
+            "Separe ingestão da entrega por canais em filas distintas.",
+            "Trate falha de um provedor de SMS sem travar push.",
+            "Inclua deduplicação e observabilidade."
+          ],
+          "definitionOfDone": [
+            "Cobre falha parcial, pico e auditoria.",
+            "ADRs para escolhas principais."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ar-fase-4-q1",
+          "prompt": "Qual a diferença entre SLI e SLO?",
+          "reviewTopicId": "ar-observabilidade",
+          "choices": [
+            {
+              "id": "a",
+              "text": "SLI é a métrica medida (ex.: % de requisições < 300ms); SLO é a meta alvo para essa métrica (ex.: 99,9% no mês).",
+              "correct": true,
+              "explanation": "E SLA é o contrato externo com consequência comercial se o SLO for violado."
+            },
+            {
+              "id": "b",
+              "text": "São linguagens de programação.",
+              "correct": false,
+              "explanation": "São conceitos de confiabilidade (SRE)."
+            },
+            {
+              "id": "c",
+              "text": "SLO é o servidor de banco de dados.",
+              "correct": false,
+              "explanation": "Não é infraestrutura."
+            }
+          ]
+        },
+        {
+          "id": "ar-fase-4-q2",
+          "prompt": "Por que um encurtador de URLs que precisa contar cliques usa HTTP 302 (temporário) em vez de 301 (permanente)?",
+          "reviewTopicId": "ar-casos",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque o navegador faz cache agressivo de 301 e nas visitas seguintes vai direto ao destino sem passar pelo seu servidor.",
+              "correct": true,
+              "explanation": "Com 302, o navegador volta ao servidor e você consegue contabilizar ou mudar o destino."
+            },
+            {
+              "id": "b",
+              "text": "Porque 301 significa erro de servidor.",
+              "correct": false,
+              "explanation": "301 é redirecionamento permanente."
+            },
+            {
+              "id": "c",
+              "text": "Porque 302 não precisa de cabeçalho `Location`.",
+              "correct": false,
+              "explanation": "Ambos usam `Location`."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

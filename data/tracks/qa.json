@@ -2,13 +2,13 @@
   "id": "qa",
   "name": "QA e Testes de Software",
   "tagline": "Encontrar falha cedo, descrever com clareza e automatizar o que se repete",
-  "description": "Para quem quer testar de propósito: caso, defeito, regressão, API, interface, acessibilidade e um teste que roda sozinho.",
+  "description": "Para quem quer testar de propósito: técnicas de caso, defeito reproduzível, API, interface, acessibilidade, pirâmide de testes, performance, segurança básica e esteira de CI.",
   "phases": [
     {
       "id": "qa-fase-1",
       "number": 1,
       "badgeTitle": "Ofício",
-      "title": "O que é testar",
+      "title": "Fundamentos e desenho de testes",
       "topics": [
         {
           "id": "qa-ideia",
@@ -17,18 +17,19 @@
           "title": "Testar é comparar com uma expectativa",
           "description": "Teste não é \"usar até cansar\". Você diz o que deveria acontecer, faz, e registra a diferença. Sem expectativa escrita, qualquer resultado parece aceitável.",
           "tags": [
-            "Teste"
+            "Teste",
+            "Fundamentos"
           ],
           "prerequisites": [],
           "resources": [
             {
-              "title": "Pirâmide de testes na prática",
+              "title": "Pirâmide de testes na prática (Martin Fowler)",
               "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
               "lang": "en",
               "kind": "leitura"
             },
             {
-              "title": "Testes na MDN",
+              "title": "Introdução a testes (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Testing",
               "lang": "pt",
               "kind": "leitura"
@@ -49,16 +50,44 @@
           ],
           "resources": [
             {
-              "title": "Testes na MDN",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Testing",
-              "lang": "pt",
+              "title": "Software Testing (Guru99 — Test Case)",
+              "url": "https://www.guru99.com/test-case.html",
+              "lang": "en",
               "kind": "leitura"
             },
             {
-              "title": "HTTPBin para experimentar pedido",
-              "url": "https://httpbin.org/",
+              "title": "Testes entre navegadores (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Testing/Introduction",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "qa-tecnicas",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Partição de equivalência e valor limite",
+          "description": "Você não precisa testar de 1 a 100 um por um. Agrupe entradas equivalentes e ataque as bordas (0, 1, 100, 101, negativo, nulo) — é onde os `>` vs `>=` costumam quebrar.",
+          "tags": [
+            "Técnicas",
+            "Bordas"
+          ],
+          "prerequisites": [
+            "qa-caso"
+          ],
+          "resources": [
+            {
+              "title": "ISTQB Foundation Syllabus (conceitos)",
+              "url": "https://www.istqb.org/certifications/certified-tester-foundation-level",
               "lang": "en",
-              "kind": "pratica"
+              "kind": "leitura"
+            },
+            {
+              "title": "Boundary Value Analysis (Guru99)",
+              "url": "https://www.guru99.com/equivalence-partitioning-boundary-value-analysis.html",
+              "lang": "en",
+              "kind": "leitura"
             }
           ]
         },
@@ -76,14 +105,14 @@
           ],
           "resources": [
             {
-              "title": "Guia de testes da OWASP",
-              "url": "https://owasp.org/www-project-web-security-testing-guide/",
+              "title": "Bug Reporting Guidelines (Mozilla)",
+              "url": "https://firefox-source-docs.mozilla.org/contributing/how_to_contribute_firefox.html",
               "lang": "en",
               "kind": "leitura"
             },
             {
-              "title": "Pirâmide de testes na prática",
-              "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
+              "title": "How to Write a Good Bug Report (Guru99)",
+              "url": "https://www.guru99.com/defect-management-process.html",
               "lang": "en",
               "kind": "leitura"
             }
@@ -168,26 +197,26 @@
         },
         {
           "id": "qa-fase-1-q2",
-          "prompt": "Severidade descreve o quê?",
-          "reviewTopicId": "qa-defeito",
+          "prompt": "Para um campo que aceita idade entre 18 e 65 anos, quais valores testam melhor os limites?",
+          "reviewTopicId": "qa-tecnicas",
           "choices": [
             {
               "id": "a",
-              "text": "O estrago se o defeito chegar em quem usa.",
+              "text": "17, 18, 65 e 66.",
               "correct": true,
-              "explanation": "Impacto, não o volume da discussão."
+              "explanation": "Os extremos exatos e seus vizinhos imediatos pegam erros de comparação."
             },
             {
               "id": "b",
-              "text": "Há quanto tempo você está cansado.",
+              "text": "25, 30, 35 e 40.",
               "correct": false,
-              "explanation": "Cansaço não é métrica."
+              "explanation": "Todos pertencem à mesma partição válida."
             },
             {
               "id": "c",
-              "text": "Quantas linhas o patch vai ter.",
+              "text": "Apenas 30.",
               "correct": false,
-              "explanation": "Tamanho do patch é outro assunto."
+              "explanation": "Não testa nenhuma borda."
             }
           ]
         }
@@ -197,7 +226,7 @@
       "id": "qa-fase-2",
       "number": 2,
       "badgeTitle": "Além da tela",
-      "title": "API, interface, regressão e CI",
+      "title": "API, interface, acessibilidade e CI",
       "topics": [
         {
           "id": "qa-api",
@@ -232,10 +261,10 @@
           "level": "intermediario",
           "hours": 6,
           "title": "Interface e regressão",
-          "description": "Regressão é a falha que volta. Automatize o fluxo que quebrou duas vezes. Deixe exploração manual para o que você ainda não sabe descrever. Selenium e Playwright são ferramentas; o caso continua sendo seu.",
+          "description": "Regressão é a falha que volta. Automatize o fluxo que quebrou duas vezes. Deixe exploração manual para o que você ainda não sabe descrever. Playwright e Selenium são ferramentas; o caso continua sendo seu.",
           "tags": [
             "Regressão",
-            "UI"
+            "Playwright"
           ],
           "prerequisites": [
             "qa-defeito"
@@ -290,23 +319,24 @@
           "title": "Teste na esteira",
           "description": "O teste que só roda na sua máquina não protege o time. A esteira roda a suíte em cada mudança e falha o build. Teste instável (passa e falha sem mudança) é defeito da suíte: conserte ou tire.",
           "tags": [
-            "CI"
+            "CI",
+            "GitHub Actions"
           ],
           "prerequisites": [
             "qa-api"
           ],
           "resources": [
             {
-              "title": "GitHub Actions",
+              "title": "GitHub Actions (pt-BR)",
               "url": "https://docs.github.com/pt/actions",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Pirâmide de testes na prática",
-              "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
+              "title": "Playwright on CI",
+              "url": "https://playwright.dev/docs/ci",
               "lang": "en",
-              "kind": "leitura"
+              "kind": "documentacao"
             }
           ]
         }
@@ -335,7 +365,7 @@
           "title": "Um fluxo automatizado",
           "description": "Automatize um fluxo curto com Playwright ou Selenium e deixe um caso de propósito de fora, com o motivo.",
           "steps": [
-            "O teste usa texto visível.",
+            "O teste usa texto visível ou role acessível.",
             "Rode duas vezes.",
             "Escreva o que continua manual."
           ],
@@ -409,6 +439,562 @@
               "text": "Porque o teclado não faz parte do teste.",
               "correct": false,
               "explanation": "Percorrer sem mouse é teste."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qa-fase-3",
+      "number": 3,
+      "badgeTitle": "Estratégia",
+      "title": "Pirâmide, massa de dados e contratos",
+      "topics": [
+        {
+          "id": "qa-piramide",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Pirâmide de testes na prática",
+          "description": "Testar toda regra de negócio pela interface (E2E) gera uma suíte lenta e frágil. Empurre combinações e regras para testes de unidade e API; deixe o E2E para fluxos críticos de ponta a ponta.",
+          "tags": [
+            "Pirâmide",
+            "Estratégia"
+          ],
+          "prerequisites": [
+            "qa-api",
+            "qa-ui"
+          ],
+          "resources": [
+            {
+              "title": "Test Pyramid (Martin Fowler Bliki)",
+              "url": "https://martinfowler.com/bliki/TestPyramid.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Just Say No to More End-to-End Tests (Google)",
+              "url": "https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "qa-massa",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Massa de dados e isolamento",
+          "description": "Se o Teste B depende do usuário criado pelo Teste A, rodar em paralelo quebra tudo. Cada teste deve criar ou preparar seu próprio estado limpo (seeds, factories, API de setup) e não vazar para o vizinho.",
+          "tags": [
+            "Massa",
+            "Isolamento"
+          ],
+          "prerequisites": [
+            "qa-piramide"
+          ],
+          "resources": [
+            {
+              "title": "Test Isolation no Playwright",
+              "url": "https://playwright.dev/docs/browser-contexts",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Fixtures no Playwright",
+              "url": "https://playwright.dev/docs/test-fixtures",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "qa-contrato",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Mocks de rede e testes de contrato",
+          "description": "Quando seu sistema chama um gateway externo, você não testa o gateway no seu CI: intercepte a rede para simular erro 500 ou timeout. Entre times internos, valide o contrato (schema JSON/OpenAPI) para ninguém quebrar o outro.",
+          "tags": [
+            "Mocks",
+            "Contrato"
+          ],
+          "prerequisites": [
+            "qa-api"
+          ],
+          "resources": [
+            {
+              "title": "Mock APIs no Playwright",
+              "url": "https://playwright.dev/docs/mock",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Contract Testing (Pact introdução)",
+              "url": "https://docs.pact.io/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "qa3-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Classificar uma suíte",
+          "description": "Pegue 10 cenários de um sistema de compras e decida quais vão para unidade, quais vão para API e quais ficam no E2E.",
+          "steps": [
+            "Liste os 10 cenários.",
+            "Atribua cada um a uma camada.",
+            "Justifique por que não colocar todos no E2E."
+          ],
+          "definitionOfDone": [
+            "A maioria está na base (unidade/API).",
+            "Os 2 ou 3 E2E cobrem o fluxo crítico."
+          ]
+        },
+        {
+          "id": "qa3-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Testes paralelos isolados",
+          "description": "Configure dois testes de UI ou API para rodarem em paralelo sem compartilhar o mesmo registro ou usuário.",
+          "steps": [
+            "Gere dados únicos por execução (ou contexto isolado).",
+            "Execute com paralelismo ativado.",
+            "Verifique que não há colisão."
+          ],
+          "definitionOfDone": [
+            "Passam em qualquer ordem e em paralelo.",
+            "Não dependem de limpeza manual antes."
+          ]
+        },
+        {
+          "id": "qa3-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Simulando falha de terceiro",
+          "description": "Use interceptação de rede para simular erro 503 ou resposta lenta de uma API externa e teste se a interface mostra erro amigável ao usuário.",
+          "steps": [
+            "Intercepte a rota externa no teste.",
+            "Retorne 503 com atraso.",
+            "Assegure que a tela não trava em branco."
+          ],
+          "definitionOfDone": [
+            "O teste roda offline do serviço terceiro.",
+            "A mensagem de erro visível é verificada."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "qa-fase-3-q1",
+          "prompt": "Qual o problema de concentrar 90% da suíte em testes E2E de navegador?",
+          "reviewTopicId": "qa-piramide",
+          "choices": [
+            {
+              "id": "a",
+              "text": "A suíte fica lenta, cara de manter e falha por detalhes de interface mesmo quando a regra está certa.",
+              "correct": true,
+              "explanation": "Feedback lento atrasa o time e aumenta flakiness."
+            },
+            {
+              "id": "b",
+              "text": "Testes E2E não conseguem clicar em botões.",
+              "correct": false,
+              "explanation": "Conseguem, mas são caros para validar cada regra pequena."
+            },
+            {
+              "id": "c",
+              "text": "Testes de unidade não funcionam em JavaScript ou Java.",
+              "correct": false,
+              "explanation": "Funcionam e são a base mais rápida da pirâmide."
+            }
+          ]
+        },
+        {
+          "id": "qa-fase-3-q2",
+          "prompt": "Por que um teste nunca deve depender dos dados criados pelo teste anterior?",
+          "reviewTopicId": "qa-massa",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque rodar isolado ou em paralelo quebra a sequência e cria falsos negativos.",
+              "correct": true,
+              "explanation": "Cada teste precisa ser independente."
+            },
+            {
+              "id": "b",
+              "text": "Porque bancos de dados não aceitam dois INSERTs.",
+              "correct": false,
+              "explanation": "O problema é o acoplamento entre testes."
+            },
+            {
+              "id": "c",
+              "text": "Porque testes só rodam uma vez por mês.",
+              "correct": false,
+              "explanation": "Rodam em cada commit."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qa-fase-4",
+      "number": 4,
+      "badgeTitle": "Especialização",
+      "title": "Exploratório, performance e segurança",
+      "topics": [
+        {
+          "id": "qa-exploratorio",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Teste exploratório com missão",
+          "description": "Exploratório não é sair clicando sem rumo: defina um objetivo (charter), um bloco de 45 minutos, explore fluxos estranhos (voltar no navegador, duplo clique, rede lenta) e anote achados.",
+          "tags": [
+            "Exploratório",
+            "UX"
+          ],
+          "prerequisites": [
+            "qa-defeito"
+          ],
+          "resources": [
+            {
+              "title": "Exploratory Testing (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/ExploratoryTesting.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Chrome DevTools — Network Throttling",
+              "url": "https://developer.chrome.com/docs/devtools/network/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        },
+        {
+          "id": "qa-performance",
+          "level": "avancado",
+          "hours": 7,
+          "title": "Testes de carga e latência (p95/p99)",
+          "description": "Funcional passar para 1 usuário não garante que aguenta 200 simultâneos. Aprenda a medir latência por percentil (p95, não só média), taxa de erro e vazão com ferramentas como k6.",
+          "tags": [
+            "Performance",
+            "k6"
+          ],
+          "prerequisites": [
+            "qa-api"
+          ],
+          "resources": [
+            {
+              "title": "Documentação do Grafana k6",
+              "url": "https://grafana.com/docs/k6/latest/",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Web Vitals (web.dev)",
+              "url": "https://web.dev/articles/vitals",
+              "lang": "pt",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "qa-seguranca",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Segurança básica para QA (OWASP)",
+          "description": "Teste se trocar o ID na URL abre dados de outro usuário (IDOR), se campos refletem `<script>` (XSS), se rotas administrativas aceitam usuário comum e se cabeçalhos sensíveis vazam.",
+          "tags": [
+            "Segurança",
+            "OWASP"
+          ],
+          "prerequisites": [
+            "qa-api"
+          ],
+          "resources": [
+            {
+              "title": "OWASP Top 10",
+              "url": "https://owasp.org/www-project-top-ten/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "OWASP Web Security Testing Guide",
+              "url": "https://owasp.org/www-project-web-security-testing-guide/",
+              "lang": "en",
+              "kind": "documentacao"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "qa4-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Sessão exploratória de 45 min",
+          "description": "Execute uma sessão cronometrada num projeto seu ou app público simulando 3G lento e botão voltar do navegador.",
+          "steps": [
+            "Escreva o charter antes de começar.",
+            "Teste com throttling de rede no DevTools.",
+            "Registre pelo menos 3 observações ou bugs."
+          ],
+          "definitionOfDone": [
+            "O relatório tem missão, tempo e achados.",
+            "Cada bug encontrado tem passos para reproduzir."
+          ]
+        },
+        {
+          "id": "qa4-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Teste de carga local com k6",
+          "description": "Escreva um script k6 contra uma API local subindo para 50 usuários virtuais com threshold de p95 < 500ms e erro < 1%.",
+          "steps": [
+            "Defina o threshold antes de rodar.",
+            "Rode rampa de carga local (nunca contra site de terceiros).",
+            "Anote p95, p99 e RPS."
+          ],
+          "definitionOfDone": [
+            "O script está no repositório.",
+            "Os números do resultado estão documentados."
+          ]
+        },
+        {
+          "id": "qa4-projeto-avancado",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Checklist OWASP numa API sua",
+          "description": "Teste autorização (IDOR), injeção básica e exposição de dados numa API de estudo e corrija ou reporte as falhas.",
+          "steps": [
+            "Tente acessar `/pedidos/2` logado como usuário 1.",
+            "Envie payloads maliciosos em busca e cadastro.",
+            "Verifique se senhas ou tokens voltam na resposta."
+          ],
+          "definitionOfDone": [
+            "Os 3 vetores foram testados e documentados.",
+            "Nenhuma ação foi feita contra alvos sem autorização."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "qa-fase-4-q1",
+          "prompt": "Por que olhar p95 e p99 em testes de performance em vez de olhar só a média?",
+          "reviewTopicId": "qa-performance",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque a média esconde os 5% ou 1% de requisições muito lentas que irritam ou derrubam clientes.",
+              "correct": true,
+              "explanation": "Latência tem cauda longa; percentis mostram a experiência real dos piores casos."
+            },
+            {
+              "id": "b",
+              "text": "Porque média não existe em milissegundos.",
+              "correct": false,
+              "explanation": "Existe, mas suaviza picos."
+            },
+            {
+              "id": "c",
+              "text": "Porque p95 sempre é menor que a média.",
+              "correct": false,
+              "explanation": "p95 é maior ou igual à mediana e geralmente bem maior que a média em distribuições assimétricas."
+            }
+          ]
+        },
+        {
+          "id": "qa-fase-4-q2",
+          "prompt": "O que é uma falha de IDOR (Broken Object Level Authorization)?",
+          "reviewTopicId": "qa-seguranca",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Um usuário autenticado conseguir ler ou alterar recurso de outro apenas trocando o ID na requisição.",
+              "correct": true,
+              "explanation": "A API verificou se está logado, mas esqueceu de verificar se o objeto pertence a ele."
+            },
+            {
+              "id": "b",
+              "text": "Um botão desalinhado no CSS.",
+              "correct": false,
+              "explanation": "Isso é defeito visual."
+            },
+            {
+              "id": "c",
+              "text": "Uma página retornar 404 para URL inexistente.",
+              "correct": false,
+              "explanation": "404 para recurso inexistente é o comportamento esperado."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qa-fase-5",
+      "number": 5,
+      "badgeTitle": "Qualidade no time",
+      "title": "Shift-left, critérios e métricas",
+      "topics": [
+        {
+          "id": "qa-shiftleft",
+          "level": "intermediario",
+          "hours": 4,
+          "title": "Shift-left e critérios de aceite",
+          "description": "O bug mais barato é o que nunca foi programado. Participe do refinamento antes da implementação, ajude a escrever critérios de aceite claros (Dado / Quando / Então) e levante casos de borda cedo.",
+          "tags": [
+            "Shift-left",
+            "Refinamento"
+          ],
+          "prerequisites": [
+            "qa-piramide"
+          ],
+          "resources": [
+            {
+              "title": "Given-When-Then (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/GivenWhenThen.html",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Guia de Engenharia de Software no Google (Testing)",
+              "url": "https://abseil.io/resources/swe-book",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        },
+        {
+          "id": "qa-metricas",
+          "level": "avancado",
+          "hours": 4,
+          "title": "Métricas úteis vs. métricas de vaidade",
+          "description": "Medir QA por \"quantidade de bugs abertos\" ou \"100% de cobertura de linhas\" incentiva jogo errado. Meça tempo de feedback do CI, taxa de falha escapada para produção e frequência de testes instáveis.",
+          "tags": [
+            "Métricas",
+            "Qualidade"
+          ],
+          "prerequisites": [
+            "qa-ci",
+            "qa-shiftleft"
+          ],
+          "resources": [
+            {
+              "title": "DORA Metrics",
+              "url": "https://dora.dev/guides/dora-metrics-four-keys/",
+              "lang": "en",
+              "kind": "leitura"
+            },
+            {
+              "title": "Test Coverage (Martin Fowler)",
+              "url": "https://martinfowler.com/bliki/TestCoverage.html",
+              "lang": "en",
+              "kind": "leitura"
+            }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "qa5-projeto-iniciante",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "História com critérios testáveis",
+          "description": "Reescreva um pedido vago (\"quero um cupom de desconto\") em 5 critérios de aceite objetivos no formato Dado/Quando/Então.",
+          "steps": [
+            "Inclua cupom expirado, mínimo de compra e uso único.",
+            "Elimine termos vagos como \"rápido\" ou \"bonito\".",
+            "Revise se cada critério vira um teste direto."
+          ],
+          "definitionOfDone": [
+            "Todos os critérios têm resultado verificável.",
+            "Há casos de erro e limite."
+          ]
+        },
+        {
+          "id": "qa5-projeto-intermediario",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Plano de testes enxuto de uma release",
+          "description": "Monte um plano de 1 página para liberar uma nova funcionalidade: escopo, fora de escopo, riscos, massa necessária e critério de rollback.",
+          "steps": [
+            "Liste o que já está coberto por automação.",
+            "Liste o que será validado em exploratório.",
+            "Defina o sinal de alerta pós-deploy."
+          ],
+          "definitionOfDone": [
+            "Cabe em 1 página legível pelo time inteiro.",
+            "Tem plano de reversão claro."
+          ]
+        },
+        {
+          "id": "qa5-projeto-avancado",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Análise de bug escapado",
+          "description": "Pegue um bug real de projeto seu que chegou ao usuário e faça uma retrospectiva técnica sem caça às bruxas: por que passou e em qual camada da pirâmide deveria ter sido pego?",
+          "steps": [
+            "Descreva a causa raiz.",
+            "Identifique a lacuna de teste.",
+            "Escreva o teste que impede a regressão."
+          ],
+          "definitionOfDone": [
+            "O teste de regressão está implementado.",
+            "A ação preventiva é concreta."
+          ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "qa-fase-5-q1",
+          "prompt": "O que significa Shift-left testing?",
+          "reviewTopicId": "qa-shiftleft",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Trazer a preocupação com qualidade e testes para o início do ciclo (requisitos e desenvolvimento), não só no final.",
+              "correct": true,
+              "explanation": "Prevenir ambiguidade antes do código custa uma fração de corrigir depois do deploy."
+            },
+            {
+              "id": "b",
+              "text": "Alinhar todos os botões da tela à esquerda.",
+              "correct": false,
+              "explanation": "É um conceito de ciclo de desenvolvimento, não de layout."
+            },
+            {
+              "id": "c",
+              "text": "Demitir quem desenvolve e deixar só QA testando.",
+              "correct": false,
+              "explanation": "Qualidade passa a ser responsabilidade compartilhada."
+            }
+          ]
+        },
+        {
+          "id": "qa-fase-5-q2",
+          "prompt": "Por que \"100% de cobertura de linhas\" não garante ausência de bugs?",
+          "reviewTopicId": "qa-metricas",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Porque um teste pode executar a linha sem fazer asserções fortes ou sem testar casos de borda/requisitos faltantes.",
+              "correct": true,
+              "explanation": "Cobertura mede código executado, não qualidade das verificações."
+            },
+            {
+              "id": "b",
+              "text": "Porque ferramentas de cobertura não funcionam em funções.",
+              "correct": false,
+              "explanation": "Elas medem linhas e ramos, mas não pensam pelos requisitos."
+            },
+            {
+              "id": "c",
+              "text": "Porque bugs só existem em CSS.",
+              "correct": false,
+              "explanation": "Bugs existem em qualquer camada."
             }
           ]
         }

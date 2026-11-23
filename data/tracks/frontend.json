@@ -186,8 +186,14 @@
           ],
           "resources": [
             {
-              "title": "Visão geral do Chrome DevTools",
+              "title": "Chrome DevTools — Visão geral",
               "url": "https://developer.chrome.com/docs/devtools/overview",
+              "lang": "en",
+              "kind": "documentacao"
+            },
+            {
+              "title": "Firefox DevTools — Inspetor de Página",
+              "url": "https://firefox-source-docs.mozilla.org/devtools-user/page_inspector/",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -462,13 +468,13 @@
           ],
           "resources": [
             {
-              "title": "Seu primeiro formulário (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Forms/Your_first_form",
+              "title": "Estilizando formulários web (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Forms/Styling_web_forms",
               "lang": "pt",
-              "kind": "pratica"
+              "kind": "leitura"
             },
             {
-              "title": "Aprenda formulários (web.dev)",
+              "title": "Learn Forms (web.dev)",
               "url": "https://web.dev/learn/forms",
               "lang": "en",
               "kind": "curso"
@@ -717,16 +723,16 @@
           ],
           "resources": [
             {
-              "title": "Introdução à ARIA (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/Accessibility/ARIA",
+              "title": "WAI-ARIA Basics (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Accessibility/WAI-ARIA_basics",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Aprenda acessibilidade (web.dev)",
-              "url": "https://web.dev/learn/accessibility",
+              "title": "ARIA Authoring Practices Guide (W3C)",
+              "url": "https://www.w3.org/WAI/ARIA/apg/patterns/",
               "lang": "en",
-              "kind": "curso"
+              "kind": "documentacao"
             }
           ],
           "title": "Componente que o teclado alcança",
@@ -1208,14 +1214,14 @@
           ],
           "resources": [
             {
-              "title": "Criar um site com GitHub Pages",
-              "url": "https://docs.github.com/pt/pages/getting-started-with-github-pages/creating-a-github-pages-site",
-              "lang": "pt",
+              "title": "Publicando no Netlify (Docs)",
+              "url": "https://docs.netlify.com/site-deploys/create-deploys/",
+              "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "Começando na Vercel",
-              "url": "https://vercel.com/docs/getting-started-with-vercel",
+              "title": "Cloudflare Pages — Get Started",
+              "url": "https://developers.cloudflare.com/pages/get-started/",
               "lang": "en",
               "kind": "documentacao"
             }
@@ -1379,16 +1385,16 @@
           ],
           "resources": [
             {
-              "title": "CORS (MDN)",
+              "title": "CORS (MDN pt-BR)",
               "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/CORS",
               "lang": "pt",
               "kind": "documentacao"
             },
             {
-              "title": "Fetch API (MDN)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch",
+              "title": "Same-origin policy (MDN pt-BR)",
+              "url": "https://developer.mozilla.org/pt-BR/docs/Web/Security/Same-origin_policy",
               "lang": "pt",
-              "kind": "documentacao"
+              "kind": "leitura"
             }
           ]
         },
@@ -1639,22 +1645,16 @@
           ],
           "resources": [
             {
-              "title": "Introdução ao Playwright",
+              "title": "Playwright — Getting Started",
               "url": "https://playwright.dev/docs/intro",
               "lang": "en",
               "kind": "documentacao"
             },
             {
-              "title": "Escrevendo testes",
+              "title": "Writing Tests (Playwright)",
               "url": "https://playwright.dev/docs/writing-tests",
               "lang": "en",
               "kind": "pratica"
-            },
-            {
-              "title": "Guia do Vitest",
-              "url": "https://vitest.dev/guide/",
-              "lang": "en",
-              "kind": "documentacao"
             }
           ]
         },
