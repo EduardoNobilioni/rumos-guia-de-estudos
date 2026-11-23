@@ -24,8 +24,8 @@
           "resources": [
             {
               "title": "O que é Kubernetes (Docs pt-BR)",
-              "url": "https://kubernetes.io/pt-br/docs/concepts/overview/what-is-kubernetes/",
-              "lang": "pt",
+              "url": "https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/",
+              "lang": "en",
               "kind": "documentacao"
             },
             {
@@ -52,8 +52,8 @@
           "resources": [
             {
               "title": "Deployments (Kubernetes Docs pt-BR)",
-              "url": "https://kubernetes.io/pt-br/docs/concepts/workloads/controllers/deployment/",
-              "lang": "pt",
+              "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+              "lang": "en",
               "kind": "documentacao"
             },
             {
@@ -86,8 +86,8 @@
             },
             {
               "title": "DNS para Services e Pods (Docs pt-BR)",
-              "url": "https://kubernetes.io/pt-br/docs/concepts/services-networking/dns-pod-service/",
-              "lang": "pt",
+              "url": "https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/",
+              "lang": "en",
               "kind": "documentacao"
             }
           ]

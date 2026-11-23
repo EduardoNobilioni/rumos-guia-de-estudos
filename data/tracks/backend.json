@@ -34,51 +34,51 @@
           "quiz": [
             {
               "id": "be-logic-quiz-q1",
-              "prompt": "Depois de estudar \"Lógica antes do framework\", o que você deve conseguir?",
+              "prompt": "Por que treinar lógica de programação e fluxo de controle antes de começar um framework web?",
               "reviewTopicId": "be-logic",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Explicar a ideia com um exemplo pequeno, sem ler a frase pronta.",
+                  "text": "Porque frameworks mudam, mas separar entradas, regras e casos de borda em funções claras vale em qualquer um.",
                   "correct": true,
-                  "explanation": "Se a explicação não sai, o tópico ainda pede revisão."
+                  "explanation": "Sem base de lógica, qualquer erro de sintaxe ou regra vira mistério."
                 },
                 {
                   "id": "b",
-                  "text": "Repetir o título do tópico e seguir.",
+                  "text": "Porque frameworks proíbem funções e condicionais.",
                   "correct": false,
-                  "explanation": "O título não mostra que você entendeu."
+                  "explanation": "Eles usam funções e condicionais o tempo todo."
                 },
                 {
                   "id": "c",
-                  "text": "Pular os recursos porque o nome já é familiar.",
+                  "text": "Porque back-end não usa HTTP.",
                   "correct": false,
-                  "explanation": "Familiaridade com o nome não é o mesmo que prática."
+                  "explanation": "Back-end usa HTTP, mas a regra de negócio ainda é lógica pura."
                 }
               ]
             },
             {
               "id": "be-logic-quiz-q2",
-              "prompt": "Quando a autoavaliação erra, o que fazer?",
+              "prompt": "Qual a vantagem de isolar a regra de negócio do código de rota HTTP?",
               "reviewTopicId": "be-logic",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Abrir de novo o tópico e um recurso indicado.",
+                  "text": "Poder testar e reutilizar a regra sem precisar simular uma requisição HTTP completa.",
                   "correct": true,
-                  "explanation": "O quiz é revisão, não nota de disciplina."
+                  "explanation": "A rota só traduz HTTP para a função de negócio."
                 },
                 {
                   "id": "b",
-                  "text": "Apagar a trilha e recomeçar do zero.",
+                  "text": "Eliminar a necessidade de banco de dados.",
                   "correct": false,
-                  "explanation": "Um erro aponta um ponto, não a trilha inteira."
+                  "explanation": "Persistência continua existindo quando necessária."
                 },
                 {
                   "id": "c",
-                  "text": "Considerar o assunto encerrado mesmo assim.",
+                  "text": "Deixar todas as funções com 500 linhas.",
                   "correct": false,
-                  "explanation": "Errar é o sinal para revisar antes de avançar."
+                  "explanation": "Funções isoladas tendem a ficar menores e mais claras."
                 }
               ]
             }

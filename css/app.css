@@ -258,25 +258,29 @@ html.dark .study-block {
   gap: 0.75rem;
   width: 100%;
   text-align: left;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  padding: 0.9rem 1.05rem;
+  border-radius: 12px;
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  background: var(--soft);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 12px -4px rgba(15, 23, 42, 0.06);
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
 html.dark .topic-node {
-  background: var(--night);
-  border-color: rgba(100, 116, 139, 0.55);
+  background: #1B2634;
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
 }
 
 .topic-node:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: var(--terra);
+  box-shadow: 0 8px 20px -6px rgba(29, 78, 216, 0.18);
 }
 
 html.dark .topic-node:hover {
   border-color: var(--ochre);
+  box-shadow: 0 8px 20px -6px rgba(96, 165, 250, 0.2);
 }
 
 .topic-node.is-done {
@@ -285,12 +289,76 @@ html.dark .topic-node:hover {
 }
 
 html.dark .topic-node.is-done {
-  background: rgba(52, 211, 153, 0.08);
+  background: rgba(52, 211, 153, 0.09);
 }
 
 .topic-node.is-optional {
   border-style: dashed;
   border-color: var(--amber);
+}
+
+section.bg-soft,
+main section.bg-soft,
+#onboarding > div.bg-soft,
+dialog > div,
+dialog > form {
+  border-radius: 14px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 10px 28px -8px rgba(15, 23, 42, 0.08);
+}
+
+html.dark section.bg-soft,
+html.dark main section.bg-soft,
+html.dark #onboarding > div.bg-soft,
+html.dark dialog > div,
+html.dark dialog > form {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 14px 32px -10px rgba(0, 0, 0, 0.5);
+}
+
+button,
+input,
+select,
+textarea {
+  border-radius: 8px;
+  transition: box-shadow 140ms ease, border-color 140ms ease, transform 120ms ease, background-color 140ms ease;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.choice-card {
+  display: block;
+  height: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(100, 116, 139, 0.4);
+  background: var(--soft);
+  padding: 1rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 6px 16px -6px rgba(15, 23, 42, 0.06);
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.choice-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -6px rgba(29, 78, 216, 0.14);
+}
+
+html.dark .choice-card {
+  border-color: rgba(148, 163, 184, 0.28);
+  background: var(--card);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+.track-switch {
+  border: 1px solid var(--line);
+  background: var(--soft);
+  color: inherit;
+  border-radius: 9999px;
+  min-height: 2.1rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 dialog {
@@ -305,22 +373,6 @@ dialog {
 dialog::backdrop {
   background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(2px);
-}
-
-.choice-card {
-  display: block;
-  height: 100%;
-  border-radius: 2px;
-  border: 1px solid var(--line);
-  background: var(--soft);
-  padding: 1rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-html.dark .choice-card {
-  border-color: var(--sage);
-  background: var(--card);
 }
 
 .choice-card.is-selected {
@@ -338,16 +390,6 @@ html.dark .choice-card {
   padding: 0;
   border: 0;
   min-inline-size: 0;
-}
-
-.track-switch {
-  border: 1px solid var(--line);
-  background: var(--soft);
-  color: inherit;
-  border-radius: 2px;
-  min-height: 2rem;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.875rem;
 }
 
 html.dark .track-switch {

@@ -36,51 +36,51 @@
           "quiz": [
             {
               "id": "f1-internet-quiz-q1",
-              "prompt": "Depois de estudar \"Como a Internet Funciona\", o que você deve conseguir?",
+              "prompt": "Na comunicação cliente-servidor na web, qual a função do DNS?",
               "reviewTopicId": "f1-internet",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Explicar a ideia com um exemplo pequeno, sem ler a frase pronta.",
+                  "text": "Traduzir nomes legíveis (ex.: exemplo.com) para o endereço IP do servidor.",
                   "correct": true,
-                  "explanation": "Se a explicação não sai, o tópico ainda pede revisão."
+                  "explanation": "É a agenda de endereços da internet."
                 },
                 {
                   "id": "b",
-                  "text": "Repetir o título do tópico e seguir.",
+                  "text": "Criptografar senhas no banco de dados.",
                   "correct": false,
-                  "explanation": "O título não mostra que você entendeu."
+                  "explanation": "Quem faz isso é hash como Argon2/bcrypt."
                 },
                 {
                   "id": "c",
-                  "text": "Pular os recursos porque o nome já é familiar.",
+                  "text": "Renderizar o HTML no navegador.",
                   "correct": false,
-                  "explanation": "Familiaridade com o nome não é o mesmo que prática."
+                  "explanation": "Quem renderiza é o motor do navegador."
                 }
               ]
             },
             {
               "id": "f1-internet-quiz-q2",
-              "prompt": "Quando a autoavaliação erra, o que fazer?",
+              "prompt": "Qual a diferença prática entre HTTP e HTTPS?",
               "reviewTopicId": "f1-internet",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Abrir de novo o tópico e um recurso indicado.",
+                  "text": "HTTPS trafega HTTP dentro de um túnel TLS criptografado e autenticado por certificado.",
                   "correct": true,
-                  "explanation": "O quiz é revisão, não nota de disciplina."
+                  "explanation": "Protege os dados contra leitura e alteração no caminho."
                 },
                 {
                   "id": "b",
-                  "text": "Apagar a trilha e recomeçar do zero.",
+                  "text": "HTTPS só funciona para imagens.",
                   "correct": false,
-                  "explanation": "Um erro aponta um ponto, não a trilha inteira."
+                  "explanation": "Funciona para qualquer recurso web."
                 },
                 {
                   "id": "c",
-                  "text": "Considerar o assunto encerrado mesmo assim.",
+                  "text": "HTTP é mais seguro que HTTPS.",
                   "correct": false,
-                  "explanation": "Errar é o sinal para revisar antes de avançar."
+                  "explanation": "HTTP trafega em texto claro."
                 }
               ]
             }
@@ -158,8 +158,8 @@
           "resources": [
             {
               "title": "Branches em poucas palavras (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-Branches-em-poucas-palavras",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+              "lang": "en",
               "kind": "leitura"
             },
             {

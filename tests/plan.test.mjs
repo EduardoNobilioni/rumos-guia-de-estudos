@@ -172,6 +172,31 @@ test('maxBlockMinutes limita duração da sessão e spacedReview agenda revisão
   assert.match(ics, /DTSTART;TZID=America\/Sao_Paulo:/);
 });
 
+test('buildWorkItems inclui sessão de reforço para tópicos com erro no quiz', () => {
+  const view = {
+    phases: [{
+      id: 'f1',
+      title: 'Base',
+      quiz: [{
+        id: 'q1',
+        reviewTopicId: 't1',
+        choices: [
+          { id: 'a', correct: true },
+          { id: 'b', correct: false },
+        ],
+      }],
+      topics: [
+        { id: 't1', title: 'DNS', description: '', hours: 1, status: 'required', done: true, prerequisites: [], resources: [] },
+      ],
+      projects: [],
+    }],
+  };
+  const items = buildWorkItems(view, 'iniciante', {
+    includeOptional: false, includeProjects: false, includeReviews: true, skipDone: true, quizAnswers: { q1: 'b' },
+  });
+  assert.ok(items.some((i) => i.kind === 'review' && i.refId === 't1' && i.title.includes('Reforço')));
+});
+
 function sequence() {
   let n = 0;
   return () => `sessao-${n++}`;

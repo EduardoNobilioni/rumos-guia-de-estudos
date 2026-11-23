@@ -23,7 +23,7 @@
           "resources": [
             {
               "title": "O que é um container? (Docker Docs)",
-              "url": "https://docs.docker.com/get-started/docker-overview/",
+              "url": "https://docs.docker.com/get-started/introduction/get-docker-desktop/",
               "lang": "en",
               "kind": "documentacao"
             },

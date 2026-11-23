@@ -92,7 +92,39 @@ function orderTopics(topics) {
 
 export function buildWorkItems(view, level, options) {
   const items = [];
+  const answers = options.quizAnswers || {};
+  const reviewTopicIds = new Set();
   for (const phase of view.phases) {
+    for (const q of phase.quiz || []) {
+      const chosen = answers[q.id];
+      if (!chosen) continue;
+      const choice = (q.choices || []).find((c) => c.id === chosen);
+      if (choice && !choice.correct && q.reviewTopicId) reviewTopicIds.add(q.reviewTopicId);
+    }
+    for (const t of phase.topics || []) {
+      for (const q of t.quiz || []) {
+        const chosen = answers[q.id];
+        if (!chosen) continue;
+        const choice = (q.choices || []).find((c) => c.id === chosen);
+        if (choice && !choice.correct) reviewTopicIds.add(q.reviewTopicId || t.id);
+      }
+    }
+  }
+  for (const phase of view.phases) {
+    for (const topic of phase.topics || []) {
+      if (!reviewTopicIds.has(topic.id)) continue;
+      items.push({
+        kind: 'review',
+        refId: topic.id,
+        phaseId: phase.id,
+        trackId: options.trackId || '',
+        trackName: options.trackName || '',
+        title: `Reforço (Revisar): ${topic.title}`,
+        minutes: 30,
+        summary: 'Tópico sinalizado para revisão na autoavaliação.',
+        links: (topic.resources || []).map((resource) => ({ title: resource.title, url: resource.url })),
+      });
+    }
     const topics = orderTopics(phase.topics.filter((topic) => {
       if (topic.status === 'hidden') return false;
       if (topic.status === 'optional' && !options.includeOptional) return false;

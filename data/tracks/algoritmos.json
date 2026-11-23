@@ -23,7 +23,7 @@
           "resources": [
             {
               "title": "Notação assintótica (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/assintotica.html",
+              "url": "https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/Oh.html",
               "lang": "pt",
               "kind": "leitura"
             },
@@ -405,8 +405,8 @@
           ],
           "resources": [
             {
-              "title": "Árvores binárias de busca (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/arvore.html",
+              "title": "Árvore binária de busca (Wikipédia pt-BR)",
+              "url": "https://pt.wikipedia.org/wiki/%C3%81rvore_bin%C3%A1ria_de_busca",
               "lang": "pt",
               "kind": "leitura"
             },
@@ -433,7 +433,7 @@
           "resources": [
             {
               "title": "Tabelas de dispersão / Hashing (IME-USP)",
-              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/hashing.html",
+              "url": "https://www.ime.usp.br/~pf/algoritmos/aulas/hash.html",
               "lang": "pt",
               "kind": "leitura"
             },
@@ -689,7 +689,7 @@
             },
             {
               "title": "B-Tree Indexes no PostgreSQL",
-              "url": "https://www.postgresql.org/docs/current/btree-intro.html",
+              "url": "https://www.postgresql.org/docs/current/btree.html",
               "lang": "en",
               "kind": "documentacao"
             }

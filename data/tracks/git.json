@@ -23,8 +23,8 @@
           "resources": [
             {
               "title": "Gravando alterações no repositório (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Gravando-Altera%C3%A7%C3%B5es-no-Reposit%C3%B3rio",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -50,8 +50,8 @@
           "resources": [
             {
               "title": "Branches em poucas palavras (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-Branches-em-poucas-palavras",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -77,8 +77,8 @@
           "resources": [
             {
               "title": "Branching e Merging básico (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-B%C3%A1sico-de-Branch-e-Merge",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -214,8 +214,8 @@
           "resources": [
             {
               "title": "Trabalhando com Remotos (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Trabalhando-com-Remotos",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -407,8 +407,8 @@
           "resources": [
             {
               "title": "Rebasing (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Ramifica%C3%A7%C3%A3o-Branching-no-Git-Rebasing",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Branching-Rebasing",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -435,8 +435,8 @@
           "resources": [
             {
               "title": "Desfazendo coisas (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Desfazendo-Coisas",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -463,8 +463,8 @@
           "resources": [
             {
               "title": "Depuração com Git (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Ferramentas-do-Git-Depurando-com-o-Git",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Tools-Debugging-with-Git",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -601,8 +601,8 @@
           "resources": [
             {
               "title": "Tags no Git (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Fundamentos-de-Git-Tags",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Basics-Tagging",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -629,8 +629,8 @@
           "resources": [
             {
               "title": "Stashing e Limpeza (Pro Git pt-BR)",
-              "url": "https://git-scm.com/book/pt-br/v2/Ferramentas-do-Git-Stashing-e-Limpeza",
-              "lang": "pt",
+              "url": "https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning",
+              "lang": "en",
               "kind": "leitura"
             },
             {

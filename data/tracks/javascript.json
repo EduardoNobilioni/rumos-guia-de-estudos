@@ -471,8 +471,8 @@
             },
             {
               "title": "AbortController (MDN pt-BR)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/API/AbortController",
-              "lang": "pt",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/API/AbortController",
+              "lang": "en",
               "kind": "documentacao"
             }
           ]

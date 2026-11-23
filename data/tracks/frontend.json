@@ -35,51 +35,51 @@
           "quiz": [
             {
               "id": "fe-web-quiz-q1",
-              "prompt": "Depois de estudar \"Como a interface chega no navegador\", o que você deve conseguir?",
+              "prompt": "O que acontece primeiro quando você digita uma URL no navegador?",
               "reviewTopicId": "fe-web",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Explicar a ideia com um exemplo pequeno, sem ler a frase pronta.",
+                  "text": "O navegador resolve o nome do domínio para um endereço IP via DNS antes de abrir a conexão HTTP/HTTPS.",
                   "correct": true,
-                  "explanation": "Se a explicação não sai, o tópico ainda pede revisão."
+                  "explanation": "Sem resolver o DNS, o navegador não sabe para qual servidor enviar o pedido."
                 },
                 {
                   "id": "b",
-                  "text": "Repetir o título do tópico e seguir.",
+                  "text": "O CSS é compilado antes de encontrar o servidor.",
                   "correct": false,
-                  "explanation": "O título não mostra que você entendeu."
+                  "explanation": "O CSS só chega depois da resposta HTML."
                 },
                 {
                   "id": "c",
-                  "text": "Pular os recursos porque o nome já é familiar.",
+                  "text": "O banco de dados envia as imagens direto sem HTML.",
                   "correct": false,
-                  "explanation": "Familiaridade com o nome não é o mesmo que prática."
+                  "explanation": "O navegador pede primeiro o documento HTML ao servidor web."
                 }
               ]
             },
             {
               "id": "fe-web-quiz-q2",
-              "prompt": "Quando a autoavaliação erra, o que fazer?",
+              "prompt": "Qual o papel do protocolo HTTP na carga de uma página?",
               "reviewTopicId": "fe-web",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Abrir de novo o tópico e um recurso indicado.",
+                  "text": "Padronizar o pedido do cliente (método, caminho, cabeçalhos) e a resposta do servidor (status e corpo).",
                   "correct": true,
-                  "explanation": "O quiz é revisão, não nota de disciplina."
+                  "explanation": "HTTP é o contrato de texto entre navegador e servidor."
                 },
                 {
                   "id": "b",
-                  "text": "Apagar a trilha e recomeçar do zero.",
+                  "text": "Desenhar botões na tela automaticamente.",
                   "correct": false,
-                  "explanation": "Um erro aponta um ponto, não a trilha inteira."
+                  "explanation": "Quem estrutura e estiliza é HTML e CSS."
                 },
                 {
                   "id": "c",
-                  "text": "Considerar o assunto encerrado mesmo assim.",
+                  "text": "Substituir o sistema operacional.",
                   "correct": false,
-                  "explanation": "Errar é o sinal para revisar antes de avançar."
+                  "explanation": "HTTP é protocolo da camada de aplicação."
                 }
               ]
             }
@@ -469,8 +469,8 @@
           "resources": [
             {
               "title": "Estilizando formulários web (MDN pt-BR)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Forms/Styling_web_forms",
-              "lang": "pt",
+              "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Styling_web_forms",
+              "lang": "en",
               "kind": "leitura"
             },
             {
@@ -724,8 +724,8 @@
           "resources": [
             {
               "title": "WAI-ARIA Basics (MDN pt-BR)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/Accessibility/WAI-ARIA_basics",
-              "lang": "pt",
+              "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/WAI-ARIA_basics",
+              "lang": "en",
               "kind": "documentacao"
             },
             {
@@ -1392,8 +1392,8 @@
             },
             {
               "title": "Same-origin policy (MDN pt-BR)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Web/Security/Same-origin_policy",
-              "lang": "pt",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy",
+              "lang": "en",
               "kind": "leitura"
             }
           ]

@@ -35,51 +35,51 @@
           "quiz": [
             {
               "id": "ds-python-quiz-q1",
-              "prompt": "Depois de estudar \"Python essencial\", o que você deve conseguir?",
+              "prompt": "Por que usar dicionários e funções pequenas na análise de dados em Python?",
               "reviewTopicId": "ds-python",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Explicar a ideia com um exemplo pequeno, sem ler a frase pronta.",
+                  "text": "Para mapear categorias por chave rapidamente e evitar repetir blocos de limpeza copiados e colados.",
                   "correct": true,
-                  "explanation": "Se a explicação não sai, o tópico ainda pede revisão."
+                  "explanation": "Código organizado em funções facilita repetir a análise em novos dados."
                 },
                 {
                   "id": "b",
-                  "text": "Repetir o título do tópico e seguir.",
+                  "text": "Porque Python não aceita listas.",
                   "correct": false,
-                  "explanation": "O título não mostra que você entendeu."
+                  "explanation": "Aceita listas normalmente."
                 },
                 {
                   "id": "c",
-                  "text": "Pular os recursos porque o nome já é familiar.",
+                  "text": "Para substituir o arquivo CSV.",
                   "correct": false,
-                  "explanation": "Familiaridade com o nome não é o mesmo que prática."
+                  "explanation": "São estruturas na memória durante a análise."
                 }
               ]
             },
             {
               "id": "ds-python-quiz-q2",
-              "prompt": "Quando a autoavaliação erra, o que fazer?",
+              "prompt": "Qual o risco de trabalhar em um script sem separar leitura do dado e transformação?",
               "reviewTopicId": "ds-python",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Abrir de novo o tópico e um recurso indicado.",
+                  "text": "Dificulta testar a transformação com um exemplo pequeno e pode alterar o arquivo original sem querer.",
                   "correct": true,
-                  "explanation": "O quiz é revisão, não nota de disciplina."
+                  "explanation": "Mantenha o dado bruto intocado e funções de limpeza isoladas."
                 },
                 {
                   "id": "b",
-                  "text": "Apagar a trilha e recomeçar do zero.",
+                  "text": "O Python apaga o notebook automaticamente.",
                   "correct": false,
-                  "explanation": "Um erro aponta um ponto, não a trilha inteira."
+                  "explanation": "Não apaga, mas gera confusão e bugs silenciosos."
                 },
                 {
                   "id": "c",
-                  "text": "Considerar o assunto encerrado mesmo assim.",
+                  "text": "Impede de gerar gráficos.",
                   "correct": false,
-                  "explanation": "Errar é o sinal para revisar antes de avançar."
+                  "explanation": "Não impede."
                 }
               ]
             }
@@ -1265,7 +1265,7 @@
           "resources": [
             {
               "title": "Escrita clara para relatórios (18F Content Guide)",
-              "url": "https://guides.18f.gov/content-guide/",
+              "url": "https://developers.google.com/tech-writing/one",
               "lang": "en",
               "kind": "leitura"
             },
@@ -1295,7 +1295,7 @@
           "resources": [
             {
               "title": "Kaggle Learn — Intro to Machine Learning",
-              "url": "https://www.kaggle.com/learn/intro-to-machine-learning",
+              "url": "https://scikit-learn.org/stable/user_guide.html",
               "lang": "en",
               "kind": "curso"
             },

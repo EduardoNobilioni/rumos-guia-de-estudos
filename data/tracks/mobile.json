@@ -35,51 +35,51 @@
           "quiz": [
             {
               "id": "mob-ux-quiz-q1",
-              "prompt": "Depois de estudar \"Tela pequena é outro produto\", o que você deve conseguir?",
+              "prompt": "Por que uma tela mobile não é apenas uma página desktop encolhida?",
               "reviewTopicId": "mob-ux",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Explicar a ideia com um exemplo pequeno, sem ler a frase pronta.",
+                  "text": "Porque o uso é por toque (alvos maiores), em telas estreitas, com interrupções e rede instável.",
                   "correct": true,
-                  "explanation": "Se a explicação não sai, o tópico ainda pede revisão."
+                  "explanation": "Ergonomia de polegar, offline e bateria mudam o desenho do fluxo."
                 },
                 {
                   "id": "b",
-                  "text": "Repetir o título do tópico e seguir.",
+                  "text": "Porque celulares não carregam fontes.",
                   "correct": false,
-                  "explanation": "O título não mostra que você entendeu."
+                  "explanation": "Carregam fontes normalmente."
                 },
                 {
                   "id": "c",
-                  "text": "Pular os recursos porque o nome já é familiar.",
+                  "text": "Porque apps mobile não usam APIs.",
                   "correct": false,
-                  "explanation": "Familiaridade com o nome não é o mesmo que prática."
+                  "explanation": "Quase todos consomem APIs."
                 }
               ]
             },
             {
               "id": "mob-ux-quiz-q2",
-              "prompt": "Quando a autoavaliação erra, o que fazer?",
+              "prompt": "Qual cuidado básico melhora a ergonomia em botões de um app mobile?",
               "reviewTopicId": "mob-ux",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Abrir de novo o tópico e um recurso indicado.",
+                  "text": "Manter área de toque confortável (cerca de 44-48 dp/px) e ações principais ao alcance do polegar.",
                   "correct": true,
-                  "explanation": "O quiz é revisão, não nota de disciplina."
+                  "explanation": "Alvos minúsculos geram cliques errados e frustração."
                 },
                 {
                   "id": "b",
-                  "text": "Apagar a trilha e recomeçar do zero.",
+                  "text": "Colocar todos os botões com 10 px de altura.",
                   "correct": false,
-                  "explanation": "Um erro aponta um ponto, não a trilha inteira."
+                  "explanation": "Fica quase impossível tocar com precisão."
                 },
                 {
                   "id": "c",
-                  "text": "Considerar o assunto encerrado mesmo assim.",
+                  "text": "Exigir uso do mouse.",
                   "correct": false,
-                  "explanation": "Errar é o sinal para revisar antes de avançar."
+                  "explanation": "Uso principal é toque e leitor de tela."
                 }
               ]
             }

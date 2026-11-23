@@ -45,6 +45,7 @@ export function initPlanScreen(api) {
       includeProjects: current.includeProjects,
       includeReviews: current.includeReviews,
       skipDone,
+      quizAnswers: trackState.quizAnswers,
       trackId: track.id,
       trackName: track.name,
     });
@@ -57,6 +58,7 @@ export function initPlanScreen(api) {
       includeProjects: current.includeProjects,
       includeReviews: current.includeReviews,
       skipDone,
+      quizAnswers: comp.trackState.quizAnswers,
       trackId: comp.track.id,
       trackName: comp.track.name,
     }));

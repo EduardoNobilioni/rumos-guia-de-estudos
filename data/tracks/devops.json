@@ -35,51 +35,51 @@
           "quiz": [
             {
               "id": "do-linux-quiz-q1",
-              "prompt": "Depois de estudar \"Linux essencial\", o que você deve conseguir?",
+              "prompt": "Por que saber navegar e diagnosticar no Linux é base para DevOps?",
               "reviewTopicId": "do-linux",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Explicar a ideia com um exemplo pequeno, sem ler a frase pronta.",
+                  "text": "Porque servidores, containers e runners de CI rodam majoritariamente em Linux e são operados via terminal.",
                   "correct": true,
-                  "explanation": "Se a explicação não sai, o tópico ainda pede revisão."
+                  "explanation": "Sem conforto no shell, ler logs e permissões fica travado."
                 },
                 {
                   "id": "b",
-                  "text": "Repetir o título do tópico e seguir.",
+                  "text": "Porque containers Docker não têm terminal.",
                   "correct": false,
-                  "explanation": "O título não mostra que você entendeu."
+                  "explanation": "Têm shell e processos Linux por baixo."
                 },
                 {
                   "id": "c",
-                  "text": "Pular os recursos porque o nome já é familiar.",
+                  "text": "Porque Linux não tem sistema de arquivos.",
                   "correct": false,
-                  "explanation": "Familiaridade com o nome não é o mesmo que prática."
+                  "explanation": "Tudo no Linux gira em torno de arquivos e processos."
                 }
               ]
             },
             {
               "id": "do-linux-quiz-q2",
-              "prompt": "Quando a autoavaliação erra, o que fazer?",
+              "prompt": "Qual erro comum de permissão no Linux deve ser evitado em servidores?",
               "reviewTopicId": "do-linux",
               "choices": [
                 {
                   "id": "a",
-                  "text": "Abrir de novo o tópico e um recurso indicado.",
+                  "text": "Dar chmod 777 em pastas ou rodar a aplicação como root para fazer funcionar.",
                   "correct": true,
-                  "explanation": "O quiz é revisão, não nota de disciplina."
+                  "explanation": "Ajuste o dono (chown) ou a permissão mínima necessária."
                 },
                 {
                   "id": "b",
-                  "text": "Apagar a trilha e recomeçar do zero.",
+                  "text": "Usar ls -la para ver permissões.",
                   "correct": false,
-                  "explanation": "Um erro aponta um ponto, não a trilha inteira."
+                  "explanation": "ls -la é apenas leitura."
                 },
                 {
                   "id": "c",
-                  "text": "Considerar o assunto encerrado mesmo assim.",
+                  "text": "Criar um usuário dedicado para o serviço.",
                   "correct": false,
-                  "explanation": "Errar é o sinal para revisar antes de avançar."
+                  "explanation": "Isso é justamente uma boa prática."
                 }
               ]
             }

@@ -57,8 +57,8 @@
             },
             {
               "title": "Testes entre navegadores (MDN pt-BR)",
-              "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Extensions/Testing/Introduction",
-              "lang": "pt",
+              "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Testing/Introduction",
+              "lang": "en",
               "kind": "leitura"
             }
           ]

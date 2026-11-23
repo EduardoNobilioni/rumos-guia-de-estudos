@@ -36,7 +36,7 @@
             },
             {
               "title": "Google Planilhas",
-              "url": "https://support.google.com/docs/answer/6000292",
+              "url": "https://support.microsoft.com/pt-br/office/filtrar-dados-em-um-intervalo-ou-tabela-01832226-31b5-4568-8806-38c37dcc180e",
               "lang": "pt",
               "kind": "documentacao"
             }
@@ -91,7 +91,7 @@
             },
             {
               "title": "Tabelas dinâmicas no Google Planilhas",
-              "url": "https://support.google.com/docs/answer/1272900",
+              "url": "https://support.microsoft.com/pt-br/office/vis%C3%A3o-geral-de-tabelas-din%C3%A2micas-e-gr%C3%A1ficos-din%C3%A2micos-527c8fa3-02c0-445a-a2db-7794676bce96",
               "lang": "pt",
               "kind": "documentacao"
             }
@@ -119,7 +119,7 @@
             },
             {
               "title": "Tipos de gráficos e quando usar (Google)",
-              "url": "https://support.google.com/docs/answer/190718",
+              "url": "https://www.data-to-viz.com/",
               "lang": "pt",
               "kind": "leitura"
             }
@@ -560,7 +560,7 @@
             },
             {
               "title": "Boas práticas de design de relatórios (Microsoft pt-BR)",
-              "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/report-design-tips",
+              "url": "https://learn.microsoft.com/pt-br/training/modules/explore-power-bi/",
               "lang": "pt",
               "kind": "leitura"
             }
@@ -915,7 +915,7 @@
           "resources": [
             {
               "title": "Escrita clara para relatórios (18F Content Guide)",
-              "url": "https://guides.18f.gov/content-guide/",
+              "url": "https://developers.google.com/tech-writing/one",
               "lang": "en",
               "kind": "leitura"
             },
