@@ -10,7 +10,7 @@ Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 5. Nada disso pode quebrar ao adicionar trilhas, projetos ou telas novas.
 
 ## 0. Ajustes para cumprir as regras (antes das próximas tarefas)
-- [ ] Roadmap combinado: juntar carreira + trilhas adicionais num único trajeto ordenado por nível e pré-requisitos
+- [x] Roadmap combinado: juntar carreira + trilhas adicionais num único trajeto ordenado por nível e pré-requisitos
 - [ ] PNG: incluir a lista de tópicos junto com a árvore
 - [ ] PDF: incluir a árvore visual junto com a lista de tópicos
 

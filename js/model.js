@@ -860,6 +860,184 @@ export function buildRoadmap(track, trackState) {
   return { phases, orphans };
 }
 
+function combinedGroupPriority(levelRank, group) {
+  if (levelRank === 0) return group === 'fundamentos' ? 0 : (group === 'tecnologia' ? 1 : 2);
+  if (levelRank === 1) return group === 'fundamentos' ? 0 : (group === 'carreira' ? 1 : 2);
+  return group === 'carreira' ? 0 : (group === 'tecnologia' ? 1 : 2);
+}
+
+function combinedStageKey(item) {
+  const rank = item.effectiveRank ?? item.levelRank;
+  if (rank === 0 && item.sourceGroup !== 'carreira') return 'base-fundamentos';
+  if (rank === 0) return 'base-carreira';
+  if (rank === 1) return 'intermediario';
+  return 'avancado';
+}
+
+const COMBINED_STAGES = [
+  { key: 'base-fundamentos', id: 'combined-base-fundamentos', title: 'Fundamentos e Base Inicial', badgeTitle: 'Base Inicial' },
+  { key: 'base-carreira', id: 'combined-base-carreira', title: 'Primeiros Passos na Carreira', badgeTitle: 'Primeiros Passos' },
+  { key: 'intermediario', id: 'combined-intermediario', title: 'Aprofundamento e Prática', badgeTitle: 'Aprofundamento' },
+  { key: 'avancado', id: 'combined-avancado', title: 'Domínio e Produção', badgeTitle: 'Domínio' },
+];
+
+export function buildCombinedRoadmap(entries) {
+  const valid = (entries || []).filter((e) => e && e.track && e.trackState);
+  if (!valid.length) return { phases: [], orphans: [], combined: false };
+  if (valid.length === 1) {
+    const { track, trackState } = valid[0];
+    const single = buildRoadmap(track, trackState);
+    return {
+      combined: false,
+      phases: single.phases.map((phase) => ({
+        ...phase,
+        topics: phase.topics.map((topic) => ({
+          ...topic,
+          sourceTrackId: track.id,
+          sourceTrackName: track.name,
+          sourceGroup: track.group || 'carreira',
+        })),
+        projects: (phase.projects || []).map((project) => ({
+          ...project,
+          sourceTrackId: track.id,
+          sourceTrackName: track.name,
+        })),
+      })),
+      orphans: single.orphans,
+    };
+  }
+
+  const nodes = [];
+  const projectsByKey = new Map();
+  let seq = 0;
+
+  for (const { track, trackState } of valid) {
+    const view = buildRoadmap(track, trackState);
+    const totalPhases = Math.max(1, view.phases.length);
+    view.phases.forEach((phase, phaseIndex) => {
+      const phaseRatio = totalPhases > 1 ? phaseIndex / (totalPhases - 1) : 0;
+      for (const topic of phase.topics) {
+        const level = normalizeLevel(topic.level) || 'iniciante';
+        const levelRank = LEVEL_RANK[level] ?? 0;
+        const isCheckpoint = /\bcheckpoint\b/i.test(topic.title || '') ? 1 : 0;
+        const key = `${track.id}::${topic.id}`;
+        nodes.push({
+          key,
+          topic: {
+            ...topic,
+            sourceTrackId: track.id,
+            sourceTrackName: track.name,
+            sourceGroup: track.group || 'carreira',
+          },
+          trackId: track.id,
+          sourceGroup: track.group || 'carreira',
+          levelRank,
+          isCheckpoint,
+          groupPriority: combinedGroupPriority(levelRank, track.group || 'carreira'),
+          phaseRatio,
+          order: seq++,
+          prereqKeys: (topic.prerequisites || []).map((pid) => `${track.id}::${pid}`),
+        });
+      }
+      for (const project of phase.projects || []) {
+        const pLevel = normalizeLevel(project.level) || 'iniciante';
+        const pRank = LEVEL_RANK[pLevel] ?? 0;
+        const sKey = pRank === 0 ? 'base-carreira' : (pRank === 1 ? 'intermediario' : 'avancado');
+        if (!projectsByKey.has(sKey)) projectsByKey.set(sKey, []);
+        projectsByKey.get(sKey).push({
+          ...project,
+          sourceTrackId: track.id,
+          sourceTrackName: track.name,
+        });
+      }
+    });
+  }
+
+  const byKey = new Map(nodes.map((n) => [n.key, n]));
+  const inDegree = new Map();
+  const dependents = new Map();
+  for (const n of nodes) {
+    inDegree.set(n.key, 0);
+    dependents.set(n.key, []);
+  }
+  for (const n of nodes) {
+    for (const pk of n.prereqKeys) {
+      if (byKey.has(pk) && pk !== n.key) {
+        inDegree.set(n.key, inDegree.get(n.key) + 1);
+        dependents.get(pk).push(n.key);
+      }
+    }
+  }
+
+  const compareNodes = (a, b) => (
+    a.levelRank - b.levelRank
+    || a.isCheckpoint - b.isCheckpoint
+    || a.groupPriority - b.groupPriority
+    || a.phaseRatio - b.phaseRatio
+    || a.order - b.order
+  );
+
+  const ready = nodes.filter((n) => inDegree.get(n.key) === 0).sort(compareNodes);
+  const sorted = [];
+  const visited = new Set();
+
+  while (ready.length) {
+    const current = ready.shift();
+    if (visited.has(current.key)) continue;
+    visited.add(current.key);
+    sorted.push(current);
+    for (const depKey of dependents.get(current.key)) {
+      const nextDeg = inDegree.get(depKey) - 1;
+      inDegree.set(depKey, nextDeg);
+      if (nextDeg === 0) {
+        ready.push(byKey.get(depKey));
+        ready.sort(compareNodes);
+      }
+    }
+  }
+
+  if (sorted.length < nodes.length) {
+    const rest = nodes.filter((n) => !visited.has(n.key)).sort(compareNodes);
+    sorted.push(...rest);
+  }
+
+  for (const item of sorted) {
+    let eff = item.levelRank;
+    for (const pk of item.prereqKeys) {
+      const parent = byKey.get(pk);
+      if (parent && parent.effectiveRank > eff) eff = parent.effectiveRank;
+    }
+    item.effectiveRank = eff;
+  }
+
+  const grouped = new Map();
+  for (const item of sorted) {
+    const sKey = combinedStageKey(item);
+    if (!grouped.has(sKey)) grouped.set(sKey, []);
+    grouped.get(sKey).push(item.topic);
+  }
+
+  const phases = [];
+  let number = 1;
+  for (const stage of COMBINED_STAGES) {
+    const topics = grouped.get(stage.key) || [];
+    if (!topics.length) continue;
+    phases.push({
+      id: stage.id,
+      number: number++,
+      title: stage.title,
+      badgeTitle: stage.badgeTitle,
+      topics,
+      projects: projectsByKey.get(stage.key) || [],
+      quiz: [],
+      note: '',
+      progress: phaseProgress(topics),
+    });
+  }
+
+  return { phases, orphans: [], combined: true };
+}
+
 export function roadmapStats(phases) {
   let required = 0;
   let requiredDone = 0;

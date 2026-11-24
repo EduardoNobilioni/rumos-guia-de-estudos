@@ -5,6 +5,7 @@ import {
   LEGACY_STORAGE_KEY,
   applyImport,
   applySharePlan,
+  buildCombinedRoadmap,
   buildExport,
   buildRoadmap,
   clampHours,
@@ -67,7 +68,9 @@ const session = {
   search: '',
   filter: 'all',
   viewMode: 'map',
+  combinedView: false,
   detailTopicId: null,
+  detailSourceTrackId: null,
   resourceLang: 'all',
   resourceKind: 'all',
   openNotes: {},
@@ -147,6 +150,36 @@ function activeTrack() {
 function activeTrackState() {
   if (!state.activeTrackId) return null;
   return state.tracks[state.activeTrackId] || null;
+}
+
+function isCombinedView() {
+  const primary = state.profile.primaryTrackId;
+  return !!session.combinedView
+    && !!primary
+    && !!trackById(primary)
+    && (state.profile.companionIds || []).some((id) => id !== primary && trackById(id));
+}
+
+function activeEntries() {
+  if (isCombinedView()) {
+    const ids = [state.profile.primaryTrackId, ...(state.profile.companionIds || [])];
+    const seen = new Set();
+    const entries = [];
+    for (const id of ids) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const track = trackById(id);
+      if (track) entries.push({ track, trackState: ensureTrack(state, id) });
+    }
+    return entries;
+  }
+  const track = activeTrack();
+  const trackState = activeTrackState();
+  return track && trackState ? [{ track, trackState }] : [];
+}
+
+function activeView() {
+  return buildCombinedRoadmap(activeEntries());
 }
 
 function showScreen(name) {
@@ -246,17 +279,22 @@ function renderTopicNode(topic, titleById, doneIds) {
     isCheckpoint ? 'is-checkpoint' : '',
   ].filter(Boolean).join(' ');
   const prereqsAttr = escapeHtml((topic.prerequisites || []).join(','));
+  const sourceTrackId = topic.sourceTrackId || activeTrack()?.id || '';
+  const sourceBadge = isCombinedView() && topic.sourceTrackName
+    ? `<span class="px-1.5 py-0.5 rounded-sm bg-terra/10 dark:bg-ochre/15 text-terra dark:text-ochre text-[10px] font-semibold">${escapeHtml(topic.sourceTrackName)}</span>`
+    : '';
   return `
     <div class="topic-node ${nodeClass}" data-node-id="${topic.id}" data-prereqs="${prereqsAttr}">
       <div class="pt-0.5 shrink-0">
-        ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
+        ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}" data-source-track="${escapeHtml(sourceTrackId)}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
       </div>
-      <button type="button" data-action="open-topic-detail" data-item-id="${topic.id}" class="min-w-0 flex-1 text-left">
+      <button type="button" data-action="open-topic-detail" data-item-id="${topic.id}" data-source-track="${escapeHtml(sourceTrackId)}" class="min-w-0 flex-1 text-left">
         <div class="flex items-start gap-2.5">
-          ${topicIconHtml(topic, activeTrack()?.id, 'md')}
+          ${topicIconHtml(topic, sourceTrackId, 'md')}
           <p class="text-sm font-semibold leading-snug ${strike}">${escapeHtml(topic.title)}</p>
         </div>
         <p class="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-muted">
+          ${sourceBadge}
           <span>${LEVEL_LABELS[topic.level] || topic.level}</span>
           <span>·</span>
           <span>${Number(topic.hours) || 0} h</span>
@@ -269,17 +307,17 @@ function renderTopicNode(topic, titleById, doneIds) {
     </div>`;
 }
 
-function renderTopicDetail(topicId) {
+function renderTopicDetail(topicId, sourceTrackId = session.detailSourceTrackId) {
   const dialog = $('topicDetailDialog');
   if (!dialog) return;
-  const located = findTopic(topicId);
+  const located = findTopic(topicId, sourceTrackId);
   if (!located) {
     session.detailTopicId = null;
+    session.detailSourceTrackId = null;
     if (dialog.open) dialog.close();
     return;
   }
-  const trackState = activeTrackState();
-  const view = buildRoadmap(activeTrack(), trackState);
+  const view = activeView();
   const titleById = new Map();
   const doneIds = new Set();
   view.phases.forEach((p) => p.topics.forEach((t) => {
@@ -287,15 +325,16 @@ function renderTopicDetail(topicId) {
     if (t.done) doneIds.add(t.id);
   }));
   const phase = view.phases.find((p) => p.id === located.phase.id) || located.phase;
-  const idx = phase.topics.findIndex((t) => t.id === topicId);
-  const topic = phase.topics[idx] || located.topic;
+  const idx = phase.topics.findIndex((t) => t.id === topicId && (!sourceTrackId || t.sourceTrackId === sourceTrackId));
+  const topic = phase.topics[idx >= 0 ? idx : 0] || located.topic;
   $('topicDetailEyebrow').textContent = `Etapa ${String(phase.number).padStart(2, '0')} · ${phase.title}`;
   $('topicDetailTitle').textContent = topic.title;
   $('topicDetailBody').innerHTML = renderTopic(topic, phase, idx, phase.topics.length, titleById, doneIds);
 }
 
 function renderTopic(topic, phase, index, total, titleById, doneIds) {
-  const trackState = activeTrackState();
+  const sourceTrackId = topic.sourceTrackId || activeTrack()?.id || '';
+  const trackState = state.tracks[sourceTrackId] || activeTrackState();
   const strike = topic.done && state.strikethrough ? 'line-through' : '';
   const optional = topic.status === 'optional';
   const hidden = topic.status === 'hidden';
@@ -345,11 +384,11 @@ function renderTopic(topic, phase, index, total, titleById, doneIds) {
   return `
     <article class="p-4 sm:px-5 sm:py-4 ${optional ? 'border-l-4 border-l-ochre' : ''}">
       <div class="flex items-start gap-3">
-        ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
+        ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}" data-source-track="${escapeHtml(sourceTrackId)}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
         <div class="min-w-0 flex-1">
           <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
             <div class="flex items-center gap-2.5 min-w-0">
-              ${topicIconHtml(topic, activeTrack()?.id, 'md')}
+              ${topicIconHtml(topic, sourceTrackId, 'md')}
               <h3 class="font-semibold ${strike}">${escapeHtml(topic.title)}</h3>
             </div>
             <button type="button" data-action="toggle-note" data-item-id="${topic.id}" class="self-start px-2.5 py-1 rounded-sm text-xs border ${topic.note || noteOpen ? 'border-ochre text-ink dark:text-ochre' : 'border-transparent bg-soft dark:bg-card'}">${topic.note ? 'Anotações' : 'Anotar'}</button>
@@ -420,13 +459,17 @@ function renderProject(project) {
   const actions = project.custom
     ? `${miniButton('Editar', `data-action="edit-project" data-project-id="${project.id}"`)}${miniButton('Excluir', `data-action="delete-project" data-project-id="${project.id}"`, 'text-terra')}`
     : '';
+  const sourceTrackId = project.sourceTrackId || activeTrack()?.id || '';
+  const sourceBadge = isCombinedView() && project.sourceTrackName
+    ? ` · ${escapeHtml(project.sourceTrackName)}`
+    : '';
   return `
     <li class="flex items-start gap-3 py-3">
-      ${checkbox(project.done, `data-action="toggle-project" data-project-id="${project.id}"`, `${project.done ? 'Desmarcar projeto' : 'Concluir projeto'} ${project.title}`)}
+      ${checkbox(project.done, `data-action="toggle-project" data-project-id="${project.id}" data-source-track="${escapeHtml(sourceTrackId)}"`, `${project.done ? 'Desmarcar projeto' : 'Concluir projeto'} ${project.title}`)}
       <div class="min-w-0">
         <p class="text-sm font-semibold ${strike}">${escapeHtml(project.title)}</p>
         <p class="read text-muted dark:text-blush mt-3">${escapeHtml(project.description)}</p>
-        <p class="mt-1 text-[11px] font-mono text-muted">${LEVEL_LABELS[project.level]} · ${Number(project.hours) || 0} h${project.custom ? ' · sua ideia' : ''}</p>
+        <p class="mt-1 text-[11px] font-mono text-muted">${LEVEL_LABELS[project.level]} · ${Number(project.hours) || 0} h${project.custom ? ' · sua ideia' : ''}${sourceBadge}</p>
         ${renderGuide(project)}
         <div class="mt-1 flex gap-1.5">${actions}</div>
       </div>
@@ -464,7 +507,8 @@ function renderPhase(phase, query, phaseHit) {
 
   const titleById = new Map();
   const doneIds = new Set();
-  buildRoadmap(activeTrack(), trackState).phases.forEach((item) => {
+  const view = activeView();
+  view.phases.forEach((item) => {
     item.topics.forEach((topic) => {
       titleById.set(topic.id, topic.title);
       if (topic.done) doneIds.add(topic.id);
@@ -586,7 +630,7 @@ function renderRoadmap() {
   const container = $('conteudo');
   const focus = captureFocus();
   const y = window.scrollY;
-  const view = buildRoadmap(track, trackState);
+  const view = activeView();
   renderPhaseFlowchart(view);
   const query = session.search.trim().toLowerCase();
   const html = view.phases.map((phase) => {
@@ -617,7 +661,7 @@ function renderRoadmap() {
 function updateDashboard() {
   const track = activeTrack();
   const trackState = activeTrackState();
-  const view = buildRoadmap(track, trackState);
+  const view = activeView();
   const stats = roadmapStats(view.phases);
   const projects = projectPlanStats(view.phases, trackState.level);
   const focus = currentPhase(view.phases);
@@ -690,9 +734,11 @@ function renderTrackSwitcher() {
     return;
   }
   nav.hidden = false;
-  nav.innerHTML = ids.map((id) => {
+  const combinedActive = isCombinedView();
+  const combinedBtn = `<button type="button" class="track-switch inline-flex items-center gap-2" data-switch-track="__combined__"${combinedActive ? ' aria-current="page"' : ''}><span>Trajeto completo</span></button>`;
+  nav.innerHTML = combinedBtn + ids.map((id) => {
     const track = trackById(id);
-    const current = id === state.activeTrackId ? ' aria-current="page"' : '';
+    const current = !combinedActive && id === state.activeTrackId ? ' aria-current="page"' : '';
     return `<button type="button" class="track-switch inline-flex items-center gap-2" data-switch-track="${escapeHtml(id)}"${current}>${trackIconHtml(id, 'sm')}<span>${escapeHtml(track.name)}</span></button>`;
   }).join('');
 }
@@ -729,7 +775,18 @@ function setSidebarOpen(open) {
 }
 
 function switchToTrack(id) {
-  if (!trackById(id) || id === state.activeTrackId) return;
+  if (id === '__combined__') {
+    session.combinedView = true;
+    if (state.profile.primaryTrackId && trackById(state.profile.primaryTrackId)) {
+      state.activeTrackId = state.profile.primaryTrackId;
+    }
+    persist();
+    refresh();
+    return;
+  }
+  if (!trackById(id)) return;
+  if (id === state.activeTrackId && !session.combinedView) return;
+  session.combinedView = false;
   const current = activeTrackState();
   const next = ensureTrack(state, id);
   if (!next.level) next.level = current?.level || 'iniciante';
@@ -741,10 +798,18 @@ function switchToTrack(id) {
 
 function updateHeader() {
   const track = activeTrack();
-  $('trackBadge').textContent = track.name;
-  $('trackTagline').textContent = track.description;
-  $('trackIcon').innerHTML = trackIconHtml(track.id, 'lg');
-  document.title = `Rumos — ${track.name}`;
+  if (isCombinedView()) {
+    const names = activeEntries().map((e) => e.track.name);
+    $('trackBadge').textContent = 'Trajeto completo';
+    $('trackTagline').textContent = `Sequência integrada do básico ao avançado: ${names.join(' + ')}`;
+    $('trackIcon').innerHTML = trackIconHtml(track.id, 'lg');
+    document.title = `Rumos — Trajeto completo (${track.name})`;
+  } else {
+    $('trackBadge').textContent = track.name;
+    $('trackTagline').textContent = track.description;
+    $('trackIcon').innerHTML = trackIconHtml(track.id, 'lg');
+    document.title = `Rumos — ${track.name}`;
+  }
   renderTrackSwitcher();
   renderTrackSidebar();
   renderRenameNotice();
@@ -925,7 +990,18 @@ function renderPreview() {
     temp.customTopics = existing.customTopics;
     temp.customProjects = existing.customProjects;
   }
-  const view = buildRoadmap(track, temp);
+  const companionIds = document.querySelector('input[name="companion"]')
+    ? selectedCompanionIds().filter((id) => id !== track.id)
+    : session.onboarding.companionIds.filter((id) => id !== track.id);
+  session.onboarding.companionIds = companionIds;
+  const entries = [{ track, trackState: temp }];
+  for (const cid of companionIds) {
+    const cTrack = trackById(cid);
+    if (!cTrack) continue;
+    const cTemp = { ...emptyTrackState(), level, weeklyHours: hours };
+    entries.push({ track: cTrack, trackState: cTemp });
+  }
+  const view = buildCombinedRoadmap(entries);
   const stats = roadmapStats(view.phases);
   const projects = projectPlanStats(view.phases, level);
   const phases = view.phases.map((phase) => {
@@ -934,13 +1010,9 @@ function renderPreview() {
       .reduce((sum, topic) => sum + (Number(topic.hours) || 0), 0);
     return `<li class="flex justify-between gap-3 py-2 border-t border-line dark:border-sage/50"><span>Etapa ${phase.number}: ${escapeHtml(phase.title)}</span><span class="font-mono text-xs shrink-0">${escapeHtml(phaseHours ? formatDuration(phaseHours, hours) : 'opcional')}</span></li>`;
   }).join('');
-  const companionIds = document.querySelector('input[name="companion"]')
-    ? selectedCompanionIds().filter((id) => id !== track.id)
-    : session.onboarding.companionIds.filter((id) => id !== track.id);
-  session.onboarding.companionIds = companionIds;
   const companionNames = companionIds.map((id) => trackById(id)?.name).filter(Boolean);
   const together = companionNames.length
-    ? `<p class="mt-2 text-sm">Junto: ${escapeHtml(companionNames.join(', '))}. Cada tecnologia guarda o próprio progresso.</p>`
+    ? `<p class="mt-2 text-sm">Trilhas combinadas: ${escapeHtml(companionNames.join(', '))}. O trajeto já está ordenado do mais básico ao mais avançado.</p>`
     : '';
   $('planPreview').innerHTML = `
     <p class="font-semibold">${escapeHtml(track.name)} · ${LEVEL_LABELS[level]} · ${hours} h/semana</p>
@@ -1000,15 +1072,16 @@ function confirmOnboarding() {
   }
   state.activeTrackId = trackId;
   state.profile.onboarded = true;
+  session.combinedView = companionIds.length > 0;
   persist();
-  toast(session.onboarding.mode === 'retake' ? 'Trilha atualizada. Seu progresso continua salvo.' : 'Trilha pronta. Bom estudo.');
+  toast(session.onboarding.mode === 'retake' ? 'Trilha atualizada. Seu progresso continua salvo.' : 'Roadmap pronto. Bom estudo.');
   refresh();
 }
 
-function findTopic(topicId) {
-  const view = buildRoadmap(activeTrack(), activeTrackState());
+function findTopic(topicId, sourceTrackId = null) {
+  const view = activeView();
   for (const phase of view.phases) {
-    const topic = phase.topics.find((item) => item.id === topicId);
+    const topic = phase.topics.find((item) => item.id === topicId && (!sourceTrackId || item.sourceTrackId === sourceTrackId));
     if (topic) return { phase, topic };
   }
   return null;
@@ -1219,10 +1292,13 @@ function onRoadmapClick(event) {
   const el = event.target.closest('[data-action]');
   if (!el) return;
   const trackState = activeTrackState();
+  const sourceTrackId = el.dataset.sourceTrack;
+  const targetTrackState = (sourceTrackId && state.tracks[sourceTrackId]) || trackState;
   const action = el.dataset.action;
   if (action === 'open-topic-detail') {
     session.detailTopicId = el.dataset.itemId;
-    renderTopicDetail(session.detailTopicId);
+    session.detailSourceTrackId = sourceTrackId || null;
+    renderTopicDetail(session.detailTopicId, session.detailSourceTrackId);
     $('topicDetailDialog').showModal();
     return;
   }
@@ -1298,26 +1374,27 @@ function onRoadmapClick(event) {
     return;
   }
   if (action === 'toggle-item') {
-    const located = findTopic(el.dataset.itemId);
+    const located = findTopic(el.dataset.itemId, sourceTrackId);
     if (!located) return;
     const wasDone = located.topic.done;
-    if (wasDone) delete trackState.completed[located.topic.id];
-    else trackState.completed[located.topic.id] = true;
-    const after = buildRoadmap(activeTrack(), trackState);
+    if (wasDone) delete targetTrackState.completed[located.topic.id];
+    else targetTrackState.completed[located.topic.id] = true;
+    const after = activeView();
     const phase = after.phases.find((item) => item.id === located.phase.id);
-    if (!wasDone && phase.progress.complete) toast(`Etapa concluída: ${phase.badgeTitle}.`);
+    if (!wasDone && phase?.progress.complete) toast(`Etapa concluída: ${phase.badgeTitle}.`);
     persist();
     refresh();
     return;
   }
   if (action === 'toggle-phase-done') {
-    const view = buildRoadmap(activeTrack(), trackState);
+    const view = activeView();
     const phase = view.phases.find((item) => item.id === el.dataset.phaseId);
     const pool = poolOf(phase);
     const allDone = pool.every((topic) => topic.done);
     pool.forEach((topic) => {
-      if (allDone) delete trackState.completed[topic.id];
-      else trackState.completed[topic.id] = true;
+      const ts = (topic.sourceTrackId && state.tracks[topic.sourceTrackId]) || trackState;
+      if (allDone) delete ts.completed[topic.id];
+      else ts.completed[topic.id] = true;
     });
     if (!allDone) toast(`Etapa ${phase.number} concluída.`);
     persist();
@@ -1325,11 +1402,12 @@ function onRoadmapClick(event) {
     return;
   }
   if (action === 'toggle-optional' || action === 'hide-topic' || action === 'restore-topic') {
-    const located = findTopic(el.dataset.itemId);
+    const located = findTopic(el.dataset.itemId, sourceTrackId);
     if (!located) return;
-    if (action === 'hide-topic') setTopicStatus(trackState, located.topic, 'hidden');
-    else if (action === 'restore-topic') setTopicStatus(trackState, located.topic, naturalStatus(located.topic, trackState));
-    else setTopicStatus(trackState, located.topic, located.topic.status === 'optional' ? 'required' : 'optional');
+    const ts = (located.topic.sourceTrackId && state.tracks[located.topic.sourceTrackId]) || trackState;
+    if (action === 'hide-topic') setTopicStatus(ts, located.topic, 'hidden');
+    else if (action === 'restore-topic') setTopicStatus(ts, located.topic, naturalStatus(located.topic, ts));
+    else setTopicStatus(ts, located.topic, located.topic.status === 'optional' ? 'required' : 'optional');
     persist();
     refresh();
     if (action === 'hide-topic') toast('Tópico oculto. Você pode restaurá-lo no filtro Ocultos.');
@@ -1376,8 +1454,8 @@ function onRoadmapClick(event) {
   }
   if (action === 'toggle-project') {
     const id = el.dataset.projectId;
-    if (trackState.completedProjects[id]) delete trackState.completedProjects[id];
-    else trackState.completedProjects[id] = true;
+    if (targetTrackState.completedProjects[id]) delete targetTrackState.completedProjects[id];
+    else targetTrackState.completedProjects[id] = true;
     persist();
     refresh();
     return;
@@ -1804,22 +1882,25 @@ function bind() {
   });
   $('onbStart').addEventListener('click', confirmOnboarding);
   $('exportMdBtn').addEventListener('click', () => {
-    const view = buildRoadmap(activeTrack(), activeTrackState());
-    downloadFile(`rumo-${activeTrack().id}.md`, roadmapMarkdown(activeTrack(), view), 'text/markdown');
+    const view = activeView();
+    const label = isCombinedView() ? { ...activeTrack(), name: `Trajeto completo (${activeTrack().name})` } : activeTrack();
+    downloadFile(`rumos-${activeTrack().id}.md`, roadmapMarkdown(label, view), 'text/markdown');
   });
   $('exportPdfBtn').addEventListener('click', () => {
-    const view = buildRoadmap(activeTrack(), activeTrackState());
-    downloadFile(`rumo-${activeTrack().id}.pdf`, textPdf(roadmapLines(activeTrack(), view)), 'application/pdf');
+    const view = activeView();
+    const label = isCombinedView() ? { ...activeTrack(), name: `Trajeto completo (${activeTrack().name})` } : activeTrack();
+    downloadFile(`rumos-${activeTrack().id}.pdf`, textPdf(roadmapLines(label, view)), 'application/pdf');
   });
   $('exportPngBtn').addEventListener('click', async () => {
     await document.fonts.ready;
     const canvas = document.createElement('canvas');
-    drawRoadmap(canvas, activeTrack(), buildRoadmap(activeTrack(), activeTrackState()));
+    const label = isCombinedView() ? { ...activeTrack(), name: `Trajeto completo (${activeTrack().name})` } : activeTrack();
+    drawRoadmap(canvas, label, activeView());
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `rumo-${activeTrack().id}.png`;
+    link.download = `rumos-${activeTrack().id}.png`;
     link.click();
     URL.revokeObjectURL(url);
   });
