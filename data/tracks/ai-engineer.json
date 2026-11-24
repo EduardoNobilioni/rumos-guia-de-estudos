@@ -1,0 +1,253 @@
+{
+  "id": "ai-engineer",
+  "name": "Engenharia de IA",
+  "tagline": "Aplicações com LLMs em produção: APIs, Prompt Engineering, RAG, Agentes e avaliação",
+  "description": "Construção de produtos e serviços com Modelos de Linguagem (LLMs): consumo de APIs, saída estruturada, busca semântica (RAG), agentes com ferramentas e avaliação automática.",
+  "phases": [
+    {
+      "id": "ai-fase-1",
+      "number": 1,
+      "badgeTitle": "LLMs e Prompts",
+      "title": "Fundamentos de LLMs, APIs e Prompt Engineering",
+      "topics": [
+        {
+          "id": "ai-fundamentos",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Tokens, janela de contexto, temperatura e custo",
+          "description": "Como modelos de linguagem funcionam na prática de engenharia: tokenização, limites de contexto, latência, streaming e estimativa de custo.",
+          "tags": ["LLM", "API"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Gemini API Documentation", "url": "https://ai.google.dev/gemini-api/docs", "lang": "en", "kind": "documentacao" },
+            { "title": "LLM Course (Hugging Face)", "url": "https://huggingface.co/learn/llm-course/", "lang": "en", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "ai-prompts",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Engenharia de Prompt estruturada e JSON Schema",
+          "description": "System prompts claros, few-shot examples e uso de Structured Outputs para garantir respostas válidas e integráveis ao back-end.",
+          "tags": ["Prompt", "JSON"],
+          "prerequisites": ["ai-fundamentos"],
+          "resources": [
+            { "title": "Prompt Engineering Overview (Anthropic)", "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview", "lang": "en", "kind": "documentacao" },
+            { "title": "Prompt Engineering Guide (OpenAI)", "url": "https://platform.openai.com/docs/guides/prompt-engineering", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ai-p1-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Extrator de dados estruturados em Python/Node.js",
+          "description": "Crie um script CLI que recebe textos livres e retorna JSON validado por esquema.",
+          "steps": ["Defina o schema de saída.", "Aplique few-shot no prompt.", "Valide o JSON com Pydantic ou Zod."],
+          "definitionOfDone": ["Trata erros e limites de taxa.", "Chave de API via variável de ambiente."]
+        },
+        {
+          "id": "ai-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Classificador de chamados com fallback e streaming",
+          "description": "Crie uma API que classifica tickets de suporte com streaming e calcula custo estimado por chamada.",
+          "steps": ["Configure streaming na resposta.", "Conte tokens de entrada/saída.", "Aplique timeout e retry com backoff."],
+          "definitionOfDone": ["Retorno em JSON confiável.", "Log de tokens e latência."]
+        },
+        {
+          "id": "ai-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Roteador multi-modelo por complexidade",
+          "description": "Encaminhe tarefas simples para um modelo rápido/barato e casos complexos para um modelo maior.",
+          "steps": ["Crie critério de roteamento.", "Compare acurácia vs. custo em 20 exemplos.", "Implemente fallback automático."],
+          "definitionOfDone": ["Redução mensurável de custo.", "Sem degradação de qualidade."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ai-f1-q1",
+          "prompt": "Por que usar Structured Outputs / JSON Schema ao integrar um LLM em uma API?",
+          "reviewTopicId": "ai-prompts",
+          "choices": [
+            { "id": "a", "text": "Para garantir formato previsível e validável pelo código da aplicação.", "correct": true, "explanation": "Reduz quebras ao parsear respostas livres." },
+            { "id": "b", "text": "Para aumentar a criatividade do modelo.", "correct": false, "explanation": "Serve para previsibilidade estrutural." }
+          ]
+        },
+        {
+          "id": "ai-f1-q2",
+          "prompt": "O que o parâmetro temperatura controla em um LLM?",
+          "reviewTopicId": "ai-fundamentos",
+          "choices": [
+            { "id": "a", "text": "O grau de aleatoriedade na escolha dos próximos tokens.", "correct": true, "explanation": "Temperaturas baixas geram respostas mais determinísticas." },
+            { "id": "b", "text": "A velocidade da conexão HTTP.", "correct": false, "explanation": "Relaciona-se à amostragem dos tokens." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-fase-2",
+      "number": 2,
+      "badgeTitle": "RAG e Busca",
+      "title": "Embeddings, bancos vetoriais e RAG",
+      "topics": [
+        {
+          "id": "ai-embeddings",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Embeddings, chunking e busca semântica",
+          "description": "Como transformar documentos em vetores, fatiar textos sem perder contexto e combinar busca vetorial com palavra-chave (BM25).",
+          "tags": ["RAG", "Embeddings"],
+          "prerequisites": ["ai-prompts"],
+          "resources": [
+            { "title": "Embeddings Guide (Gemini API)", "url": "https://ai.google.dev/gemini-api/docs/embeddings", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ai-rag",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Arquitetura RAG (Retrieval-Augmented Generation)",
+          "description": "Indexação, recuperação de trechos relevantes, citação de fontes e mitigação de alucinações respondendo apenas com base nos documentos.",
+          "tags": ["RAG", "Python"],
+          "prerequisites": ["ai-embeddings"],
+          "resources": [
+            { "title": "RAG in Hugging Face Cookbook", "url": "https://huggingface.co/learn/cookbook/rag_zephyr_langchain", "lang": "en", "kind": "pratica" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ai-p2-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Buscador semântico de notas em Markdown",
+          "description": "Gere embeddings de arquivos locais `.md` e ranqueie os 5 trechos mais próximos por similaridade de cosseno.",
+          "steps": ["Fatie arquivos por títulos.", "Gere e salve os vetores localmente.", "Execute consulta e exiba score."],
+          "definitionOfDone": ["Encontra trechos por sentido mesmo sem palavra exata.", "Rápido e reproduzível."]
+        },
+        {
+          "id": "ai-p2-int",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Assistente de perguntas e respostas com citações (RAG)",
+          "description": "Indexe manuais técnicos locais e responda perguntas citando o trecho e arquivo de origem.",
+          "steps": ["Fatie com overlap.", "Indexe em banco vetorial.", "Exija citação da fonte na resposta."],
+          "definitionOfDone": ["Diz 'não encontrado' sem base nos docs.", "Mostra as fontes usadas."]
+        },
+        {
+          "id": "ai-p2-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "RAG híbrido (BM25 + vetorial) com reranking",
+          "description": "Combine busca lexical e vetorial via Reciprocal Rank Fusion e aplique reranker antes de enviar contexto ao LLM.",
+          "steps": ["Implemente busca dupla.", "Funda rankings.", "Compare precisão top-5 antes e depois."],
+          "definitionOfDone": ["Métrica de recall/MRR medida.", "Melhoria comprovada em códigos/siglas exatas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ai-f2-q1",
+          "prompt": "Qual o objetivo principal do chunking com sobreposição (overlap) em RAG?",
+          "reviewTopicId": "ai-embeddings",
+          "choices": [
+            { "id": "a", "text": "Evitar que frases ou ideias importantes sejam cortadas ao meio sem contexto.", "correct": true, "explanation": "A sobreposição preserva continuidade." },
+            { "id": "b", "text": "Diminuir a precisão da busca.", "correct": false, "explanation": "Serve para melhorar a recuperação." }
+          ]
+        },
+        {
+          "id": "ai-f2-q2",
+          "prompt": "Por que combinar busca vetorial com busca por palavra-chave (híbrida)?",
+          "reviewTopicId": "ai-rag",
+          "choices": [
+            { "id": "a", "text": "Para capturar tanto sinônimos semânticos quanto códigos exatos, IDs e siglas.", "correct": true, "explanation": "Embeddings sozinhos costumam errar códigos exatos." },
+            { "id": "b", "text": "Para evitar precisar de qualquer banco de dados.", "correct": false, "explanation": "Usa ambos os índices combinados." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-fase-3",
+      "number": 3,
+      "badgeTitle": "Agentes e Produção",
+      "title": "Tool calling, avaliação (Evals) e segurança",
+      "topics": [
+        {
+          "id": "ai-tools",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Function/Tool Calling e fluxos com agentes",
+          "description": "Quando usar workflow determinístico vs. agente autônomo: ferramentas tipadas, loops com limite de passos e confirmação humana.",
+          "tags": ["Agentes", "LLM"],
+          "prerequisites": ["ai-rag"],
+          "resources": [
+            { "title": "Function Calling Guide (Gemini API)", "url": "https://ai.google.dev/gemini-api/docs/function-calling", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ai-evals",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Evals, observabilidade e OWASP Top 10 para LLMs",
+          "description": "Criar conjuntos de teste antes de mexer no prompt, medir latência/custo e defender contra Prompt Injection e vazamento de dados.",
+          "tags": ["Evals", "Segurança"],
+          "prerequisites": ["ai-tools"],
+          "resources": [
+            { "title": "OWASP Top 10 for LLM Applications", "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ai-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Assistente com 1 função tipada (Tool Calling)",
+          "description": "Conecte um modelo a uma função local de consulta (ex.: buscar CEP ou previsão) com validação de argumentos.",
+          "steps": ["Descreva o schema da ferramenta.", "Processe a chamada.", "Devolva resposta final amigável."],
+          "definitionOfDone": ["Valida parâmetros antes de executar.", "Trata erro da API externa."]
+        },
+        {
+          "id": "ai-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Conjunto de Evals automatizado para prompts",
+          "description": "Monte 15 casos de teste em JSON e um script que compara duas versões de prompt automaticamente.",
+          "steps": ["Escreva casos com resposta esperada.", "Calcule taxa de acerto e latência.", "Gere tabela comparativa."],
+          "definitionOfDone": ["Execução reproduzível.", "Identifica regressões entre prompts."]
+        },
+        {
+          "id": "ai-p3-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Agente com ferramentas, aprovação humana e Evals",
+          "description": "Implemente um assistente com ações de leitura automáticas, ações de escrita com confirmação e defesa contra Prompt Injection.",
+          "steps": ["Separe ferramentas seguras vs. destrutivas.", "Limite número de iterações.", "Teste cenários de injeção de prompt."],
+          "definitionOfDone": ["Nenhuma ação crítica roda sem confirmação.", "Relatório de evals aprovado."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ai-f3-q1",
+          "prompt": "Qual o principal risco conhecido como Prompt Injection?",
+          "reviewTopicId": "ai-evals",
+          "choices": [
+            { "id": "a", "text": "Um texto externo enganar o modelo para ignorar instruções do sistema ou chamar ferramentas indevidas.", "correct": true, "explanation": "Nunca trate conteúdo externo como instrução confiável." },
+            { "id": "b", "text": "Falta de memória RAM no navegador.", "correct": false, "explanation": "É uma vulnerabilidade de segurança em LLMs." }
+          ]
+        },
+        {
+          "id": "ai-f3-q2",
+          "prompt": "Por que limitar o número máximo de iterações em um loop de agente?",
+          "reviewTopicId": "ai-tools",
+          "choices": [
+            { "id": "a", "text": "Para evitar loops infinitos, estouro de latência e custo descontrolado de tokens.", "correct": true, "explanation": "Agentes precisam de guardrails de execução." },
+            { "id": "b", "text": "Para impedir o uso de JSON.", "correct": false, "explanation": "Protege custo e estabilidade." }
+          ]
+        }
+      ]
+    }
+  ]
+}

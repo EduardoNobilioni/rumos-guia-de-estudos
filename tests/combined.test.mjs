@@ -72,3 +72,32 @@ test('buildCombinedRoadmap combina carreira + fundamentos + tecnologia do básic
   const marked = flat.find((t) => t.sourceTrackId === 'frontend' && t.id === firstTopicId);
   assert.equal(marked.done, true);
 });
+
+test('buildCombinedRoadmap integra novas carreiras (ai-engineer) com python e algoritmos do básico ao avançado', () => {
+  const ai = loadTrack('ai-engineer.json');
+  const python = loadTrack('python.json');
+  const algoritmos = loadTrack('algoritmos.json');
+
+  const view = buildCombinedRoadmap([
+    { track: ai, trackState: { ...emptyTrackState(), level: 'iniciante', weeklyHours: 10 } },
+    { track: python, trackState: { ...emptyTrackState(), level: 'iniciante', weeklyHours: 10 } },
+    { track: algoritmos, trackState: { ...emptyTrackState(), level: 'iniciante', weeklyHours: 10 } },
+  ]);
+
+  assert.equal(view.combined, true);
+  const flat = view.phases.flatMap((p) => p.topics);
+  assert.ok(flat.some((t) => t.sourceTrackId === 'ai-engineer'));
+  assert.ok(flat.some((t) => t.sourceTrackId === 'python'));
+  assert.ok(flat.some((t) => t.sourceTrackId === 'algoritmos'));
+
+  const seenPos = new Map(flat.map((t, idx) => [`${t.sourceTrackId}::${t.id}`, idx]));
+  for (const t of flat) {
+    const pos = seenPos.get(`${t.sourceTrackId}::${t.id}`);
+    for (const pid of t.prerequisites || []) {
+      const pPos = seenPos.get(`${t.sourceTrackId}::${pid}`);
+      if (pPos !== undefined) {
+        assert.ok(pPos < pos, `pré-requisito ${pid} apareceu depois de ${t.id}`);
+      }
+    }
+  }
+});

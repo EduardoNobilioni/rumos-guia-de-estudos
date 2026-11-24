@@ -18,7 +18,9 @@ const LANGUAGE_RULES = [
   [/\b(aws|cloud|nuvem|terraform|iac|nginx)\b/, 'Cloud'],
   [/\b(owasp|seguranca|criptografia|jwt|https|cors|csp|lgpd|pentest)\b/, 'Segurança'],
   [/\b(teste|testes|qa|playwright|jest|tdd|e2e|unitario)\b/, 'QA/Testes'],
-  [/\b(machine learning|ml|ia|modelo|regressao|classificacao|spark|duckdb|dbt|etl)\b/, 'Dados/ML'],
+  [/\b(machine learning|ml|ia|llm|rag|modelo|regressao|classificacao|spark|duckdb|dbt|etl|mlflow|drift)\b/, 'Dados/ML'],
+  [/\b(ux|ui|figma|wireframe|heuristica|usabilidade|design system)\b/, 'UX/UI'],
+  [/\b(produto|discovery|rice|prd)\b/, 'Produto'],
 ];
 
 const TRACK_DEFAULT_LANGS = {
@@ -36,6 +38,10 @@ const TRACK_DEFAULT_LANGS = {
   ciberseguranca: ['Segurança', 'Linux'],
   cloud: ['Cloud', 'Linux', 'Docker'],
   'arquitetura-software': ['Arquitetura', 'Node.js'],
+  'ux-ui': ['UX/UI'],
+  'product-manager': ['Produto'],
+  'ai-engineer': ['Python', 'Dados/ML'],
+  mlops: ['Python', 'Docker', 'Dados/ML'],
   computacao: ['Algoritmos', 'Linux'],
   algoritmos: ['Algoritmos', 'Python'],
   'banco-de-dados': ['SQL'],

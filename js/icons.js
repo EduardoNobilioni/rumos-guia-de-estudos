@@ -17,6 +17,10 @@ const SVG_ICONS = {
   'engenharia-software': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z" fill="#FEF3C7" stroke="#D97706" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   network: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.8"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18" stroke="#0284C7" stroke-width="1.6"/></svg>',
   checkpoint: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 20V5" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/><path d="M5 5h11l-2 4 2 4H5" fill="#FEF3C7" stroke="#D97706" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+  'ux-ui': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3" fill="#FCE7F3" stroke="#DB2777" stroke-width="1.8"/><circle cx="9" cy="10" r="2" fill="#EC4899"/><path d="M13 9h4M13 13h4M7.5 16h9" stroke="#DB2777" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  'product-manager': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3" fill="#FEF3C7" stroke="#D97706" stroke-width="1.8"/><path d="M8 14v-3M12 14V8M16 14v-5" stroke="#D97706" stroke-width="2" stroke-linecap="round"/></svg>',
+  'ai-engineer': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l1.8 4.8L18.5 9.5l-4.7 1.7L12 16l-1.8-4.8L5.5 9.5l4.7-1.7L12 3z" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.8" stroke-linejoin="round"/><circle cx="18" cy="17.5" r="2.2" fill="#10B981"/></svg>',
+  mlops: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="7" cy="12" r="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.8"/><circle cx="17" cy="7" r="2.5" fill="#D1FAE5" stroke="#059669" stroke-width="1.8"/><circle cx="17" cy="17" r="2.5" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.8"/><path d="M9.7 10.7l4.8-2.5M9.7 13.3l4.8 2.5" stroke="#64748B" stroke-width="1.8"/></svg>',
 };
 
 const TRACK_DEVICONS = {
@@ -74,6 +78,11 @@ const TOPIC_RULES = [
   [/\b(terraform|infraestrutura como codigo)\b/, { devicon: 'devicon-terraform-plain colored' }],
   [/\b(aws|nuvem|cloud)\b/, { devicon: 'devicon-amazonwebservices-plain-wordmark colored' }],
   [/\b(linux|terminal|bash|linha de comando|systemd|ssh|chmod|firewall|servidor)\b/, { devicon: 'devicon-linux-plain' }],
+  [/\b(figma|wireframe|heuristica|usabilidade|design system|ux|ui)\b/, { devicon: 'devicon-figma-plain colored' }],
+  [/\b(fastapi)\b/, { devicon: 'devicon-fastapi-plain colored' }],
+  [/\b(llm|rag|prompt|agentes|embeddings|evals)\b/, { svg: 'ai-engineer' }],
+  [/\b(mlflow|mlops|drift|serving)\b/, { svg: 'mlops' }],
+  [/\b(produto|discovery|rice|prd|metricas)\b/, { svg: 'product-manager' }],
   [/\b(checkpoint)\b/, { svg: 'checkpoint' }],
   [/\b(owasp|seguranca|cors|csp|https|autenticacao|autorizacao|jwt|lgpd|criptografia)\b/, { svg: 'ciberseguranca' }],
   [/\b(http|rest|restful|api|internet|tempo real|dns|rede)\b/, { svg: 'network' }],

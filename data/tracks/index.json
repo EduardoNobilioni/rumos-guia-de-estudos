@@ -160,6 +160,61 @@
       ]
     },
     {
+      "id": "ux-ui",
+      "file": "ux-ui.json",
+      "group": "carreira",
+      "keywords": [
+        "ux",
+        "ui",
+        "design",
+        "figma",
+        "usabilidade",
+        "prototipo",
+        "design system"
+      ]
+    },
+    {
+      "id": "product-manager",
+      "file": "product-manager.json",
+      "group": "carreira",
+      "keywords": [
+        "produto",
+        "pm",
+        "discovery",
+        "metricas",
+        "rice",
+        "prd",
+        "roadmap"
+      ]
+    },
+    {
+      "id": "ai-engineer",
+      "file": "ai-engineer.json",
+      "group": "carreira",
+      "keywords": [
+        "ia",
+        "llm",
+        "rag",
+        "prompt",
+        "agentes",
+        "embeddings",
+        "evals"
+      ]
+    },
+    {
+      "id": "mlops",
+      "file": "mlops.json",
+      "group": "carreira",
+      "keywords": [
+        "machine learning",
+        "mlflow",
+        "drift",
+        "fastapi",
+        "pipeline",
+        "serving"
+      ]
+    },
+    {
       "id": "computacao",
       "file": "computacao.json",
       "group": "fundamentos",

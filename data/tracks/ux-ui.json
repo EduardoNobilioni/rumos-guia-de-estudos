@@ -1,0 +1,289 @@
+{
+  "id": "ux-ui",
+  "name": "UX / UI Design",
+  "tagline": "Projetar interfaces úteis, acessíveis e consistentes da pesquisa ao Design System",
+  "description": "Experiência do usuário e interface na prática: heurísticas de usabilidade, pesquisa, arquitetura da informação, prototipação no Figma, Design Systems e acessibilidade (WCAG).",
+  "phases": [
+    {
+      "id": "ux-fase-1",
+      "number": 1,
+      "badgeTitle": "Fundamentos",
+      "title": "Usabilidade, heurísticas e pesquisa",
+      "topics": [
+        {
+          "id": "ux-heuristics",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Heurísticas de Nielsen e leis de UX",
+          "description": "Usabilidade não é gosto pessoal. Entenda visibilidade de status, prevenção de erros, reconhecimento em vez de memorização e carga cognitiva.",
+          "tags": ["Usabilidade", "UX"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "10 Usability Heuristics (NN/g)", "url": "https://www.nngroup.com/articles/ten-usability-heuristics/", "lang": "en", "kind": "leitura" },
+            { "title": "Laws of UX", "url": "https://lawsofux.com/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "ux-research",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Entrevistas, fluxos e arquitetura da informação",
+          "description": "Como descobrir o problema real antes de abrir o Figma: roteiro de entrevista sem perguntas enviesadas, jornada do usuário e organização de menus.",
+          "tags": ["Pesquisa", "Fluxo"],
+          "prerequisites": ["ux-heuristics"],
+          "resources": [
+            { "title": "User Interviews 101 (NN/g)", "url": "https://www.nngroup.com/articles/user-interviews/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "ux-wireframe",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Wireframes de baixa fidelidade",
+          "description": "Validar hierarquia, fluxo e conteúdo no papel ou cinza antes de gastar horas com cor e sombra.",
+          "tags": ["Wireframe"],
+          "prerequisites": ["ux-research"],
+          "resources": [
+            { "title": "Wireframing for Beginners (Figma)", "url": "https://www.figma.com/resource-library/what-is-wireframing/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ux-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Auditoria heurística de um app do dia a dia",
+          "description": "Avalie um site público contra as 10 heurísticas de Nielsen e proponha 3 melhorias justificadas.",
+          "steps": ["Liste 5 fluxos comuns.", "Anote violações com captura.", "Desenhe wireframe corrigindo o pior ponto."],
+          "definitionOfDone": ["Cada problema aponta a heurística.", "Solução simples e objetiva."]
+        },
+        {
+          "id": "ux-p1-int",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Mapa de jornada e árvore de navegação",
+          "description": "Realize 3 entrevistas curtas e reorganize os menus de um fluxo complexo usando card sorting.",
+          "steps": ["Monte roteiro sem perguntas indutivas.", "Conduza 3 entrevistas.", "Publique árvore de menus revisada."],
+          "definitionOfDone": ["Fluxo reduz cliques desnecessários.", "Achados documentados."]
+        },
+        {
+          "id": "ux-p1-ava",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Benchmark comparativo com matriz de decisão",
+          "description": "Compare 4 fluxos concorrentes de onboarding e defina padrão ideal baseado em evidências de pesquisa.",
+          "steps": ["Mapeie pontos de atrito dos 4 produtos.", "Classifique severidade.", "Prototipe fluxo otimizado."],
+          "definitionOfDone": ["Relatório comparativo claro.", "Justificativa para cada etapa do fluxo."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ux-f1-q1",
+          "prompt": "Por que validar wireframes em baixa fidelidade antes do visual final?",
+          "reviewTopicId": "ux-wireframe",
+          "choices": [
+            { "id": "a", "text": "Para testar fluxo e hierarquia rápido, sem distrair com cores e polimento.", "correct": true, "explanation": "Mudanças estruturais custam bem menos antes da etapa visual." },
+            { "id": "b", "text": "Porque o Figma não permite usar cores no início.", "correct": false, "explanation": "É uma decisão metodológica." }
+          ]
+        },
+        {
+          "id": "ux-f1-q2",
+          "prompt": "Em entrevistas com usuários, o que devemos evitar?",
+          "reviewTopicId": "ux-research",
+          "choices": [
+            { "id": "a", "text": "Perguntas enviesadas que sugerem a resposta esperada.", "correct": true, "explanation": "Prefira perguntar sobre comportamentos passados reais." },
+            { "id": "b", "text": "Ouvir em silêncio após fazer a pergunta.", "correct": false, "explanation": "Dar espaço ajuda o entrevistado a elaborar." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ux-fase-2",
+      "number": 2,
+      "badgeTitle": "UI e Figma",
+      "title": "Tipografia, cor, grids e Figma",
+      "topics": [
+        {
+          "id": "ux-typography",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Tipografia, escala e espaçamento",
+          "description": "Hierarquia visual vem de contraste de tamanho, peso e respiro consistente (escala de 4/8 px), não de bordas em excesso.",
+          "tags": ["UI", "Tipografia"],
+          "prerequisites": ["ux-wireframe"],
+          "resources": [
+            { "title": "Typography in UI (Material 3)", "url": "https://m3.material.io/styles/typography/overview", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ux-color",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Sistemas de cor e contraste",
+          "description": "Definir fundo, superfície, texto, destaque e estados semânticos (sucesso, erro, aviso) garantindo contraste mínimo WCAG.",
+          "tags": ["Cor", "Contraste"],
+          "prerequisites": ["ux-typography"],
+          "resources": [
+            { "title": "Color System (Material 3)", "url": "https://m3.material.io/styles/color/system/overview", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ux-figma",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Figma: Auto Layout, componentes e variantes",
+          "description": "Construa telas responsivas usando Auto Layout, estilos reutilizáveis e variantes de estado (hover, focus, disabled).",
+          "tags": ["Figma", "Auto Layout"],
+          "prerequisites": ["ux-color"],
+          "resources": [
+            { "title": "Guide to Components in Figma", "url": "https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ux-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Guia de estilo com tipografia e paleta clara/escura",
+          "description": "Monte uma folha de estilo no Figma com 6 níveis tipográficos e paleta validada para modo claro e escuro.",
+          "steps": ["Defina escala de texto.", "Crie tokens de fundo e texto.", "Verifique contraste mínimo 4.5:1."],
+          "definitionOfDone": ["Escala consistente de 4/8 px.", "Todas as cores passam no contraste."]
+        },
+        {
+          "id": "ux-p2-int",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Protótipo navegável de 4 telas com Auto Layout",
+          "description": "Crie um fluxo completo (busca, detalhe, confirmação e erro) no Figma com componentes e variantes.",
+          "steps": ["Defina tokens.", "Monte botões e campos com variantes de estado.", "Ligue o protótipo interativo."],
+          "definitionOfDone": ["Telas responsivas desktop e mobile.", "Auto Layout aplicado."]
+        },
+        {
+          "id": "ux-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Biblioteca responsiva com modos claro/escuro por Variables",
+          "description": "Use Variables do Figma para alternar instantaneamente 5 telas complexas entre tema claro e escuro.",
+          "steps": ["Crie coleções primitivas e semânticas.", "Vincule a 5 componentes compostos.", "Teste troca de tema com 1 clique."],
+          "definitionOfDone": ["Zero cor hardcoded nas telas.", "Ambos os temas legíveis."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ux-f2-q1",
+          "prompt": "Qual a principal vantagem do Auto Layout no Figma?",
+          "reviewTopicId": "ux-figma",
+          "choices": [
+            { "id": "a", "text": "Fazer componentes e quadros se adaptarem automaticamente ao conteúdo e tamanho da tela.", "correct": true, "explanation": "Funciona de forma análoga ao Flexbox em CSS." },
+            { "id": "b", "text": "Gerar imagens PNG automaticamente.", "correct": false, "explanation": "Exportação de imagem é outro recurso." }
+          ]
+        },
+        {
+          "id": "ux-f2-q2",
+          "prompt": "Para que servem tokens semânticos de cor em vez de usar códigos hexadecimais soltos?",
+          "reviewTopicId": "ux-color",
+          "choices": [
+            { "id": "a", "text": "Permitir troca de tema e manutenção global mantendo o significado de cada superfície.", "correct": true, "explanation": "Separa o papel visual (ex.: superfície/erro) do valor hexadecimal." },
+            { "id": "b", "text": "Limitar o projeto a apenas 2 cores.", "correct": false, "explanation": "Organiza o sistema inteiro." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ux-fase-3",
+      "number": 3,
+      "badgeTitle": "Acessibilidade e Design System",
+      "title": "WCAG na prática e Design Systems",
+      "topics": [
+        {
+          "id": "ux-wcag",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Acessibilidade (WCAG 2.2) desde o design",
+          "description": "Contraste 4.5:1 para texto, foco visível, estados que não dependem só da cor, alvos clicáveis adequados e rótulos claros.",
+          "tags": ["WCAG", "Acessibilidade"],
+          "prerequisites": ["ux-figma"],
+          "resources": [
+            { "title": "Acessibilidade na Web (MDN)", "url": "https://developer.mozilla.org/pt-BR/docs/Web/Accessibility", "lang": "pt", "kind": "documentacao" },
+            { "title": "Introduction to Web Accessibility (W3C)", "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "ux-design-system",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Design tokens, documentação e handoff",
+          "description": "Como estruturar um Design System escalável com tokens semânticos, regras de uso e entrega clara para desenvolvimento.",
+          "tags": ["Design System", "Figma"],
+          "prerequisites": ["ux-wcag"],
+          "resources": [
+            { "title": "Design Systems Repo", "url": "https://designsystemsrepo.com/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "ux-testing",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Testes de usabilidade e iteração por métricas",
+          "description": "Conduzir testes moderados com 5 usuários, observar onde travam sem ajudar e transformar achados em ajustes priorizados.",
+          "tags": ["Testes", "UX"],
+          "prerequisites": ["ux-design-system"],
+          "resources": [
+            { "title": "Usability Testing 101 (NN/g)", "url": "https://www.nngroup.com/articles/usability-testing-101/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ux-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Checklist WCAG de um formulário",
+          "description": "Revise um formulário simples garantindo rótulos visíveis, foco por teclado e mensagens de erro textuais.",
+          "steps": ["Verifique contrastes.", "Desenhe estado de foco.", "Escreva erros específicos."],
+          "definitionOfDone": ["Nenhum placeholder usado como único rótulo.", "Erros claros sem depender só de cor."]
+        },
+        {
+          "id": "ux-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Roteiro e execução de teste de usabilidade",
+          "description": "Escreva 4 tarefas neutras e teste seu protótipo com 3 pessoas anotando tempo e bloqueios.",
+          "steps": ["Crie tarefas sem revelar passos.", "Peça para pensarem em voz alta.", "Liste top 5 ajustes."],
+          "definitionOfDone": ["Relatório objetivo.", "Melhorias priorizadas."]
+        },
+        {
+          "id": "ux-p3-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Mini Design System documentado e testado",
+          "description": "Publique um kit com tokens, 8 componentes acessíveis (claro/escuro) e relatório de teste de usabilidade.",
+          "steps": ["Valide contraste WCAG em todos os estados.", "Documente quando usar e evitar cada componente.", "Aplique testes e ajuste."],
+          "definitionOfDone": ["Zero falhas WCAG AA.", "Guia pronto para handoff em front-end."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ux-f3-q1",
+          "prompt": "Em um formulário acessível, o que nunca deve acontecer em mensagens de erro?",
+          "reviewTopicId": "ux-wcag",
+          "choices": [
+            { "id": "a", "text": "Indicar erro apenas mudando a cor da borda para vermelho, sem texto ou ícone.", "correct": true, "explanation": "Pessoas daltônicas ou leitoras de tela precisam de indicação textual." },
+            { "id": "b", "text": "Explicar perto do campo o que precisa ser corrigido.", "correct": false, "explanation": "Isso é uma boa prática." }
+          ]
+        },
+        {
+          "id": "ux-f3-q2",
+          "prompt": "Ao conduzir um teste de usabilidade, o que o facilitador deve fazer quando o participante trava?",
+          "reviewTopicId": "ux-testing",
+          "choices": [
+            { "id": "a", "text": "Observar e perguntar o que ela esperava encontrar antes de ajudar.", "correct": true, "explanation": "Mostrar onde clicar esconde falhas reais da interface." },
+            { "id": "b", "text": "Apontar imediatamente o botão certo.", "correct": false, "explanation": "Isso invalida o aprendizado do teste." }
+          ]
+        }
+      ]
+    }
+  ]
+}

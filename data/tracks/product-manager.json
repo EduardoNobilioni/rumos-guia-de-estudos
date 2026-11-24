@@ -1,0 +1,263 @@
+{
+  "id": "product-manager",
+  "name": "Product Manager",
+  "tagline": "Descobrir o problema certo, priorizar com critério e medir impacto real",
+  "description": "Gestão de Produto em tecnologia: Product Discovery, validação de hipóteses, priorização, métricas (retenção, funil, North Star), PRDs claros e parceria com engenharia e design.",
+  "phases": [
+    {
+      "id": "pm-fase-1",
+      "number": 1,
+      "badgeTitle": "Base e Discovery",
+      "title": "Papel de PM e Product Discovery",
+      "topics": [
+        {
+          "id": "pm-papel",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Problema vs. solução e outcomes vs. outputs",
+          "description": "Entregar funcionalidades (output) não é gerar resultado (outcome). Aprenda a formular problemas claros antes de sair escrevendo telas.",
+          "tags": ["Produto", "Estratégia"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "SVPG Articles on Product Management", "url": "https://www.svpg.com/articles/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "pm-discovery",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Entrevistas de descoberta e árvores de oportunidade",
+          "description": "Como conversar com usuários para mapear dores reais, oportunidades e hipóteses testáveis em ciclos contínuos.",
+          "tags": ["Discovery", "Pesquisa"],
+          "prerequisites": ["pm-papel"],
+          "resources": [
+            { "title": "Product Discovery Basics (Atlassian)", "url": "https://www.atlassian.com/agile/product-management/product-discovery", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "pm-p1-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Documento de Discovery para um problema real",
+          "description": "Escolha um fluxo ineficiente de um serviço conhecido e redija problema, público-alvo, hipóteses e métricas de sucesso.",
+          "steps": ["Descreva o problema sem citar solução.", "Liste 3 hipóteses testáveis.", "Defina a métrica de sucesso."],
+          "definitionOfDone": ["Hipóteses falsificáveis.", "Critério claro de sucesso."]
+        },
+        {
+          "id": "pm-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Árvore de oportunidades (OST) com 3 experimentos baratos",
+          "description": "Estruture um resultado desejado, 4 oportunidades de usuários e testes sem código para validar a principal aposta.",
+          "steps": ["Defina 1 outcome numérico.", "Mapeie dores observadas.", "Desenhe teste tipo concierge/protótipo."],
+          "definitionOfDone": ["Oportunidades ligadas ao outcome.", "Teste viável em menos de 1 semana."]
+        },
+        {
+          "id": "pm-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Caso completo de Discovery com entrevistas simuladas",
+          "description": "Consolide síntese de entrevistas, riscos (valor, usabilidade, viabilidade, negócio) e recomendação de seguir ou pivotar.",
+          "steps": ["Analise os 4 riscos de produto.", "Sintetize evidências.", "Apresente decisão fundamentada."],
+          "definitionOfDone": ["Cobre os 4 riscos.", "Decisão baseada em dados."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "pm-f1-q1",
+          "prompt": "Qual a diferença entre output e outcome em produto?",
+          "reviewTopicId": "pm-papel",
+          "choices": [
+            { "id": "a", "text": "Output é o que o time constrói; outcome é a mudança mensurável no comportamento ou valor gerado.", "correct": true, "explanation": "Times maduros medem sucesso por outcomes." },
+            { "id": "b", "text": "Output é design e outcome é código.", "correct": false, "explanation": "Ambos são entregas; outcome é o impacto." }
+          ]
+        },
+        {
+          "id": "pm-f1-q2",
+          "prompt": "Qual o objetivo principal do Product Discovery contínuo?",
+          "reviewTopicId": "pm-discovery",
+          "choices": [
+            { "id": "a", "text": "Reduzir o risco de construir algo que ninguém usa antes de investir tempo pesado de engenharia.", "correct": true, "explanation": "Validar rápido evita desperdício." },
+            { "id": "b", "text": "Escrever especificações longas sem falar com usuários.", "correct": false, "explanation": "Discovery exige contato frequente com usuários." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pm-fase-2",
+      "number": 2,
+      "badgeTitle": "Priorização e Métricas",
+      "title": "Priorização, métricas e experimentação",
+      "topics": [
+        {
+          "id": "pm-priorizacao",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Frameworks de priorização (RICE, impacto x esforço)",
+          "description": "Dizer não com critério: como equilibrar alcance, impacto, confiança e esforço técnico ao montar um roadmap.",
+          "tags": ["Priorização", "RICE"],
+          "prerequisites": ["pm-discovery"],
+          "resources": [
+            { "title": "RICE: Simple Prioritization (Intercom)", "url": "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "pm-metricas",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Métricas: funil, retenção, coortes e North Star",
+          "description": "Evitar métricas de vaidade: entenda ativação, retenção por coorte, churn e métricas de guarda.",
+          "tags": ["Métricas", "Dados"],
+          "prerequisites": ["pm-priorizacao"],
+          "resources": [
+            { "title": "Product Metrics Guide (Amplitude)", "url": "https://amplitude.com/blog/product-metrics", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "pm-ab",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Experimentos e testes A/B em produto",
+          "description": "Quando testar com MVP manual, protótipo ou teste A/B controlado sem tirar conclusões de amostras pequenas.",
+          "tags": ["Experimentos", "Teste A/B"],
+          "prerequisites": ["pm-metricas"],
+          "resources": [
+            { "title": "A/B Testing Guide (Statsig)", "url": "https://www.statsig.com/perspectives/ab-testing-guide", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "pm-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Árvore de métricas (North Star + métricas de guarda)",
+          "description": "Escolha um produto conhecido e defina sua North Star Metric, 3 métricas drivers e 2 métricas de guarda.",
+          "steps": ["Identifique o valor central entregue.", "Conecte drivers de aquisição/retenção.", "Defina o que não pode piorar."],
+          "definitionOfDone": ["Sem métricas de vaidade isoladas.", "Inclui métricas de guarda."]
+        },
+        {
+          "id": "pm-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Backlog priorizado com matriz RICE e métricas",
+          "description": "Avalie 8 iniciativas usando RICE, justificando impacto e confiança, e explique o corte das 3 piores.",
+          "steps": ["Liste 8 iniciativas com esforço.", "Calcule o score RICE.", "Justifique os descartes."],
+          "definitionOfDone": ["Critérios transparentes.", "Inclui métricas de guarda."]
+        },
+        {
+          "id": "pm-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Plano de experimento A/B com cálculo de amostra",
+          "description": "Projete um teste A/B completo: hipótese, variante, MDE (efeito mínimo detectável), duração e critério de decisão.",
+          "steps": ["Formule hipótese nula e alternativa.", "Estime tamanho de amostra.", "Defina regras de parada."],
+          "definitionOfDone": ["Evita peaking prematuro.", "Critérios de sucesso claros."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "pm-f2-q1",
+          "prompt": "Para que servem as métricas de guarda (guardrail metrics)?",
+          "reviewTopicId": "pm-metricas",
+          "choices": [
+            { "id": "a", "text": "Garantir que o aumento em uma métrica não estrague outra área crítica, como performance ou satisfação.", "correct": true, "explanation": "Evita otimização local destrutiva." },
+            { "id": "b", "text": "Substituir testes unitários.", "correct": false, "explanation": "São métricas de produto/negócio." }
+          ]
+        },
+        {
+          "id": "pm-f2-q2",
+          "prompt": "Na fórmula RICE, o fator 'Confidence' serve para quê?",
+          "reviewTopicId": "pm-priorizacao",
+          "choices": [
+            { "id": "a", "text": "Penalizar ideias baseadas apenas em palpite quando faltam dados ou evidências.", "correct": true, "explanation": "Dá mais peso a apostas bem fundamentadas." },
+            { "id": "b", "text": "Medir o tempo do time de design.", "correct": false, "explanation": "Isso entra em Effort." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pm-fase-3",
+      "number": 3,
+      "badgeTitle": "Entrega e Estratégia",
+      "title": "PRDs, parceria técnica e go-to-market",
+      "topics": [
+        {
+          "id": "pm-prd",
+          "level": "avancado",
+          "hours": 5,
+          "title": "PRDs enxutos, critérios de aceite e trade-offs",
+          "description": "Escrever especificações curtas que alinham contexto, escopo, não-escopo e casos de borda com engenharia e design.",
+          "tags": ["PRD", "Delivery"],
+          "prerequisites": ["pm-ab"],
+          "resources": [
+            { "title": "Product Requirements Documents (Atlassian)", "url": "https://www.atlassian.com/agile/product-management/requirements", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "pm-tech",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Colaboração técnica: APIs, dívida técnica e riscos",
+          "description": "Entender viabilidade, débito técnico e arquitetura em alto nível para negociar escopo fatiado sem comprometer qualidade.",
+          "tags": ["Engenharia", "Arquitetura"],
+          "prerequisites": ["pm-prd"],
+          "resources": [
+            { "title": "Product Management Guides (Mind the Product)", "url": "https://www.mindtheproduct.com/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "pm-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Histórias de usuário com critérios de aceite claros",
+          "description": "Escreva 4 histórias de usuário fatiadas verticalmente no formato Dado/Quando/Então cobrindo casos de erro.",
+          "steps": ["Fatie por valor ao usuário.", "Escreva critérios testáveis.", "Inclua estados vazios e de erro."],
+          "definitionOfDone": ["Sem histórias gigantes.", "Testável por QA."]
+        },
+        {
+          "id": "pm-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Roadmap trimestral orientado a objetivos (Now/Next/Later)",
+          "description": "Organize um roadmap Now / Next / Later evitando datas rígidas falsas e amarrando entregas a resultados.",
+          "steps": ["Agrupe por temas de problema.", "Indique incertezas de longo prazo.", "Alinhe com métricas do trimestre."],
+          "definitionOfDone": ["Foco em objetivos.", "Comunicação clara para stakeholders."]
+        },
+        {
+          "id": "pm-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "PRD completo + plano de lançamento fatiado",
+          "description": "Escreva um PRD de uma nova funcionalidade incluindo problema, não-escopo, riscos técnicos e rollout progressivo.",
+          "steps": ["Defina MVP vs. fase 2.", "Escreva critérios de aceite.", "Planeje feature flags."],
+          "definitionOfDone": ["Seção explícita de não-escopo.", "Plano pós-lançamento."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "pm-f3-q1",
+          "prompt": "Por que incluir uma seção de 'Não-escopo' em um PRD?",
+          "reviewTopicId": "pm-prd",
+          "choices": [
+            { "id": "a", "text": "Para evitar aumento silencioso de escopo e alinhar expectativas do que não será feito nesta etapa.", "correct": true, "explanation": "Clareza de fronteiras acelera a entrega." },
+            { "id": "b", "text": "Para proibir sugestões futuras.", "correct": false, "explanation": "Pode virar fase futura após validação." }
+          ]
+        },
+        {
+          "id": "pm-f3-q2",
+          "prompt": "Qual a melhor forma de lidar com dívida técnica na conversa entre PM e engenharia?",
+          "reviewTopicId": "pm-tech",
+          "choices": [
+            { "id": "a", "text": "Tornar visível o impacto na velocidade e confiabilidade para priorizar junto com entregas de produto.", "correct": true, "explanation": "Débito técnico afeta diretamente a entrega futura de valor." },
+            { "id": "b", "text": "Ignorar até o sistema parar.", "correct": false, "explanation": "Paralisa o roadmap no médio prazo." }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "id": "mlops",
+  "name": "MLOps",
+  "tagline": "Levar modelos de Machine Learning do notebook para produção com reprodutibilidade",
+  "description": "Engenharia operacional de Machine Learning: versionamento de dados e modelos, pipelines reprodutíveis, empacotamento com Docker/FastAPI, monitoramento de drift e CI/CD para ML.",
+  "phases": [
+    {
+      "id": "mlops-fase-1",
+      "number": 1,
+      "badgeTitle": "Reprodutibilidade",
+      "title": "Do notebook ao código versionado",
+      "topics": [
+        {
+          "id": "mlops-codigo",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Refatorar notebooks em módulos Python testáveis",
+          "description": "Separar carregamento de dados, treino e inferência em pacotes Python com dependências fixadas e testes automatizados.",
+          "tags": ["Python", "MLOps"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Made With ML — MLOps Course", "url": "https://madewithml.com/", "lang": "en", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "mlops-tracking",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Rastreamento de experimentos e registro de modelos",
+          "description": "Registrar hiperparâmetros, métricas, versão dos dados e artefatos treinados com MLflow para nunca perder como um modelo foi gerado.",
+          "tags": ["MLflow", "Experimentos"],
+          "prerequisites": ["mlops-codigo"],
+          "resources": [
+            { "title": "MLflow Documentation", "url": "https://mlflow.org/docs/latest/index.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "mlops-p1-ini",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Treino reproduzível com MLflow",
+          "description": "Converta um modelo do scikit-learn em script CLI que loga parâmetros, métricas e modelo no MLflow.",
+          "steps": ["Fixe seed e dependências.", "Logue métricas e artefato no MLflow.", "Teste inferência carregando o modelo registrado."],
+          "definitionOfDone": ["Executa com um comando.", "Métricas comparáveis entre rodadas."]
+        },
+        {
+          "id": "mlops-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Pipeline de dados com validação de schema",
+          "description": "Valide tipos, nulos e faixas numéricas antes do treino falhando rápido quando o dataset quebrar contrato.",
+          "steps": ["Defina regras de contrato dos dados.", "Bloqueie treino em caso de erro.", "Adicione testes unitários."],
+          "definitionOfDone": ["Testes passam em CI.", "Contrato documentado."]
+        },
+        {
+          "id": "mlops-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Orquestração completa de treino + promoção automática",
+          "description": "Compare o modelo candidato contra o modelo atual em produção e só promova se superar métrica mínima.",
+          "steps": ["Consulte versão atual no Registry.", "Compare métricas em holdout fixo.", "Promova ou rejeite com log."],
+          "definitionOfDone": ["Nenhum modelo pior é promovido.", "Critério auditável."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "mlops-f1-q1",
+          "prompt": "Por que registrar artefatos e parâmetros em um Model Registry?",
+          "reviewTopicId": "mlops-tracking",
+          "choices": [
+            { "id": "a", "text": "Para garantir rastreabilidade, comparação entre versões e rollback seguro em produção.", "correct": true, "explanation": "Sem registro, não dá para auditar qual modelo está no ar." },
+            { "id": "b", "text": "Para substituir a limpeza dos dados.", "correct": false, "explanation": "Qualidade dos dados continua indispensável." }
+          ]
+        },
+        {
+          "id": "mlops-f1-q2",
+          "prompt": "Qual o principal benefício de sair do notebook para módulos Python testados?",
+          "reviewTopicId": "mlops-codigo",
+          "choices": [
+            { "id": "a", "text": "Evitar células executadas fora de ordem e permitir testes automáticos e automação em CI.", "correct": true, "explanation": "Código modular garante execução determinística." },
+            { "id": "b", "text": "Impedir visualização de gráficos.", "correct": false, "explanation": "Notebooks continuam ótimos para exploração inicial." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mlops-fase-2",
+      "number": 2,
+      "badgeTitle": "Serving e Containers",
+      "title": "Servir modelos via API e Docker",
+      "topics": [
+        {
+          "id": "mlops-serving",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "APIs de inferência com FastAPI e validação de entrada",
+          "description": "Expor predição online (REST) ou em lote (batch), validando schema de entrada com Pydantic e separando pré-processamento.",
+          "tags": ["FastAPI", "Python"],
+          "prerequisites": ["mlops-tracking"],
+          "resources": [
+            { "title": "Documentação FastAPI (PT)", "url": "https://fastapi.tiangolo.com/pt/", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "mlops-docker",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Empacotamento em Docker e pipelines CI/CD para ML",
+          "description": "Criar imagens enxutas para inferência e rodar testes de dados, treino básico e qualidade no GitHub Actions.",
+          "tags": ["Docker", "CI/CD"],
+          "prerequisites": ["mlops-serving"],
+          "resources": [
+            { "title": "MLOps: Continuous Delivery (Google Cloud)", "url": "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "mlops-p2-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Endpoint `/predict` com FastAPI e Pydantic",
+          "description": "Carregue um modelo salvo na inicialização da API e valide entradas com tipos e limites numéricos.",
+          "steps": ["Carregue modelo uma vez no startup.", "Defina schema Pydantic.", "Teste com curl/pytest."],
+          "definitionOfDone": ["Não recarrega o modelo a cada request.", "Retorna 422 para entrada inválida."]
+        },
+        {
+          "id": "mlops-p2-int",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Serviço de predição containerizado com healthcheck",
+          "description": "Empacote um modelo com FastAPI + Docker, expondo `/predict` e `/health` com usuário não-root.",
+          "steps": ["Crie endpoints FastAPI.", "Escreva Dockerfile enxuto.", "Adicione testes de integração."],
+          "definitionOfDone": ["Container sobe e responde em `/health`.", "Imagem sem segredos embutidos."]
+        },
+        {
+          "id": "mlops-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Workflow de CI/CD que testa modelo e gera imagem",
+          "description": "Configure GitHub Actions para rodar testes de código, fumaça de inferência e build Docker a cada PR.",
+          "steps": ["Crie workflow YAML.", "Rode pytest com amostra mínima.", "Valide build do Dockerfile."],
+          "definitionOfDone": ["Pipeline falha se acurácia cair abaixo do piso.", "Build reproduzível."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "mlops-f2-q1",
+          "prompt": "Qual o risco de deixar transformações de feature apenas no notebook de treino?",
+          "reviewTopicId": "mlops-serving",
+          "choices": [
+            { "id": "a", "text": "Ocorre training-serving skew: o modelo recebe dados transformados diferente em produção.", "correct": true, "explanation": "O pipeline de pré-processamento precisa ser compartilhado." },
+            { "id": "b", "text": "O Docker não compila código Python.", "correct": false, "explanation": "O problema é inconsistência estatística." }
+          ]
+        },
+        {
+          "id": "mlops-f2-q2",
+          "prompt": "Por que carregar o modelo na inicialização da API em vez de dentro da função de rota?",
+          "reviewTopicId": "mlops-serving",
+          "choices": [
+            { "id": "a", "text": "Para evitar leitura de disco repetida e garantir baixa latência em cada predição.", "correct": true, "explanation": "Modelos podem ter dezenas de MB ou GB." },
+            { "id": "b", "text": "Porque HTTP não aceita arquivos.", "correct": false, "explanation": "É uma questão de performance e memória." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mlops-fase-3",
+      "number": 3,
+      "badgeTitle": "Monitoramento",
+      "title": "Data drift, alertas e retreinamento",
+      "topics": [
+        {
+          "id": "mlops-drift",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Detecção de Data Drift e Concept Drift",
+          "description": "Monitorar se a distribuição dos dados de entrada mudou (data drift) ou se a relação com o alvo mudou (concept drift).",
+          "tags": ["Drift", "Monitoramento"],
+          "prerequisites": ["mlops-docker"],
+          "resources": [
+            { "title": "Evidently AI Documentation", "url": "https://docs.evidentlyai.com/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "mlops-retreino",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Estratégias de deploy (Canary, Shadow) e retreinamento",
+          "description": "Como atualizar modelos sem derrubar métricas de negócio usando shadow deploy e gatilhos seguros de retreinamento.",
+          "tags": ["Deploy", "MLOps"],
+          "prerequisites": ["mlops-drift"],
+          "resources": [
+            { "title": "Made With ML — Testing & Monitoring", "url": "https://madewithml.com/courses/mlops/monitoring/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "mlops-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Log estruturado de predições para auditoria",
+          "description": "Registre entrada anonimizada, versão do modelo, predição e latência em JSONL para análise futura.",
+          "steps": ["Defina formato de log.", "Mascare dados sensíveis.", "Teste consulta de latência p95."],
+          "definitionOfDone": ["Sem dados pessoais nos logs.", "Inclui identificador da versão do modelo."]
+        },
+        {
+          "id": "mlops-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Comparador de distribuição de features",
+          "description": "Escreva script que calcula mudança estatística (PSI/KS) entre dados de treino e produção.",
+          "steps": ["Carregue referência e lote atual.", "Calcule estatísticas por coluna.", "Destaque desvios acima do limite."],
+          "definitionOfDone": ["Sinaliza colunas alteradas.", "Relatório legível no terminal."]
+        },
+        {
+          "id": "mlops-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Relatório automatizado de drift com alerta",
+          "description": "Compare referência com novos dados usando Evidently e gere relatório HTML identificando colunas em drift.",
+          "steps": ["Separe referência e atual.", "Simule mudança em 2 colunas.", "Gere relatório e regra de alerta."],
+          "definitionOfDone": ["Identifica exatamente as colunas alteradas.", "Documenta ação de rollback ou retreino."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "mlops-f3-q1",
+          "prompt": "Em que consiste o Shadow Deployment de um modelo novo?",
+          "reviewTopicId": "mlops-retreino",
+          "choices": [
+            { "id": "a", "text": "O modelo novo recebe cópia do tráfego real e registra predições sem afetar a resposta ao usuário.", "correct": true, "explanation": "Permite validar comportamento real sem risco." },
+            { "id": "b", "text": "Desligar os logs do modelo antigo.", "correct": false, "explanation": "Logs e comparação são a base do shadow deploy." }
+          ]
+        },
+        {
+          "id": "mlops-f3-q2",
+          "prompt": "Qual a diferença entre Data Drift e Concept Drift?",
+          "reviewTopicId": "mlops-drift",
+          "choices": [
+            { "id": "a", "text": "Data Drift muda a distribuição das entradas; Concept Drift muda a própria relação entre entrada e variável alvo.", "correct": true, "explanation": "Ambos exigem atenção, mas o Concept Drift costuma exigir retreino com novos rótulos." },
+            { "id": "b", "text": "São sinônimos para erro de sintaxe.", "correct": false, "explanation": "São mudanças estatísticas distintas em produção." }
+          ]
+        }
+      ]
+    }
+  ]
+}
