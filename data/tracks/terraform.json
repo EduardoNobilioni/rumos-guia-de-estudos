@@ -1,0 +1,239 @@
+{
+  "id": "terraform",
+  "name": "Terraform",
+  "tagline": "Infraestrutura como Código (IaC): HCL, state remoto, módulos e automação segura",
+  "description": "Provisionamento declarativo e versionado com Terraform: linguagem HCL, ciclo `init`/`plan`/`apply`, gerenciamento seguro de state remoto, módulos reutilizáveis e CI/CD de infra.",
+  "phases": [
+    {
+      "id": "tf-fase-1",
+      "number": 1,
+      "badgeTitle": "HCL e Ciclo Base",
+      "title": "Linguagem HCL, Providers e `plan`/`apply`",
+      "topics": [
+        {
+          "id": "tf-hcl",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "HCL, Providers, Resources, Variables e Outputs",
+          "description": "Escrever infraestrutura declarativa separando `variables.tf`, `main.tf` e `outputs.tf` com versões de provider travadas.",
+          "tags": ["Terraform", "IaC"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Terraform Documentation (HashiCorp)", "url": "https://developer.hashicorp.com/terraform/docs", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "tf-state",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Como o Terraform State funciona e por que nunca vai no Git",
+          "description": "Entender o arquivo `terraform.tfstate` (que mapeia código para recursos reais e pode conter valores sensíveis) e backend remoto com locking.",
+          "tags": ["Terraform", "State"],
+          "prerequisites": ["tf-hcl"],
+          "resources": [
+            { "title": "State in Terraform (HashiCorp)", "url": "https://developer.hashicorp.com/terraform/language/state", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "tf-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Ambiente local em Terraform com provider Docker",
+          "description": "Provisione uma rede, volume e container Nginx/Postgres localmente usando apenas código HCL.",
+          "steps": ["Trave versão no `required_providers`.", "Parametrize porta via variável.", "Teste `plan`, `apply` e `destroy`."],
+          "definitionOfDone": ["`.tfstate` listado no `.gitignore`.", "`terraform validate` e `fmt` limpos."]
+        },
+        {
+          "id": "tf-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Múltiplos ambientes separados por diretório ou workspace",
+          "description": "Estruture `dev` e `prod` com `tfvars` distintos garantindo que mudança em dev não altera produção.",
+          "steps": ["Separe diretórios ou backends.", "Adicione validações `validation {}` nas variáveis.", "Exponha URLs via `output`."],
+          "definitionOfDone": ["Variáveis críticas validadas antes do plan.", "Estados isolados."]
+        },
+        {
+          "id": "tf-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Backend remoto criptografado com state locking",
+          "description": "Configure state remoto (ex.: S3/MinIO/GCS local ou cloud) bloqueando execuções concorrentes.",
+          "steps": ["Configure bloco `backend`.", "Ative versionamento do bucket e criptografia.", "Teste lock simultâneo."],
+          "definitionOfDone": ["Duas execuções simultâneas não corrompem o state.", "Permite rollback de versão."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "tf-f1-q1",
+          "prompt": "Por que arquivos `.tfstate` nunca devem ser commitados em repositórios Git comuns?",
+          "reviewTopicId": "tf-state",
+          "choices": [
+            { "id": "a", "text": "Porque guardam valores de recursos e frequentemente armazenam senhas/chaves em texto claro, além de causarem conflitos concorrentes.", "correct": true, "explanation": "Use backend remoto criptografado com lock." },
+            { "id": "b", "text": "Porque o Terraform apaga o Git se encontrar `.tfstate`.", "correct": false, "explanation": "É risco de segurança e concorrência." }
+          ]
+        },
+        {
+          "id": "tf-f1-q2",
+          "prompt": "Para que serve rodar `terraform plan` antes de `terraform apply`?",
+          "reviewTopicId": "tf-hcl",
+          "choices": [
+            { "id": "a", "text": "Visualizar exatamente quais recursos serão criados, alterados ou destruídos antes de aplicar qualquer mudança.", "correct": true, "explanation": "Evita destruições acidentais (`-/+ destroy and then create`)." },
+            { "id": "b", "text": "Formatar a indentação dos arquivos `.tf`.", "correct": false, "explanation": "Formatação é feita com `terraform fmt`." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tf-fase-2",
+      "number": 2,
+      "badgeTitle": "Módulos e Escala",
+      "title": "Módulos reutilizáveis, `for_each` e `import`",
+      "topics": [
+        {
+          "id": "tf-modules",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Módulos reutilizáveis, `for_each` vs. `count` e `locals`",
+          "description": "Evitar reescrita entre projetos com módulos bem delimitados e usar `for_each` (por chave estável) em vez de `count` para listas que mudam.",
+          "tags": ["Terraform", "Módulos"],
+          "prerequisites": ["tf-state"],
+          "resources": [
+            { "title": "Modules Overview (HashiCorp)", "url": "https://developer.hashicorp.com/terraform/language/modules", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "tf-lifecycle",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "`import`, `moved` e `lifecycle` (`create_before_destroy`, `prevent_destroy`)",
+          "description": "Trazer recursos criados manualmente para o código e refatorar nomes de recursos no código sem destruir produção usando bloco `moved`.",
+          "tags": ["Terraform", "Refatoração"],
+          "prerequisites": ["tf-modules"],
+          "resources": [
+            { "title": "Refactoring — moved blocks", "url": "https://developer.hashicorp.com/terraform/language/modules/develop/refactoring", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "tf-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Conversão de `count` frágil para `for_each` por mapa",
+          "description": "Mostre na prática como remover item do meio de uma lista com `count` recria os demais, e corrija com `for_each`.",
+          "steps": ["Crie 3 recursos com `count` e remova o índice 1.", "Compare plano de destruição.", "Refaça com `for_each` usando mapa nomeado."],
+          "definitionOfDone": ["Remover chave afeta apenas 1 recurso.", "Diferença explicada no README."]
+        },
+        {
+          "id": "tf-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "Módulo Terraform reutilizável versionado",
+          "description": "Crie módulo de rede ou serviço web com `README.md`, `variables` validadas, `locals` de tags padrão e `outputs`.",
+          "steps": ["Estruture `modules/web-service`.", "Instancie 2 vezes com parâmetros distintos.", "Valide com `terraform validate`."],
+          "definitionOfDone": ["Tags de custo padronizadas via `locals`.", "Documentado inputs/outputs."]
+        },
+        {
+          "id": "tf-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Importação e refatoração segura com bloco `moved`",
+          "description": "Crie recurso fora do Terraform, importe para o state e mova para dentro de um módulo usando `moved` com zero downtime.",
+          "steps": ["Use bloco `import {}` declarativo.", "Encapsule em módulo com `moved {}`.", "Confirme `0 to add, 0 to destroy` no plan."],
+          "definitionOfDone": ["Plano mostra apenas alteração de endereço no state.", "Recurso real intacto."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "tf-f2-q1",
+          "prompt": "Por que preferir `for_each` a `count` ao criar múltiplos recursos parecidos a partir de uma lista que pode mudar?",
+          "reviewTopicId": "tf-modules",
+          "choices": [
+            { "id": "a", "text": "`for_each` identifica cada recurso por uma chave nominal estável no state; `count` usa índices numéricos que deslocam e recriam tudo ao remover do meio.", "correct": true, "explanation": "Evita quedas desnecessárias ao editar listas." },
+            { "id": "b", "text": "`count` não aceita números maiores que 2.", "correct": false, "explanation": "O problema é indexação posicional frágil." }
+          ]
+        },
+        {
+          "id": "tf-f2-q2",
+          "prompt": "Para que serve o bloco `moved` ao reorganizar código Terraform em módulos?",
+          "reviewTopicId": "tf-lifecycle",
+          "choices": [
+            { "id": "a", "text": "Avisar ao Terraform o novo endereço do recurso no state para que ele apenas atualize a referência sem destruir e recriar o recurso.", "correct": true, "explanation": "Refatoração de IaC sem risco de downtime." },
+            { "id": "b", "text": "Apagar o bucket remoto.", "correct": false, "explanation": "Preserva exatamente o recurso existente." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tf-fase-3",
+      "number": 3,
+      "badgeTitle": "CI/CD e Qualidade",
+      "title": "Testes, segurança de IaC e pipelines em equipe",
+      "topics": [
+        {
+          "id": "tf-ci",
+          "level": "avancado",
+          "hours": 6,
+          "title": "CI/CD para Terraform (`fmt`, `tflint`, Checkov/Trivy) e revisão de Plan",
+          "description": "Automatizar `terraform fmt -check`, lint, scan de segurança em IaC e comentar o output do `plan` no Pull Request antes da aprovação.",
+          "tags": ["Terraform", "CI/CD"],
+          "prerequisites": ["tf-lifecycle"],
+          "resources": [
+            { "title": "Automate Terraform with GitHub Actions", "url": "https://developer.hashicorp.com/terraform/tutorials/automation/github-actions", "lang": "en", "kind": "curso" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "tf-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Checks básicos em PR (`fmt`, `validate` e `tflint`)",
+          "description": "Configure workflow no GitHub Actions validando formatação e erros estáticos em cada Pull Request.",
+          "steps": ["Adicione `terraform fmt -check -recursive`.", "Configure `terraform validate`.", "Teste com PR propositalmente mal formatado."],
+          "definitionOfDone": ["PR falha se código estiver fora do padrão.", "Rápido e gratuito."]
+        },
+        {
+          "id": "tf-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Testes nativos de módulos com `terraform test`",
+          "description": "Escreva arquivo `.tftest.hcl` verificando planos (`command = plan`) e asserções em variáveis e nomes.",
+          "steps": ["Crie diretório `tests/`.", "Valide `assert` no plano sem gastar cloud.", "Rode `terraform test`."],
+          "definitionOfDone": ["Asserções cobrem inputs inválidos e outputs.", "Passa no CI."]
+        },
+        {
+          "id": "tf-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Pipeline GitOps com scan de segurança e aprovação manual",
+          "description": "Workflow completo rodando `trivy config`/`checkov`, publicando `plan` no PR e exigindo aprovação para `apply` na `main`.",
+          "steps": ["Rode scanner IaC antes do plan.", "Restrinja `apply` apenas após merge aprovado.", "Use OIDC sem chaves fixas."],
+          "definitionOfDone": ["Ninguém aplica direto da máquina em prod.", "Trilha completa no PR."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "tf-f3-q1",
+          "prompt": "Qual o fluxo mais seguro para trabalhar em equipe com Terraform?",
+          "reviewTopicId": "tf-ci",
+          "choices": [
+            { "id": "a", "text": "Rodar `plan` no Pull Request, revisar as alterações previstas com o time e executar `apply` apenas após aprovação no CI.", "correct": true, "explanation": "Evita conflitos e garante visibilidade do que mudará." },
+            { "id": "b", "text": "Cada pessoa rodar `apply` localmente sem state remoto.", "correct": false, "explanation": "Causa divergência e sobrescrita de infra." }
+          ]
+        },
+        {
+          "id": "tf-f3-q2",
+          "prompt": "O que ferramentas como Trivy/Checkov verificam em arquivos Terraform antes do deploy?",
+          "reviewTopicId": "tf-ci",
+          "choices": [
+            { "id": "a", "text": "Maus hábitos de segurança na configuração, como buckets públicos, portas `0.0.0.0/0` no SSH ou discos sem criptografia.", "correct": true, "explanation": "Pega falhas antes de sequer criar os recursos." },
+            { "id": "b", "text": "Se a tela tem contraste WCAG.", "correct": false, "explanation": "Analisam segurança de Infraestrutura como Código." }
+          ]
+        }
+      ]
+    }
+  ]
+}

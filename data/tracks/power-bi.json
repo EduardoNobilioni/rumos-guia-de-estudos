@@ -1,0 +1,239 @@
+{
+  "id": "power-bi",
+  "name": "Power BI",
+  "tagline": "Power Query (ETL), modelagem Star Schema, DAX avançado e relatórios executivos",
+  "description": "Domínio completo do Power BI para análise e BI: tratamento reproduzível no Power Query, modelagem dimensional (Star Schema), DAX (contexto de filtro e linha), RLS e performance.",
+  "phases": [
+    {
+      "id": "pbi-fase-1",
+      "number": 1,
+      "badgeTitle": "Power Query e Modelo",
+      "title": "Power Query (ETL) e modelagem Star Schema",
+      "topics": [
+        {
+          "id": "pbi-pq",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Power Query (linguagem M): limpeza, Unpivot e parâmetros",
+          "description": "Transformar arquivos sujos, combinar pastas, usar Unpivot para normalizar colunas em linhas e parametrizar caminhos.",
+          "tags": ["Power BI", "Power Query"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Power Query Documentation (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/power-query/", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "pbi-schema",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Modelagem Star Schema, tabela Calendário e relacionamentos 1:N",
+          "description": "Separar tabelas Fato de Dimensões, marcar tabela Calendário oficial e evitar filtros bidirecionais perigosos.",
+          "tags": ["Power BI", "Star Schema"],
+          "prerequisites": ["pbi-pq"],
+          "resources": [
+            { "title": "Star Schema Guidance (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/star-schema", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "pbi-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Pipeline Power Query consolidando 12 arquivos mensais",
+          "description": "Una CSVs mensais de uma pasta tratando cabeçalhos extras, datas PT-BR e valores vazios automaticamente.",
+          "steps": ["Conecte à pasta com parâmetro.", "Aplique limpeza e tipagem por localidade.", "Crie tabela dCalendario dedicada."],
+          "definitionOfDone": ["Adicionar novo mês na pasta funciona ao clicar em Atualizar.", "Zero erro de tipo."]
+        },
+        {
+          "id": "pbi-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Refatoração de 'tabelão único' para Star Schema",
+          "description": "Pegue uma tabela larga única e separe em 1 fato + 4 dimensões no Power Query validando totais idênticos.",
+          "steps": ["Extraia dimensões únicas.", "Remova colunas redundantes da fato.", "Configure relacionamentos 1:N unidirecionais."],
+          "definitionOfDone": ["Modelo menor em memória.", "Relacionamentos limpos sem N:N acidental."]
+        },
+        {
+          "id": "pbi-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Modelo com Query Folding ativo e atualização incremental",
+          "description": "Garanta que filtros e junções no SQL sejam empurrados ao banco de origem (View Native Query habilitado).",
+          "steps": ["Verifique etapas que quebram folding.", "Reordene filtros para o início.", "Configure parâmetros RangeStart/RangeEnd."],
+          "definitionOfDone": ["`View Native Query` disponível nas etapas principais.", "Carga rápida em base grande."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "pbi-f1-q1",
+          "prompt": "Por que evitar ativar direção de filtro cruzado 'Ambos' (bidirecional) indiscriminadamente no modelo?",
+          "reviewTopicId": "pbi-schema",
+          "choices": [
+            { "id": "a", "text": "Pode criar ambiguidade entre caminhos de filtro, resultados errados e queda de desempenho.", "correct": true, "explanation": "Use direção única (Dimensão -> Fato) e `CROSSFILTER` em medidas pontuais quando precisar." },
+            { "id": "b", "text": "Porque impede usar gráficos de barra.", "correct": false, "explanation": "Afeta propagação de contexto de filtro e performance." }
+          ]
+        },
+        {
+          "id": "pbi-f1-q2",
+          "prompt": "O que é Query Folding no Power Query?",
+          "reviewTopicId": "pbi-pq",
+          "choices": [
+            { "id": "a", "text": "Capacidade do Power Query traduzir suas etapas em uma única query SQL nativa executada na fonte, trazendo só o resultado necessário.", "correct": true, "explanation": "Essencial para performance e atualização incremental." },
+            { "id": "b", "text": "Dobrar o tamanho do arquivo PBIX.", "correct": false, "explanation": "Otimiza delegando processamento para o servidor de dados." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pbi-fase-2",
+      "number": 2,
+      "badgeTitle": "DAX Essencial",
+      "title": "Medidas DAX, contextos e inteligência de tempo",
+      "topics": [
+        {
+          "id": "pbi-dax-base",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Medidas vs. Colunas Calculadas, Contexto de Linha e Filtro",
+          "description": "Dominar `SUMX`, `CALCULATE`, `ALL`/`REMOVEFILTERS` e transição de contexto sem copiar fórmulas sem entender.",
+          "tags": ["Power BI", "DAX"],
+          "prerequisites": ["pbi-schema"],
+          "resources": [
+            { "title": "Learn DAX Basics (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dax/dax-overview", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "pbi-time",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Time Intelligence (`SAMEPERIODLASTYEAR`, `DATESYTD`) e variáveis `VAR`",
+          "description": "Escrever DAX legível com `VAR`/`RETURN` e calcular comparativos mensais, anuais (YoY) e acumulados no ano.",
+          "tags": ["Power BI", "DAX"],
+          "prerequisites": ["pbi-dax-base"],
+          "resources": [
+            { "title": "Time Intelligence Functions (DAX)", "url": "https://learn.microsoft.com/pt-br/dax/time-intelligence-functions-dax", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "pbi-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Pacote de 6 medidas base organizadas em tabela de medidas",
+          "description": "Crie Receita, Custo, Margem %, Ticket Médio e % sobre Total usando medidas explícitas e `DIVIDE()`.",
+          "steps": ["Use `DIVIDE` para evitar divisão por zero.", "Crie tabela dedicada de medidas.", "Formate R$ e % corretamente."],
+          "definitionOfDone": ["Nenhuma agregação implícita solta.", "Medidas reutilizáveis em qualquer visual."]
+        },
+        {
+          "id": "pbi-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "Comparativo YoY, MoM e acumulado YTD com `VAR`",
+          "description": "Implemente variação percentual ano contra ano usando tabela Calendário marcada e variáveis `VAR`.",
+          "steps": ["Marque dCalendario como tabela de datas.", "Escreva medida YoY com `VAR`.", "Trate anos sem histórico anterior."],
+          "definitionOfDone": ["Bate com cálculo manual.", "Código DAX indentado e legível."]
+        },
+        {
+          "id": "pbi-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Curva ABC (Pareto) dinâmica em DAX",
+          "description": "Classifique clientes/produtos dinamicamente em A (80%), B (15%) e C (5%) respondendo aos filtros da página.",
+          "steps": ["Calcule ranking e acumulado dinâmico.", "Classifique faixas com `SWITCH(TRUE(), ...)`.", "Valide performance no Performance Analyzer."],
+          "definitionOfDone": ["Recalcula corretamente ao filtrar região/ano.", "Tempo de render abaixo de 1 segundo."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "pbi-f2-q1",
+          "prompt": "Qual a função do `DIVIDE(numerador, denominador)` em DAX comparada ao operador `/`?",
+          "reviewTopicId": "pbi-dax-base",
+          "choices": [
+            { "id": "a", "text": "Trata divisão por zero com segurança retornando BLANK (ou valor alternativo) em vez de `Infinity` ou erro.", "correct": true, "explanation": "Evita que cards exibam `Infinito` em filtros sem movimento." },
+            { "id": "b", "text": "Arredonda sempre para inteiro.", "correct": false, "explanation": "Mantém precisão decimal." }
+          ]
+        },
+        {
+          "id": "pbi-f2-q2",
+          "prompt": "Para funções de Time Intelligence (`SAMEPERIODLASTYEAR`, `TOTALYTD`) funcionarem corretamente, o que o modelo exige?",
+          "reviewTopicId": "pbi-time",
+          "choices": [
+            { "id": "a", "text": "Uma tabela Calendário contínua (sem buracos nos dias do ano) devidamente relacionada e marcada como Tabela de Datas.", "correct": true, "explanation": "Datas faltantes na fato quebrariam o deslocamento temporal sem calendário contínuo." },
+            { "id": "b", "text": "Usar coluna de texto `'Jan/2025'` sem tipo Data.", "correct": false, "explanation": "Exige coluna contínua do tipo `Date`." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pbi-fase-3",
+      "number": 3,
+      "badgeTitle": "UX, RLS e Publicação",
+      "title": "Performance, design de relatório, RLS e publicação",
+      "topics": [
+        {
+          "id": "pbi-prod",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Design de relatório, Performance Analyzer, RLS e Power BI Service",
+          "description": "Otimizar visuais lentos, configurar Row-Level Security (RLS), drill-through, tooltips personalizados e gateway/agendamento.",
+          "tags": ["Power BI", "RLS", "UX"],
+          "prerequisites": ["pbi-time"],
+          "resources": [
+            { "title": "Optimization Guide for Power BI", "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/power-bi-optimization", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "pbi-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Painel com hierarquia clara, drill-through e tooltip rico",
+          "description": "Configure página de detalhe acionada ao clicar com botão direito em qualquer categoria.",
+          "steps": ["Defina até 5 visuais principais por página.", "Crie página de tooltip.", "Configure drill-through."],
+          "definitionOfDone": ["Interface limpa sem poluição.", "Navegação intuitiva."]
+        },
+        {
+          "id": "pbi-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Auditoria e aceleração usando Performance Analyzer",
+          "description": "Grave carregamento de relatório pesado, identifique medida/visual lento e reduza tempo total pela metade.",
+          "steps": ["Rode Performance Analyzer.", "Reduza visuais redundantes na mesma página.", "Otimize `FILTER(TabelaInteira)` para filtro em coluna."],
+          "definitionOfDone": ["Antes e depois registrados.", "Ganho real de velocidade."]
+        },
+        {
+          "id": "pbi-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Segurança por linha (RLS) dinâmico por `USERPRINCIPALNAME()`",
+          "description": "Implemente tabela de permissões filtrando automaticamente os dados conforme o e-mail logado no Power BI Service.",
+          "steps": ["Crie tabela de mapeamento usuário -> equipe.", "Aplique filtro DAX na role.", "Valide com 'Exibir como função'."],
+          "definitionOfDone": ["Testado com 2 perfis diferentes.", "Nenhum dado de outra equipe visível."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "pbi-f3-q1",
+          "prompt": "Em DAX, por que devemos evitar `FILTER(TabelaInteira, Tabela[Ano] = 2025)` dentro do `CALCULATE`?",
+          "reviewTopicId": "pbi-prod",
+          "choices": [
+            { "id": "a", "text": "Porque itera todas as linhas da tabela inteira em vez de filtrar só os valores distintos da coluna; prefira `Tabela[Ano] = 2025` direto.", "correct": true, "explanation": "Filtrar apenas colunas reduz drasticamente memória e CPU." },
+            { "id": "b", "text": "Porque `CALCULATE` não aceita anos.", "correct": false, "explanation": "Aceita filtros booleanos simples muito mais rápidos." }
+          ]
+        },
+        {
+          "id": "pbi-f3-q2",
+          "prompt": "O que o recurso Row-Level Security (RLS) garante no Power BI?",
+          "reviewTopicId": "pbi-prod",
+          "choices": [
+            { "id": "a", "text": "Restringir quais linhas de dados cada usuário ou grupo pode enxergar no mesmo relatório publicado.", "correct": true, "explanation": "Evita manter 10 cópias do mesmo arquivo PBIX para 10 gerentes." },
+            { "id": "b", "text": "Alterar a fonte da letra automaticamente.", "correct": false, "explanation": "É um mecanismo de segurança de dados por perfil." }
+          ]
+        }
+      ]
+    }
+  ]
+}

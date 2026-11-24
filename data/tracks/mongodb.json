@@ -1,0 +1,239 @@
+{
+  "id": "mongodb",
+  "name": "MongoDB",
+  "tagline": "Modelagem de documentos, índices compostos, Aggregation Pipeline e performance",
+  "description": "Bancos orientados a documentos com MongoDB: quando usar NoSQL vs. SQL, embedding vs. referencing, índices ESR, Aggregation Pipeline, transações e análise com `explain()`.",
+  "phases": [
+    {
+      "id": "mdb-fase-1",
+      "number": 1,
+      "badgeTitle": "Documentos e Modelagem",
+      "title": "Modelagem de documentos (Embed vs. Reference) e CRUD",
+      "topics": [
+        {
+          "id": "mdb-modelagem",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Documentos BSON, Embedding vs. Referencing e Schema Validation",
+          "description": "Dados acessados juntos vivem juntos: entenda quando embutir subdocumentos vs. referenciar coleções evitando arrays infinitos.",
+          "tags": ["MongoDB", "Modelagem"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Data Modeling (MongoDB Docs)", "url": "https://www.mongodb.com/docs/manual/data-modeling/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "mdb-crud",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "CRUD seguro, projeções e operadores atômicos (`$set`, `$inc`, `$push`)",
+          "description": "Atualizar campos específicos atomicamente sem sobrescrever documentos inteiros nem vazar campos desnecessários.",
+          "tags": ["MongoDB", "CRUD"],
+          "prerequisites": ["mdb-modelagem"],
+          "resources": [
+            { "title": "MongoDB CRUD Operations", "url": "https://www.mongodb.com/docs/manual/crud/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "mdb-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Catálogo com JSON Schema Validation no MongoDB",
+          "description": "Crie coleção com validador JSON Schema exigindo tipos corretos e campos obrigatórios no próprio banco.",
+          "steps": ["Defina `$jsonSchema`.", "Teste inserir documento inválido.", "Verifique rejeição pelo servidor."],
+          "definitionOfDone": ["Documentos fora do contrato falham no insert.", "Campos documentados."]
+        },
+        {
+          "id": "mdb-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Modelagem híbrida para pedidos e avaliações",
+          "description": "Embuta itens do pedido (imutáveis na compra) e referencie avaliações paginadas separadas para não estourar 16 MB.",
+          "steps": ["Justifique o que vai embutido vs. separado.", "Use `$inc` atômico em contadores.", "Escreva consultas principais."],
+          "definitionOfDone": ["Nenhum array cresce sem limite no documento.", "Contadores atualizados atomicamente."]
+        },
+        {
+          "id": "mdb-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Bucket Pattern para séries temporais ou sensores",
+          "description": "Agrupe leituras por janela de tempo em documentos-balde reduzindo quantidade de índices e I/O.",
+          "steps": ["Defina tamanho máximo do bucket.", "Implemente upsert incremental.", "Compare quantidade de documentos."],
+          "definitionOfDone": ["Redução drástica de documentos e índices.", "Consultas por intervalo rápidas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "mdb-f1-q1",
+          "prompt": "Qual o principal perigo de embutir um array que cresce indefinidamente (ex.: logs ou comentários infinitos) dentro de um documento MongoDB?",
+          "reviewTopicId": "mdb-modelagem",
+          "choices": [
+            { "id": "a", "text": "O documento pode atingir o limite rígido de 16 MB e degrada escrita/rebalanceamento de memória.", "correct": true, "explanation": "Relacionamentos 1-para-muitos ilimitados devem ser referenciados." },
+            { "id": "b", "text": "O MongoDB apaga o array ao atingir 10 itens.", "correct": false, "explanation": "Ele falha ao ultrapassar 16 MB." }
+          ]
+        },
+        {
+          "id": "mdb-f1-q2",
+          "prompt": "Por que usar `$inc` ou `$set` em vez de ler o documento, somar no código e usar `replaceOne`?",
+          "reviewTopicId": "mdb-crud",
+          "choices": [
+            { "id": "a", "text": "Evita condições de corrida (lost update) quando duas requisições atualizam o mesmo documento ao mesmo tempo.", "correct": true, "explanation": "Operadores de update são atômicos no documento." },
+            { "id": "b", "text": "Porque `replaceOne` não aceita números.", "correct": false, "explanation": "O problema é sobrescrever atualizações concorrentes." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb-fase-2",
+      "number": 2,
+      "badgeTitle": "Índices e Pipeline",
+      "title": "Índices (regra ESR) e Aggregation Pipeline",
+      "topics": [
+        {
+          "id": "mdb-indices",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Índices compostos, regra ESR e análise de `explain('executionStats')`",
+          "description": "Ordenar campos no índice por Equality -> Sort -> Range para eliminar COLLSCAN e ordenação em memória.",
+          "tags": ["MongoDB", "Índices"],
+          "prerequisites": ["mdb-crud"],
+          "resources": [
+            { "title": "The ESR (Equality, Sort, Range) Rule", "url": "https://www.mongodb.com/docs/manual/tutorial/equality-sort-range-guideline/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "mdb-agg",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Aggregation Pipeline (`$match`, `$group`, `$project`, `$lookup`)",
+          "description": "Filtrar cedo com `$match` para aproveitar índices antes de agrupar, projetar ou cruzar coleções.",
+          "tags": ["MongoDB", "Aggregation"],
+          "prerequisites": ["mdb-indices"],
+          "resources": [
+            { "title": "Aggregation Pipeline (MongoDB Docs)", "url": "https://www.mongodb.com/docs/manual/aggregation/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "mdb-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Otimização de consulta lenta removendo COLLSCAN",
+          "description": "Insira 20 mil documentos de teste, meça `executionTimeMillis` e `totalDocsExamined` antes e depois do índice.",
+          "steps": ["Rode `.explain('executionStats')`.", "Crie índice adequado.", "Compare docs examinados vs. retornados."],
+          "definitionOfDone": ["Troca COLLSCAN por IXSCAN.", "Razão docs examinados/retornados próxima de 1."]
+        },
+        {
+          "id": "mdb-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Relatório analítico com Aggregation Pipeline",
+          "description": "Calcule faturamento mensal, top 5 produtos e ticket médio com `$match`, `$unwind`, `$group` e `$sort`.",
+          "steps": ["Coloque `$match` no primeiro estágio.", "Projete apenas campos necessários.", "Valide totais."],
+          "definitionOfDone": ["Usa índice no `$match` inicial.", "Saída limpa e ordenada."]
+        },
+        {
+          "id": "mdb-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Índice composto seguindo regra ESR + TTL Index",
+          "description": "Modele fila ou sessões com expiração automática (TTL) e consulta paginada usando índice ESR sem sort em memória.",
+          "steps": ["Defina ordem Equality -> Sort -> Range no índice.", "Confirme ausência de estágio `SORT` no explain.", "Configure `expireAfterSeconds`."],
+          "definitionOfDone": ["Zero `SORT` em memória.", "Expiração automática validada."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "mdb-f2-q1",
+          "prompt": "Na regra ESR para índices compostos no MongoDB, qual deve ser a ordem dos campos?",
+          "reviewTopicId": "mdb-indices",
+          "choices": [
+            { "id": "a", "text": "Equality (igualdade exata), depois Sort (ordenação), depois Range (intervalo `>`, `<`).", "correct": true, "explanation": "Permite usar o índice para filtrar e já entregar ordenado." },
+            { "id": "b", "text": "Sempre ordem alfabética do nome do campo.", "correct": false, "explanation": "A ordem dos campos no índice muda totalmente o desempenho." }
+          ]
+        },
+        {
+          "id": "mdb-f2-q2",
+          "prompt": "Por que colocar `$match` o mais cedo possível em um Aggregation Pipeline?",
+          "reviewTopicId": "mdb-agg",
+          "choices": [
+            { "id": "a", "text": "Para reduzir logo o volume de documentos processados e permitir que o MongoDB utilize índices.", "correct": true, "explanation": "Após `$group` ou `$project`, índices originais não podem ser usados." },
+            { "id": "b", "text": "Porque `$match` só funciona na primeira linha.", "correct": false, "explanation": "Funciona em qualquer lugar, mas cedo aproveita índices." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb-fase-3",
+      "number": 3,
+      "badgeTitle": "Operação e Transações",
+      "title": "Replica Sets, transações ACID e backups",
+      "topics": [
+        {
+          "id": "mdb-ops",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Replica Sets, Write/Read Concerns e Transações multi-documento",
+          "description": "Entender consistência vs. latência (`w: 'majority'`), quando transações multi-documento são realmente necessárias e backups.",
+          "tags": ["MongoDB", "ACID"],
+          "prerequisites": ["mdb-agg"],
+          "resources": [
+            { "title": "Transactions (MongoDB Docs)", "url": "https://www.mongodb.com/docs/manual/core/transactions/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "mdb-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Backup lógico e restauração com `mongodump`/`mongorestore`",
+          "description": "Exporte um banco local em container e restaure em banco limpo verificando integridade e índices.",
+          "steps": ["Suba MongoDB no Docker.", "Execute `mongodump`.", "Restaure e valide contagem."],
+          "definitionOfDone": ["Índices recriados no restore.", "Procedimento documentado."]
+        },
+        {
+          "id": "mdb-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Transferência atômica usando Transaction Session",
+          "description": "Debite e credite em duas coleções dentro de `session.withTransaction()` simulando erro no meio para provar rollback.",
+          "steps": ["Suba replica set local em Docker.", "Force falha após primeira escrita.", "Verifique rollback completo."],
+          "definitionOfDone": ["Saldo total permanece inalterado no erro.", "Commit funciona no fluxo normal."]
+        },
+        {
+          "id": "mdb-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Change Streams reagindo a alterações em tempo real",
+          "description": "Consuma eventos de inserção/atualização via Change Streams com retomada por `resumeToken`.",
+          "steps": ["Escute coleção filtrada.", "Salve último `resumeToken`.", "Teste reiniciar consumidor sem perder evento."],
+          "definitionOfDone": ["Retoma do ponto exato após queda.", "Zero polling repetido no banco."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "mdb-f3-q1",
+          "prompt": "Em MongoDB, quando é possível evitar uma transação multi-documento?",
+          "reviewTopicId": "mdb-ops",
+          "choices": [
+            { "id": "a", "text": "Quando os dados que mudam juntos cabem no mesmo documento, pois escritas em um único documento já são atômicas.", "correct": true, "explanation": "Boa modelagem reduz necessidade de transações pesadas." },
+            { "id": "b", "text": "Nunca existem operações atômicas no MongoDB.", "correct": false, "explanation": "Escritas em documento único são sempre atômicas." }
+          ]
+        },
+        {
+          "id": "mdb-f3-q2",
+          "prompt": "O que significa `writeConcern: { w: 'majority' }`?",
+          "reviewTopicId": "mdb-ops",
+          "choices": [
+            { "id": "a", "text": "O banco confirma sucesso somente após a maioria dos nós votantes do Replica Set gravar a escrita, protegendo contra perda em failover.", "correct": true, "explanation": "Equilibra durabilidade com alta disponibilidade." },
+            { "id": "b", "text": "Apaga nós secundários.", "correct": false, "explanation": "Garante replicação durável antes de responder ok." }
+          ]
+        }
+      ]
+    }
+  ]
+}

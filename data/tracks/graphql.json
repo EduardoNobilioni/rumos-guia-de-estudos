@@ -1,0 +1,239 @@
+{
+  "id": "graphql",
+  "name": "GraphQL",
+  "tagline": "Schemas tipados, Queries, Mutations, DataLoader contra N+1 e segurança em produção",
+  "description": "APIs GraphQL bem projetadas: definição de schema (SDL), resolvers, paginação por cursor, DataLoader para agrupar consultas ao banco, proteção contra queries profundas e cache.",
+  "phases": [
+    {
+      "id": "gql-fase-1",
+      "number": 1,
+      "badgeTitle": "Schema e Resolvers",
+      "title": "SDL, Queries, Mutations e Resolvers",
+      "topics": [
+        {
+          "id": "gql-sdl",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Schema Definition Language (SDL), tipos e nulabilidade",
+          "description": "Projetar contratos orientados ao domínio usando tipos, enums, `input`, interfaces e cuidado com campos não-nulos (`!`).",
+          "tags": ["GraphQL", "Schema"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "GraphQL Official Learn — Schemas and Types", "url": "https://graphql.org/learn/schema/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "gql-resolvers",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Queries, Mutations, Resolvers e contexto de autenticação",
+          "description": "Conectar campos do schema a fontes de dados passando sessão autenticada no `context` e retornando erros claros.",
+          "tags": ["GraphQL", "API"],
+          "prerequisites": ["gql-sdl"],
+          "resources": [
+            { "title": "Execution & Resolvers (GraphQL.org)", "url": "https://graphql.org/learn/execution/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "gql-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "API GraphQL de catálogo de livros em memória",
+          "description": "Defina schema com autores, livros e filtros, com Query e Mutation tipadas.",
+          "steps": ["Escreva schema SDL limpo.", "Implemente resolvers de leitura e criação.", "Teste consultas aninhadas."],
+          "definitionOfDone": ["Schema sem ciclos desnecessários.", "Mutations retornam payload claro."]
+        },
+        {
+          "id": "gql-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "União de erro explícita em Mutations",
+          "description": "Modele respostas de mutação como `Union` de sucesso ou erros de validação tipados no próprio schema.",
+          "steps": ["Crie tipos `InvalidInputError` e `NotFoundError`.", "Use `... on` na query cliente.", "Escreva testes."],
+          "definitionOfDone": ["Erros de negócio visíveis no schema.", "Sem depender apenas de `errors[]` genérico."]
+        },
+        {
+          "id": "gql-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "API GraphQL integrada a PostgreSQL com contexto autenticado",
+          "description": "Injete usuário autenticado no `context` verificando permissões no nível de serviço antes de retornar dados.",
+          "steps": ["Valide JWT no contexto.", "Autorize na camada de regra.", "Separe schema público vs. restrito."],
+          "definitionOfDone": ["Campos privados retornam erro de autorização.", "Testes integrados passam."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "gql-f1-q1",
+          "prompt": "Qual o risco de marcar praticamente todos os campos do schema como não-nulos (`!`)?",
+          "reviewTopicId": "gql-sdl",
+          "choices": [
+            { "id": "a", "text": "Se um subcampo falhar ao resolver, o erro sobe (null bubbling) e pode anular o objeto inteiro ou a resposta completa.", "correct": true, "explanation": "Campos anuláveis isolam falhas parciais com mais resiliência." },
+            { "id": "b", "text": "Impede criar queries com mais de 2 campos.", "correct": false, "explanation": "Trata da propagação de erros nulos na execução." }
+          ]
+        },
+        {
+          "id": "gql-f1-q2",
+          "prompt": "Onde devem ficar dados de sessão/usuário autenticado em resolvers GraphQL?",
+          "reviewTopicId": "gql-resolvers",
+          "choices": [
+            { "id": "a", "text": "No objeto `context` passado a cada requisição e verificado pela camada de domínio.", "correct": true, "explanation": "Evita confiar em IDs enviados livremente nos argumentos da query." },
+            { "id": "b", "text": "Em variável global mutável compartilhada.", "correct": false, "explanation": "Misturaria sessões de usuários concorrentes." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gql-fase-2",
+      "number": 2,
+      "badgeTitle": "Performance",
+      "title": "DataLoader (N+1) e paginação por cursor",
+      "topics": [
+        {
+          "id": "gql-dataloader",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Resolver o problema N+1 com DataLoader",
+          "description": "Agrupar dezenas de buscas repetidas por item em uma única consulta em lote por tick do event loop usando DataLoader por requisição.",
+          "tags": ["GraphQL", "DataLoader"],
+          "prerequisites": ["gql-resolvers"],
+          "resources": [
+            { "title": "GraphQL DataLoader (Official Repo)", "url": "https://github.com/graphql/dataloader", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "gql-pagination",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Paginação por cursor (Relay Connections)",
+          "description": "Por que paginação baseada em cursor (`edges`, `pageInfo`, `after`, `first`) escala melhor e não pula/repete itens ao inserir dados.",
+          "tags": ["GraphQL", "Paginação"],
+          "prerequisites": ["gql-dataloader"],
+          "resources": [
+            { "title": "Pagination (GraphQL.org)", "url": "https://graphql.org/learn/pagination/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "gql-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Reproduzir e medir problema N+1 em query aninhada",
+          "description": "Crie query listando 20 posts com autores e conte quantas queries SQL rodam antes e depois de otimizar.",
+          "steps": ["Logue chamadas ao banco.", "Conte queries para 20 itens.", "Documente o gargalo."],
+          "definitionOfDone": ["Prova numérica do N+1.", "Baseline registrado."]
+        },
+        {
+          "id": "gql-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Batch loading com DataLoader por requisição",
+          "description": "Implemente `new DataLoader(...)` no `context` por request reduzindo 21 queries para 2.",
+          "steps": ["Crie loader novo a cada request.", "Retorne resultados na mesma ordem das chaves.", "Meça queries novamente."],
+          "definitionOfDone": ["Nunca compartilha cache do DataLoader entre usuários.", "Queries reduzidas a lote único."]
+        },
+        {
+          "id": "gql-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Conexão paginada por cursor com ordenação estável",
+          "description": "Implemente `first`/`after` retornando `edges`, `cursor` opaco e `pageInfo { hasNextPage endCursor }`.",
+          "steps": ["Codifique cursor em base64.", "Busque `limit + 1` para calcular `hasNextPage`.", "Teste inserções durante paginação."],
+          "definitionOfDone": ["Sem itens duplicados ao inserir novo registro.", "Limite máximo de `first` imposto."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "gql-f2-q1",
+          "prompt": "Por que criar uma nova instância de DataLoader a cada requisição HTTP em vez de usar uma global?",
+          "reviewTopicId": "gql-dataloader",
+          "choices": [
+            { "id": "a", "text": "Para evitar que dados em cache de um usuário ou transação vazem para outra requisição.", "correct": true, "explanation": "O cache do DataLoader é por requisição." },
+            { "id": "b", "text": "Porque DataLoader só aceita 1 chave.", "correct": false, "explanation": "Aceita lotes de várias chaves por requisição." }
+          ]
+        },
+        {
+          "id": "gql-f2-q2",
+          "prompt": "Qual a vantagem de `hasNextPage` calculado com `LIMIT + 1` em cursor pagination?",
+          "reviewTopicId": "gql-pagination",
+          "choices": [
+            { "id": "a", "text": "Saber se existe próxima página sem precisar rodar um `COUNT(*)` custoso na tabela inteira.", "correct": true, "explanation": "Se vierem `first + 1` linhas, há próxima página e devolve-se apenas `first`." },
+            { "id": "b", "text": "Ordenar em ordem inversa.", "correct": false, "explanation": "Evita `COUNT(*)` pesado." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gql-fase-3",
+      "number": 3,
+      "badgeTitle": "Segurança e Produção",
+      "title": "Segurança, limites de query e cache",
+      "topics": [
+        {
+          "id": "gql-security",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Profundidade máxima, custo de query, Persisted Queries e CORS/HTTP",
+          "description": "Defender o endpoint contra queries recursivas gigantes (`author { posts { author ... } }`), desativar introspection se necessário e usar APQ/Persisted Queries.",
+          "tags": ["GraphQL", "Segurança"],
+          "prerequisites": ["gql-pagination"],
+          "resources": [
+            { "title": "GraphQL Security Cheat Sheet (OWASP)", "url": "https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "gql-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Regra de limite de profundidade máxima (Depth Limit)",
+          "description": "Rejeite queries com mais de 5 níveis de aninhamento antes da execução.",
+          "steps": ["Adicione validation rule de profundidade.", "Teste query recursiva maliciosa.", "Retorne erro antes dos resolvers."],
+          "definitionOfDone": ["Resolvers nem chegam a rodar.", "Queries normais passam."]
+        },
+        {
+          "id": "gql-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Análise de complexidade e limite de paginação",
+          "description": "Calcule custo ponderado por listas (`first: 1000` multiplicando filhos) bloqueando abuso de CPU/DB.",
+          "steps": ["Atribua custo aos campos de lista.", "Exija argumento máximo de página.", "Teste cálculo com queries aninhadas."],
+          "definitionOfDone": ["Bloqueia `first: 99999`.", "Documenta limite máximo aceito."]
+        },
+        {
+          "id": "gql-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "API GraphQL com Persisted Queries e Cache HTTP",
+          "description": "Aceite queries pré-registradas por hash via GET permitindo cache em CDN e reduzindo payload da rede.",
+          "steps": ["Mapeie hashes permitidos.", "Configure cabeçalho `Cache-Control` por query pública.", "Escreva testes E2E."],
+          "definitionOfDone": ["Queries arbitrárias bloqueadas em modo estrito.", "Cache funcional em GET."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "gql-f3-q1",
+          "prompt": "Qual ataque é mitigado ao limitar profundidade (depth limit) e complexidade em GraphQL?",
+          "reviewTopicId": "gql-security",
+          "choices": [
+            { "id": "a", "text": "Negação de serviço (DoS) causada por queries profundamente aninhadas que multiplicam leituras exponencialmente.", "correct": true, "explanation": "Sem limite, uma única requisição HTTP pode travar servidor e banco." },
+            { "id": "b", "text": "Erro de CSS no navegador.", "correct": false, "explanation": "Protege CPU e banco contra abuso." }
+          ]
+        },
+        {
+          "id": "gql-f3-q2",
+          "prompt": "Como Persisted Queries ajudam tanto na segurança quanto no cache?",
+          "reviewTopicId": "gql-security",
+          "choices": [
+            { "id": "a", "text": "Permitem enviar apenas o hash da query aprovada via HTTP GET cacheável, reduzindo superfície para queries arbitrárias.", "correct": true, "explanation": "Facilita CDN e whitelist em produção." },
+            { "id": "b", "text": "Criptografam a senha do usuário no HTML.", "correct": false, "explanation": "Servem para cache e controle das queries." }
+          ]
+        }
+      ]
+    }
+  ]
+}

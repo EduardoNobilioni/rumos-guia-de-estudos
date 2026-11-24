@@ -18,7 +18,10 @@ const LANGUAGE_RULES = [
   [/\b(git|github|branch|commit|pull request|ci\/cd)\b/, 'Git'],
   [/\b(power bi|dax|star schema|planilha|excel)\b/, 'Power BI'],
   [/\b(mobile|flutter|dart|android|kotlin|swift|ios|react native)\b/, 'Mobile'],
-  [/\b(aws|cloud|nuvem|terraform|iac|nginx)\b/, 'Cloud'],
+  [/\b(aws|cloud|nuvem|nginx)\b/, 'Cloud'],
+  [/\b(terraform|hcl|tfstate|iac)\b/, 'Terraform'],
+  [/\b(graphql|sdl|dataloader)\b/, 'GraphQL'],
+  [/\b(mongodb|bson|esr)\b/, 'MongoDB'],
   [/\b(owasp|seguranca|criptografia|jwt|https|cors|csp|lgpd|pentest)\b/, 'Segurança'],
   [/\b(teste|testes|qa|playwright|jest|tdd|e2e|unitario)\b/, 'QA/Testes'],
   [/\b(machine learning|ml|ia|llm|rag|modelo|regressao|classificacao|spark|duckdb|dbt|etl|mlflow|drift)\b/, 'Dados/ML'],
@@ -78,6 +81,10 @@ const TRACK_DEFAULT_LANGS = {
   nextjs: ['Next.js', 'React', 'TypeScript'],
   angular: ['Angular', 'TypeScript'],
   vuejs: ['Vue.js', 'TypeScript'],
+  graphql: ['GraphQL', 'Node.js'],
+  mongodb: ['MongoDB'],
+  terraform: ['Terraform', 'Cloud'],
+  'power-bi': ['Power BI', 'SQL'],
 };
 
 function normalizeText(value) {

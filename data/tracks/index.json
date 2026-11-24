@@ -523,6 +523,54 @@
         "composition api",
         "vite"
       ]
+    },
+    {
+      "id": "graphql",
+      "file": "graphql.json",
+      "group": "tecnologia",
+      "keywords": [
+        "graphql",
+        "sdl",
+        "dataloader",
+        "api",
+        "cursor"
+      ]
+    },
+    {
+      "id": "mongodb",
+      "file": "mongodb.json",
+      "group": "tecnologia",
+      "keywords": [
+        "mongodb",
+        "nosql",
+        "documentos",
+        "aggregation",
+        "esr"
+      ]
+    },
+    {
+      "id": "terraform",
+      "file": "terraform.json",
+      "group": "tecnologia",
+      "keywords": [
+        "terraform",
+        "hcl",
+        "iac",
+        "infraestrutura como codigo",
+        "state"
+      ]
+    },
+    {
+      "id": "power-bi",
+      "file": "power-bi.json",
+      "group": "tecnologia",
+      "keywords": [
+        "power bi",
+        "dax",
+        "power query",
+        "star schema",
+        "bi"
+      ]
     }
   ]
 }
