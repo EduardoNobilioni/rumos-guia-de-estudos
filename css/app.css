@@ -247,11 +247,21 @@ html.dark .busy-block {
 .study-block {
   border: 1px solid var(--terra);
   background: #EFF6FF;
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.study-block:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -6px rgba(37, 99, 235, 0.24);
 }
 
 html.dark .study-block {
   border-color: var(--ochre);
   background: #172538;
+}
+
+html.dark .study-block:hover {
+  box-shadow: 0 6px 16px -6px rgba(56, 189, 248, 0.25);
 }
 
 .topic-node {
@@ -265,7 +275,7 @@ html.dark .study-block {
   border: 1px solid rgba(100, 116, 139, 0.35);
   background: var(--soft);
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 12px -4px rgba(15, 23, 42, 0.06);
-  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
 }
 
 html.dark .topic-node {
@@ -277,12 +287,12 @@ html.dark .topic-node {
 .topic-node:hover {
   transform: translateY(-2px);
   border-color: var(--terra);
-  box-shadow: 0 8px 20px -6px rgba(29, 78, 216, 0.18);
+  box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.22);
 }
 
 html.dark .topic-node:hover {
   border-color: var(--ochre);
-  box-shadow: 0 8px 20px -6px rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 20px -6px rgba(56, 189, 248, 0.24);
 }
 
 .topic-node.is-done {
@@ -317,11 +327,93 @@ html.dark dialog > form {
 }
 
 button,
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
+button,
 input,
 select,
 textarea,
-a {
+a,
+[role="checkbox"],
+summary {
   transition: box-shadow 150ms ease, border-color 150ms ease, transform 130ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+[role="checkbox"] {
+  cursor: pointer;
+}
+
+[role="checkbox"]:hover {
+  transform: translateY(-1px);
+  border-color: var(--terra);
+  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.24);
+}
+
+html.dark [role="checkbox"]:hover {
+  border-color: var(--ochre);
+  box-shadow: 0 4px 12px -4px rgba(56, 189, 248, 0.26);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+  accent-color: var(--terra);
+}
+
+html.dark input[type="checkbox"],
+html.dark input[type="radio"] {
+  accent-color: var(--ochre);
+}
+
+label:has(input[type="checkbox"]),
+label:has(input[type="radio"]),
+label:has(input[type="file"]),
+label.cursor-pointer {
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease, transform 130ms ease, color 150ms ease;
+}
+
+label:has(input[type="checkbox"]):hover,
+label:has(input[type="radio"]):hover,
+label:has(input[type="file"]):hover,
+label.cursor-pointer:hover {
+  border-color: var(--terra);
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+html.dark label:has(input[type="checkbox"]):hover,
+html.dark label:has(input[type="radio"]):hover,
+html.dark label:has(input[type="file"]):hover,
+html.dark label.cursor-pointer:hover {
+  border-color: var(--ochre);
+  background-color: rgba(56, 189, 248, 0.08);
+}
+
+a[href]:not(.skip-link):hover {
+  color: var(--terra);
+}
+
+html.dark a[href]:not(.skip-link):hover {
+  color: var(--ochre);
+}
+
+main#conteudo article {
+  transition: background-color 150ms ease;
+}
+
+main#conteudo article:hover {
+  background-color: rgba(37, 99, 235, 0.03);
+}
+
+html.dark main#conteudo article:hover {
+  background-color: rgba(56, 189, 248, 0.05);
 }
 
 button,
@@ -458,9 +550,15 @@ html.dark .flow-node.is-active {
   transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.choice-card:hover {
+.choice-card:not(:has(input:disabled)):hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px -6px rgba(29, 78, 216, 0.14);
+  border-color: var(--terra);
+  box-shadow: 0 10px 24px -6px rgba(37, 99, 235, 0.22);
+}
+
+html.dark .choice-card:not(:has(input:disabled)):hover {
+  border-color: var(--ochre);
+  box-shadow: 0 10px 24px -6px rgba(56, 189, 248, 0.24);
 }
 
 html.dark .choice-card {
@@ -532,6 +630,14 @@ html.dark .choice-card.is-selected {
 
 summary {
   cursor: pointer;
+}
+
+summary:hover {
+  color: var(--terra);
+}
+
+html.dark summary:hover {
+  color: var(--ochre);
 }
 
 summary::-webkit-details-marker {
