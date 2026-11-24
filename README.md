@@ -163,3 +163,7 @@ A versão original, a trilha Full-Stack, foi criada por Eduardo Nobilioni.
 Esta versão — trilhas personalizadas, plano de estudo, importação da grade, autoavaliações, exportações, redesign e acessibilidade — foi desenvolvida com a ajuda de ferramentas de IA: um assistente (Grok Bot) e um agente de código do Cursor. O trabalho foi feito sob a direção de Eduardo, que definiu as ideias, os requisitos e as escolhas de visual, e revisa as mudanças.
 
 O texto das trilhas e os links de estudo também passaram por essa ajuda e podem ter erro. Correção é bem-vinda por issue ou pull request.
+
+## Licença
+
+Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para detalhes.
