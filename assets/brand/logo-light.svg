@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <title>Rumo</title>
-  <polygon fill="#7a3329" points="25.19,6.81 20.60,17.34 14.66,11.40"/>
-  <polygon fill="#887655" points="6.81,25.19 11.40,14.66 17.34,20.60"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="#2563EB"/>
+  <path d="M8.5 23.5L23.5 8.5L17.5 20.5L14.5 17.5L8.5 23.5Z" fill="#FFFFFF"/>
+  <path d="M8.5 23.5L13 13.5L23.5 8.5L14.5 17.5L8.5 23.5Z" fill="#34D399"/>
+  <text x="42" y="23" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="22" font-weight="700" fill="#0F172A">rumo</text>
 </svg>

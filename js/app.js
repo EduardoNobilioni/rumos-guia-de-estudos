@@ -184,7 +184,7 @@ function showScreen(name) {
 function applyTheme() {
   document.documentElement.classList.toggle('dark', state.theme !== 'light');
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = state.theme === 'light' ? '#F7F8FA' : '#0E141B';
+  if (meta) meta.content = state.theme === 'light' ? '#FFFFFF' : '#090D16';
   $('themeLabel').textContent = state.theme === 'light' ? 'Tema escuro' : 'Tema claro';
   $('themeIcon').textContent = state.theme === 'light' ? '☾' : '☀';
   $('onbThemeBtn').textContent = state.theme === 'light' ? 'Tema escuro' : 'Tema claro';
@@ -506,7 +506,7 @@ function renderPhase(phase, query, phaseHit) {
     : `<ul class="divide-y divide-line dark:divide-sage/40">${projects.map(renderProject).join('')}</ul>`;
 
   return `
-    <section class="rounded-sm bg-soft dark:bg-card border ${progress.complete ? 'border-terra/70 dark:border-ochre/70' : 'border-line dark:border-sage/50'} overflow-hidden">
+    <section id="phase-${phase.id}" class="rounded-sm bg-soft dark:bg-card border ${progress.complete ? 'border-emerald dark:border-emerald-400' : 'border-line dark:border-sage/50'} overflow-hidden">
       <div class="p-4 sm:p-5 border-b border-line dark:border-sage/50">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <button type="button" data-action="toggle-phase" data-phase-id="${phase.id}" aria-expanded="${!collapsed}" class="flex items-center gap-3 text-left">
@@ -548,6 +548,34 @@ function renderPhase(phase, query, phaseHit) {
     </section>`;
 }
 
+function renderPhaseFlowchart(view) {
+  const container = $('phaseFlowchart');
+  if (!container) return;
+  if (!view.phases.length) {
+    container.hidden = true;
+    container.innerHTML = '';
+    return;
+  }
+  container.hidden = false;
+  const nodes = view.phases.map((phase, index) => {
+    const p = phase.progress;
+    const cls = p.complete ? 'is-done' : (p.done > 0 ? 'is-active' : '');
+    const arrow = index < view.phases.length - 1 ? '<span class="flow-arrow" aria-hidden="true">→</span>' : '';
+    return `
+      <button type="button" data-flow-phase="${phase.id}" class="flow-node ${cls}">
+        <span class="font-mono text-xs font-semibold ${p.complete ? 'text-emerald dark:text-emerald-300' : 'text-terra dark:text-ochre'}">Etapa ${phase.number}</span>
+        <span class="font-semibold">${escapeHtml(phase.title)}</span>
+        <span class="font-mono text-xs text-muted">${p.done}/${p.total}</span>
+      </button>${arrow}`;
+  }).join('');
+  container.innerHTML = `
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+      <h2 class="text-sm font-bold">Fluxograma das etapas</h2>
+      <span class="text-xs text-muted">Clique em uma etapa para ir direto ao conteúdo</span>
+    </div>
+    <div class="flow-track">${nodes}</div>`;
+}
+
 function renderRoadmap() {
   const track = activeTrack();
   const trackState = activeTrackState();
@@ -555,6 +583,7 @@ function renderRoadmap() {
   const focus = captureFocus();
   const y = window.scrollY;
   const view = buildRoadmap(track, trackState);
+  renderPhaseFlowchart(view);
   const query = session.search.trim().toLowerCase();
   const html = view.phases.map((phase) => {
     const phaseHit = !!query && `${phase.title} ${phase.badgeTitle} ${phase.note}`.toLowerCase().includes(query);
@@ -1425,6 +1454,18 @@ function bind() {
     session.viewMode = session.viewMode === 'map' ? 'list' : 'map';
     $('viewModeBtn').textContent = session.viewMode === 'map' ? 'Modo: Mapa visual' : 'Modo: Lista detalhada';
     renderRoadmap();
+  });
+  $('phaseFlowchart').addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-flow-phase]');
+    if (!btn) return;
+    const id = btn.dataset.flowPhase;
+    const trackState = activeTrackState();
+    if (trackState.collapsedPhases[id]) {
+      delete trackState.collapsedPhases[id];
+      persist();
+      refresh();
+    }
+    document.getElementById(`phase-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   $('topicDetailClose').addEventListener('click', () => {
     session.detailTopicId = null;

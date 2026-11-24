@@ -61,14 +61,14 @@ O visual prioriza leitura confortável, clareza e foco de estudo com base em psi
 
 | Papel | Claro | Escuro | Uso |
 | --- | --- | --- | --- |
-| Fundo | `#F7F8FA` | `#0E141B` | Fundo da página |
-| Superfície | `#FFFFFF` | `#161F29` | Cartões e popups |
-| Texto principal | `#0F172A` | `#F1F5F9` | Leitura principal |
-| Texto secundário | `#475569` | `#94A3B8` | Rótulos e metadados |
-| Destaque / Foco | `#1D4ED8` | `#60A5FA` | Botões, foco e ação principal |
-| Progresso | `#047857` | `#34D399` | Tópico concluído |
+| Fundo | `#FFFFFF` | `#090D16` | Fundo da página |
+| Superfície | `#F8FAFC` | `#111827` | Cartões, fluxograma e popups |
+| Texto principal | `#0F172A` | `#F8FAFC` | Leitura principal |
+| Texto secundário | `#475569` | `#CBD5E1` | Rótulos e metadados |
+| Destaque / Foco | `#2563EB` | `#38BDF8` | Botões, foco e ação principal |
+| Progresso | `#059669` | `#34D399` | Tópico concluído e barra de progresso |
 | Atenção leve | `#B45309` | `#FBBF24` | Opcional / Revisar |
-| Borda / Neutro | `#64748B` | `#64748B` | Contornos e hachura de ocupado |
+| Borda / Neutro | `#64748B` | `#475569` | Contornos e hachura de ocupado |
 
 O horário de aula é hachurado e traz a palavra **Ocupado**. A sessão de estudo tem borda na cor de destaque. Tópico concluído tem um visto desenhado, não só um quadrado pintado. Etapa pela metade mostra um traço.
 
@@ -101,14 +101,14 @@ Não há analytics, conta nem envio dos seus dados para um servidor deste projet
 - `index.html` — página
 - `manifest.webmanifest` e `sw.js` — manifesto PWA e cache offline
 - `css/app.css` — tema, foco, nós do mapa, hachura da grade e impressão
-- `js/app.js` — interface da trilha, mapa/popup e autoavaliação
+- `js/app.js` — interface da trilha, fluxograma das etapas, mapa/popup e autoavaliação
 - `js/dashboard-screen.js` — painel de acompanhamento com KPIs, gráfico semanal e anéis de progresso
 - `js/plan-screen.js` — plano de estudo e importação da grade
 - `js/plan.js` — distribuição das sessões
 - `js/ics.js` — leitura de `.ics` e CSV
 - `js/model.js` — progresso, importação e validação
 - `js/share.js` — link com a configuração
-- `js/files.js` — Markdown, PNG e PDF
+- `js/files.js` — Markdown, PNG e PDF (com fluxograma das etapas e codificação WinAnsi)
 - `data/tracks/` — conteúdo das trilhas
 - `examples/backup-legado.json` — exemplo do JSON antigo
 - `docs/screenshots/` — imagens deste README
