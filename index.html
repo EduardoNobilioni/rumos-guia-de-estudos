@@ -113,6 +113,56 @@
     <h1 id="onbHeading" class="mt-2 text-2xl sm:text-3xl font-semibold">Qual é a sua área?</h1>
     <p id="onbLead" class="read mt-3 text-muted dark:text-blush"></p>
 
+    <div id="onbStep0" hidden class="mt-6 space-y-6">
+      <section class="rounded-xl bg-soft dark:bg-card border border-line/40 dark:border-sage/50 p-5 sm:p-6">
+        <h2 class="text-lg sm:text-xl font-bold">Objetivo do Rumos</h2>
+        <p class="read mt-2 text-muted dark:text-blush">O <strong>Rumos</strong> é um guia gratuito, em português e sem cadastro para você planejar seus estudos em tecnologia com clareza — desde a escolha da área até um plano semanal realista.</p>
+        <div class="mt-5 grid sm:grid-cols-3 gap-4">
+          <div class="rounded-lg border border-line/35 dark:border-sage/50 bg-paper dark:bg-night p-4">
+            <p class="text-xs font-mono font-semibold text-terra dark:text-ochre">01 · Trilhas guiadas</p>
+            <p class="mt-1.5 text-sm font-semibold">Fluxograma e pré-requisitos</p>
+            <p class="mt-1 text-xs text-muted">Carreiras, fundamentos e linguagens organizados por etapas, projetos práticos e links gratuitos.</p>
+          </div>
+          <div class="rounded-lg border border-line/35 dark:border-sage/50 bg-paper dark:bg-night p-4">
+            <p class="text-xs font-mono font-semibold text-terra dark:text-ochre">02 · Ritmo realista</p>
+            <p class="mt-1.5 text-sm font-semibold">Plano semanal e agenda</p>
+            <p class="mt-1 text-xs text-muted">Distribui seus estudos em torno das suas aulas ou trabalho e exporta para <code>.ics</code>, PDF, PNG e Markdown.</p>
+          </div>
+          <div class="rounded-lg border border-line/35 dark:border-sage/50 bg-paper dark:bg-night p-4">
+            <p class="text-xs font-mono font-semibold text-emerald dark:text-emerald-400">03 · Privacidade local</p>
+            <p class="mt-1.5 text-sm font-semibold">Sem login nem rastreio</p>
+            <p class="mt-1 text-xs text-muted">Tudo fica salvo no seu navegador, com backup e restauração em JSON a qualquer momento.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-xl bg-soft dark:bg-card border border-line/40 dark:border-sage/50 p-5 sm:p-6">
+        <h2 class="text-base sm:text-lg font-bold">Como montar seu roadmap em 4 passos</h2>
+        <ol class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
+          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
+            <span class="font-mono font-bold text-terra dark:text-ochre">1.</span>
+            <span><strong>Escolha seu objetivo:</strong> selecione uma carreira, fundamento ou linguagem. Ao escolher, você avança automaticamente para o próximo passo.</span>
+          </li>
+          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
+            <span class="font-mono font-bold text-terra dark:text-ochre">2.</span>
+            <span><strong>Informe seu nível:</strong> tópicos abaixo do seu nível ficam marcados como opcionais sem travar seu progresso.</span>
+          </li>
+          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
+            <span class="font-mono font-bold text-terra dark:text-ochre">3.</span>
+            <span><strong>Defina suas horas semanais:</strong> calculamos a duração estimada de cada etapa no seu ritmo real.</span>
+          </li>
+          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
+            <span class="font-mono font-bold text-emerald dark:text-emerald-400">4.</span>
+            <span><strong>Acompanhe e exporte:</strong> use o fluxograma, anotações, autoavaliações e exporte quando quiser.</span>
+          </li>
+        </ol>
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <button id="welcomeStartBtn" type="button" class="px-5 py-2.5 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Começar a montar meu roadmap</button>
+          <button id="welcomeBackBtn" type="button" hidden class="px-4 py-2.5 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Voltar para minha trilha</button>
+        </div>
+      </section>
+    </div>
+
     <div id="onbStep1">
       <label class="block text-sm font-medium" for="onbSearch">Buscar trilha</label>
       <input id="onbSearch" type="search" autocomplete="off" placeholder="Ex.: Python, Excel, testes" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
@@ -141,8 +191,14 @@
       <div id="planPreview"></div>
     </div>
 
-    <div class="mt-6 flex items-center justify-between gap-3">
-      <button id="onbBack" type="button" class="px-4 py-2.5 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Voltar</button>
+    <div id="onbNavRow" class="mt-6 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <button id="onbBack" type="button" class="px-4 py-2.5 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Voltar</button>
+        <label class="inline-flex items-center gap-2 text-xs text-muted">
+          <input id="onbAutoAdvance" type="checkbox" checked />
+          <span>Avançar automaticamente ao selecionar</span>
+        </label>
+      </div>
       <div class="flex gap-2">
         <button id="onbNext" type="button" class="px-4 py-2.5 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Continuar</button>
         <button id="onbStart" type="button" hidden class="px-4 py-2.5 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Começar trilha</button>
@@ -301,11 +357,6 @@
       <main id="conteudo" class="space-y-5" aria-label="Etapas da trilha"></main>
 
       <div id="orphans" hidden class="mt-5"></div>
-
-      <footer class="mt-12 pt-6 border-t border-line dark:border-sage/50 text-xs text-muted flex flex-col sm:flex-row sm:justify-between gap-2">
-        <p>Rumos guarda o progresso, as anotações e as observações neste navegador, separados por trilha.</p>
-        <p id="footerStats" class="font-mono"></p>
-      </footer>
     </div>
   </div>
 
@@ -460,6 +511,48 @@
       <div id="topicDetailBody" class="mt-4"></div>
     </div>
   </dialog>
+
+  <dialog id="infoDialog" aria-labelledby="infoDialogTitle">
+    <div class="rounded-lg bg-soft dark:bg-card border border-line dark:border-sage/50 p-6 max-h-[85vh] overflow-y-auto shadow-xl">
+      <div class="flex items-start justify-between gap-3">
+        <h2 id="infoDialogTitle" class="text-lg font-bold"></h2>
+        <button type="button" id="infoDialogClose" class="px-3 py-1.5 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Fechar</button>
+      </div>
+      <div id="infoDialogBody" class="mt-4 space-y-3 text-sm text-muted dark:text-blush"></div>
+    </div>
+  </dialog>
+
+  <footer id="siteFooter" class="mt-12 border-t border-line/40 dark:border-sage/50 bg-blush/70 dark:bg-card/60 text-xs text-muted">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <p class="font-bold text-sm text-ink dark:text-blush">Rumos — Guia de Estudos</p>
+          <p class="mt-2 leading-relaxed">Plataforma aberta, gratuita e em português para montar roadmaps de estudo em tecnologia, acompanhar progresso e organizar sua rotina semanal.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-ink dark:text-blush">Informações e transparência</p>
+          <ul class="mt-2 space-y-1.5">
+            <li><button type="button" data-footer-action="about" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Sobre e orientações</button></li>
+            <li><button type="button" data-footer-action="privacy" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Política de Privacidade</button></li>
+            <li><button type="button" data-footer-action="terms" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Termos de Uso</button></li>
+            <li><button type="button" data-footer-action="accessibility" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Declaração de Acessibilidade</button></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold text-ink dark:text-blush">Projeto e comunidade</p>
+          <ul class="mt-2 space-y-1.5">
+            <li><a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">Código-fonte no GitHub</a></li>
+            <li><a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos/issues" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">Reportar erro ou sugerir trilha</a></li>
+            <li><span>Dados 100% locais no navegador (sem cadastro e sem cookies de rastreamento)</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-4 border-t border-line/30 dark:border-sage/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <p>© 2026 Rumos · Idealizado por Eduardo Nobilioni · Conteúdo educacional gratuito.</p>
+        <p id="footerStats" class="font-mono"></p>
+      </div>
+    </div>
+  </footer>
 
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0" role="status" aria-live="polite"></div>
   <script type="module" src="js/app.js"></script>

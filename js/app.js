@@ -814,14 +814,23 @@ const STEP_COPY = [
 
 function goToStep(step) {
   session.onboarding.step = step;
-  for (let index = 1; index <= 4; index += 1) $(`onbStep${index}`).hidden = index !== step;
+  for (let index = 0; index <= 4; index += 1) $(`onbStep${index}`).hidden = index !== step;
+  if (step === 0) {
+    $('onbStepLabel').textContent = 'Boas-vindas';
+    $('onbHeading').textContent = 'Planeje seus estudos em tecnologia com clareza';
+    $('onbLead').textContent = 'Entenda como o Rumos funciona e monte seu roadmap personalizado em poucos cliques.';
+    $('onbNavRow').hidden = true;
+    $('welcomeBackBtn').hidden = !isReady(state) || !activeTrack();
+    return;
+  }
   const [heading, lead] = STEP_COPY[step - 1];
   $('onbStepLabel').textContent = `Passo ${step} de 4`;
   $('onbHeading').textContent = heading;
   $('onbLead').textContent = session.onboarding.mode === 'retake' && step === 4
     ? 'Progresso, anotações, observações e ideias criadas por você continuam. Opcionais e ocultos desta trilha voltam para a recomendação do novo nível.'
     : lead;
-  $('onbBack').hidden = step === 1;
+  $('onbNavRow').hidden = false;
+  $('onbBack').hidden = false;
   $('onbNext').hidden = step === 4;
   $('onbStart').hidden = step !== 4;
   $('onbStart').textContent = session.onboarding.mode === 'retake' ? 'Atualizar trilha' : 'Começar trilha';
@@ -879,7 +888,7 @@ function renderPreview() {
     <ol class="mt-3 text-sm">${phases}</ol>`;
 }
 
-function openOnboarding(mode) {
+function openOnboarding(mode, initialStep = mode === 'create' ? 0 : 1) {
   session.onboarding.mode = mode;
   const current = activeTrackState();
   session.onboarding.trackId = mode === 'retake' ? state.activeTrackId : session.onboarding.trackId;
@@ -891,7 +900,7 @@ function openOnboarding(mode) {
   session.onboarding.query = '';
   renderOnboardingChoices();
   showScreen('onboarding');
-  goToStep(1);
+  goToStep(initialStep);
 }
 
 function confirmOnboarding() {
@@ -1575,14 +1584,35 @@ function bind() {
       session.openPhaseNotes[details.dataset.phaseId] = details.open;
     }
   }, true);
+  let autoAdvanceTimer = null;
+  const scheduleAutoAdvance = (targetStep) => {
+    if (!$('onbAutoAdvance')?.checked) return;
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = setTimeout(() => {
+      if ($('onboarding') && !$('onboarding').hidden) goToStep(targetStep);
+    }, 180);
+  };
   document.addEventListener('change', (event) => {
     if (!(event.target instanceof HTMLInputElement)) return;
     if (event.target.type === 'radio' || event.target.type === 'checkbox') paintChoices();
     if (event.target.name === 'track') {
       session.onboarding.trackId = event.target.value;
       syncCompanionLocks();
+      if (session.onboarding.step === 1) scheduleAutoAdvance(2);
     }
     if (event.target.name === 'companion') session.onboarding.companionIds = selectedCompanionIds();
+    if (event.target.name === 'level') {
+      session.onboarding.level = event.target.value;
+      if (session.onboarding.step === 2) scheduleAutoAdvance(3);
+    }
+    if (event.target.name === 'hours') {
+      if (event.target.value === 'custom') {
+        $('hoursCustom')?.focus();
+      } else {
+        session.onboarding.hours = clampHours(event.target.value);
+        if (session.onboarding.step === 3 && session.onboarding.hours) scheduleAutoAdvance(4);
+      }
+    }
   });
   $('onbSearch').addEventListener('input', () => {
     session.onboarding.query = $('onbSearch').value;
@@ -1610,7 +1640,50 @@ function bind() {
     if (custom) custom.checked = true;
     paintChoices();
   });
-  $('onbBack').addEventListener('click', () => goToStep(Math.max(1, session.onboarding.step - 1)));
+  $('hoursCustom').addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    const hours = selectedHours();
+    if (!hours) return toast('Informe entre 1 e 60 horas por semana.', 'error');
+    session.onboarding.hours = hours;
+    goToStep(4);
+  });
+  $('welcomeStartBtn').addEventListener('click', () => goToStep(1));
+  $('welcomeBackBtn').addEventListener('click', () => refresh());
+  $('onbBack').addEventListener('click', () => {
+    clearTimeout(autoAdvanceTimer);
+    goToStep(Math.max(0, session.onboarding.step - 1));
+  });
+  $('infoDialogClose').addEventListener('click', () => $('infoDialog').close());
+  $('siteFooter').addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-footer-action]');
+    if (!btn) return;
+    const action = btn.dataset.footerAction;
+    if (action === 'about') {
+      openOnboarding(isReady(state) ? 'retake' : 'create', 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const INFO_COPY = {
+      privacy: {
+        title: 'Política de Privacidade',
+        body: '<p>O <strong>Rumos</strong> funciona 100% no seu navegador. Não exigimos cadastro, não coletamos dados pessoais, não usamos cookies de rastreamento e não enviamos seu progresso para servidores externos.</p><p>Todo o seu progresso, anotações, respostas da autoavaliação e plano semanal ficam armazenados localmente no <code>localStorage</code> do seu dispositivo. Você pode exportar ou apagar seus dados a qualquer momento usando os botões de backup JSON.</p>',
+      },
+      terms: {
+        title: 'Termos de Uso',
+        body: '<p>O <strong>Rumos</strong> é uma ferramenta educacional gratuita e aberta. As trilhas, estimativas de carga horária e sugestões de projetos têm caráter orientativo para apoiar seus estudos.</p><p>Os links externos apontam para documentações, cursos e materiais gratuitos de terceiros, cujos conteúdos e disponibilidade pertencem aos respectivos autores.</p>',
+      },
+      accessibility: {
+        title: 'Declaração de Acessibilidade',
+        body: '<p>O Rumos foi projetado seguindo as diretrizes <strong>WCAG 2.2 nível AA</strong>, com suporte completo a navegação por teclado, alto contraste nos temas claro e escuro, foco visível e respeito à preferência <code>prefers-reduced-motion</code>.</p><p>Caso encontre qualquer barreira de acessibilidade, abra uma issue no repositório do projeto no GitHub.</p>',
+      },
+    };
+    const info = INFO_COPY[action];
+    if (!info) return;
+    $('infoDialogTitle').textContent = info.title;
+    $('infoDialogBody').innerHTML = info.body;
+    $('infoDialog').showModal();
+  });
   $('onbNext').addEventListener('click', () => {
     const step = session.onboarding.step;
     if (step === 1) {
