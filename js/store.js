@@ -15,7 +15,17 @@ export const session = {
   dialogResources: [],
   sidebarQuery: '',
   openGroups: {},
-  onboarding: { step: 1, trackId: null, level: null, hours: 8, mode: 'create', companionIds: [], query: '' },
+  onboarding: {
+    step: 0,
+    trackId: null,
+    level: null,
+    hours: 8,
+    mode: 'create',
+    companionIds: [],
+    query: '',
+    backendLanguageId: null,
+    backendEcosystemIds: [],
+  },
 };
 
 let state = emptyState();

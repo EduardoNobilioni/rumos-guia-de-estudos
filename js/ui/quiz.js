@@ -4,8 +4,17 @@ import { escapeHtml } from './dom.js';
 export function initQuiz(api) {
   const { $, persist, toast } = api;
 
+  function quizState(scope, id) {
+    if (scope === 'topic') {
+      const located = api.findTopic(id);
+      const source = located?.topic?.sourceTrackId;
+      if (source && api.getState().tracks[source]) return api.getState().tracks[source];
+    }
+    return api.activeTrackState();
+  }
+
   function openQuiz(scope, id) {
-    const trackState = api.activeTrackState();
+    const trackState = quizState(scope, id);
     const view = api.activeView();
     let questions = [];
     let title = 'Autoavaliação';
@@ -39,8 +48,6 @@ export function initQuiz(api) {
     $('quizDialog').addEventListener('change', (event) => {
       const input = event.target;
       if (!input.dataset.question) return;
-      api.activeTrackState().quizAnswers[input.dataset.question] = input.value;
-      persist(api.getState().activeTrackId);
       const view = api.activeView();
       let scope = 'topic';
       let owner = '';
@@ -55,8 +62,12 @@ export function initQuiz(api) {
           }
         }
       }
+      const ownerState = quizState(scope, owner);
+      ownerState.quizAnswers[input.dataset.question] = input.value;
+      const sourceId = scope === 'topic' ? api.findTopic(owner)?.topic?.sourceTrackId : api.getState().activeTrackId;
+      persist(sourceId || api.getState().activeTrackId);
       openQuiz(scope, owner);
-      if (quizScore(questions, api.activeTrackState().quizAnswers).needsReview) toast('Vale revisar. Não é nota.');
+      if (quizScore(questions, ownerState.quizAnswers).needsReview) toast('Vale revisar. Não é nota.');
     });
     $('quizDialog').addEventListener('click', (event) => {
       const button = event.target.closest('[data-review-topic]');

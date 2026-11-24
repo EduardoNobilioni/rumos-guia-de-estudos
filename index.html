@@ -160,6 +160,14 @@
           <p id="onbSearchStatus" class="mono" style="margin:8px 0" aria-live="polite"></p>
           <div id="onbTrackGroups" class="choice-list"></div>
         </div>
+        <fieldset id="onbStepLanguage" hidden>
+          <legend class="sr-only">Linguagem de back-end</legend>
+          <div id="onbLanguageList" class="choice-list"></div>
+        </fieldset>
+        <fieldset id="onbStepEcosystem" hidden>
+          <legend class="sr-only">Ecossistema da linguagem</legend>
+          <div id="onbEcosystemList" class="choice-list"></div>
+        </fieldset>
         <div id="onbStep2" hidden><div id="onbCompanionList" class="choice-list"></div></div>
         <fieldset id="onbStep3" hidden class="choice-list"><legend class="sr-only">Nível atual</legend></fieldset>
         <fieldset id="onbStep4" hidden>
@@ -199,6 +207,10 @@
           <p id="renameNoticeText" class="read"></p>
           <button type="button" id="renameNoticeDismiss" class="btn btn-secondary btn-small" style="margin-top:12px">Entendi</button>
         </div>
+        <div id="backendLanguageNotice" class="card card-pad" hidden style="margin-bottom:16px">
+          <p id="backendLanguageNoticeText" class="read"></p>
+          <button type="button" id="backendLanguageNoticeBtn" class="btn btn-primary btn-small" style="margin-top:12px">Escolher linguagem</button>
+        </div>
         <section class="hero-grid" aria-label="Trilha aberta">
           <div>
             <div class="row" id="trackMeta"></div>
@@ -237,7 +249,7 @@
             <label class="check" style="margin-top:12px"><input id="includeBelowLevel" type="checkbox" /> Contar o que está abaixo do meu nível. <span id="optionalHint"></span></label>
           </article>
         </div>
-        <div class="card card-pad" style="margin-top:12px">
+        <div id="stageBadges" class="card card-pad" style="margin-top:12px">
           <div class="spread">
             <span class="mono">Etapas</span>
             <span id="badgesUnlockedCounter" class="mono"></span>

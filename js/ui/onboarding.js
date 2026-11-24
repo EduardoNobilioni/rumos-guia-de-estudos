@@ -1,4 +1,8 @@
-import { applyStudySelection, buildCombinedRoadmap, clampHours, emptyTrackState, ensureTrack, formatDuration, groupTracks, projectPlanStats, roadmapStats, tracksMatching } from '../model.js';
+import {
+  applyStudySelection, backendEcosystemChoices, backendLanguageChoices, blocksFullStackCompanion, clampHours,
+  emptyTrackState, ensureTrack, formatDuration, fullstackOnboardingSteps, FULLSTACK_TRACK_ID, groupTracks,
+  projectPlanStats, roadmapStats, tracksMatching,
+} from '../model.js';
 import { syncPlanWeeklyHours } from '../plan.js';
 import { trackIconHtml } from '../icons.js';
 import { catalog } from '../load-tracks.js';
@@ -11,13 +15,25 @@ const LEVELS = [
 ];
 const HOURS = [4, 8, 12, 20];
 
-const COPY = [
-  ['Qual carreira é o seu objetivo?', 'Escolha sua trilha principal de carreira. Ao selecionar, você avança automaticamente para o próximo passo.'],
-  ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque quantas trilhas adicionais quiser estudar em paralelo e clique em Continuar.'],
-  ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
-  ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
-  ['Seu plano', 'Confira a carreira, as trilhas adicionais e as etapas antes de gerar seu roadmap completo.'],
-];
+const STEP_DOM = {
+  career: 'onbStep1',
+  language: 'onbStepLanguage',
+  ecosystem: 'onbStepEcosystem',
+  companions: 'onbStep2',
+  level: 'onbStep3',
+  hours: 'onbStep4',
+  preview: 'onbStep5',
+};
+
+const STEP_COPY = {
+  career: ['Qual carreira é o seu objetivo?', 'Escolha sua trilha principal de carreira. Ao selecionar, você avança automaticamente para o próximo passo.'],
+  language: ['Qual linguagem no back-end?', 'Escolha uma. Nenhuma vem marcada. HTTP, REST, banco, autenticação, testes e deploy continuam.'],
+  ecosystem: ['Qual framework?', 'Escolha um. Ele entra só no lugar do framework de back-end. O restante da trilha permanece.'],
+  companions: ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque as trilhas adicionais e clique em Continuar.'],
+  level: ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
+  hours: ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
+  preview: ['Seu plano', 'Confira a carreira, a linguagem e as etapas antes de gerar seu roadmap completo.'],
+};
 
 export function initOnboarding(api) {
   const { $, session, toast } = api;
@@ -30,6 +46,36 @@ export function initOnboarding(api) {
     </label>`;
   }
 
+  function steps() {
+    return ['home', ...fullstackOnboardingSteps(draft.trackId, draft.backendLanguageId, catalog())];
+  }
+
+  function renderLanguages() {
+    const options = backendLanguageChoices(catalog());
+    $('onbLanguageList').innerHTML = options.map((track) => choice(
+      'backendLanguage',
+      track.id,
+      track.name,
+      track.tagline || '',
+      draft.backendLanguageId === track.id,
+      'radio',
+      trackIconHtml(track.id, 'sm', track.name),
+    )).join('') || '<p class="muted">Nenhuma linguagem de back-end com trilha.</p>';
+  }
+
+  function renderEcosystem() {
+    const options = backendEcosystemChoices(catalog(), draft.backendLanguageId);
+    $('onbEcosystemList').innerHTML = options.map((track) => choice(
+      'backendEcosystem',
+      track.id,
+      track.name,
+      track.tagline || '',
+      draft.backendEcosystemIds[0] === track.id,
+      'radio',
+      trackIconHtml(track.id, 'sm', track.name),
+    )).join('');
+  }
+
   function renderChoices() {
     const groups = groupTracks(catalog());
     $('onbTrackGroups').innerHTML = groups.filter((group) => group.id === 'carreira').map((group) => (
@@ -37,12 +83,14 @@ export function initOnboarding(api) {
     )).join('');
     $('onbCompanionList').innerHTML = groups.filter((group) => group.id !== 'carreira').map((group) => (
       `<fieldset class="stack"><legend class="eyebrow">${escapeHtml(group.title)}</legend><p class="muted">${escapeHtml(group.lead)}</p>
-        ${group.tracks.map((track) => choice('companion', track.id, track.name, track.tagline || '', draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'sm', track.name))).join('')}
+        ${group.tracks.filter((track) => draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(track.id)).map((track) => choice('companion', track.id, track.name, track.tagline || '', draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'sm', track.name))).join('')}
       </fieldset>`
     )).join('');
     $('onbStep3').innerHTML = `<legend class="sr-only">Nível</legend>${LEVELS.map(([id, title, text]) => choice('level', id, title, text, draft.level === id)).join('')}`;
     $('hourChoices').innerHTML = HOURS.map((hours) => choice('hours', String(hours), `${hours} h`, 'por semana', draft.hours === hours)).join('')
       + choice('hours', 'custom', 'Outro', 'eu digo quantas', draft.hours && !HOURS.includes(draft.hours));
+    renderLanguages();
+    renderEcosystem();
   }
 
   function filter(query) {
@@ -70,60 +118,87 @@ export function initOnboarding(api) {
     return [...document.querySelectorAll('#onboarding input[name="companion"]:checked')].map((input) => input.value);
   }
 
+  function ecosystems() {
+    return [...document.querySelectorAll('#onboarding input[name="backendEcosystem"]:checked')].map((input) => input.value);
+  }
+
   function goToStep(step) {
-    draft.step = step;
-    $('onbStep0').hidden = step !== 0;
-    $('onbFlow').hidden = step === 0;
-    for (let index = 1; index <= 5; index += 1) $(`onbStep${index}`).hidden = index !== step;
-    if (step === 0) {
+    const flow = steps();
+    const index = Math.max(0, Math.min(step, flow.length - 1));
+    draft.step = index;
+    const id = flow[index];
+    $('onbStep0').hidden = id !== 'home';
+    $('onbFlow').hidden = id === 'home';
+    if (id === 'home') {
       $('onbNavRow').hidden = true;
       const state = api.getState();
       $('welcomeBackBtn').hidden = !(state.profile.onboarded && state.tracks[state.activeTrackId]);
       watchReveals($('onbStep0'));
       return;
     }
-    const [heading, lead] = COPY[step - 1];
+    for (const domId of new Set(Object.values(STEP_DOM))) $(domId).hidden = true;
+    if (id === 'language') renderLanguages();
+    if (id === 'ecosystem') renderEcosystem();
+    if (id === 'companions') renderChoices();
+    $(STEP_DOM[id]).hidden = false;
+    const [heading, lead] = STEP_COPY[id];
     $('onbHeading').textContent = heading;
-    $('onbLead').textContent = draft.mode === 'retake' && step === 5
+    $('onbLead').textContent = draft.mode === 'retake' && id === 'preview'
       ? 'Progresso, anotações e ideias criadas por você continuam. Opcionais e ocultos desta trilha voltam para a recomendação do novo nível.'
       : lead;
-    $('onbStepLabel').textContent = `Passo ${step} de 5`;
-    document.querySelectorAll('#onbSegments i').forEach((bar, index) => bar.classList.toggle('is-done', index < step));
+    $('onbStepLabel').textContent = `Passo ${index} de ${flow.length - 1}`;
+    $('onbSegments').innerHTML = flow.slice(1).map((_, bar) => `<i${bar < index ? ' class="is-done"' : ''}></i>`).join('');
     $('onbBack').hidden = false;
-    $('onbNext').hidden = step === 5;
-    $('onbStart').hidden = step !== 5;
+    $('onbNext').hidden = id === 'preview';
+    $('onbStart').hidden = id !== 'preview';
     $('onbStart').textContent = draft.mode === 'retake' ? 'Atualizar trilha' : 'Gerar roadmap completo';
-    $('autoWrap').hidden = step === 2 || step === 5;
+    $('autoWrap').hidden = id === 'companions' || id === 'ecosystem' || id === 'preview';
     $('onbNavRow').hidden = false;
-    if (step === 5) renderPlan();
+    if (id === 'preview') renderPlan();
   }
 
   function renderPlan() {
     const entry = catalog().find((item) => item.id === draft.trackId);
-    if (!entry || !draft.level || !draft.hours) {
-      $('planPreview').textContent = 'Faltou uma resposta. Volta um passo.';
+    if (!entry || !draft.level || !draft.hours || (draft.trackId === FULLSTACK_TRACK_ID && !draft.backendLanguageId)) {
+      $('planPreview').textContent = 'Faltou uma resposta. Volte um passo.';
       return;
     }
     const names = draft.companionIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
+    const language = backendLanguageChoices(catalog()).find((item) => item.id === draft.backendLanguageId);
+    const eco = draft.backendEcosystemIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
+    const backendLine = draft.trackId === FULLSTACK_TRACK_ID && language
+      ? ` Back-end em ${language.name}${eco.length ? `, com ${eco.join(', ')}` : ''}.`
+      : '';
     $('planPreview').innerHTML = `<p style="font:var(--text-title-s)">${escapeHtml(entry.name)} · ${escapeHtml(LEVELS.find((item) => item[0] === draft.level)?.[1] || draft.level)} · ${draft.hours} h por semana</p>
-      <p class="muted" style="margin-top:8px">${names.length ? `Junto: ${escapeHtml(names.join(', '))}.` : 'Só a carreira, por enquanto.'} ${escapeHtml(formatDuration(draft.hours * 8, draft.hours))} dá uma noção do mês, o prazo real sai das etapas.</p>`;
+      <p class="muted" style="margin-top:8px">${names.length ? `Junto: ${escapeHtml(names.join(', '))}.` : 'Só a carreira, por enquanto.'}${escapeHtml(backendLine)} ${escapeHtml(formatDuration(draft.hours * 8, draft.hours))} dá uma noção do mês, o prazo real sai das etapas.</p>`;
   }
 
   async function confirm() {
-    const ids = companions().filter((id) => id !== draft.trackId);
+    if (draft.trackId === FULLSTACK_TRACK_ID && !draft.backendLanguageId) {
+      toast('Escolha a linguagem do back-end.', 'error');
+      const at = steps().indexOf('language');
+      if (at >= 0) goToStep(at);
+      return;
+    }
+    const ids = companions().filter((id) => id !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id)));
     draft.companionIds = ids;
-    await api.ensureTracks([draft.trackId, ...ids]);
+    const languageIds = draft.trackId === FULLSTACK_TRACK_ID
+      ? [draft.backendLanguageId, ...draft.backendEcosystemIds]
+      : [];
+    await api.ensureTracks([draft.trackId, ...ids, ...languageIds]);
     applyStudySelection(api.getState(), {
       trackId: draft.trackId,
       level: draft.level,
       hours: draft.hours,
       companionIds: ids,
+      backendLanguageId: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendLanguageId : null,
+      backendEcosystemIds: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendEcosystemIds : [],
     });
     const primary = api.getState().tracks[draft.trackId];
     if (primary.studyPlan) syncPlanWeeklyHours(primary.studyPlan, draft.hours);
     session.combinedView = ids.length > 0;
     api.persistAll();
-    toast(draft.mode === 'retake' ? 'Trilha atualizada. O que você já fez continua.' : 'Trilha montada. Bom estudo.');
+    toast(draft.mode === 'retake' ? 'Trilha atualizada. Seu progresso continua.' : 'Roadmap gerado.');
     api.refresh();
   }
 
@@ -143,16 +218,26 @@ export function initOnboarding(api) {
           box.disabled = box.value === draft.trackId;
           if (box.disabled) box.checked = false;
         });
-        if (draft.step === 1 && $('onbAutoAdvance').checked) setTimeout(() => goToStep(2), 180);
+        const flow = steps();
+        if (flow[draft.step] === 'career' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
+      if (input.name === 'backendLanguage') {
+        draft.backendLanguageId = input.value;
+        draft.backendEcosystemIds = [];
+        const flow = steps();
+        if (flow[draft.step] === 'language' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
+      }
+      if (input.name === 'backendEcosystem') draft.backendEcosystemIds = ecosystems();
       if (input.name === 'companion') draft.companionIds = companions();
       if (input.name === 'level') {
         draft.level = input.value;
-        if (draft.step === 3 && $('onbAutoAdvance').checked) setTimeout(() => goToStep(4), 180);
+        const flow = steps();
+        if (flow[draft.step] === 'level' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
       if (input.name === 'hours' && input.value !== 'custom') {
         draft.hours = clampHours(input.value);
-        if (draft.step === 4 && draft.hours && $('onbAutoAdvance').checked) setTimeout(() => goToStep(5), 180);
+        const flow = steps();
+        if (flow[draft.step] === 'hours' && draft.hours && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
     });
     $('onbSearch').addEventListener('input', () => { draft.query = $('onbSearch').value; filter(draft.query); });
@@ -165,12 +250,22 @@ export function initOnboarding(api) {
     $('welcomeStartBtn').addEventListener('click', () => goToStep(1));
     $('onbBack').addEventListener('click', () => goToStep(Math.max(0, draft.step - 1)));
     $('onbNext').addEventListener('click', () => {
-      if (draft.step === 1 && !selected('track')) return toast('Escolha uma carreira.', 'error');
-      if (draft.step === 1) draft.trackId = selected('track');
-      if (draft.step === 2) draft.companionIds = companions().filter((id) => id !== draft.trackId);
-      if (draft.step === 3 && !selected('level')) return toast('Escolha um nível.', 'error');
-      if (draft.step === 3) draft.level = selected('level');
-      if (draft.step === 4) {
+      const id = steps()[draft.step];
+      if (id === 'career' && !selected('track')) return toast('Escolha uma carreira.', 'error');
+      if (id === 'career') draft.trackId = selected('track');
+      if (id === 'language' && !selected('backendLanguage')) return toast('Escolha a linguagem do back-end.', 'error');
+      if (id === 'language') {
+        const nextLanguage = selected('backendLanguage');
+        if (nextLanguage !== draft.backendLanguageId) draft.backendEcosystemIds = [];
+        draft.backendLanguageId = nextLanguage;
+      }
+      if (id === 'ecosystem') {
+        draft.backendEcosystemIds = ecosystems().filter((item) => item !== draft.backendLanguageId);
+      }
+      if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(item)));
+      if (id === 'level' && !selected('level')) return toast('Escolha um nível.', 'error');
+      if (id === 'level') draft.level = selected('level');
+      if (id === 'hours') {
         draft.hours = selected('hours') === 'custom' ? clampHours($('hoursCustom').value) : clampHours(selected('hours'));
         if (!draft.hours) return toast('Entre 1 e 60 horas.', 'error');
       }
@@ -178,6 +273,7 @@ export function initOnboarding(api) {
     });
     $('onbStart').addEventListener('click', () => { confirm().catch(() => toast('Não consegui montar a trilha.', 'error')); });
     $('welcomeBackBtn').addEventListener('click', () => api.refresh());
+    $('backendLanguageNoticeBtn').addEventListener('click', () => open('retake'));
   }
 
   function open(mode, step) {
@@ -189,14 +285,26 @@ export function initOnboarding(api) {
       draft.level = current.level;
       draft.hours = current.weeklyHours;
       draft.companionIds = [...(state.profile.companionIds || [])];
+      draft.backendLanguageId = state.profile.backendLanguageId || null;
+      draft.backendEcosystemIds = [...(state.profile.backendEcosystemIds || [])];
+    }
+    if (mode === 'create') {
+      draft.backendLanguageId = null;
+      draft.backendEcosystemIds = [];
     }
     renderChoices();
     api.showScreen('onboarding');
-    const initial = step == null ? (mode === 'create' ? 0 : 1) : step;
-    goToStep(initial);
+    const flow = steps();
+    if (step === 0) return goToStep(0);
+    if (mode === 'retake' && state.activeTrackId === FULLSTACK_TRACK_ID && !state.profile.backendLanguageId && step == null) {
+      const at = flow.indexOf('language');
+      return goToStep(at >= 0 ? at : 1);
+    }
+    if (typeof step === 'number') return goToStep(step);
+    goToStep(mode === 'create' ? 0 : 1);
   }
 
   return { bind, open };
 }
 
-export { emptyTrackState, ensureTrack, buildCombinedRoadmap, roadmapStats, projectPlanStats };
+export { emptyTrackState, ensureTrack, roadmapStats, projectPlanStats };

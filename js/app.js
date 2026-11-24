@@ -1,5 +1,6 @@
 import {
-  CIENCIA_DE_DADOS_ID, applySharePlan, buildCombinedRoadmap, currentPhase, ensureTrack, isReady, sharePlanFromTrack,
+  CIENCIA_DE_DADOS_ID, applySharePlan, backendEcosystemChoices, backendLanguageChoices, buildCombinedRoadmap, buildStudyRoadmap,
+  currentPhase, ensureTrack, isReady, needsBackendLanguageChoice, sharePlanFromTrack,
 } from './model.js';
 import { decodePlan, encodePlan, planFromHash } from './share.js';
 import { drawRoadmap, roadmapMarkdown, roadmapPdf } from './files.js';
@@ -43,8 +44,36 @@ function activeTrackState() {
   const state = getState();
   return state.tracks[state.activeTrackId] || null;
 }
+function languageEntries() {
+  const state = getState();
+  const languageId = state.profile.backendLanguageId;
+  if (!backendLanguageChoices(catalog()).some((track) => track.id === languageId)) return [];
+  const language = cachedTrack(languageId);
+  const languageState = state.tracks[languageId];
+  if (!language || !languageState) return [];
+  const ecoIds = new Set(backendEcosystemChoices(catalog(), languageId).map((track) => track.id));
+  const out = [{ track: language, trackState: languageState }];
+  for (const id of state.profile.backendEcosystemIds || []) {
+    if (!ecoIds.has(id)) continue;
+    const track = cachedTrack(id);
+    const trackState = state.tracks[id];
+    if (track && trackState) out.push({ track, trackState });
+  }
+  return out;
+}
+
+function planTrackIds(state) {
+  return [
+    state.activeTrackId,
+    state.profile.primaryTrackId,
+    ...(state.profile.companionIds || []),
+    state.profile.backendLanguageId,
+    ...(state.profile.backendEcosystemIds || []),
+  ];
+}
+
 function activeView() {
-  return buildCombinedRoadmap(activeEntries());
+  return buildStudyRoadmap(activeEntries(), languageEntries());
 }
 
 function findTopic(topicId, sourceTrackId = null) {
@@ -96,6 +125,11 @@ function renderNotice() {
   const show = state.activeTrackId === CIENCIA_DE_DADOS_ID && !(state.profile.dismissedNotices || []).includes('dados-ciencia');
   $('renameNotice').hidden = !show;
   if (show) $('renameNoticeText').textContent = 'Essa trilha se chamava Dados. O nome agora é Ciência de Dados, e o que você já marcou continua aqui. Analista, Engenharia de Dados e Machine Learning são outras trilhas.';
+  const askLanguage = needsBackendLanguageChoice(state, catalog());
+  $('backendLanguageNotice').hidden = !askLanguage;
+  if (askLanguage) {
+    $('backendLanguageNoticeText').textContent = 'O back-end desta trilha ainda é o de Node.js, do jeito que estava salvo. Escolhe a linguagem pra eu trocar essa parte. O que você já marcou e anotou fica.';
+  }
 }
 
 async function ensureTracks(ids) {
@@ -111,7 +145,7 @@ async function switchToTrack(id) {
     return;
   }
   $('conteudo').innerHTML = '<div class="skeleton" style="height:88px"></div><div class="skeleton" style="height:88px"></div>';
-  await ensureTracks([id, ...(getState().profile.companionIds || [])]);
+  await ensureTracks(planTrackIds(getState()).concat(id));
   const state = getState();
   const current = activeTrackState();
   const next = ensureTrack(state, id);
@@ -298,7 +332,7 @@ async function boot() {
     $('conteudo').innerHTML = '<div class="skeleton" style="height:120px"></div>';
     showScreen('roadmap');
     try {
-      await ensureTracks([state.activeTrackId, ...(state.profile.companionIds || [])]);
+      await ensureTracks(planTrackIds(state));
       roadmap.render();
       sidebar.render();
       renderNotice();

@@ -11,6 +11,7 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 ## O que dá pra fazer
 
 - Escolher carreira, fundamentos e linguagens, nível e horas. O trajeto combinado junta as trilhas, tira tópico repetido e respeita pré-requisito.
+- No Full-Stack, escolher uma linguagem de back-end. Nada vem marcado. Ela troca só a parte de linguagem do servidor; fundamentos, front-end, HTTP, banco e deploy continuam. Sem escolha salva, a versão em Node continua até você escolher.
 - Marcar tópico, anotar, ocultar, reordenar, criar tópico e link seu.
 - Ideias de projeto com busca, doze por página.
 - Autoavaliação por etapa. Abaixo de 70% aparece revisão. Não é nota.

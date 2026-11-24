@@ -22,6 +22,7 @@ O que o Rumos promete pra quem estuda. O código que decide isso fica em `js/mod
 - **RN-13.** A página do plano não lista cada sessão. Gerar monta o plano e baixa `.ics`, PDF e Markdown. Na tela fica o resumo: quantidade, intervalo de datas e horas.
 - **RN-14.** A busca de ideias espera cerca de 200 ms e mostra 12 projetos por página.
 - **RN-15.** Na abertura o navegador lê só o índice das trilhas. O JSON de uma trilha baixa quando ela é aberta. A validação das 52 trilhas roda no `npm run validate`, não no navegador.
+- **RN-16.** No Full-Stack, a pessoa escolhe uma linguagem de back-end, sem valor marcado. Só entram linguagens que têm trilha (Node.js, Python, Java, C#, PHP e Go, se o arquivo existir). Se essa linguagem tiver um framework com trilha própria, o passo seguinte pede um só (hoje, C# e .NET). A trilha inteira continua na ordem: fundamentos, front-end, back-end, banco, teste e deploy. A linguagem troca só o nó de linguagem da etapa de back-end; o framework troca só o nó de framework. HTTP, REST, banco, auth, teste e deploy ficam. Estado antigo sem escolha continua na versão em Node e pede a escolha no onboarding. Trocar a linguagem não apaga progresso nem anotação.
 
 ## O que já estava pronto e o que mudou
 
@@ -35,3 +36,4 @@ O que o Rumos promete pra quem estuda. O código que decide isso fica em `js/mod
 | RN-06 janela semanal | Parcial, só na sugestão inicial | `syncPlanWeeklyHours` |
 | RN-07 refazer sem perder progresso | Parcial | Nível e horas reaplicados, notas preservadas |
 | RN-13 plano sem lista na tela | Ausente | Resumo e download |
+| RN-16 linguagem de back-end no Full-Stack | A etapa de servidor era só Node | Uma linguagem, um framework se houver trilha; o resto do Full-Stack permanece; estado antigo segue em Node até a pessoa escolher |
