@@ -293,6 +293,46 @@ const UI_FRAMEWORK_TOPIC_IDS = {
   frontend: new Set(['fe-react', 'fe-state', 'fe-next']),
 };
 
+/**
+ * Onde a carreira se divide e as trilhas que cobririam cada lado.
+ * O passo só aparece se pelo menos duas opções existem no catálogo.
+ */
+export const CAREER_PATH_SPLITS = [
+  { careerId: 'mobile', topicIds: ['mb-flutter'], optionIds: ['flutter', 'kotlin'] },
+  { careerId: 'dados', topicIds: ['ds-python'], optionIds: ['python', 'r'] },
+  { careerId: 'analista-dados', topicIds: ['ad-python'], optionIds: ['python', 'r'] },
+  { careerId: 'engenharia-dados', topicIds: ['ed-python'], optionIds: ['python', 'r'] },
+  { careerId: 'machine-learning', topicIds: ['ml-python'], optionIds: ['python', 'r'] },
+  { careerId: 'game-dev', topicIds: ['game-engine'], optionIds: ['csharp', 'cpp'] },
+  { careerId: 'devops', topicIds: ['do-aws'], optionIds: ['aws', 'azure', 'gcp'] },
+  { careerId: 'cloud', topicIds: ['cl-aws'], optionIds: ['aws', 'azure', 'gcp'] },
+];
+
+export function careerSplitOptions(trackId, list) {
+  const spec = CAREER_PATH_SPLITS.find((item) => item.careerId === trackId);
+  if (!spec) return [];
+  const byId = new Map((Array.isArray(list) ? list : []).filter((track) => track && track.id).map((track) => [track.id, track]));
+  const options = spec.optionIds.map((id) => byId.get(id)).filter(Boolean);
+  return options.length >= 2 ? options : [];
+}
+
+export function careerSplitReport(list) {
+  return CAREER_PATH_SPLITS.map((spec) => {
+    const ids = new Set((Array.isArray(list) ? list : []).map((track) => track && track.id));
+    const present = spec.optionIds.filter((id) => ids.has(id));
+    const missing = spec.optionIds.filter((id) => !ids.has(id));
+    return { careerId: spec.careerId, offered: present.length >= 2, present, missing };
+  });
+}
+
+export function needsCareerChoice(state, list) {
+  if (!state?.profile?.onboarded) return false;
+  const options = careerSplitOptions(state.activeTrackId, list);
+  if (!options.length) return false;
+  const chosen = state.profile.careerChoices && state.profile.careerChoices[state.activeTrackId];
+  return !options.some((track) => track.id === chosen);
+}
+
 /** Linguagens de back-end com trilha. A oferta é a interseção com o catálogo, sem ordem de preferência. */
 export const BACKEND_LANGUAGE_IDS = ['nodejs', 'python', 'java', 'csharp', 'php', 'go'];
 
@@ -356,6 +396,7 @@ export function fullstackOnboardingSteps(trackId, languageId, list) {
     if (backendEcosystemChoices(list, languageId).length) steps.push('ecosystem');
   }
   if (careerIncludesFrontend(trackId) && frontendFrameworkChoices(list).length) steps.push('framework');
+  if (careerSplitOptions(trackId, list).length) steps.push('path');
   steps.push('companions', 'level', 'hours', 'preview');
   return steps;
 }
@@ -446,7 +487,20 @@ function backendHostPhase(view) {
  * A linguagem escolhida troca só o nó de linguagem da etapa de back-end.
  * O framework, se houver um, troca só o nó de framework. HTTP, REST, banco, auth, teste e deploy ficam.
  */
-export function buildStudyRoadmap(entries, languageEntries = [], uiFrameworkEntry = null) {
+export function resetTrackProgress(trackState) {
+  if (!trackState) return trackState;
+  trackState.completed = {};
+  trackState.notes = {};
+  trackState.phaseNotes = {};
+  trackState.completedProjects = {};
+  trackState.quizAnswers = {};
+  trackState.doneResources = {};
+  trackState.guideChecks = {};
+  trackState.overrides = {};
+  return trackState;
+}
+
+export function buildStudyRoadmap(entries, languageEntries = [], uiFrameworkEntry = null, careerChoiceEntry = null) {
   const list = (entries || []).filter((entry) => entry && entry.track && entry.trackState);
   const chosen = (languageEntries || []).filter((entry) => entry && entry.track && entry.trackState);
   const hasFullstack = list.some((entry) => entry.track.id === FULLSTACK_TRACK_ID);
@@ -456,6 +510,31 @@ export function buildStudyRoadmap(entries, languageEntries = [], uiFrameworkEntr
       spliceUiFramework(view, career.track.id, uiFrameworkEntry);
       for (const phase of view.phases) phase.progress = phaseProgress(phase.topics);
       view.frontendFrameworkName = uiFrameworkEntry.track.name;
+    }
+    const careerId = list[0]?.track?.id;
+    const spec = CAREER_PATH_SPLITS.find((item) => item.careerId === careerId);
+    if (spec && careerChoiceEntry?.track && careerChoiceEntry.trackState && spec.optionIds.includes(careerChoiceEntry.track.id)) {
+      const drop = new Set(spec.topicIds);
+      let host = null;
+      for (const phase of view.phases) {
+        if (phase.topics.some((topic) => drop.has(topic.id))) host = phase;
+      }
+      for (const phase of view.phases) {
+        phase.topics = phase.topics
+          .filter((topic) => !drop.has(topic.id))
+          .map((topic) => ({
+            ...topic,
+            prerequisites: (topic.prerequisites || []).filter((id) => !drop.has(id)),
+          }));
+      }
+      if (host) {
+        const incoming = dedupeLanguageTopics(view.phases.flatMap((phase) => phase.topics), topicsFromEntry(careerChoiceEntry));
+        const index = host.topics.findIndex((topic) => (topic.prerequisites || []).some((id) => drop.has(id)));
+        const insertAt = index >= 0 ? index : host.topics.length;
+        host.topics = [...host.topics.slice(0, insertAt), ...incoming, ...host.topics.slice(insertAt)];
+      }
+      for (const phase of view.phases) phase.progress = phaseProgress(phase.topics);
+      view.careerChoiceName = careerChoiceEntry.track.name;
     }
     return view;
   };
@@ -895,6 +974,8 @@ export function applyStudySelection(state, selection) {
     state.profile.frontendFrameworkId = uiFrameworkId;
     adapt(uiFrameworkId);
   }
+  if (!state.profile.careerChoices || typeof state.profile.careerChoices !== 'object') state.profile.careerChoices = {};
+  if (isId(selection.careerChoiceId)) state.profile.careerChoices[trackId] = selection.careerChoiceId;
   state.profile.primaryTrackId = trackId;
   state.profile.companionIds = companionIds;
   state.activeTrackId = trackId;

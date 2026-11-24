@@ -94,9 +94,10 @@
           <h1 id="homeTitle" class="home-title">Planeje seus estudos em tecnologia com clareza</h1>
           <p class="muted read" style="margin-top:12px">Entenda como o Rumos funciona e monte seu roadmap personalizado em poucos cliques.</p>
           <div class="row" style="margin-top:24px">
+            <button type="button" id="welcomeBackBtn" class="btn btn-primary" hidden>Continuar trilha</button>
             <button type="button" id="welcomeStartBtn" class="btn btn-primary">Começar a montar meu roadmap <span aria-hidden="true">→</span></button>
-            <button type="button" id="welcomeBackBtn" class="btn btn-secondary" hidden>Voltar para minha trilha</button>
           </div>
+          <p id="welcomeContinueMeta" class="mono" hidden style="margin-top:8px"></p>
           <p class="mono" style="margin-top:12px">Sem cadastro · dados só no seu navegador</p>
         </div>
         <aside class="card card-pad reveal" aria-label="Exemplo da trilha Front-end">
@@ -171,6 +172,10 @@
         <fieldset id="onbStepUiFramework" hidden>
           <legend class="sr-only">Framework de front-end</legend>
           <div id="onbUiFrameworkList" class="choice-list"></div>
+        </fieldset>
+        <fieldset id="onbStepPath" hidden>
+          <legend class="sr-only">Caminho da carreira</legend>
+          <div id="onbPathList" class="choice-list"></div>
         </fieldset>
         <div id="onbStep2" hidden><div id="onbCompanionList" class="choice-list"></div></div>
         <fieldset id="onbStep3" hidden class="choice-list"><legend class="sr-only">Nível atual</legend></fieldset>

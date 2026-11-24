@@ -1,7 +1,7 @@
 import {
   CIENCIA_DE_DADOS_ID, applySharePlan, backendEcosystemChoices, backendLanguageChoices, buildCombinedRoadmap, buildStudyRoadmap,
-  careerIncludesFrontend, currentPhase, ensureTrack, frontendFrameworkChoices, isReady, needsBackendLanguageChoice,
-  needsFrontendFrameworkChoice, sharePlanFromTrack,
+  careerIncludesFrontend, careerSplitOptions, currentPhase, ensureTrack, frontendFrameworkChoices, isReady,
+  needsBackendLanguageChoice, needsFrontendFrameworkChoice, resetTrackProgress, sharePlanFromTrack,
 } from './model.js';
 import { decodePlan, encodePlan, planFromHash } from './share.js';
 import { drawRoadmap, roadmapMarkdown, roadmapPdf } from './files.js';
@@ -74,7 +74,18 @@ function frameworkEntry() {
   return { track, trackState };
 }
 
+function careerChoiceEntry() {
+  const state = getState();
+  const id = state.profile.careerChoices && state.profile.careerChoices[state.activeTrackId];
+  if (!careerSplitOptions(state.activeTrackId, catalog()).some((track) => track.id === id)) return null;
+  const track = cachedTrack(id);
+  const trackState = state.tracks[id];
+  if (!track || !trackState) return null;
+  return { track, trackState };
+}
+
 function planTrackIds(state) {
+  const choice = state.profile.careerChoices && state.profile.careerChoices[state.activeTrackId];
   return [
     state.activeTrackId,
     state.profile.primaryTrackId,
@@ -82,11 +93,12 @@ function planTrackIds(state) {
     state.profile.backendLanguageId,
     ...(state.profile.backendEcosystemIds || []),
     state.profile.frontendFrameworkId,
+    choice,
   ];
 }
 
 function activeView() {
-  return buildStudyRoadmap(activeEntries(), languageEntries(), frameworkEntry());
+  return buildStudyRoadmap(activeEntries(), languageEntries(), frameworkEntry(), careerChoiceEntry());
 }
 
 function findTopic(topicId, sourceTrackId = null) {
@@ -272,6 +284,10 @@ api.confirmRemove = async (kind, id) => {
 
 function bindChrome() {
   $('brandHome').innerHTML = `${brandMark(true)}<span>Rumos</span>`;
+  $('brandHome').addEventListener('click', (event) => {
+    event.preventDefault();
+    api.showHome();
+  });
   $('moreBtn').innerHTML = icon('more');
   $('shareBtn').innerHTML = `${icon('share')}<span class="share-label">Compartilhar</span>`;
   document.querySelectorAll('[data-nav]').forEach((button) => {
@@ -295,12 +311,15 @@ function bindChrome() {
     { label: 'Importar JSON', run: () => $('importFileInput').click() },
     { label: 'Trocar de trilha', run: () => onboarding.open('retake') },
     { label: 'Resetar esta trilha', danger: true, run: async () => {
-      const ok = await dialogs.askConfirm({ title: 'Resetar esta trilha?', body: 'Desmarca tópico e projeto e apaga anotação desta trilha. As outras ficam.', confirmLabel: 'Resetar' });
+      const ok = await dialogs.askConfirm({
+        title: 'Resetar o roadmap?',
+        body: 'O progresso e as anotações desta trilha serão apagados. Não dá para desfazer.',
+        confirmLabel: 'Apagar e voltar ao início',
+      });
       if (!ok) return;
-      const trackState = activeTrackState();
-      trackState.completed = {}; trackState.notes = {}; trackState.phaseNotes = {}; trackState.completedProjects = {};
+      resetTrackProgress(activeTrackState());
       persist(getState().activeTrackId);
-      roadmap.render();
+      api.showHome();
     } },
   ]));
   $('retryBtn').addEventListener('click', () => boot());

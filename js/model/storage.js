@@ -494,6 +494,7 @@ function emptyProfile() {
     backendLanguageId: null,
     backendEcosystemIds: [],
     frontendFrameworkId: null,
+    careerChoices: {},
   };
 }
 
@@ -511,6 +512,12 @@ function sanitizeProfile(raw) {
     .filter((id) => id !== profile.backendLanguageId)
     .slice(0, 1);
   profile.frontendFrameworkId = isId(raw.frontendFrameworkId) ? raw.frontendFrameworkId : null;
+  profile.careerChoices = {};
+  if (isPlainObject(raw.careerChoices)) {
+    for (const [key, value] of Object.entries(raw.careerChoices)) {
+      if (isId(key) && isId(value)) profile.careerChoices[key] = value;
+    }
+  }
   return profile;
 }
 
@@ -639,6 +646,7 @@ export function buildExport(state, exportedAt = new Date().toISOString()) {
       backendLanguageId: state.profile.backendLanguageId || null,
       backendEcosystemIds: state.profile.backendEcosystemIds || [],
       frontendFrameworkId: state.profile.frontendFrameworkId || null,
+      careerChoices: state.profile.careerChoices || {},
     },
     completed: active.completed,
     notes: active.notes,
