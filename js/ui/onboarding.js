@@ -274,6 +274,8 @@ export function initOnboarding(api) {
 
   function bind() {
     $('onbBrand').innerHTML = `${brandMark(false)}<span>Rumos</span>`;
+    const homeTitle = $('homeTitleLockup');
+    if (homeTitle && !homeTitle.querySelector('.brand-mark')) homeTitle.insertAdjacentHTML('afterbegin', brandMark(true));
     $('onbThemeBtn').innerHTML = icon('sun');
     $('onbThemeBtn').addEventListener('click', () => api.toggleTheme());
     renderChoices();
