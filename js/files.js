@@ -223,11 +223,12 @@ export function drawRoadmap(canvas, track, view) {
   const cols = Math.min(4, Math.max(1, view.phases.length));
   const flowRows = Math.ceil(view.phases.length / cols);
   const flowHeight = flowRows * 74 + 24;
-  const topicRows = view.phases.reduce(
-    (sum, phase) => sum + 1 + phase.topics.filter((topic) => topic.status !== 'hidden').length,
-    view.phases.length,
-  );
-  const height = 220 + flowHeight + topicRows * line;
+  const treeHeight = view.phases.reduce((sum, phase) => {
+    const visible = phase.topics.filter((t) => t.status !== 'hidden');
+    const pairs = Math.ceil(visible.length / 2);
+    return sum + 64 + Math.max(1, pairs) * 62 + 24;
+  }, 0);
+  const height = 220 + flowHeight + treeHeight;
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
@@ -278,21 +279,69 @@ export function drawRoadmap(canvas, track, view) {
     }
   });
 
+  // Mapa visual conectado (espinha dorsal + ramificações)
+  const centerX = width / 2;
+  const nodeW = 360;
+  const nodeH = 44;
   let y = fy + flowHeight + 24;
   for (const phase of view.phases) {
+    // Marco da etapa no eixo central
+    ctx.fillStyle = phase.progress.complete ? '#ECFDF5' : '#EFF6FF';
+    ctx.strokeStyle = phase.progress.complete ? '#059669' : '#2563EB';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(centerX - 240, y, 480, 42, 10);
+    ctx.fill();
+    ctx.stroke();
+
     ctx.fillStyle = '#0F172A';
-    ctx.font = `700 18px ${FONT_UI}`;
-    ctx.fillText(`Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`, 48, y);
-    y += line;
-    ctx.font = `400 16px ${FONT_BODY}`;
-    for (const topic of phase.topics) {
-      if (topic.status === 'hidden') continue;
+    ctx.font = `700 15px ${FONT_UI}`;
+    const pTitle = `Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`;
+    ctx.fillText(pTitle.length > 54 ? `${pTitle.slice(0, 53)}…` : pTitle, centerX - 220, y + 26);
+
+    const visible = phase.topics.filter((topic) => topic.status !== 'hidden');
+    const branchStartY = y + 42;
+    const rows = Math.max(1, Math.ceil(visible.length / 2));
+    const branchEndY = branchStartY + rows * 62;
+
+    // Espinha dorsal vertical
+    ctx.strokeStyle = '#93C5FD';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(centerX, branchStartY);
+    ctx.lineTo(centerX, branchEndY);
+    ctx.stroke();
+
+    visible.forEach((topic, idx) => {
+      const row = Math.floor(idx / 2);
+      const isLeft = idx % 2 === 0;
+      const ny = branchStartY + 14 + row * 62;
+      const nx = isLeft ? centerX - 44 - nodeW : centerX + 44;
+
+      // Conector horizontal até o tronco
+      ctx.strokeStyle = '#93C5FD';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(centerX, ny + nodeH / 2);
+      ctx.lineTo(isLeft ? nx + nodeW : nx, ny + nodeH / 2);
+      ctx.stroke();
+
+      ctx.fillStyle = topic.done ? '#ECFDF5' : '#FFFFFF';
+      ctx.strokeStyle = topic.done ? '#059669' : (topic.status === 'optional' ? '#D97706' : '#2563EB');
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(nx, ny, nodeW, nodeH, 8);
+      ctx.fill();
+      ctx.stroke();
+
       ctx.fillStyle = topic.done ? '#047857' : '#0F172A';
-      const prefix = topic.done ? '✓' : '○';
-      const optional = topic.status === 'optional' ? ' · opcional' : '';
-      ctx.fillText(`${prefix}  ${topic.title}${optional}`, 72, y);
-      y += line;
-    }
-    y += 12;
+      ctx.font = `600 13px ${FONT_BODY}`;
+      const prefix = topic.done ? '✓ ' : '';
+      const opt = topic.status === 'optional' ? ' (opc.)' : '';
+      const text = `${prefix}${topic.title}${opt}`;
+      ctx.fillText(text.length > 44 ? `${text.slice(0, 43)}…` : text, nx + 12, ny + 27);
+    });
+
+    y = branchEndY + 24;
   }
 }

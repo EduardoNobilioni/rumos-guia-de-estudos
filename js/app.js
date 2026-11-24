@@ -238,11 +238,16 @@ function miniButton(label, attrs, extra = '') {
 function renderTopicNode(topic, titleById, doneIds) {
   const strike = topic.done && state.strikethrough ? 'line-through opacity-75' : '';
   const optional = topic.status === 'optional';
+  const isCheckpoint = /\bcheckpoint\b/i.test(topic.title || '');
   const resCount = (topic.resources || []).length;
   const pendingPrereqs = (topic.prerequisites || []).filter((id) => !doneIds.has(id) && titleById.has(id));
-  const nodeClass = topic.done ? 'is-done' : (optional ? 'is-optional' : '');
+  const nodeClass = [
+    topic.done ? 'is-done' : (optional ? 'is-optional' : ''),
+    isCheckpoint ? 'is-checkpoint' : '',
+  ].filter(Boolean).join(' ');
+  const prereqsAttr = escapeHtml((topic.prerequisites || []).join(','));
   return `
-    <div class="topic-node ${nodeClass}">
+    <div class="topic-node ${nodeClass}" data-node-id="${topic.id}" data-prereqs="${prereqsAttr}">
       <div class="pt-0.5 shrink-0">
         ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
       </div>
@@ -469,8 +474,14 @@ function renderPhase(phase, query, phaseHit) {
   const notesKnown = Object.prototype.hasOwnProperty.call(session.openPhaseNotes, phase.id);
   const notesOpen = noteHit || (notesKnown ? session.openPhaseNotes[phase.id] : phase.note.trim().length > 0);
   const allIndexes = phase.topics;
+  let branchSide = 0;
+  const mapNodes = topics.map((topic) => {
+    const isCheckpoint = /\bcheckpoint\b/i.test(topic.title || '');
+    const wrapClass = isCheckpoint ? 'is-checkpoint-wrap' : (branchSide++ % 2 === 0 ? 'is-left' : 'is-right');
+    return `<div class="roadmap-branch ${wrapClass}">${renderTopicNode(topic, titleById, doneIds)}</div>`;
+  }).join('');
   const items = session.viewMode === 'map'
-    ? `<div class="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">${topics.map((topic) => renderTopicNode(topic, titleById, doneIds)).join('')}</div>`
+    ? `<div class="roadmap-branches">${mapNodes}</div>`
     : `<div class="divide-y divide-line dark:divide-sage/40">${topics.map((topic) => renderTopic(
       topic,
       phase,
@@ -558,6 +569,17 @@ function renderPhaseFlowchart(view) {
     <div class="flow-track">${nodes}</div>`;
 }
 
+function renderMapLegend() {
+  return `
+    <div class="roadmap-legend" aria-label="Legenda do mapa visual">
+      <span><span class="legend-swatch border-2 border-terra dark:border-ochre bg-paper dark:bg-card"></span>Obrigatório</span>
+      <span><span class="legend-swatch border-2 border-dashed border-amber-600 dark:border-amber-400 bg-paper dark:bg-card"></span>Opcional</span>
+      <span><span class="legend-swatch border-2 border-emerald dark:border-emerald-400 bg-emerald/15"></span>Concluído ✓</span>
+      <span><span class="legend-swatch border-2 border-terra dark:border-ochre bg-gradient-to-br from-blue-500/20 to-emerald-500/20"></span>Checkpoint</span>
+      <span class="text-muted">Passe o mouse em um tópico para destacar os pré-requisitos</span>
+    </div>`;
+}
+
 function renderRoadmap() {
   const track = activeTrack();
   const trackState = activeTrackState();
@@ -571,7 +593,10 @@ function renderRoadmap() {
     const phaseHit = !!query && `${phase.title} ${phase.badgeTitle} ${phase.note}`.toLowerCase().includes(query);
     return renderPhase(phase, query, phaseHit);
   }).join('');
-  container.innerHTML = html;
+  container.classList.toggle('is-map-mode', session.viewMode === 'map');
+  container.innerHTML = session.viewMode === 'map' && html.trim().length > 0
+    ? `${renderMapLegend()}${html}`
+    : html;
   $('emptyState').hidden = html.trim().length > 0;
   const orphans = $('orphans');
   if (view.orphans.length) {
@@ -1452,6 +1477,21 @@ function bind() {
     $('viewModeBtn').textContent = session.viewMode === 'map' ? 'Modo: Mapa visual' : 'Modo: Lista detalhada';
     renderRoadmap();
   });
+  const clearPrereqHighlights = () => {
+    document.querySelectorAll('#conteudo .is-prereq-highlight').forEach((el) => el.classList.remove('is-prereq-highlight'));
+  };
+  const highlightPrereqs = (target) => {
+    clearPrereqHighlights();
+    const node = target.closest('[data-node-id]');
+    if (!node || !node.dataset.prereqs) return;
+    node.dataset.prereqs.split(',').filter(Boolean).forEach((id) => {
+      document.querySelector(`#conteudo [data-node-id="${CSS.escape(id)}"]`)?.classList.add('is-prereq-highlight');
+    });
+  };
+  $('conteudo').addEventListener('mouseover', (event) => highlightPrereqs(event.target));
+  $('conteudo').addEventListener('mouseout', clearPrereqHighlights);
+  $('conteudo').addEventListener('focusin', (event) => highlightPrereqs(event.target));
+  $('conteudo').addEventListener('focusout', clearPrereqHighlights);
   $('phaseFlowchart').addEventListener('click', (event) => {
     const btn = event.target.closest('[data-flow-phase]');
     if (!btn) return;
