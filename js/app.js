@@ -731,7 +731,9 @@ function trackSearchBlob(track) {
 function renderOnboardingChoices() {
   const draft = session.onboarding;
   const groups = groupTracks(tracks);
-  $('onbTrackGroups').innerHTML = groups.map((group) => {
+  const careerGroups = groups.filter((g) => g.id === 'carreira');
+  const addonGroups = groups.filter((g) => g.id === 'fundamentos' || g.id === 'tecnologia');
+  $('onbTrackGroups').innerHTML = careerGroups.map((group) => {
     const cards = group.tracks.map((track) => {
       const card = choiceCard('track', track.id, track.name, track.tagline, draft.trackId === track.id, 'radio', trackIconHtml(track.id, 'md'));
       return card.replace('data-search=""', `data-search="${escapeHtml(trackSearchBlob(track))}"`);
@@ -742,15 +744,21 @@ function renderOnboardingChoices() {
       <div class="mt-3 grid sm:grid-cols-2 gap-3">${cards}</div>
     </fieldset>`;
   }).join('');
-  const skills = tracks.filter((track) => track.group === 'tecnologia');
-  $('onbCompanionList').innerHTML = skills.map((track) => {
-    const card = choiceCard('companion', track.id, track.name, track.tagline, draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'md'));
-    return card.replace('data-search=""', `data-search="${escapeHtml(trackSearchBlob(track))}" data-companion`);
+  $('onbCompanionList').innerHTML = addonGroups.map((group) => {
+    const cards = group.tracks.map((track) => {
+      const card = choiceCard('companion', track.id, track.name, track.tagline, draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'md'));
+      return card.replace('data-search=""', `data-search="${escapeHtml(trackSearchBlob(track))}" data-companion`);
+    }).join('');
+    return `<fieldset class="onb-group">
+      <legend class="text-sm font-bold">${escapeHtml(group.title)}</legend>
+      <p class="mt-1 text-xs text-muted dark:text-blush">${escapeHtml(group.lead)}</p>
+      <div class="mt-3 grid sm:grid-cols-2 gap-3">${cards}</div>
+    </fieldset>`;
   }).join('');
   $('onbSearch').value = draft.query || '';
   filterOnboarding(draft.query || '');
   syncCompanionLocks();
-  $('onbStep2').innerHTML = `<legend class="sr-only">Nível atual</legend>${LEVELS.map((level) => choiceCard(
+  $('onbStep3').innerHTML = `<legend class="sr-only">Nível atual</legend>${LEVELS.map((level) => choiceCard(
     'level',
     level,
     LEVEL_LABELS[level],
@@ -779,16 +787,11 @@ function filterOnboarding(query) {
   document.querySelectorAll('#onbTrackGroups [data-track-group]').forEach((group) => {
     group.hidden = ![...group.querySelectorAll('[data-track-card]')].some((card) => !card.hidden);
   });
-  document.querySelectorAll('#onbCompanionList [data-companion]').forEach((card) => {
-    card.hidden = needle !== '' && !visible.has(card.dataset.value);
-  });
-  const companionVisible = [...document.querySelectorAll('#onbCompanionList [data-companion]')].some((card) => !card.hidden);
-  $('onbCompanions').hidden = !companionVisible;
   $('onbSearchStatus').textContent = !needle
     ? ''
     : count === 0
-      ? 'Nenhuma trilha com esse termo.'
-      : `${count} ${count === 1 ? 'trilha' : 'trilhas'}`;
+      ? 'Nenhuma carreira com esse termo.'
+      : `${count} ${count === 1 ? 'carreira' : 'carreiras'}`;
 }
 
 function syncCompanionLocks() {
@@ -806,15 +809,16 @@ function selectedCompanionIds() {
 }
 
 const STEP_COPY = [
-  ['Qual trilha você quer estudar?', 'Carreiras, fundamentos e tecnologias. Dá para buscar. Uma tecnologia pode entrar junto com a trilha principal, e trocar depois não apaga o que você já marcou.'],
+  ['Qual carreira é o seu objetivo?', 'Escolha sua trilha principal de carreira. Ao selecionar, você avança automaticamente para o próximo passo.'],
+  ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque quantas trilhas adicionais quiser estudar em paralelo e clique em Continuar.'],
   ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
   ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
-  ['Seu plano', 'Confira as etapas antes de começar. O progresso fica salvo neste navegador.'],
+  ['Seu plano', 'Confira a carreira, as trilhas adicionais e as etapas antes de gerar seu roadmap completo.'],
 ];
 
 function goToStep(step) {
   session.onboarding.step = step;
-  for (let index = 0; index <= 4; index += 1) $(`onbStep${index}`).hidden = index !== step;
+  for (let index = 0; index <= 5; index += 1) $(`onbStep${index}`).hidden = index !== step;
   if (step === 0) {
     $('onbStepLabel').textContent = 'Boas-vindas';
     $('onbHeading').textContent = 'Planeje seus estudos em tecnologia com clareza';
@@ -824,17 +828,17 @@ function goToStep(step) {
     return;
   }
   const [heading, lead] = STEP_COPY[step - 1];
-  $('onbStepLabel').textContent = `Passo ${step} de 4`;
+  $('onbStepLabel').textContent = `Passo ${step} de 5`;
   $('onbHeading').textContent = heading;
-  $('onbLead').textContent = session.onboarding.mode === 'retake' && step === 4
+  $('onbLead').textContent = session.onboarding.mode === 'retake' && step === 5
     ? 'Progresso, anotações, observações e ideias criadas por você continuam. Opcionais e ocultos desta trilha voltam para a recomendação do novo nível.'
     : lead;
   $('onbNavRow').hidden = false;
   $('onbBack').hidden = false;
-  $('onbNext').hidden = step === 4;
-  $('onbStart').hidden = step !== 4;
-  $('onbStart').textContent = session.onboarding.mode === 'retake' ? 'Atualizar trilha' : 'Começar trilha';
-  if (step === 4) renderPreview();
+  $('onbNext').hidden = step === 5;
+  $('onbStart').hidden = step !== 5;
+  $('onbStart').textContent = session.onboarding.mode === 'retake' ? 'Atualizar trilha' : 'Gerar roadmap completo';
+  if (step === 5) renderPreview();
 }
 
 function selectedRadio(name) {
@@ -1598,18 +1602,19 @@ function bind() {
     if (event.target.name === 'track') {
       session.onboarding.trackId = event.target.value;
       syncCompanionLocks();
+      if (session.onboarding.step === 1) scheduleAutoAdvance(2);
     }
     if (event.target.name === 'companion') session.onboarding.companionIds = selectedCompanionIds();
     if (event.target.name === 'level') {
       session.onboarding.level = event.target.value;
-      if (session.onboarding.step === 2) scheduleAutoAdvance(3);
+      if (session.onboarding.step === 3) scheduleAutoAdvance(4);
     }
     if (event.target.name === 'hours') {
       if (event.target.value === 'custom') {
         $('hoursCustom')?.focus();
       } else {
         session.onboarding.hours = clampHours(event.target.value);
-        if (session.onboarding.step === 3 && session.onboarding.hours) scheduleAutoAdvance(4);
+        if (session.onboarding.step === 4 && session.onboarding.hours) scheduleAutoAdvance(5);
       }
     }
   });
@@ -1645,7 +1650,7 @@ function bind() {
     const hours = selectedHours();
     if (!hours) return toast('Informe entre 1 e 60 horas por semana.', 'error');
     session.onboarding.hours = hours;
-    goToStep(4);
+    goToStep(5);
   });
   $('welcomeStartBtn').addEventListener('click', () => goToStep(1));
   $('welcomeBackBtn').addEventListener('click', () => refresh());
@@ -1687,14 +1692,16 @@ function bind() {
     const step = session.onboarding.step;
     if (step === 1) {
       session.onboarding.trackId = selectedRadio('track');
-      session.onboarding.companionIds = selectedCompanionIds().filter((id) => id !== session.onboarding.trackId);
-      if (!session.onboarding.trackId) return toast('Escolha uma trilha.', 'error');
+      if (!session.onboarding.trackId) return toast('Escolha uma carreira.', 'error');
     }
     if (step === 2) {
+      session.onboarding.companionIds = selectedCompanionIds().filter((id) => id !== session.onboarding.trackId);
+    }
+    if (step === 3) {
       session.onboarding.level = selectedRadio('level');
       if (!session.onboarding.level) return toast('Escolha um nível.', 'error');
     }
-    if (step === 3) {
+    if (step === 4) {
       session.onboarding.hours = selectedHours();
       if (!session.onboarding.hours) return toast('Informe entre 1 e 60 horas por semana.', 'error');
     }

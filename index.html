@@ -137,23 +137,23 @@
       </section>
 
       <section class="rounded-xl bg-soft dark:bg-card border border-line/40 dark:border-sage/50 p-5 sm:p-6">
-        <h2 class="text-base sm:text-lg font-bold">Como montar seu roadmap em 4 passos</h2>
+        <h2 class="text-base sm:text-lg font-bold">Como montar seu roadmap</h2>
         <ol class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
           <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
             <span class="font-mono font-bold text-terra dark:text-ochre">1.</span>
-            <span><strong>Escolha seu objetivo:</strong> selecione sua trilha principal e, se quiser, tecnologias paralelas; depois clique em Continuar.</span>
+            <span><strong>Escolha sua carreira:</strong> defina seu objetivo principal e avance automaticamente para o próximo passo.</span>
           </li>
           <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
             <span class="font-mono font-bold text-terra dark:text-ochre">2.</span>
-            <span><strong>Informe seu nível:</strong> tópicos abaixo do seu nível ficam marcados como opcionais sem travar seu progresso.</span>
+            <span><strong>Adicione fundamentos e linguagens:</strong> opcionalmente marque trilhas paralelas e clique em Continuar.</span>
           </li>
           <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
             <span class="font-mono font-bold text-terra dark:text-ochre">3.</span>
-            <span><strong>Defina suas horas semanais:</strong> calculamos a duração estimada de cada etapa no seu ritmo real.</span>
+            <span><strong>Informe nível e horas:</strong> tópicos abaixo do seu nível ficam opcionais e o prazo segue seu ritmo real.</span>
           </li>
           <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
             <span class="font-mono font-bold text-emerald dark:text-emerald-400">4.</span>
-            <span><strong>Acompanhe e exporte:</strong> use o fluxograma, anotações, autoavaliações e exporte quando quiser.</span>
+            <span><strong>Gere e acompanhe:</strong> visualize seu fluxograma completo, marque tópicos, faça revisões e exporte.</span>
           </li>
         </ol>
         <div class="mt-5 flex flex-wrap items-center gap-3">
@@ -164,22 +164,21 @@
     </div>
 
     <div id="onbStep1">
-      <label class="block text-sm font-medium" for="onbSearch">Buscar trilha</label>
-      <input id="onbSearch" type="search" autocomplete="off" placeholder="Ex.: Python, Excel, testes" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
+      <label class="block text-sm font-medium" for="onbSearch">Buscar carreira</label>
+      <input id="onbSearch" type="search" autocomplete="off" placeholder="Ex.: Front-end, Dados, DevOps, Java" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
       <p id="onbSearchStatus" class="mt-2 text-xs font-mono text-muted" aria-live="polite"></p>
       <div id="onbTrackGroups" class="mt-4 space-y-6"></div>
-      <fieldset id="onbCompanions" class="onb-group mt-6">
-        <legend class="text-sm font-bold">Estudar uma tecnologia junto</legend>
-        <p id="onbCompanionLead" class="mt-1 text-xs text-muted dark:text-blush">Opcional. Marque uma ou mais trilhas de tecnologia. O progresso de cada uma fica separado, e você troca no topo da página.</p>
-        <div id="onbCompanionList" class="mt-3 grid sm:grid-cols-2 gap-3"></div>
-      </fieldset>
     </div>
 
-    <fieldset id="onbStep2" hidden class="mt-6 space-y-3">
+    <div id="onbStep2" hidden class="mt-6 space-y-6">
+      <div id="onbCompanionList" class="space-y-6"></div>
+    </div>
+
+    <fieldset id="onbStep3" hidden class="mt-6 space-y-3">
       <legend class="sr-only">Nível atual</legend>
     </fieldset>
 
-    <fieldset id="onbStep3" hidden class="mt-6 space-y-3">
+    <fieldset id="onbStep4" hidden class="mt-6 space-y-3">
       <legend class="sr-only">Horas por semana</legend>
       <div id="hourChoices" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
       <label class="block text-sm" for="hoursCustom">Outra quantidade
@@ -187,7 +186,7 @@
       </label>
     </fieldset>
 
-    <div id="onbStep4" hidden class="mt-6 rounded-sm border border-line dark:border-sage/50 bg-soft dark:bg-card p-4 sm:p-5">
+    <div id="onbStep5" hidden class="mt-6 rounded-sm border border-line dark:border-sage/50 bg-soft dark:bg-card p-4 sm:p-5">
       <div id="planPreview"></div>
     </div>
 
