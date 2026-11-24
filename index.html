@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rumos</title>
-  <meta name="description" content="Rumos: o mapa de estudos que eu queria na faculdade. Gratuito, no seu navegador." />
+  <meta name="description" content="Rumos: roadmap, guia e plano de estudos em tecnologia. Sem cadastro, no seu navegador." />
   <meta property="og:title" content="Rumos" />
-  <meta property="og:description" content="Rumos: roadmap e plano de estudos em volta da grade da faculdade." />
+  <meta property="og:description" content="Rumos: roadmap, guia e plano de estudos em tecnologia." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:url" content="https://eduardonobilioni.github.io/rumo-guia-de-estudos/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Rumos" />
-  <meta name="twitter:description" content="Rumos: roadmap e plano de estudos em volta da grade da faculdade." />
+  <meta name="twitter:description" content="Rumos: roadmap, guia e plano de estudos em tecnologia." />
   <meta property="og:image" content="https://eduardonobilioni.github.io/rumo-guia-de-estudos/assets/brand/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -83,20 +83,74 @@
   </div>
 
   <main id="onboarding" class="onb is-screen" hidden>
-    <div class="spread" style="margin-bottom:var(--space-6)">
-      <a href="./" class="brand-lockup" id="onbBrand" aria-label="Rumos"></a>
-      <div class="row">
-        <button type="button" id="welcomeBackBtn" class="btn btn-secondary btn-small" hidden>Voltar pra minha trilha</button>
-        <button type="button" id="onbThemeBtn" class="btn-icon" aria-label="Alternar tema"></button>
-      </div>
+    <div hidden>
+      <a href="./" id="onbBrand" aria-label="Rumos"></a>
+      <button type="button" id="onbThemeBtn" aria-label="Alternar tema"></button>
     </div>
-    <div class="onb-layout">
-      <div>
+    <div id="onbStep0">
+      <div class="home-hero">
+        <div class="reveal">
+          <p class="row"><span class="tag tag-highlight">Boas-vindas</span><span class="muted">Roadmap, guia e plano de estudos em tecnologia</span></p>
+          <h1 id="homeTitle" class="home-title">Planeje seus estudos em tecnologia com clareza</h1>
+          <p class="muted read" style="margin-top:12px">Entenda como o Rumos funciona e monte seu roadmap personalizado em poucos cliques.</p>
+          <div class="row" style="margin-top:24px">
+            <button type="button" id="welcomeStartBtn" class="btn btn-primary">Começar a montar meu roadmap <span aria-hidden="true">→</span></button>
+            <button type="button" id="welcomeBackBtn" class="btn btn-secondary" hidden>Voltar para minha trilha</button>
+          </div>
+          <p class="mono" style="margin-top:12px">Sem cadastro · dados só no seu navegador</p>
+        </div>
+        <aside class="card card-pad reveal" aria-label="Exemplo da trilha Front-end">
+          <div class="spread">
+            <p style="font:var(--text-title-s)">Front-end</p>
+            <span class="tag">Etapa 2 de 7</span>
+          </div>
+          <div class="flow" style="margin:16px 0" aria-hidden="true">
+            <span class="dot is-done"></span><span class="dot is-current"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="stack">
+            <div class="topic-node is-done">
+              <span class="mark-box is-on" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 8.2 6.2 11.4 13 4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg></span>
+              <span><span class="letter-badge is-sm">CSS</span> <strong>Variáveis, transição e hierarquia visual</strong><span class="mono" style="display:block">Intermediário · 6 h · 2 links</span></span>
+            </div>
+            <div class="topic-node">
+              <span class="mark-box" aria-hidden="true"></span>
+              <span><span class="letter-badge is-sm">TW</span> <strong>Tailwind sem perder o CSS</strong><span class="mono" style="display:block">Intermediário · 6 h · 2 links</span></span>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <div class="feature-grid">
+        <article class="card card-pad reveal">
+          <p class="eyebrow">01 · Trilhas guiadas</p>
+          <h2 style="font:var(--text-title-s);margin-top:8px">Fluxograma e pré-requisitos</h2>
+          <p class="muted" style="margin-top:8px">Carreiras, fundamentos e linguagens organizados por etapas, projetos práticos e links gratuitos.</p>
+        </article>
+        <article class="card card-pad reveal">
+          <p class="eyebrow">02 · Ritmo realista</p>
+          <h2 style="font:var(--text-title-s);margin-top:8px">Plano semanal e agenda</h2>
+          <p class="muted" style="margin-top:8px">Distribui seus estudos em torno das suas aulas ou trabalho e exporta para .ics, PDF, PNG e Markdown.</p>
+        </article>
+        <article class="card card-pad reveal">
+          <p class="eyebrow">03 · Privacidade local</p>
+          <h2 style="font:var(--text-title-s);margin-top:8px">Sem login nem rastreio</h2>
+          <p class="muted" style="margin-top:8px">Tudo fica salvo no seu navegador, com backup e restauração em JSON a qualquer momento.</p>
+        </article>
+      </div>
+      <section class="card card-pad reveal" style="margin-top:var(--space-6)" aria-labelledby="howTitle">
+        <h2 id="howTitle" style="font:var(--text-title-m)">Como montar seu roadmap</h2>
+        <ol class="steps-grid">
+          <li><span class="letter-badge">1</span><strong>Escolha sua carreira</strong><span class="muted">Defina seu objetivo principal e avance automaticamente para o próximo passo.</span></li>
+          <li><span class="letter-badge">2</span><strong>Adicione fundamentos e linguagens</strong><span class="muted">Opcionalmente marque trilhas paralelas e clique em Continuar.</span></li>
+          <li><span class="letter-badge">3</span><strong>Informe nível e horas</strong><span class="muted">Tópicos abaixo do seu nível ficam opcionais e o prazo segue seu ritmo real.</span></li>
+          <li><span class="letter-badge">4</span><strong>Gere e acompanhe</strong><span class="muted">Visualize seu fluxograma completo, marque tópicos, faça revisões e exporte.</span></li>
+        </ol>
+      </section>
+    </div>
+    <div id="onbFlow" hidden>
         <div class="onb-copy">
-          <p class="eyebrow">Feito na faculdade, pra quem estuda junto</p>
-          <p id="onbStepLabel" class="mono" style="margin-top:8px">Passo 1 de 5</p>
-          <h1 id="onbHeading">Qual carreira você quer seguir?</h1>
-          <p id="onbLead" class="muted" style="margin-top:8px">Eu me perdi no meio de curso demais. Escolhe uma carreira. O resto a gente encaixa na semana.</p>
+          <p id="onbStepLabel" class="mono">Passo 1 de 5</p>
+          <h1 id="onbHeading">Qual carreira é o seu objetivo?</h1>
+          <p id="onbLead" class="muted" style="margin-top:8px"></p>
         </div>
         <div class="onb-steps" id="onbSegments" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
         <div id="onbStep1">
@@ -124,12 +178,10 @@
             </div>
             <div class="row">
               <button type="button" id="onbNext" class="btn btn-primary">Continuar</button>
-              <button type="button" id="onbStart" class="btn btn-primary" hidden>Montar a trilha</button>
+              <button type="button" id="onbStart" class="btn btn-primary" hidden>Gerar roadmap completo</button>
             </div>
           </div>
         </div>
-      </div>
-      <aside id="livePreview" class="card live-preview" aria-live="polite"></aside>
     </div>
   </main>
 
@@ -233,7 +285,6 @@
         </div>
         <div id="conteudo" class="phases" aria-label="Etapas da trilha"></div>
         <div id="orphans" hidden style="margin-top:16px"></div>
-        <p id="footerStats" class="mono" style="margin-top:24px"></p>
       </main>
     </div>
   </div>
@@ -252,14 +303,32 @@
   <footer id="siteFooter" class="site-footer">
     <label class="sr-only" for="importFileInput">Arquivo JSON de backup</label>
     <input id="importFileInput" type="file" accept=".json,application/json" class="sr-only" />
-    <div class="foot-grid">
-      <p>© 2026 Rumos · Feito por Eduardo Nobilioni, na faculdade · MIT · Gratuito</p>
-      <div class="row">
-        <button type="button" data-footer-action="privacy">Privacidade</button>
-        <button type="button" data-footer-action="terms">Termos</button>
-        <button type="button" data-footer-action="accessibility">Acessibilidade</button>
-        <a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos" target="_blank" rel="noopener noreferrer">Código no GitHub</a>
+    <div class="footer-grid">
+      <div>
+        <p style="font:var(--text-title-s);color:var(--color-text)">Rumos — Guia de Estudos</p>
+        <p class="muted" style="margin-top:8px">Plataforma aberta, gratuita e em português para montar roadmaps de estudo em tecnologia, acompanhar progresso e organizar a rotina semanal.</p>
       </div>
+      <div>
+        <p style="font:var(--text-label-m);color:var(--color-text)">Informações e transparência</p>
+        <ul class="stack" style="margin-top:8px;list-style:none;padding:0">
+          <li><button type="button" data-footer-action="about">Sobre e orientações</button></li>
+          <li><button type="button" data-footer-action="privacy">Política de Privacidade</button></li>
+          <li><button type="button" data-footer-action="terms">Termos de Uso</button></li>
+          <li><button type="button" data-footer-action="accessibility">Declaração de Acessibilidade</button></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font:var(--text-label-m);color:var(--color-text)">Projeto e comunidade</p>
+        <ul class="stack" style="margin-top:8px;list-style:none;padding:0">
+          <li><a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos" target="_blank" rel="noopener noreferrer">Código-fonte no GitHub</a></li>
+          <li><a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos/issues" target="_blank" rel="noopener noreferrer">Reportar erro ou sugerir trilha</a></li>
+          <li><span class="muted">Dados locais no navegador, sem cadastro e sem cookies de rastreamento</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="spread" style="max-width:1200px;margin:var(--space-6) auto 0;padding-top:var(--space-4);border-top:1px solid var(--color-border)">
+      <p>© 2026 Rumos · Idealizado por Eduardo Nobilioni · Licença MIT · Conteúdo educacional gratuito.</p>
+      <p id="footerStats" class="mono"></p>
     </div>
   </footer>
 
