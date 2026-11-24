@@ -47,9 +47,9 @@ Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 - [x] Dados / Back-end / Infra: GraphQL, MongoDB, Terraform, Power BI
 
 ### Fundamentos (~3)
-- [ ] Redes de Computadores e Internet
-- [ ] Design Systems e Acessibilidade
-- [ ] Engenharia de Prompt
+- [x] Redes de Computadores e Internet
+- [x] Design Systems e Acessibilidade
+- [x] Engenharia de Prompt
 
 ## 5. Fechamento de cada etapa
-- [ ] README, prints e testes atualizados
+- [x] README, prints e testes atualizados

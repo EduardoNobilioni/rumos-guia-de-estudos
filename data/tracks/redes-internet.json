@@ -1,0 +1,239 @@
+{
+  "id": "redes-internet",
+  "name": "Redes de Computadores e Internet",
+  "tagline": "IP, DNS, TCP/UDP, HTTP/HTTPS, TLS, proxies e diagnóstico prático na Web",
+  "description": "Os alicerces de rede que todo profissional de software precisa: como endereços IP e DNS localizam serviços, TCP vs. UDP, ciclos HTTP, TLS/HTTPS, proxies reversos, CDNs e diagnóstico.",
+  "phases": [
+    {
+      "id": "ri-fase-1",
+      "number": 1,
+      "badgeTitle": "Internet e Transporte",
+      "title": "IP, DNS, portas e TCP vs. UDP",
+      "topics": [
+        {
+          "id": "ri-dns-ip",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Endereços IP, DNS e como um domínio chega a um servidor",
+          "description": "Do navegador ao servidor: resolução recursiva de DNS, registros A/AAAA/CNAME, NAT e diferença entre IP público e localhost.",
+          "tags": ["Rede", "DNS", "IP"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Como a Internet funciona (MDN)", "url": "https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work", "lang": "pt", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "ri-tcp-udp",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "TCP (handshake, entrega ordenada), UDP e portas",
+          "description": "Por que web e APIs usam TCP confiável enquanto streaming, jogos e DNS preferem UDP com menor latência.",
+          "tags": ["TCP", "UDP", "Portas"],
+          "prerequisites": ["ri-dns-ip"],
+          "resources": [
+            { "title": "TCP vs. UDP (Cloudflare Learning)", "url": "https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ri-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Mapa comentado do trajeto de uma requisição web",
+          "description": "Use `dig`, `curl -v` e DevTools para traçar DNS, IP, handshake TLS e resposta HTTP de um site público.",
+          "steps": ["Resolva o domínio com `dig`.", "Observe handshake em `curl -v`.", "Anote cada etapa em diagrama simples."],
+          "definitionOfDone": ["Mostra IPs, portas e tempo por etapa.", "Explica papel do DNS e TCP."]
+        },
+        {
+          "id": "ri-p1-int",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Diagnóstico de portas locais com `ss` / `nc`",
+          "description": "Diferencie serviço escutando apenas em `127.0.0.1` vs. `0.0.0.0` subindo servidores de teste locais.",
+          "steps": ["Suba servidor preso em `127.0.0.1`.", "Liste sockets abertos.", "Compare acesso local vs. rede."],
+          "definitionOfDone": ["Explica diferença entre loopback e todas as interfaces.", "Comandos testados."]
+        },
+        {
+          "id": "ri-p1-ava",
+          "level": "avancado",
+          "hours": 7,
+          "title": "Eco TCP e UDP lado a lado medindo latência e perda",
+          "description": "Escreva cliente/servidor simples em TCP e UDP na mesma máquina comparando comportamento ao simular atraso.",
+          "steps": ["Implemente servidor TCP e UDP.", "Compare tempo de conexão.", "Documente casos de uso reais."],
+          "definitionOfDone": ["Ambos rodam limpos localmente.", "Relatório objetivo das diferenças."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ri-f1-q1",
+          "prompt": "Qual a função principal do DNS na Internet?",
+          "reviewTopicId": "ri-dns-ip",
+          "choices": [
+            { "id": "a", "text": "Traduzir nomes de domínio legíveis (ex.: rumos.dev) em endereços IP roteáveis.", "correct": true, "explanation": "Sem DNS precisaríamos memorizar endereços IP numéricos." },
+            { "id": "b", "text": "Compilar arquivos JavaScript.", "correct": false, "explanation": "É o sistema de nomes da Internet." }
+          ]
+        },
+        {
+          "id": "ri-f1-q2",
+          "prompt": "Por que jogos online e chamadas de vídeo em tempo real costumam preferir UDP a TCP?",
+          "reviewTopicId": "ri-tcp-udp",
+          "choices": [
+            { "id": "a", "text": "Porque no UDP um pacote perdido não trava todos os pacotes seguintes esperando retransmissão (evita head-of-line blocking).", "correct": true, "explanation": "Para áudio/vídeo ao vivo, um quadro atrasado não serve mais." },
+            { "id": "b", "text": "Porque UDP garante 100% de entrega ordenada sem perdas.", "correct": false, "explanation": "Essa garantia é do TCP." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ri-fase-2",
+      "number": 2,
+      "badgeTitle": "HTTP e TLS",
+      "title": "HTTP, cookies/CORS e HTTPS/TLS",
+      "topics": [
+        {
+          "id": "ri-http",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "HTTP/1.1, HTTP/2, cabeçalhos, status codes e CORS",
+          "description": "Entender métodos idempotentes, cache (`ETag`, `Cache-Control`), compressão (`gzip`/`br`) e por que CORS é política do navegador.",
+          "tags": ["HTTP", "CORS"],
+          "prerequisites": ["ri-tcp-udp"],
+          "resources": [
+            { "title": "Visão geral do HTTP (MDN PT-BR)", "url": "https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Overview", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ri-tls",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "TLS / HTTPS, certificados digitais e cadeias de confiança",
+          "description": "Como TLS protege confidencialidade e integridade contra interceptação e o papel de CAs, SNI e renovação automática.",
+          "tags": ["TLS", "HTTPS", "Segurança"],
+          "prerequisites": ["ri-http"],
+          "resources": [
+            { "title": "Transport Layer Security (MDN)", "url": "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ri-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Inspeção de Cache HTTP com `ETag` e `304 Not Modified`",
+          "description": "Suba servidor local respondendo com `ETag` e comprove resposta `304` sem reenviar o corpo.",
+          "steps": ["Envie `If-None-Match` no `curl`.", "Valide economia de bytes no `304`.", "Teste `Cache-Control`."],
+          "definitionOfDone": ["Mostra status 200 na 1ª e 304 na 2ª chamada.", "Documentado."]
+        },
+        {
+          "id": "ri-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Reprodução controlada de preflight CORS",
+          "description": "Conecte duas portas locais diferentes observando requisição `OPTIONS` e cabeçalhos `Access-Control-Allow-*`.",
+          "steps": ["Suba front em `:3000` e API em `:4000`.", "Observe bloqueio sem CORS.", "Libere origem exata."],
+          "definitionOfDone": ["Nunca usa `*` junto com credenciais.", "Explica por que `curl` não sofre CORS." ]
+        },
+        {
+          "id": "ri-p2-ava",
+          "level": "avancado",
+          "hours": 7,
+          "title": "HTTPS local com certificados válidos (mkcert) e HTTP/2",
+          "description": "Sirva aplicação local em HTTPS usando certificado confiável local verificando negociação ALPN/TLS 1.3.",
+          "steps": ["Gere certificado local.", "Ative TLS no proxy/servidor.", "Confira protocolo em `curl -I --http2`."],
+          "definitionOfDone": ["Cadeado verde sem alerta no navegador.", "TLS 1.2+ ativo."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ri-f2-q1",
+          "prompt": "Por que uma chamada bloqueada por CORS no navegador funciona normalmente quando feita pelo `curl` ou Postman?",
+          "reviewTopicId": "ri-http",
+          "choices": [
+            { "id": "a", "text": "Porque CORS é uma proteção aplicada apenas pelos navegadores web para restringir requisições cross-origin de scripts na página.", "correct": true, "explanation": "Por isso CORS nunca substitui autenticação no servidor." },
+            { "id": "b", "text": "Porque `curl` ignora a porta TCP.", "correct": false, "explanation": "`curl` simplesmente não aplica política Same-Origin de navegador." }
+          ]
+        },
+        {
+          "id": "ri-f2-q2",
+          "prompt": "O que o código de status HTTP `304 Not Modified` indica?",
+          "reviewTopicId": "ri-http",
+          "choices": [
+            { "id": "a", "text": "Que o recurso em cache no cliente ainda é válido, evitando baixar o arquivo inteiro novamente.", "correct": true, "explanation": "Economiza banda e acelera o carregamento." },
+            { "id": "b", "text": "Erro interno no banco de dados.", "correct": false, "explanation": "Erros de servidor são família 5xx." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ri-fase-3",
+      "number": 3,
+      "badgeTitle": "Proxies e Edge",
+      "title": "Proxies reversos, CDNs e latência real",
+      "topics": [
+        {
+          "id": "ri-edge",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Proxy reverso (Nginx/Caddy), WebSockets e CDNs",
+          "description": "Terminação TLS na borda, encaminhamento de cabeçalhos `X-Forwarded-For`, upgrade para WebSocket e cache geográfico em CDN.",
+          "tags": ["Nginx", "CDN", "WebSockets"],
+          "prerequisites": ["ri-tls"],
+          "resources": [
+            { "title": "What is a CDN? (Cloudflare)", "url": "https://www.cloudflare.com/learning/cdn/what-is-a-cdn/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ri-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Proxy reverso Nginx na frente de API local",
+          "description": "Configure Docker Compose com Nginx na porta 80 encaminhando `/api` para container back-end preservando `Host` e IP cliente.",
+          "steps": ["Escreva bloco `proxy_pass`.", "Passe cabeçalhos `X-Forwarded-*`.", "Bloqueie acesso direto externo à porta da API."],
+          "definitionOfDone": ["API recebe IP original.", "Tudo acessível por uma única porta."]
+        },
+        {
+          "id": "ri-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Estratégia de cache estático vs. dinâmico em CDN",
+          "description": "Defina cabeçalhos para ativos versionados (`immutable` 1 ano) vs. HTML/JSON (`no-cache` / revalidação).",
+          "steps": ["Separe assets com hash no nome.", "Aplique `max-age` longo apenas em arquivos versionados.", "Teste comportamento ao atualizar build."],
+          "definitionOfDone": ["Usuários não ficam presos em versão antiga.", "Assets aproveitam cache máximo."]
+        },
+        {
+          "id": "ri-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Checklist de diagnóstico de rede para aplicações web",
+          "description": "Monte guia prático com causas comuns em produção: timeout de proxy, header perdido, DNS TTL alto e queda de keep-alive.",
+          "steps": ["Documente sintomas e comandos de verificação.", "Inclua análise de headers.", "Valide com casos reais simulados."],
+          "definitionOfDone": ["Cobre DNS, TLS, proxy e backend.", "Útil como runbook de equipe."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ri-f3-q1",
+          "prompt": "Quando é seguro configurar `Cache-Control: public, max-age=31536000, immutable`?",
+          "reviewTopicId": "ri-edge",
+          "choices": [
+            { "id": "a", "text": "Para arquivos estáticos com hash de conteúdo no nome (ex.: `app.8f2c1a.js`), cujo nome muda a cada alteração.", "correct": true, "explanation": "Nunca use 1 ano de cache em `index.html` ou endpoints privados." },
+            { "id": "b", "text": "Para dados privados da conta do usuário.", "correct": false, "explanation": "Dados privados nunca devem usar `public` cache." }
+          ]
+        },
+        {
+          "id": "ri-f3-q2",
+          "prompt": "Para que serve o cabeçalho `X-Forwarded-For` em proxies reversos?",
+          "reviewTopicId": "ri-edge",
+          "choices": [
+            { "id": "a", "text": "Informar à aplicação de origem qual era o endereço IP original do cliente antes de passar pelo proxy.", "correct": true, "explanation": "Sem ele, toda requisição pareceria vir do IP do proxy." },
+            { "id": "b", "text": "Aumentar o tamanho máximo do CSS.", "correct": false, "explanation": "Preserva metadados da conexão cliente." }
+          ]
+        }
+      ]
+    }
+  ]
+}

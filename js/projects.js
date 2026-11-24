@@ -85,6 +85,9 @@ const TRACK_DEFAULT_LANGS = {
   mongodb: ['MongoDB'],
   terraform: ['Terraform', 'Cloud'],
   'power-bi': ['Power BI', 'SQL'],
+  'redes-internet': ['HTML/CSS', 'Segurança'],
+  'design-systems': ['HTML/CSS', 'UX/UI'],
+  'engenharia-prompt': ['Dados/ML'],
 };
 
 function normalizeText(value) {

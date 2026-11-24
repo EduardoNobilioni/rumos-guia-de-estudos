@@ -328,6 +328,43 @@
       ]
     },
     {
+      "id": "redes-internet",
+      "file": "redes-internet.json",
+      "group": "fundamentos",
+      "keywords": [
+        "rede",
+        "dns",
+        "http",
+        "https",
+        "tls",
+        "proxy"
+      ]
+    },
+    {
+      "id": "design-systems",
+      "file": "design-systems.json",
+      "group": "fundamentos",
+      "keywords": [
+        "design system",
+        "tokens",
+        "wcag",
+        "acessibilidade",
+        "componentes"
+      ]
+    },
+    {
+      "id": "engenharia-prompt",
+      "file": "engenharia-prompt.json",
+      "group": "fundamentos",
+      "keywords": [
+        "prompt",
+        "llm",
+        "few-shot",
+        "json",
+        "evals"
+      ]
+    },
+    {
       "id": "python",
       "file": "python.json",
       "group": "tecnologia",

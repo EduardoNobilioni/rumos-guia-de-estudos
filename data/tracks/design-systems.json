@@ -1,0 +1,240 @@
+{
+  "id": "design-systems",
+  "name": "Design Systems e Acessibilidade",
+  "tagline": "Tokens semânticos, componentes reutilizáveis, WCAG 2.2 AA e consistência entre design e código",
+  "description": "Fundamentos para construir interfaces coesas e inclusivas: design tokens (cor, escala, tipografia), anatomia de componentes, acessibilidade WCAG 2.2 e documentação.",
+  "phases": [
+    {
+      "id": "ds-fase-1",
+      "number": 1,
+      "badgeTitle": "Tokens e Escala",
+      "title": "Design Tokens, semântica e temas claro/escuro",
+      "topics": [
+        {
+          "id": "ds-tokens",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Tokens primitivos vs. semânticos (CSS Variables / JSON)",
+          "description": "Separar paleta bruta (`blue-600`) do papel semântico (`color-action-primary`, `color-surface`) permitindo temas claro/escuro sem duplicação.",
+          "tags": ["Design System", "Tokens"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Design Tokens Community Group", "url": "https://www.designtokens.org/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ds-escala",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Escala tipográfica, ritmo espacial (4/8 px) e elevação",
+          "description": "Definir tamanhos fluidos, alturas de linha legíveis e profundidade sutil (bordas + sombras) com consistência matemática.",
+          "tags": ["Tipografia", "UI"],
+          "prerequisites": ["ds-tokens"],
+          "resources": [
+            { "title": "Material 3 Design System Foundations", "url": "https://m3.material.io/foundations", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ds-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Folha de Design Tokens claro/escuro em CSS",
+          "description": "Defina variáveis CSS semânticas para fundo, superfície, borda, texto, ação e feedback nos temas claro e escuro.",
+          "steps": ["Separe tokens base e semânticos.", "Teste contraste em ambos os temas.", "Respeite `prefers-color-scheme`."],
+          "definitionOfDone": ["Sem cores soltas nos componentes.", "Contraste mínimo 4.5:1 no texto."]
+        },
+        {
+          "id": "ds-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Página de showcase de fundações vivas",
+          "description": "Construa página HTML/CSS exibindo tipografia, espaçamentos e tokens interativos com alternância de tema.",
+          "steps": ["Documente quando usar cada nível.", "Mostre tokens ao vivo.", "Adicione cópia rápida de token."],
+          "definitionOfDone": ["Responsiva de 320px a 1440px.", "Zero quebra de layout a 200% zoom."]
+        },
+        {
+          "id": "ds-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Pipeline de tokens JSON -> CSS / Tailwind",
+          "description": "Gere automaticamente variáveis CSS a partir de um arquivo único JSON de tokens compartilhado entre design e código.",
+          "steps": ["Estruture JSON padronizado.", "Escreva script Node gerando CSS.", "Valide contraste automático."],
+          "definitionOfDone": ["Única fonte de verdade.", "Testes falham se contraste cair abaixo de AA."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ds-f1-q1",
+          "prompt": "Qual a vantagem de usar tokens semânticos (`--surface-card`, `--text-muted`) sobre tokens literais (`--gray-100`) diretamente nas telas?",
+          "reviewTopicId": "ds-tokens",
+          "choices": [
+            { "id": "a", "text": "Permite adaptar temas (claro/escuro/alto contraste) alterando apenas o mapeamento do token sem editar cada componente.", "correct": true, "explanation": "Expressa a intenção visual em vez da cor fixa." },
+            { "id": "b", "text": "Reduz o CSS para zero linhas.", "correct": false, "explanation": "Torna o sistema escalável e tematizável." }
+          ]
+        },
+        {
+          "id": "ds-f1-q2",
+          "prompt": "Por que adotar escala base de 4 px ou 8 px para espaçamentos?",
+          "reviewTopicId": "ds-escala",
+          "choices": [
+            { "id": "a", "text": "Garante ritmo visual consistente entre margens, paddings e gaps sem valores arbitrários como 13px ou 19px.", "correct": true, "explanation": "Acelera decisões de design e código." },
+            { "id": "b", "text": "Porque navegadores não aceitam números ímpares.", "correct": false, "explanation": "É um critério de harmonia visual." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ds-fase-2",
+      "number": 2,
+      "badgeTitle": "Componentes e WCAG",
+      "title": "Acessibilidade WCAG 2.2 e anatomia de componentes",
+      "topics": [
+        {
+          "id": "ds-wcag",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "WCAG 2.2 AA: teclado, foco visível, contraste e ARIA",
+          "description": "Regra de ouro do ARIA: prefira HTML semântico nativo (`button`, `dialog`, `details`); use ARIA só quando necessário, garantindo navegação por Tab/Esc/Enter.",
+          "tags": ["WCAG", "Acessibilidade"],
+          "prerequisites": ["ds-escala"],
+          "resources": [
+            { "title": "ARIA Authoring Practices Guide (W3C)", "url": "https://www.w3.org/WAI/ARIA/apg/", "lang": "en", "kind": "documentacao" },
+            { "title": "Acessibilidade Web (MDN PT-BR)", "url": "https://developer.mozilla.org/pt-BR/docs/Web/Accessibility", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ds-componentes",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "API de componentes: variantes, estados e composição",
+          "description": "Projetar componentes previsíveis cobrindo todos os estados (default, hover, focus-visible, active, disabled, loading, erro).",
+          "tags": ["Design System", "Componentes"],
+          "prerequisites": ["ds-wcag"],
+          "resources": [
+            { "title": "Every Layout / Inclusive Components", "url": "https://inclusive-components.design/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ds-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Grupo completo de Botões e Inputs acessíveis",
+          "description": "Implemente variantes primária, secundária e perigo com rótulo associado, mensagem de erro via `aria-describedby` e foco 2px.",
+          "steps": ["Garanta altura mínima >= 24px (ideal 40px).", "Associe erro com `aria-describedby`.", "Teste só com teclado."],
+          "definitionOfDone": ["Sem depender apenas de cor no erro.", "Foco sempre visível no Tab."]
+        },
+        {
+          "id": "ds-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Modal (`<dialog>`) e Tabs acessíveis pelo padrão APG",
+          "description": "Crie modal que prende foco, fecha com Esc e devolve foco ao gatilho, além de abas com navegação por setas.",
+          "steps": ["Use `<dialog>` nativo ou trap de foco.", "Implemente `ArrowLeft`/`ArrowRight` nas abas.", "Valide com axe-core."],
+          "definitionOfDone": ["0 violações no axe-core.", "100% operável sem mouse."]
+        },
+        {
+          "id": "ds-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Mini kit de 6 componentes com auditoria automatizada",
+          "description": "Publique 6 componentes HTML/JS documentados rodando validação automática de contraste e atributos ARIA nos testes.",
+          "steps": ["Cubra todos os estados.", "Adicione suporte a `prefers-reduced-motion`.", "Escreva testes automatizados de acessibilidade."],
+          "definitionOfDone": ["Passa no axe-core claro e escuro.", "Animações desligam com reduced-motion."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ds-f2-q1",
+          "prompt": "Qual é a primeira regra do uso de ARIA segundo o W3C?",
+          "reviewTopicId": "ds-wcag",
+          "choices": [
+            { "id": "a", "text": "Sempre prefira elementos HTML nativos semânticos (como `<button>`, `<a href>`, `<select>`) antes de tentar recriá-los com `<div>` + ARIA.", "correct": true, "explanation": "Elementos nativos já trazem foco, teclado e semântica prontos." },
+            { "id": "b", "text": "Colocar `role='button'` em todos os títulos `<h1>`.", "correct": false, "explanation": "Isso quebraria a semântica." }
+          ]
+        },
+        {
+          "id": "ds-f2-q2",
+          "prompt": "Qual atributo HTML conecta um campo `<input>` ao seu texto explicativo ou mensagem de erro para leitores de tela?",
+          "reviewTopicId": "ds-wcag",
+          "choices": [
+            { "id": "a", "text": "`aria-describedby` apontando para o `id` da mensagem de erro/ajuda.", "correct": true, "explanation": "O leitor anuncia o rótulo e em seguida a descrição/erro." },
+            { "id": "b", "text": "`placeholder`.", "correct": false, "explanation": "Placeholder some ao digitar e tem baixo contraste padrão." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ds-fase-3",
+      "number": 3,
+      "badgeTitle": "Governança",
+      "title": "Documentação, versionamento e adoção",
+      "topics": [
+        {
+          "id": "ds-gov",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Documentação viva, SemVer e evolução sem quebrar times",
+          "description": "Escrever guias 'Quando usar / Quando evitar', gerenciar breaking changes com SemVer e medir adoção real.",
+          "tags": ["Design System", "Governança"],
+          "prerequisites": ["ds-componentes"],
+          "resources": [
+            { "title": "Design Systems Repo", "url": "https://designsystemsrepo.com/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ds-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Template de documentação de componente ('Quando usar vs. evitar')",
+          "description": "Documente 3 componentes comuns com exemplos práticos de bom e mau uso.",
+          "steps": ["Liste propriedades aceitas.", "Mostre exemplo certo e errado.", "Inclua notas de acessibilidade."],
+          "definitionOfDone": ["Claro para devs e designers.", "Fácil de consultar."]
+        },
+        {
+          "id": "ds-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Changelog e guia de migração (SemVer)",
+          "description": "Simule uma atualização com breaking change em token ou prop, escrevendo guia claro de upgrade.",
+          "steps": ["Classifique mudança como major/minor/patch.", "Deprecie antes de remover.", "Escreva passo a passo de migração."],
+          "definitionOfDone": ["Segue Semantic Versioning.", "Caminho de migração sem surpresas."]
+        },
+        {
+          "id": "ds-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Auditoria completa de acessibilidade em app real",
+          "description": "Rode auditoria teclado + zoom 200% + leitor/axe em uma aplicação real corrigindo os bloqueios encontrados.",
+          "steps": ["Teste navegação 100% teclado.", "Verifique contraste claro/escuro.", "Publique relatório antes/depois."],
+          "definitionOfDone": ["Zero bloqueios críticos de teclado ou contraste.", "Evidências documentadas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ds-f3-q1",
+          "prompt": "Em Semantic Versioning (MAJOR.MINOR.PATCH) de um Design System, quando incrementar a versão MAJOR?",
+          "reviewTopicId": "ds-gov",
+          "choices": [
+            { "id": "a", "text": "Quando houver mudanças incompatíveis (breaking changes) na API de componentes ou remoção de tokens.", "correct": true, "explanation": "Avisa os times que é necessário ajustar código ao atualizar." },
+            { "id": "b", "text": "Ao corrigir apenas um erro de digitação na documentação.", "correct": false, "explanation": "Correções retrocompatíveis são PATCH." }
+          ]
+        },
+        {
+          "id": "ds-f3-q2",
+          "prompt": "Por que incluir seção 'Quando NÃO usar' na documentação de componentes?",
+          "reviewTopicId": "ds-gov",
+          "choices": [
+            { "id": "a", "text": "Para evitar mau uso (ex.: usar modal para tudo ou checkbox no lugar de radio) mantendo coerência UX.", "correct": true, "explanation": "Guia decisões sem exigir reunião para cada tela." },
+            { "id": "b", "text": "Para proibir contribuições.", "correct": false, "explanation": "Orienta escolhas saudáveis." }
+          ]
+        }
+      ]
+    }
+  ]
+}
