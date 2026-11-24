@@ -215,6 +215,73 @@
       ]
     },
     {
+      "id": "game-dev",
+      "file": "game-dev.json",
+      "group": "carreira",
+      "keywords": [
+        "jogos",
+        "godot",
+        "unity",
+        "game loop",
+        "fisica",
+        "fsm"
+      ]
+    },
+    {
+      "id": "network-engineer",
+      "file": "network-engineer.json",
+      "group": "carreira",
+      "keywords": [
+        "redes",
+        "tcp/ip",
+        "cidr",
+        "dns",
+        "vlan",
+        "bgp",
+        "wireguard"
+      ]
+    },
+    {
+      "id": "devsecops",
+      "file": "devsecops.json",
+      "group": "carreira",
+      "keywords": [
+        "seguranca",
+        "appsec",
+        "sast",
+        "dast",
+        "sbom",
+        "trivy",
+        "opa"
+      ]
+    },
+    {
+      "id": "bi-analyst",
+      "file": "bi-analyst.json",
+      "group": "carreira",
+      "keywords": [
+        "bi",
+        "power bi",
+        "dax",
+        "star schema",
+        "kpis",
+        "metabase"
+      ]
+    },
+    {
+      "id": "csharp-dotnet",
+      "file": "csharp-dotnet.json",
+      "group": "carreira",
+      "keywords": [
+        "c#",
+        "csharp",
+        "dotnet",
+        ".net",
+        "aspnet",
+        "entity framework"
+      ]
+    },
+    {
       "id": "computacao",
       "file": "computacao.json",
       "group": "fundamentos",

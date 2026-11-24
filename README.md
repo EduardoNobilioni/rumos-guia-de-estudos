@@ -36,7 +36,7 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 
 ## Trilhas
 
-**Carreiras.** Front-end, Back-end, Full-Stack, Ciência de Dados, Analista de Dados, Engenharia de Dados, Machine Learning e IA, Engenharia de IA, MLOps, Java e Spring Boot, Mobile, QA e Testes de Software, DevOps, Cibersegurança, Cloud e Arquitetura em Nuvem, Arquitetura de Software e System Design, UX / UI Design, Product Manager.
+**Carreiras.** Front-end, Back-end, Full-Stack, Ciência de Dados, Analista de Dados, Analista de BI, Engenharia de Dados, Machine Learning e IA, Engenharia de IA, MLOps, Java e Spring Boot, C# e .NET, Mobile, Desenvolvimento de Jogos, QA e Testes de Software, DevOps, DevSecOps, Cibersegurança, Engenharia de Redes, Cloud e Arquitetura em Nuvem, Arquitetura de Software e System Design, UX / UI Design, Product Manager.
 
 **Fundamentos.** Fundamentos da Computação, Estruturas de Dados e Algoritmos, Banco de Dados e Modelagem, Engenharia de Software e Boas Práticas.
 

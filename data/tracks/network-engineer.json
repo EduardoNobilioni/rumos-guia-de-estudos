@@ -1,0 +1,263 @@
+{
+  "id": "network-engineer",
+  "name": "Engenharia de Redes",
+  "tagline": "TCP/IP, sub-redes, roteamento, DNS, VPNs, firewall e diagnóstico em produção",
+  "description": "Redes de computadores aplicadas: modelos OSI/TCP-IP, endereçamento IPv4/IPv6 e CIDR, switches/VLANs, roteamento, DNS/TLS, firewalls, VPNs e observabilidade de tráfego.",
+  "phases": [
+    {
+      "id": "net-fase-1",
+      "number": 1,
+      "badgeTitle": "Fundamentos IP",
+      "title": "TCP/IP, endereçamento, CIDR e DNS",
+      "topics": [
+        {
+          "id": "net-osi",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Camadas OSI/TCP-IP, ARP, TCP vs. UDP",
+          "description": "Entenda como quadros Ethernet, pacotes IP e segmentos TCP/UDP atravessam a rede e quando usar conexão confiável vs. baixa latência.",
+          "tags": ["TCP/IP", "Rede"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Computer Networking (Cloudflare Learning)", "url": "https://www.cloudflare.com/learning/network-layer/what-is-the-network-layer/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "net-cidr",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "IPv4, IPv6, NAT e cálculo de sub-redes (CIDR)",
+          "description": "Dividir redes com máscaras `/24`, `/26`, `/28`, faixas privadas (RFC 1918), gateway padrão e por que NAT existe no IPv4.",
+          "tags": ["CIDR", "IPv4", "IPv6"],
+          "prerequisites": ["net-osi"],
+          "resources": [
+            { "title": "What is Subnetting? (Cloudflare)", "url": "https://www.cloudflare.com/learning/network-layer/what-is-a-subnet/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "net-dns",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "DNS, DHCP e portas bem conhecidas",
+          "description": "Resolução recursiva vs. autoritativa, registros A, AAAA, CNAME, MX, TXT, TTL e depuração com `dig`.",
+          "tags": ["DNS", "DHCP"],
+          "prerequisites": ["net-cidr"],
+          "resources": [
+            { "title": "What is DNS? (Cloudflare)", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "net-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Plano de endereçamento CIDR para 4 setores",
+          "description": "Divida `10.20.0.0/22` em 4 sub-redes adequadas para servidores, estações, Wi-Fi visitantes e gerência.",
+          "steps": ["Calcule hosts necessários por setor.", "Defina máscara e intervalo útil.", "Documente gateway e broadcast."],
+          "definitionOfDone": ["Sem sobreposição de faixas.", "Sobra margem para crescimento."]
+        },
+        {
+          "id": "net-p1-int",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Auditoria DNS completa de um domínio público",
+          "description": "Use `dig` e `whois` para mapear NS, A/AAAA, MX, SPF/DMARC e tempos de propagação (TTL).",
+          "steps": ["Consulte registros autoritativos.", "Compare resposta com resolvedores públicos.", "Registre cadeia de resolução."],
+          "definitionOfDone": ["Todos os registros explicados.", "Identifica eventual erro de TTL ou CNAME."]
+        },
+        {
+          "id": "net-p1-ava",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Laboratório dual-stack IPv4 + IPv6 local",
+          "description": "Configure duas sub-redes virtuais roteando IPv4 e IPv6 localmente e valide conectividade ponta a ponta.",
+          "steps": ["Atribua prefixos IPv4 e IPv6.", "Habilite encaminhamento no kernel.", "Teste com `ping -4` e `ping -6`."],
+          "definitionOfDone": ["Tráfego isolado entre sub-redes.", "Testes documentados."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "net-f1-q1",
+          "prompt": "Quantos endereços de host utilizáveis existem em uma sub-rede IPv4 `/26`?",
+          "reviewTopicId": "net-cidr",
+          "choices": [
+            { "id": "a", "text": "62 endereços (64 totais menos rede e broadcast).", "correct": true, "explanation": "2^(32-26) = 64; descontam-se endereço de rede e broadcast." },
+            { "id": "b", "text": "254 endereços.", "correct": false, "explanation": "254 vale para /24." }
+          ]
+        },
+        {
+          "id": "net-f1-q2",
+          "prompt": "Por que o DNS usa cache com TTL?",
+          "reviewTopicId": "net-dns",
+          "choices": [
+            { "id": "a", "text": "Para acelerar respostas repetidas e evitar sobrecarga nos servidores autoritativos.", "correct": true, "explanation": "TTL define por quantos segundos a resposta fica válida no cache." },
+            { "id": "b", "text": "Para criptografar o tráfego TCP.", "correct": false, "explanation": "Quem criptografa DNS são DoH/DoT, não TTL." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "net-fase-2",
+      "number": 2,
+      "badgeTitle": "Roteamento e Segurança",
+      "title": "VLANs, roteamento, firewall e VPNs",
+      "topics": [
+        {
+          "id": "net-switching",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Switching, VLANs (802.1Q) e Spanning Tree",
+          "description": "Segmentar redes em nível 2 separando tráfego sensível de visitantes e evitando loops em switches redundantes.",
+          "tags": ["VLAN", "Switching"],
+          "prerequisites": ["net-dns"],
+          "resources": [
+            { "title": "What is a VLAN? (Cloudflare)", "url": "https://www.cloudflare.com/learning/network-layer/what-is-a-vlan/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "net-routing",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Roteamento estático, OSPF, BGP e firewall stateful",
+          "description": "Como pacotes escolhem caminho entre redes (ASN/BGP na internet) e regras de entrada/saída com negação padrão.",
+          "tags": ["BGP", "Firewall"],
+          "prerequisites": ["net-switching"],
+          "resources": [
+            { "title": "What is BGP? (Cloudflare)", "url": "https://www.cloudflare.com/learning/security/glossary/what-is-bgp/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "net-vpn",
+          "level": "avancado",
+          "hours": 6,
+          "title": "VPNs modernas (WireGuard/IPsec) e balanceamento",
+          "description": "Fechar túneis criptografados entre filiais/nuvem e distribuir tráfego L4/L7 com healthchecks.",
+          "tags": ["WireGuard", "VPN"],
+          "prerequisites": ["net-routing"],
+          "resources": [
+            { "title": "WireGuard Conceptual Overview", "url": "https://www.wireguard.com/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "net-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Política de firewall por padrão fechado",
+          "description": "Defina tabela de regras permitindo apenas SSH restrito, HTTP/HTTPS e bloqueando todo o restante.",
+          "steps": ["Liste serviços expostos.", "Escreva regras de entrada e saída.", "Teste portas com `ss`/`nc`."],
+          "definitionOfDone": ["Negação padrão ativa.", "Somente portas necessárias abertas."]
+        },
+        {
+          "id": "net-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Topologia segmentada em 3 VLANs com roteamento",
+          "description": "Simule 3 VLANs isoladas permitindo acesso apenas da rede administrativa para a rede de servidores.",
+          "steps": ["Configure portas access e trunk.", "Aplique ACL entre VLANs.", "Valide bloqueio de visitantes."],
+          "definitionOfDone": ["Visitantes não alcançam servidores.", "Rotas documentadas."]
+        },
+        {
+          "id": "net-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Túnel WireGuard ponto-a-ponto entre dois hosts",
+          "description": "Suba duas VMs/containers comunicando via túnel WireGuard com chaves públicas e roteamento restrito.",
+          "steps": ["Gere pares de chaves.", "Configure `AllowedIPs` mínimo.", "Valide tráfego cifrado."],
+          "definitionOfDone": ["Comunicação funciona apenas pelo túnel.", "Chaves privadas protegidas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "net-f2-q1",
+          "prompt": "Qual a diferença entre um switch de camada 2 (VLAN) e um roteador de camada 3?",
+          "reviewTopicId": "net-switching",
+          "choices": [
+            { "id": "a", "text": "O switch encaminha quadros por endereço MAC dentro do mesmo domínio; o roteador encaminha pacotes IP entre redes diferentes.", "correct": true, "explanation": "VLANs isolam domínios de broadcast; roteadores conectam sub-redes." },
+            { "id": "b", "text": "Switches operam apenas via cabo coaxial.", "correct": false, "explanation": "A diferença está na camada e tabela de encaminhamento." }
+          ]
+        },
+        {
+          "id": "net-f2-q2",
+          "prompt": "Qual protocolo gerencia o anúncio de rotas entre Sistemas Autônomos (ASNs) na Internet?",
+          "reviewTopicId": "net-routing",
+          "choices": [
+            { "id": "a", "text": "BGP (Border Gateway Protocol).", "correct": true, "explanation": "OSPF é intradomínio (IGP); BGP conecta provedores e nuvens." },
+            { "id": "b", "text": "DHCP.", "correct": false, "explanation": "DHCP atribui IPs locais." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "net-fase-3",
+      "number": 3,
+      "badgeTitle": "Diagnóstico",
+      "title": "Capturas, latência e solução de incidentes",
+      "topics": [
+        {
+          "id": "net-diag",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Diagnóstico com tcpdump, Wireshark, mtr e ss",
+          "description": "Investigar perda de pacote, handshake TCP lento, erro de MTU/fragmentação e falha de certificado TLS em produção.",
+          "tags": ["Wireshark", "Diagnóstico"],
+          "prerequisites": ["net-vpn"],
+          "resources": [
+            { "title": "Wireshark User's Guide", "url": "https://www.wireshark.org/docs/wsug_html_chunked/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "net-p3-ini",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "Guia prático de ping, traceroute/mtr e curl -v",
+          "description": "Documente com exemplos reais como distinguir erro de DNS, porta fechada, timeout de firewall e erro HTTP.",
+          "steps": ["Simule cada falha localmente.", "Compare código de saída e logs.", "Monte fluxograma de triagem."],
+          "definitionOfDone": ["Diferencia claramente DNS vs. L3 vs. L4 vs. L7.", "Comandos testados."]
+        },
+        {
+          "id": "net-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Análise de captura PCAP (3-way handshake e retransmissão)",
+          "description": "Capture uma sessão TCP local, identifique SYN, SYN-ACK, ACK, janela TCP e retransmissões.",
+          "steps": ["Filtre por porta no Wireshark/tcpdump.", "Meça tempo de handshake.", "Identifique reset (RST) ou timeout."],
+          "definitionOfDone": ["Filtros de exibição documentados.", "Explica causa de latência." ]
+        },
+        {
+          "id": "net-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Runbook de resposta a queda de conectividade",
+          "description": "Crie um passo a passo estruturado (bottom-up e top-down) para isolar incidentes de rede híbrida nuvem/on-premises.",
+          "steps": ["Defina checagem de link, rota, NAT e firewall.", "Inclua comandos de coleta sem derrubar tráfego.", "Documente critérios de mitigação."],
+          "definitionOfDone": ["Testado em cenário simulado.", "Limpo para uso sob pressão."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "net-f3-q1",
+          "prompt": "Se um `curl` falha rápido com 'Connection refused', qual camada já respondeu?",
+          "reviewTopicId": "net-diag",
+          "choices": [
+            { "id": "a", "text": "O host de destino foi alcançado na rede, mas nenhum serviço está escutando naquela porta (ou devolveu TCP RST).", "correct": true, "explanation": "Diferente de timeout, aqui houve resposta ativa recusando a porta." },
+            { "id": "b", "text": "Falhou apenas a resolução DNS.", "correct": false, "explanation": "Erro de DNS retorna 'Could not resolve host'." }
+          ]
+        },
+        {
+          "id": "net-f3-q2",
+          "prompt": "Por que problemas de MTU incorreto causam conexões que abrem o handshake mas travam ao transferir dados grandes?",
+          "reviewTopicId": "net-diag",
+          "choices": [
+            { "id": "a", "text": "Pacotes pequenos (SYN/ACK) passam, mas pacotes cheios são descartados no túnel quando ICMP 'Fragmentation Needed' é bloqueado.", "correct": true, "explanation": "Muito comum em VPNs quando PMTUD é bloqueado por firewall." },
+            { "id": "b", "text": "Porque MTU define a senha do Wi-Fi.", "correct": false, "explanation": "MTU é o tamanho máximo de pacote na interface." }
+          ]
+        }
+      ]
+    }
+  ]
+}

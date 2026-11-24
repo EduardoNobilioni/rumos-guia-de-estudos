@@ -1,0 +1,239 @@
+{
+  "id": "devsecops",
+  "name": "DevSecOps",
+  "tagline": "Integrar segurança contínua no código, dependências, containers, nuvem e CI/CD",
+  "description": "Segurança automatizada no ciclo de desenvolvimento: prevenção de vazamento de segredos, SCA, SAST, DAST, hardening de containers e Infraestrutura como Código (IaC).",
+  "phases": [
+    {
+      "id": "dso-fase-1",
+      "number": 1,
+      "badgeTitle": "Código e Segredos",
+      "title": "Shift-left, segredos e dependências (SCA)",
+      "topics": [
+        {
+          "id": "dso-secrets",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Prevenção de segredos no Git e rotação de chaves",
+          "description": "Bloquear tokens e senhas antes do push com hooks e scanners (gitleaks), entender por que apagar o arquivo em novo commit não apaga do histórico.",
+          "tags": ["Segredos", "Git"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Secrets Management Cheat Sheet (OWASP)", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "dso-sca",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Análise de dependências (SCA) e SBOM",
+          "description": "Detectar vulnerabilidades conhecidas (CVEs) em pacotes de terceiros com auditoria automatizada e gerar inventário de software (SBOM).",
+          "tags": ["SCA", "SBOM"],
+          "prerequisites": ["dso-secrets"],
+          "resources": [
+            { "title": "OWASP Dependency-Check / CycloneDX", "url": "https://owasp.org/www-project-cyclonedx/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "dso-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Hook local + Action bloqueando segredos no Git",
+          "description": "Configure scanner de segredos em repositório de exemplo e comprove que um token fictício é barrado antes do merge.",
+          "steps": ["Instale detector em pre-commit.", "Crie workflow no GitHub Actions.", "Teste com chave falsa."],
+          "definitionOfDone": ["PR falha automaticamente com segredo falso.", "Documenta como revogar chave vazada."]
+        },
+        {
+          "id": "dso-p1-int",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Auditoria automática de dependências e SBOM",
+          "description": "Adicione geração de SBOM (CycloneDX) e relatório de CVEs com severidade no pipeline de uma API.",
+          "steps": ["Gere SBOM em JSON.", "Filtre vulnerabilidades críticas.", "Exiba resumo no job de CI."],
+          "definitionOfDone": ["SBOM gerado a cada build.", "Critérios claros para não quebrar por falso positivo."]
+        },
+        {
+          "id": "dso-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Autenticação OIDC sem chaves fixas no CI/CD",
+          "description": "Substitua credenciais estáticas de nuvem por tokens efêmeros via OpenID Connect entre GitHub Actions e provedor cloud.",
+          "steps": ["Configure provedor OIDC.", "Restrinja trust policy à branch principal.", "Remova segredos estáticos."],
+          "definitionOfDone": ["Zero chave permanente armazenada.", "Escopo limitado por repositório/branch."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "dso-f1-q1",
+          "prompt": "Se uma chave de API foi commitada no Git por engano, remover o arquivo em um novo commit basta?",
+          "reviewTopicId": "dso-secrets",
+          "choices": [
+            { "id": "a", "text": "Não: ela continua no histórico do Git; é obrigatório revogar/rotacionar a chave imediatamente.", "correct": true, "explanation": "Considere qualquer segredo que tocou repositório público como comprometido." },
+            { "id": "b", "text": "Sim, novos commits apagam automaticamente o passado.", "correct": false, "explanation": "O histórico do Git guarda todas as revisões." }
+          ]
+        },
+        {
+          "id": "dso-f1-q2",
+          "prompt": "Para que serve um SBOM (Software Bill of Materials)?",
+          "reviewTopicId": "dso-sca",
+          "choices": [
+            { "id": "a", "text": "Listar todos os componentes e bibliotecas contidos em uma aplicação para responder rápido a novas CVEs.", "correct": true, "explanation": "Funciona como a 'lista de ingredientes' do software." },
+            { "id": "b", "text": "Substituir o firewall da rede.", "correct": false, "explanation": "Trata da cadeia de suprimentos de software." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dso-fase-2",
+      "number": 2,
+      "badgeTitle": "SAST e Containers",
+      "title": "SAST, DAST e segurança de imagens/IaC",
+      "topics": [
+        {
+          "id": "dso-sast",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "SAST (análise estática) e DAST (análise dinâmica)",
+          "description": "Combinar varredura no código-fonte (Semgrep/CodeQL) com testes dinâmicos contra a aplicação rodando em staging.",
+          "tags": ["SAST", "DAST"],
+          "prerequisites": ["dso-sca"],
+          "resources": [
+            { "title": "OWASP DevSecOps Guideline", "url": "https://owasp.org/www-project-devsecops-guideline/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "dso-containers",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Segurança de containers (Trivy), imagens mínimas e IaC",
+          "description": "Rodar containers como usuário não-root, escanear imagens e arquivos Terraform/Kubernetes antes do deploy.",
+          "tags": ["Docker", "Trivy", "IaC"],
+          "prerequisites": ["dso-sast"],
+          "resources": [
+            { "title": "Docker Security Cheat Sheet (OWASP)", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "dso-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Dockerfile endurecido com multi-stage e non-root",
+          "description": "Refatore uma imagem Docker removendo ferramentas de build e rodando o processo sem privilégios de root.",
+          "steps": ["Use imagem base enxuta.", "Crie usuário dedicado.", "Confira com `docker inspect` e Trivy."],
+          "definitionOfDone": ["`USER` não-root ativo.", "Redução visível de vulnerabilidades e tamanho."]
+        },
+        {
+          "id": "dso-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "Pipeline completo com SAST + Scan de Container",
+          "description": "Monte workflow em CI executando análise estática de código e varredura de imagem Docker com falha em severidade HIGH/CRITICAL.",
+          "steps": ["Adicione Semgrep ou CodeQL.", "Rode Trivy na imagem gerada.", "Publique relatório SARIF."],
+          "definitionOfDone": ["Resultados integrados ao PR.", "Bloqueia vulnerabilidades críticas."]
+        },
+        {
+          "id": "dso-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Scan de IaC (Terraform/K8s) + teste DAST em staging",
+          "description": "Valide manifestos contra permissões excessivas e execute varredura dinâmica automatizada (OWASP ZAP) contra app de teste.",
+          "steps": ["Rode check de IaC antes do plan.", "Suba app efêmera no CI.", "Execute baseline DAST."],
+          "definitionOfDone": ["Detecta buckets públicos ou containers privilegiados.", "Relatório DAST anexado."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "dso-f2-q1",
+          "prompt": "Qual a diferença entre SAST e DAST?",
+          "reviewTopicId": "dso-sast",
+          "choices": [
+            { "id": "a", "text": "SAST analisa o código-fonte sem executá-lo; DAST testa a aplicação em execução simulando ataques externos.", "correct": true, "explanation": "Os dois se complementam no pipeline." },
+            { "id": "b", "text": "SAST funciona só em bancos SQL.", "correct": false, "explanation": "Analisa diversas linguagens." }
+          ]
+        },
+        {
+          "id": "dso-f2-q2",
+          "prompt": "Por que evitar rodar processos dentro de um container como `root`?",
+          "reviewTopicId": "dso-containers",
+          "choices": [
+            { "id": "a", "text": "Reduz drasticamente o impacto caso ocorra execução remota ou escape de container.", "correct": true, "explanation": "Aplica o princípio do menor privilégio também no runtime." },
+            { "id": "b", "text": "Porque containers não aceitam usuário root.", "correct": false, "explanation": "Aceitam por padrão, justamente por isso precisamos trocar." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dso-fase-3",
+      "number": 3,
+      "badgeTitle": "Governança e Runtime",
+      "title": "Assinatura de artefatos, políticas e resposta",
+      "topics": [
+        {
+          "id": "dso-policy",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Policy-as-Code, assinatura de imagens e detecção em runtime",
+          "description": "Validar políticas com OPA/Kyverno no cluster, assinar artefatos (Sigstore/Cosign) e monitorar anomalias em tempo de execução.",
+          "tags": ["OPA", "Assinatura", "Runtime"],
+          "prerequisites": ["dso-containers"],
+          "resources": [
+            { "title": "OWASP Application Security Verification Standard", "url": "https://owasp.org/www-project-application-security-verification-standard/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "dso-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Checklist ASVS básico para revisão de PR",
+          "description": "Adapte 10 verificações essenciais de autenticação, entrada e logs em um template de Pull Request.",
+          "steps": ["Selecione 10 itens práticos do ASVS.", "Formule perguntas objetivas.", "Aplique em um repo."],
+          "definitionOfDone": ["Template curto e utilizável no dia a dia.", "Sem burocracia excessiva."]
+        },
+        {
+          "id": "dso-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Política em código (OPA/Rego) bloqueando deploy inseguro",
+          "description": "Escreva política negando Deployment sem limites de CPU/memória ou usando tag `:latest`.",
+          "steps": ["Escreva regra Rego simples.", "Teste casos válidos e inválidos.", "Integre ao CI."],
+          "definitionOfDone": ["Bloqueia manifestos com `:latest`.", "Testes unitários da política passam."]
+        },
+        {
+          "id": "dso-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Pipeline end-to-end com proveniência e políticas",
+          "description": "Combine build reprodutível, geração de SBOM, scan de vulnerabilidades e verificação de política antes do deploy.",
+          "steps": ["Conecte cada estágio de verificação.", "Documente exceções com prazo de validade.", "Gere trilha de auditoria."],
+          "definitionOfDone": ["Todo artefato tem dono, SBOM e scan verde.", "Exceções têm data de revisão."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "dso-f3-q1",
+          "prompt": "Qual o objetivo de usar Policy-as-Code (como OPA) no pipeline/cluster?",
+          "reviewTopicId": "dso-policy",
+          "choices": [
+            { "id": "a", "text": "Automatizar e versionar regras de segurança/compliance para barrar configurações inseguras antes de chegarem à produção.", "correct": true, "explanation": "Substitui revisões manuais lentas por validação consistente." },
+            { "id": "b", "text": "Desligar autenticação em staging.", "correct": false, "explanation": "Garante que políticas sejam cumpridas automaticamente." }
+          ]
+        },
+        {
+          "id": "dso-f3-q2",
+          "prompt": "Por que evitar a tag `:latest` em imagens de produção?",
+          "reviewTopicId": "dso-policy",
+          "choices": [
+            { "id": "a", "text": "Porque ela é mutável: impede saber exatamente qual código rodou e dificulta rollback e rastreio de CVEs.", "correct": true, "explanation": "Use tags imutáveis ou digest SHA256." },
+            { "id": "b", "text": "Porque `:latest` não funciona no Linux.", "correct": false, "explanation": "Funciona, porém quebra reprodutibilidade." }
+          ]
+        }
+      ]
+    }
+  ]
+}

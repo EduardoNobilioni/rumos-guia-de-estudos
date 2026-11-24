@@ -1,0 +1,252 @@
+{
+  "id": "game-dev",
+  "name": "Desenvolvimento de Jogos",
+  "tagline": "Game loop, física 2D/3D, engines (Godot/Unity), IA de jogo e publicação",
+  "description": "Construção de jogos digitais do zero à publicação: arquitetura de game loop e delta time, vetores e colisões, estados de jogo, Godot/Unity, áudio, interface e otimização.",
+  "phases": [
+    {
+      "id": "game-fase-1",
+      "number": 1,
+      "badgeTitle": "Base de Jogos",
+      "title": "Game loop, vetores e movimento",
+      "topics": [
+        {
+          "id": "game-loop",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Game loop, frames por segundo e Delta Time",
+          "description": "Todo jogo roda num ciclo contínuo de entrada, atualização e renderização. Usar delta time garante velocidade igual em 60 Hz ou 144 Hz.",
+          "tags": ["Game Loop", "Jogos"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Game Programming Patterns — Game Loop", "url": "https://gameprogrammingpatterns.com/game-loop.html", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "game-vetores",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Vetores 2D, normalização e movimentação",
+          "description": "Como posição, velocidade e aceleração funcionam com vetores e por que normalizar diagonais evita andar mais rápido na diagonal.",
+          "tags": ["Matemática", "2D"],
+          "prerequisites": ["game-loop"],
+          "resources": [
+            { "title": "Vector Math (Godot Docs)", "url": "https://docs.godotengine.org/en/stable/tutorials/math/vector_math.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "game-p1-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Mini jogo estilo Pong ou Asteroides 2D",
+          "description": "Implemente movimentação com delta time, rebote em bordas e placar simples.",
+          "steps": ["Normalize direção do movimento.", "Implemente colisão com bordas.", "Adicione placar e reinício."],
+          "definitionOfDone": ["Velocidade constante em qualquer FPS.", "Jogável por teclado."]
+        },
+        {
+          "id": "game-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Protótipo top-down com câmera suave e dash",
+          "description": "Movimentação em 8 direções normalizada, cooldown de habilidade e câmera seguindo o jogador.",
+          "steps": ["Normalize vetor diagonal.", "Controle cooldown com timer.", "Adicione interpolação suave na câmera."],
+          "definitionOfDone": ["Movimento fluido sem trancos.", "HUD mostra recarga."]
+        },
+        {
+          "id": "game-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Motor simples com fixed timestep e interpolação",
+          "description": "Separe passo fixo de física do passo variável de renderização para evitar bugs de colisão.",
+          "steps": ["Acumule tempo entre frames.", "Execute física em passo fixo.", "Interpole posição visual."],
+          "definitionOfDone": ["Física determinística mesmo sob queda de FPS.", "Sem microtravamentos."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "game-f1-q1",
+          "prompt": "Por que multiplicamos a velocidade pelo delta time ao mover um personagem?",
+          "reviewTopicId": "game-loop",
+          "choices": [
+            { "id": "a", "text": "Para manter a velocidade consistente independente da taxa de quadros (FPS) do computador.", "correct": true, "explanation": "Sem delta time, um jogo a 120 FPS rodaria no dobro da velocidade de 60 FPS." },
+            { "id": "b", "text": "Para aumentar a resolução das texturas.", "correct": false, "explanation": "Relaciona-se ao tempo decorrido entre quadros." }
+          ]
+        },
+        {
+          "id": "game-f1-q2",
+          "prompt": "O que acontece se você somar movimento horizontal + vertical sem normalizar o vetor?",
+          "reviewTopicId": "game-vetores",
+          "choices": [
+            { "id": "a", "text": "O personagem anda ~41% mais rápido nas diagonais.", "correct": true, "explanation": "A hipotenusa de (1, 1) tem comprimento √2 ≈ 1,41." },
+            { "id": "b", "text": "O personagem fica imóvel na diagonal.", "correct": false, "explanation": "Ele acelera além do previsto." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "game-fase-2",
+      "number": 2,
+      "badgeTitle": "Engine e Física",
+      "title": "Engines (Godot/Unity), colisões e máquinas de estado",
+      "topics": [
+        {
+          "id": "game-engine",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Cenas, nós/GameObjects e sinais na engine (Godot ou Unity)",
+          "description": "Organize entidades desacopladas usando árvore de cenas/prefabs e eventos (signals/events) em vez de referências globais frágeis.",
+          "tags": ["Godot", "Unity"],
+          "prerequisites": ["game-vetores"],
+          "resources": [
+            { "title": "Your First 2D Game (Godot Docs)", "url": "https://docs.godotengine.org/en/stable/getting_started/first_2d_game/index.html", "lang": "en", "kind": "curso" },
+            { "title": "Unity Learn", "url": "https://learn.unity.com/", "lang": "en", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "game-fsm",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Colisões, física e Máquinas de Estado (FSM)",
+          "description": "Separar comportamentos de Parado, Correndo, Pulando e Atacando com FSM limpa evita dezenas de flags booleanas em conflito.",
+          "tags": ["Física", "FSM"],
+          "prerequisites": ["game-engine"],
+          "resources": [
+            { "title": "State Pattern (Game Programming Patterns)", "url": "https://gameprogrammingpatterns.com/state.html", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "game-p2-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Plataforma 2D simples com coleta de itens",
+          "description": "Crie um nível curto em Godot ou Unity com pulo, plataformas e contador de itens via sinais/eventos.",
+          "steps": ["Configure camadas de colisão.", "Emita sinal ao coletar item.", "Atualize placar na UI."],
+          "definitionOfDone": ["Sem vazamento de colisão no chão.", "UI desacoplada do jogador."]
+        },
+        {
+          "id": "game-p2-int",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Personagem controlado por Máquina de Estados (FSM)",
+          "description": "Implemente Idle, Run, Jump, Fall e Attack em estados separados com transições explícitas.",
+          "steps": ["Defina classe base de estado.", "Mova lógica de entrada para cada estado.", "Adicione animações por estado."],
+          "definitionOfDone": ["Sem conflito entre pulo e ataque.", "Fácil adicionar novo estado."]
+        },
+        {
+          "id": "game-p2-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Vertical Slice completo de 1 fase jogável",
+          "description": "Fase com inimigos com patrulha/perseguição, checkpoint, áudio, menu inicial e tela de vitória/derrota.",
+          "steps": ["Crie IA simples de inimigo.", "Adicione efeitos sonoros e feedback.", "Empacote build executável."],
+          "definitionOfDone": ["Loop completo menu -> jogo -> fim.", "Sem crashes durante 10 min de teste."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "game-f2-q1",
+          "prompt": "Por que usar uma Máquina de Estados Finitos (FSM) para controlar personagens?",
+          "reviewTopicId": "game-fsm",
+          "choices": [
+            { "id": "a", "text": "Para isolar cada comportamento e evitar combinações inválidas de múltiplas flags booleanas.", "correct": true, "explanation": "Garante apenas um estado ativo por vez." },
+            { "id": "b", "text": "Para desenhar sprites 3D automaticamente.", "correct": false, "explanation": "É um padrão de arquitetura comportamental." }
+          ]
+        },
+        {
+          "id": "game-f2-q2",
+          "prompt": "Como sinais/eventos ajudam na organização de cenas?",
+          "reviewTopicId": "game-engine",
+          "choices": [
+            { "id": "a", "text": "Permitem que um objeto avise que algo aconteceu sem depender diretamente da UI ou de outros nós.", "correct": true, "explanation": "Reduz acoplamento entre cena de jogo e interface." },
+            { "id": "b", "text": "Aumentam o uso de memória de vídeo.", "correct": false, "explanation": "É um padrão leve de desacoplamento." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "game-fase-3",
+      "number": 3,
+      "badgeTitle": "Polimento e Publicação",
+      "title": "Save/Load, performance e build multiplataforma",
+      "topics": [
+        {
+          "id": "game-save",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Persistência (Save/Load), UI responsiva e acessibilidade",
+          "description": "Salvar progresso com versão de schema, remapear teclas, legendas claras e controle de volume separado.",
+          "tags": ["UI", "Persistência"],
+          "prerequisites": ["game-fsm"],
+          "resources": [
+            { "title": "Saving Games (Godot Docs)", "url": "https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "game-perf",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Object Pooling, profiling e publicação",
+          "description": "Medir gargalos de CPU/GPU antes de otimizar, reutilizar projéteis/partículas (Object Pool) e exportar builds para Web/Desktop.",
+          "tags": ["Performance", "Build"],
+          "prerequisites": ["game-save"],
+          "resources": [
+            { "title": "Object Pool Pattern", "url": "https://gameprogrammingpatterns.com/object-pool.html", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "game-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Menu de opções com volume e controles",
+          "description": "Tela de pausa salvando volume de música/SFX e sensibilidade em arquivo de configuração.",
+          "steps": ["Separe canais de áudio.", "Salve JSON local.", "Carregue na inicialização."],
+          "definitionOfDone": ["Preferências persistem ao reabrir.", "Navegável por teclado/controle."]
+        },
+        {
+          "id": "game-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Object Pool para projéteis e efeitos",
+          "description": "Substitua instanciação/destruição contínua de tiros por um pool reutilizável medindo queda no garbage collector.",
+          "steps": ["Crie pool pré-alocado.", "Reative em vez de instanciar.", "Compare frame time no profiler."],
+          "definitionOfDone": ["Sem picos de alocação em rajadas.", "Comportamento visual idêntico."]
+        },
+        {
+          "id": "game-p3-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Jogo completo publicado (HTML5 / Desktop)",
+          "description": "Exporte, teste em resolução diferente, gere página de lançamento (ex.: itch.io) com instruções e save versionado.",
+          "steps": ["Faça build Web e Desktop.", "Teste em máquina limpa.", "Publique versão jogável."],
+          "definitionOfDone": ["Save sobrevive a atualização.", "Zero erro no console na build final."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "game-f3-q1",
+          "prompt": "Quando o padrão Object Pool traz maior benefício?",
+          "reviewTopicId": "game-perf",
+          "choices": [
+            { "id": "a", "text": "Quando muitos objetos curtos (tiros, partículas, inimigos) são criados e destruídos toda hora.", "correct": true, "explanation": "Evita alocações repetidas e pausas de Garbage Collector." },
+            { "id": "b", "text": "Para objetos únicos como o menu principal.", "correct": false, "explanation": "Não há ganho para objetos criados uma vez." }
+          ]
+        },
+        {
+          "id": "game-f3-q2",
+          "prompt": "Por que incluir número de versão no arquivo de Save?",
+          "reviewTopicId": "game-save",
+          "choices": [
+            { "id": "a", "text": "Para poder migrar saves antigos com segurança quando você atualizar o jogo.", "correct": true, "explanation": "Sem versão, novos campos quebram saves de jogadores antigos." },
+            { "id": "b", "text": "Para reduzir FPS.", "correct": false, "explanation": "Serve para compatibilidade de dados." }
+          ]
+        }
+      ]
+    }
+  ]
+}

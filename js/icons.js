@@ -21,6 +21,10 @@ const SVG_ICONS = {
   'product-manager': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3" fill="#FEF3C7" stroke="#D97706" stroke-width="1.8"/><path d="M8 14v-3M12 14V8M16 14v-5" stroke="#D97706" stroke-width="2" stroke-linecap="round"/></svg>',
   'ai-engineer': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l1.8 4.8L18.5 9.5l-4.7 1.7L12 16l-1.8-4.8L5.5 9.5l4.7-1.7L12 3z" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.8" stroke-linejoin="round"/><circle cx="18" cy="17.5" r="2.2" fill="#10B981"/></svg>',
   mlops: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="7" cy="12" r="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.8"/><circle cx="17" cy="7" r="2.5" fill="#D1FAE5" stroke="#059669" stroke-width="1.8"/><circle cx="17" cy="17" r="2.5" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.8"/><path d="M9.7 10.7l4.8-2.5M9.7 13.3l4.8 2.5" stroke="#64748B" stroke-width="1.8"/></svg>',
+  'game-dev': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="7" width="18" height="11" rx="5" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.8"/><path d="M8 10.5v4M6 12.5h4" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/><circle cx="15.5" cy="11.5" r="1" fill="#10B981"/><circle cx="17.5" cy="13.5" r="1" fill="#EC4899"/></svg>',
+  'network-engineer': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="5" r="2.5" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.8"/><circle cx="6" cy="18" r="2.5" fill="#D1FAE5" stroke="#059669" stroke-width="1.8"/><circle cx="18" cy="18" r="2.5" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.8"/><path d="M10.7 7.2L7.2 15.8M13.3 7.2l3.5 8.6M8.5 18h7" stroke="#64748B" stroke-width="1.8"/></svg>',
+  devsecops: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 4.8-3 8.8-7 10-4-1.2-7-5.2-7-10V6l7-3z" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 12l1.8 1.8 3.5-3.6" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'bi-analyst': '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2.5" fill="#FEF3C7" stroke="#D97706" stroke-width="1.8"/><path d="M7.5 16v-4M12 16V9M16.5 16v-6" stroke="#D97706" stroke-width="2.2" stroke-linecap="round"/></svg>',
 };
 
 const TRACK_DEVICONS = {
@@ -36,6 +40,7 @@ const TRACK_DEVICONS = {
   linux: 'devicon-linux-plain',
   docker: 'devicon-docker-plain colored',
   kubernetes: 'devicon-kubernetes-plain colored',
+  'csharp-dotnet': 'devicon-csharp-plain colored',
 };
 
 const TOPIC_RULES = [
@@ -63,6 +68,11 @@ const TOPIC_RULES = [
   [/\b(python|venv|unittest|ruff|mypy|pyproject|dataclasses)\b/, { devicon: 'devicon-python-plain colored' }],
   [/\b(spring)\b/, { devicon: 'devicon-spring-original colored' }],
   [/\b(java|jvm|maven|gradle)\b/, { devicon: 'devicon-java-plain colored' }],
+  [/\b(c#|csharp|\.net|dotnet|aspnet|ef core|linq|xunit)\b/, { devicon: 'devicon-csharp-plain colored' }],
+  [/\b(godot)\b/, { devicon: 'devicon-godot-plain colored' }],
+  [/\b(unity)\b/, { devicon: 'devicon-unity-plain' }],
+  [/\b(game loop|fsm|jogos)\b/, { svg: 'game-dev' }],
+  [/\b(sast|dast|sbom|trivy|opa)\b/, { svg: 'devsecops' }],
   [/\b(flutter|dart)\b/, { devicon: 'devicon-flutter-plain colored' }],
   [/\b(android|kotlin)\b/, { devicon: 'devicon-android-plain colored' }],
   [/\b(swift|ios)\b/, { devicon: 'devicon-swift-plain colored' }],

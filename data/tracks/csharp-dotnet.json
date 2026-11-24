@@ -1,0 +1,251 @@
+{
+  "id": "csharp-dotnet",
+  "name": "C# e .NET",
+  "tagline": "Back-end robusto com C# moderno, ASP.NET Core, Entity Framework e testes",
+  "description": "Desenvolvimento back-end no ecossistema Microsoft moderno: C# tipado e assíncrono, LINQ, Minimal APIs e Controllers com ASP.NET Core, Entity Framework Core, autenticação JWT e xUnit.",
+  "phases": [
+    {
+      "id": "cs-fase-1",
+      "number": 1,
+      "badgeTitle": "Base C#",
+      "title": "C# moderno, coleções, LINQ e async/await",
+      "topics": [
+        {
+          "id": "cs-base",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Tipos, records, nullability e OOP em C#",
+          "description": "Sintaxe moderna do C#, tipos de referência anuláveis (`nullable`), `record`, interfaces e encapsulamento limpo.",
+          "tags": ["C#", ".NET"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Documentação C# (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "cs-linq",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "LINQ, coleções e programação assíncrona (`async`/`await`)",
+          "description": "Consultar e transformar coleções declarativamente com LINQ e evitar bloqueios de thread com `Task` e `CancellationToken`.",
+          "tags": ["C#", "LINQ"],
+          "prerequisites": ["cs-base"],
+          "resources": [
+            { "title": "LINQ in C# (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/linq/", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cs-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Analisador de arquivo CSV em C# via CLI",
+          "description": "Leia um CSV de pedidos e gere resumo por categoria usando `record` e LINQ.",
+          "steps": ["Crie modelo `record`.", "Agrupe e ordene com LINQ.", "Trate linhas inválidas sem crash."],
+          "definitionOfDone": ["Compila sem warnings de nullability.", "Saída clara no terminal."]
+        },
+        {
+          "id": "cs-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Cliente HTTP assíncrono com `HttpClientFactory` e `CancellationToken`",
+          "description": "Consuma uma API REST pública em paralelo respeitando timeout e cancelamento.",
+          "steps": ["Use `HttpClient` corretamente.", "Propague `CancellationToken`.", "Desserialize com `System.Text.Json`."],
+          "definitionOfDone": ["Sem `Task.Result` bloqueando threads.", "Trata falhas HTTP."]
+        },
+        {
+          "id": "cs-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Processador em lote com `Channel<T>` e `BackgroundService`",
+          "description": "Crie fila em memória concorrente em .NET com trabalhadores assíncronos e shutdown gracioso.",
+          "steps": ["Configure `Channel.CreateBounded`.", "Implemente `BackgroundService`.", "Teste parada limpa com Ctrl+C."],
+          "definitionOfDone": ["Sem perda de itens em fila durante desligamento.", "Limite de memória respeitado."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cs-f1-q1",
+          "prompt": "Por que evitar `.Result` ou `.Wait()` em chamadas assíncronas (`Task`) dentro de APIs ASP.NET Core?",
+          "reviewTopicId": "cs-linq",
+          "choices": [
+            { "id": "a", "text": "Porque bloqueia threads do pool e pode causar queda severa de throughput (thread pool starvation) e deadlocks.", "correct": true, "explanation": "Use `await` de ponta a ponta." },
+            { "id": "b", "text": "Porque `await` só funciona no Linux.", "correct": false, "explanation": "Funciona em todas as plataformas." }
+          ]
+        },
+        {
+          "id": "cs-f1-q2",
+          "prompt": "Para que serve habilitar Nullable Reference Types em projetos C# modernos?",
+          "reviewTopicId": "cs-base",
+          "choices": [
+            { "id": "a", "text": "Detectar possíveis referências nulas em tempo de compilação antes de virarem `NullReferenceException` em produção.", "correct": true, "explanation": "Torna explicitamente claro o que pode ou não ser nulo." },
+            { "id": "b", "text": "Remover todos os tipos numéricos.", "correct": false, "explanation": "Aumenta a segurança de tipos." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs-fase-2",
+      "number": 2,
+      "badgeTitle": "ASP.NET Core e EF",
+      "title": "Web APIs com ASP.NET Core e Entity Framework",
+      "topics": [
+        {
+          "id": "cs-aspnet",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "ASP.NET Core: Minimal APIs, DI e Middleware",
+          "description": "Construir endpoints HTTP limpos com injeção de dependência nativa, validação de DTOs e tratamento global de erros (`ProblemDetails`).",
+          "tags": ["ASP.NET Core", ".NET"],
+          "prerequisites": ["cs-linq"],
+          "resources": [
+            { "title": "Visão geral do ASP.NET Core (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/aspnet/core/", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "cs-ef",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Entity Framework Core, Migrations e PostgreSQL/SQL",
+          "description": "Mapear entidades, gerenciar migrações, usar `AsNoTracking()` em leituras e evitar queries N+1.",
+          "tags": ["EF Core", "SQL"],
+          "prerequisites": ["cs-aspnet"],
+          "resources": [
+            { "title": "Entity Framework Core (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/ef/core/", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cs-p2-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Minimal API REST de tarefas com OpenAPI/Swagger",
+          "description": "Crie endpoints CRUD com DTOs separados, validação e documentação automática via OpenAPI.",
+          "steps": ["Separe DTOs de entrada/saída.", "Retorne códigos HTTP semânticos.", "Configure Swagger/OpenAPI."],
+          "definitionOfDone": ["Documentação interativa funcionando.", "Retorna 400/404 adequadamente."]
+        },
+        {
+          "id": "cs-p2-int",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "API ASP.NET Core + EF Core + PostgreSQL",
+          "description": "Persista pedidos e itens com migrations versionadas, paginação e consultas sem N+1.",
+          "steps": ["Configure `DbContext` e migrations.", "Use `AsNoTracking()` nas listagens.", "Implemente paginação."],
+          "definitionOfDone": ["Logs SQL mostram queries enxutas.", "Banco sobe via Docker Compose."]
+        },
+        {
+          "id": "cs-p2-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "API com autenticação JWT, roles e `ProblemDetails`",
+          "description": "Adicione login com hash seguro, autorização por política (`Policy`) e respostas padronizadas RFC 7807.",
+          "steps": ["Configure `JwtBearer`.", "Proteja rotas administrativas.", "Padronize exceções em middleware."],
+          "definitionOfDone": ["Rotas protegidas retornam 401/403 corretamente.", "Sem stack trace vazado em produção."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cs-f2-q1",
+          "prompt": "Qual a vantagem de usar `AsNoTracking()` no Entity Framework Core em consultas de apenas leitura?",
+          "reviewTopicId": "cs-ef",
+          "choices": [
+            { "id": "a", "text": "Evita que o Change Tracker mantenha cópias das entidades na memória, deixando listagens mais rápidas e leves.", "correct": true, "explanation": "Ótimo ganho para endpoints GET." },
+            { "id": "b", "text": "Apaga registros do banco.", "correct": false, "explanation": "Apenas desativa o rastreamento de alterações em memória." }
+          ]
+        },
+        {
+          "id": "cs-f2-q2",
+          "prompt": "Por que usar DTOs em vez de expor diretamente as entidades do banco na API?",
+          "reviewTopicId": "cs-aspnet",
+          "choices": [
+            { "id": "a", "text": "Para controlar exatamente o contrato HTTP, evitar vazamento de campos sensíveis e desacoplar o esquema do banco.", "correct": true, "explanation": "Impede over-posting e quebra de clientes ao alterar tabelas." },
+            { "id": "b", "text": "Porque ASP.NET não consegue serializar classes.", "correct": false, "explanation": "Serializa normalmente; DTO é boa prática de arquitetura e segurança." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs-fase-3",
+      "number": 3,
+      "badgeTitle": "Testes e Produção",
+      "title": "Testes integrados (xUnit), observabilidade e Docker",
+      "topics": [
+        {
+          "id": "cs-tests",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Testes unitários e de integração com xUnit e WebApplicationFactory",
+          "description": "Testar regras de domínio isoladas e subir a API em teste integrado real com `WebApplicationFactory`.",
+          "tags": ["xUnit", "Testes"],
+          "prerequisites": ["cs-ef"],
+          "resources": [
+            { "title": "Integration tests in ASP.NET Core", "url": "https://learn.microsoft.com/pt-br/aspnet/core/test/integration-tests", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "cs-prod",
+          "level": "avancado",
+          "hours": 6,
+          "title": "OpenTelemetry, HealthChecks e containers .NET",
+          "description": "Publicar API .NET em container multi-stage enxuto com `/health`, logs estruturados e métricas OpenTelemetry.",
+          "tags": ["Docker", "Observabilidade"],
+          "prerequisites": ["cs-tests"],
+          "resources": [
+            { "title": "Containerize a .NET app (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dotnet/core/docker/build-container", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cs-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Suíte de testes de regra de negócio com xUnit",
+          "description": "Cubra cálculos de desconto e validação de domínio com `[Fact]` e `[Theory]` no xUnit.",
+          "steps": ["Crie projeto `xUnit`.", "Escreva casos de borda com `[Theory]`.", "Rode `dotnet test`."],
+          "definitionOfDone": ["Todos os testes passam rápido.", "Cobertura clara de casos de erro."]
+        },
+        {
+          "id": "cs-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Testes de rota HTTP com `WebApplicationFactory`",
+          "description": "Valide autenticação, validação de entrada e códigos HTTP 201/400/404 diretamente nos endpoints reais.",
+          "steps": ["Configure `WebApplicationFactory<Program>`.", "Envie requests reais com `HttpClient`.", "Valide payload e status."],
+          "definitionOfDone": ["Testa pipeline completo incluindo middleware.", "Execução determinística."]
+        },
+        {
+          "id": "cs-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "API .NET dockerizada com HealthCheck e OpenTelemetry",
+          "description": "Build multi-stage `.NET` usando usuário não-root, endpoint `/health` validando banco e rastreamento de requests.",
+          "steps": ["Configure `MapHealthChecks`.", "Exporte traces com OpenTelemetry.", "Empacote com Dockerfile multi-stage."],
+          "definitionOfDone": ["Imagem final enxuta sem SDK.", "`/health` verifica banco de verdade."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cs-f3-q1",
+          "prompt": "Qual a utilidade de `WebApplicationFactory<Program>` no ASP.NET Core?",
+          "reviewTopicId": "cs-tests",
+          "choices": [
+            { "id": "a", "text": "Subir o servidor da aplicação em memória nos testes para validar rotas, middlewares, DI e serialização juntos.", "correct": true, "explanation": "Permite testes de integração fiéis sem abrir porta pública." },
+            { "id": "b", "text": "Gerar arquivos CSS.", "correct": false, "explanation": "É usado para testes de integração de APIs." }
+          ]
+        },
+        {
+          "id": "cs-f3-q2",
+          "prompt": "Por que usar build multi-stage no Dockerfile de uma aplicação .NET?",
+          "reviewTopicId": "cs-prod",
+          "choices": [
+            { "id": "a", "text": "Compilar usando a imagem SDK e copiar apenas os binários para a imagem `aspnet` runtime, reduzindo tamanho e superfície de ataque.", "correct": true, "explanation": "Evita levar compilador e caches para produção." },
+            { "id": "b", "text": "Porque C# não roda em Linux.", "correct": false, "explanation": ".NET moderno é multiplataforma." }
+          ]
+        }
+      ]
+    }
+  ]
+}

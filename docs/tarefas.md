@@ -35,11 +35,11 @@ Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 - [x] Product Manager / Gestão de Produto (discovery, métricas, priorização)
 - [x] Engenharia de IA (LLMs, RAG, agentes, avaliação)
 - [x] MLOps (pipelines, deploy e monitoramento de modelos)
-- [ ] Desenvolvimento de Jogos (game loop, física, Godot/Unity)
-- [ ] Engenharia de Redes (TCP/IP, roteamento, DNS, VPN, segurança de rede)
-- [ ] DevSecOps (AppSec em CI/CD, análise estática/dinâmica, contêineres)
-- [ ] Analista de BI (modelagem dimensional, Power BI/Metabase, KPIs)
-- [ ] C# / .NET ou PHP / Laravel
+- [x] Desenvolvimento de Jogos (game loop, física, Godot/Unity)
+- [x] Engenharia de Redes (TCP/IP, roteamento, DNS, VPN, segurança de rede)
+- [x] DevSecOps (AppSec em CI/CD, análise estática/dinâmica, contêineres)
+- [x] Analista de BI (modelagem dimensional, Power BI/Metabase, KPIs)
+- [x] C# / .NET ou PHP / Laravel
 
 ### Linguagens e tecnologias (~12)
 - [ ] Linguagens: Go, Rust, C / C++, C#, PHP

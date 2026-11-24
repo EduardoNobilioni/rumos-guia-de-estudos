@@ -21,6 +21,8 @@ const LANGUAGE_RULES = [
   [/\b(machine learning|ml|ia|llm|rag|modelo|regressao|classificacao|spark|duckdb|dbt|etl|mlflow|drift)\b/, 'Dados/ML'],
   [/\b(ux|ui|figma|wireframe|heuristica|usabilidade|design system)\b/, 'UX/UI'],
   [/\b(produto|discovery|rice|prd)\b/, 'Produto'],
+  [/\b(c#|csharp|\.net|dotnet|aspnet|xunit|ef core)\b/, 'C# / .NET'],
+  [/\b(godot|unity|game loop|jogos|fsm)\b/, 'Jogos'],
 ];
 
 const TRACK_DEFAULT_LANGS = {
@@ -42,6 +44,11 @@ const TRACK_DEFAULT_LANGS = {
   'product-manager': ['Produto'],
   'ai-engineer': ['Python', 'Dados/ML'],
   mlops: ['Python', 'Docker', 'Dados/ML'],
+  'game-dev': ['Jogos', 'C# / .NET'],
+  'network-engineer': ['Linux', 'Segurança'],
+  devsecops: ['Segurança', 'Docker', 'Git'],
+  'bi-analyst': ['SQL', 'Power BI'],
+  'csharp-dotnet': ['C# / .NET', 'SQL'],
   computacao: ['Algoritmos', 'Linux'],
   algoritmos: ['Algoritmos', 'Python'],
   'banco-de-dados': ['SQL'],

@@ -1,0 +1,239 @@
+{
+  "id": "bi-analyst",
+  "name": "Analista de BI",
+  "tagline": "Modelagem dimensional, ETL analítico, KPIs executivos e governança de painéis",
+  "description": "Business Intelligence orientado a decisão: levantamento de indicadores com áreas de negócio, Star Schema, SQL analítico, Power BI / Metabase, storytelling e governança de dados.",
+  "phases": [
+    {
+      "id": "bi-fase-1",
+      "number": 1,
+      "badgeTitle": "Indicadores e Dados",
+      "title": "KPIs de negócio e modelagem dimensional (Star Schema)",
+      "topics": [
+        {
+          "id": "bi-kpis",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Levantamento de requisitos e definição de KPIs",
+          "description": "Traduzir perguntas vagas em indicadores com fórmula explícita, granularidade, dono e meta antes de abrir qualquer ferramenta visual.",
+          "tags": ["KPIs", "Negócio"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Metabase Learn — BI Basics", "url": "https://www.metabase.com/learn/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "bi-star",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Modelagem dimensional: Tabelas Fato, Dimensão e Star Schema",
+          "description": "Por que painéis travam com tabelão único ou 15 joins circulares: separe eventos mensuráveis (fato) de contexto (dimensão).",
+          "tags": ["Star Schema", "Modelagem"],
+          "prerequisites": ["bi-kpis"],
+          "resources": [
+            { "title": "Understand Star Schema (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/power-bi/guidance/star-schema", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bi-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Dicionário de KPIs de uma loja ou SaaS",
+          "description": "Defina 8 indicadores (receita, ticket médio, churn, margem...) com fórmula SQL, unidade e frequência.",
+          "steps": ["Defina pergunta de negócio de cada KPI.", "Escreva fórmula sem ambiguidade.", "Indique tabela fonte."],
+          "definitionOfDone": ["Sem duas definições diferentes para o mesmo nome.", "Granularidade explícita."]
+        },
+        {
+          "id": "bi-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Desenho de Star Schema a partir de CSVs brutos",
+          "description": "Modele 1 tabela fato de vendas e 4 dimensões (calendário, cliente, produto, canal) removendo redundâncias.",
+          "steps": ["Identifique o grão da tabela fato.", "Crie tabela dimensão calendário.", "Valide cardinalidade 1:N."],
+          "definitionOfDone": ["Sem relacionamento N:N direto sem ponte.", "Chaves limpas."]
+        },
+        {
+          "id": "bi-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Camada analítica em SQL com testes de conciliação",
+          "description": "Crie views/tabelas dimensionais em PostgreSQL/DuckDB e valide que totais batem com os dados originais.",
+          "steps": ["Escreva queries CTEs idempotentes.", "Compare soma bruta vs. modelo final.", "Documente linhagem."],
+          "definitionOfDone": ["Diferença zero nos valores financeiros.", "Queries executam rápido."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bi-f1-q1",
+          "prompt": "Em um Star Schema, o que fica na tabela Fato vs. nas tabelas Dimensão?",
+          "reviewTopicId": "bi-star",
+          "choices": [
+            { "id": "a", "text": "Fato guarda eventos/medições numéricas e chaves; Dimensões guardam atributos descritivos usados para filtrar e agrupar.", "correct": true, "explanation": "Essa separação melhora performance e evita filtros ambíguos." },
+            { "id": "b", "text": "Fato guarda só textos de cadastro.", "correct": false, "explanation": "Cadastros ficam nas dimensões." }
+          ]
+        },
+        {
+          "id": "bi-f1-q2",
+          "prompt": "Por que definir fórmula e grão de um KPI antes de construir o painel?",
+          "reviewTopicId": "bi-kpis",
+          "choices": [
+            { "id": "a", "text": "Para evitar que áreas diferentes calculem o mesmo indicador com números divergentes.", "correct": true, "explanation": "Consistência gera confiança nos dados." },
+            { "id": "b", "text": "Para escolher a cor do gráfico.", "correct": false, "explanation": "Serve para rigor conceitual dos números." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bi-fase-2",
+      "number": 2,
+      "badgeTitle": "Power BI e DAX",
+      "title": "ETL, Power BI e medidas analíticas (DAX)",
+      "topics": [
+        {
+          "id": "bi-powerbi",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Power Query (ETL) e Power BI / Metabase",
+          "description": "Tratamento de tipos, datas locais, remoção de duplicatas no Power Query e construção de visuais claros.",
+          "tags": ["Power BI", "ETL"],
+          "prerequisites": ["bi-star"],
+          "resources": [
+            { "title": "Introdução ao Power BI (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/training/powerplatform/power-bi", "lang": "pt", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "bi-dax",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "DAX essencial: contexto de filtro, CALCULATE e inteligência de tempo",
+          "description": "Criar medidas reutilizáveis (YoY, MoM, acumulado) entendendo a diferença entre coluna calculada e medida dinâmica.",
+          "tags": ["Power BI", "DAX"],
+          "prerequisites": ["bi-powerbi"],
+          "resources": [
+            { "title": "DAX Overview (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dax/dax-overview", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bi-p2-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Tratamento de planilha bagunçada no Power Query",
+          "description": "Limpe um arquivo CSV real com datas inconsistentes, nulos e cabeçalhos extras de forma 100% reproduzível.",
+          "steps": ["Remova linhas inválidas.", "Padronize moeda e data.", "Transforme colunas em linhas (Unpivot)."],
+          "definitionOfDone": ["Atualização roda sem intervenção manual.", "Tipos validados."]
+        },
+        {
+          "id": "bi-p2-int",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Painel executivo de vendas em Power BI ou Metabase",
+          "description": "Dashboard com Star Schema, 6 medidas DAX (YoY, margem, meta) e drill-through por categoria.",
+          "steps": ["Ligue fato e dimensões.", "Escreva medidas DAX explícitas.", "Adicione filtros de período e região."],
+          "definitionOfDone": ["Sem colunas calculadas desnecessárias.", "Leitura clara em 10 segundos."]
+        },
+        {
+          "id": "bi-p2-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Painel com Row-Level Security (RLS) e comparação de metas",
+          "description": "Implemente controle de acesso por perfil regional e compare realizado vs. orçado em múltiplas granularidades.",
+          "steps": ["Crie papéis RLS.", "Teste visão como usuário restrito.", "Otimize medidas lentas."],
+          "definitionOfDone": ["Gerente regional vê apenas sua região.", "Tempo de carregamento fluido."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bi-f2-q1",
+          "prompt": "Em Power BI/DAX, por que preferir Medidas a Colunas Calculadas para totais e razões (como margem %)?",
+          "reviewTopicId": "bi-dax",
+          "choices": [
+            { "id": "a", "text": "Medidas são avaliadas dinamicamente conforme os filtros do painel e não inflam a memória linha a linha.", "correct": true, "explanation": "Razões pré-calculadas por linha ficam erradas quando agregadas." },
+            { "id": "b", "text": "Porque colunas calculadas não aceitam números.", "correct": false, "explanation": "A questão é agregação dinâmica e memória." }
+          ]
+        },
+        {
+          "id": "bi-f2-q2",
+          "prompt": "Para que serve o Unpivot (transformar colunas em linhas) no Power Query?",
+          "reviewTopicId": "bi-powerbi",
+          "choices": [
+            { "id": "a", "text": "Normalizar planilhas largas (ex.: uma coluna por mês) para formato tabular analisável.", "correct": true, "explanation": "Ferramentas de BI trabalham muito melhor com coluna 'Data' e 'Valor'." },
+            { "id": "b", "text": "Apagar todos os dados históricos.", "correct": false, "explanation": "Apenas reorganiza a estrutura tabular." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bi-fase-3",
+      "number": 3,
+      "badgeTitle": "Storytelling e Governança",
+      "title": "Comunicação visual, performance e governança",
+      "topics": [
+        {
+          "id": "bi-story",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Storytelling com dados e governança de self-service BI",
+          "description": "Escolher o gráfico certo (sem pizza de 12 fatias), destacar a conclusão no título e organizar atualização programada e permissões.",
+          "tags": ["Storytelling", "Governança"],
+          "prerequisites": ["bi-dax"],
+          "resources": [
+            { "title": "Data Visualization Guidelines (Microsoft)", "url": "https://learn.microsoft.com/pt-br/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a", "lang": "pt", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "bi-p3-ini",
+          "level": "iniciante",
+          "hours": 3,
+          "title": "Redesign de um gráfico confuso",
+          "description": "Pegue um gráfico poluído (pizza/3D) e refaça em barras ordenadas com título que resume a conclusão.",
+          "steps": ["Remova grade excessiva e 3D.", "Ordene valores.", "Escreva título informativo."],
+          "definitionOfDone": ["Mensagem visível em 5 segundos.", "Zero distorção visual."]
+        },
+        {
+          "id": "bi-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Guia de estilo e glossário para dashboards da equipe",
+          "description": "Padronize paleta acessível, formatação numérica (R$, %), posição de filtros e página de metadados.",
+          "steps": ["Crie tema JSON/guia visual.", "Adicione página 'Sobre os dados'.", "Documente horário de atualização."],
+          "definitionOfDone": ["Cores distinguíveis.", "Transparência sobre fonte e última carga."]
+        },
+        {
+          "id": "bi-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Apresentação executiva de diagnóstico comercial",
+          "description": "Construa um case completo mostrando queda de receita por segmento, diagnóstico raiz e 2 recomendações acionáveis.",
+          "steps": ["Analise margem, volume e churn.", "Isole qual região puxou a queda.", "Apresente em 5 slides + painel."],
+          "definitionOfDone": ["Cada gráfico responde a uma pergunta.", "Inclui recomendação concreta."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "bi-f3-q1",
+          "prompt": "Qual o erro mais comum em painéis executivos que dificulta a tomada de decisão?",
+          "reviewTopicId": "bi-story",
+          "choices": [
+            { "id": "a", "text": "Encher a tela com dezenas de gráficos desconexos sem contexto de meta nem hierarquia visual.", "correct": true, "explanation": "Um bom painel responde às principais decisões daquela área." },
+            { "id": "b", "text": "Mostrar comparação com o mês ou ano anterior.", "correct": false, "explanation": "Comparação dá contexto essencial." }
+          ]
+        },
+        {
+          "id": "bi-f3-q2",
+          "prompt": "Por que todo painel em produção precisa exibir data/hora da última atualização e glossário?",
+          "reviewTopicId": "bi-story",
+          "choices": [
+            { "id": "a", "text": "Para evitar decisões com dados defasados ou interpretações erradas sobre as métricas.", "correct": true, "explanation": "Transparência evita desconfiança e erros operacionais." },
+            { "id": "b", "text": "Para deixar o arquivo maior.", "correct": false, "explanation": "Faz parte de governança de BI." }
+          ]
+        }
+      ]
+    }
+  ]
+}
