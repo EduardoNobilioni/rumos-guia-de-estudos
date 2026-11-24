@@ -1,4 +1,4 @@
-const CACHE = 'rumos-cache-v6';
+const CACHE = 'rumos-cache-v7';
 const PRECACHE = [
   './',
   './index.html',

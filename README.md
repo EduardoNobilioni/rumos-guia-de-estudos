@@ -13,6 +13,7 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 - Escolher carreira, fundamentos e linguagens, nível e horas. O trajeto combinado junta as trilhas, tira tópico repetido e respeita pré-requisito.
 - No Full-Stack, escolher uma linguagem de back-end. Nada vem marcado. Ela troca só a parte de linguagem do servidor; fundamentos, front-end, HTTP, banco e deploy continuam. Sem escolha salva, a versão em Node continua até você escolher.
 - Em Front-end e Full-Stack, escolher um framework de interface (React, Vue ou Angular). HTML, CSS e JavaScript ficam. Sem escolha salva, o conteúdo em React continua.
+- Em Jogos, escolher C# ou C e C++. O resto da trilha fica. Mobile, Dados e nuvem não pedem caminho: ainda não há trilha para o outro lado.
 - Marcar tópico, anotar, ocultar, reordenar, criar tópico e link seu.
 - Ideias de projeto com busca, doze por página.
 - Autoavaliação por etapa. Abaixo de 70% aparece revisão. Não é nota.

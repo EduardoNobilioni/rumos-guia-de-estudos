@@ -1,5 +1,6 @@
 import {
   applyStudySelection, backendEcosystemChoices, backendLanguageChoices, blocksFullStackCompanion, careerIncludesFrontend,
+  careerSplitOptions,
   clampHours, emptyTrackState, ensureTrack, formatDuration, FRONTEND_FRAMEWORK_IDS, frontendFrameworkChoices,
   fullstackOnboardingSteps, FULLSTACK_TRACK_ID, groupTracks, projectPlanStats, roadmapStats, tracksMatching,
 } from '../model.js';
@@ -20,6 +21,7 @@ const STEP_DOM = {
   language: 'onbStepLanguage',
   ecosystem: 'onbStepEcosystem',
   framework: 'onbStepUiFramework',
+  path: 'onbStepPath',
   companions: 'onbStep2',
   level: 'onbStep3',
   hours: 'onbStep4',
@@ -31,6 +33,7 @@ const STEP_COPY = {
   language: ['Qual linguagem no back-end?', 'Escolha uma. Nenhuma vem marcada. HTTP, REST, banco, autenticação, testes e deploy continuam.'],
   ecosystem: ['Qual framework de back-end?', 'Escolha um. Ele entra só no lugar do framework de servidor. O restante da trilha permanece.'],
   framework: ['Qual framework de front-end?', 'Escolha um. Nenhuma vem marcada. HTML, CSS e JavaScript continuam.'],
+  path: ['Qual caminho nesta parte?', 'Escolha um. Nada vem marcado. O resto da trilha continua na mesma ordem.'],
   companions: ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque as trilhas adicionais e clique em Continuar.'],
   level: ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
   hours: ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
@@ -63,6 +66,19 @@ export function initOnboarding(api) {
       'radio',
       trackIconHtml(track.id, 'sm', track.name),
     )).join('') || '<p class="muted">Nenhuma linguagem de back-end com trilha.</p>';
+  }
+
+  function renderPath() {
+    const options = careerSplitOptions(draft.trackId, catalog());
+    $('onbPathList').innerHTML = options.map((track) => choice(
+      'careerPath',
+      track.id,
+      track.name,
+      track.tagline || '',
+      draft.careerChoiceId === track.id,
+      'radio',
+      trackIconHtml(track.id, 'sm', track.name),
+    )).join('');
   }
 
   function renderUiFramework() {
@@ -107,6 +123,7 @@ export function initOnboarding(api) {
     renderLanguages();
     renderEcosystem();
     renderUiFramework();
+    renderPath();
   }
 
   function filter(query) {
@@ -148,7 +165,22 @@ export function initOnboarding(api) {
     if (id === 'home') {
       $('onbNavRow').hidden = true;
       const state = api.getState();
-      $('welcomeBackBtn').hidden = !(state.profile.onboarded && state.tracks[state.activeTrackId]);
+      const current = state.tracks[state.activeTrackId];
+      const ready = !!(state.profile.onboarded && current && current.level);
+      $('welcomeBackBtn').hidden = !ready;
+      $('welcomeContinueMeta').hidden = !ready;
+      $('welcomeStartBtn').className = ready ? 'btn btn-secondary' : 'btn btn-primary';
+      $('welcomeBackBtn').className = 'btn btn-primary';
+      if (ready) {
+        const name = catalog().find((item) => item.id === state.activeTrackId)?.name || 'Trilha';
+        let progress = '';
+        try {
+          const stats = roadmapStats(api.activeView().phases);
+          if (stats.required) progress = ` · ${stats.requiredDone} de ${stats.required} tópicos`;
+        } catch { /* trilha ainda não carregada */ }
+        $('welcomeBackBtn').textContent = 'Continuar trilha';
+        $('welcomeContinueMeta').textContent = `${name}${progress}`;
+      }
       watchReveals($('onbStep0'));
       return;
     }
@@ -156,6 +188,7 @@ export function initOnboarding(api) {
     if (id === 'language') renderLanguages();
     if (id === 'ecosystem') renderEcosystem();
     if (id === 'framework') renderUiFramework();
+    if (id === 'path') renderPath();
     if (id === 'companions') renderChoices();
     $(STEP_DOM[id]).hidden = false;
     const [heading, lead] = STEP_COPY[id];
@@ -205,6 +238,12 @@ export function initOnboarding(api) {
       if (at >= 0) goToStep(at);
       return;
     }
+    if (careerSplitOptions(draft.trackId, catalog()).length && !draft.careerChoiceId) {
+      toast('Escolha um caminho.', 'error');
+      const at = steps().indexOf('path');
+      if (at >= 0) goToStep(at);
+      return;
+    }
     const ids = companions().filter((id) => id !== draft.trackId
       && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id))
       && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(id)));
@@ -213,7 +252,8 @@ export function initOnboarding(api) {
       ? [draft.backendLanguageId, ...draft.backendEcosystemIds]
       : [];
     const frameworkIds = careerIncludesFrontend(draft.trackId) && draft.frontendFrameworkId ? [draft.frontendFrameworkId] : [];
-    await api.ensureTracks([draft.trackId, ...ids, ...languageIds, ...frameworkIds]);
+    const pathIds = draft.careerChoiceId ? [draft.careerChoiceId] : [];
+    await api.ensureTracks([draft.trackId, ...ids, ...languageIds, ...frameworkIds, ...pathIds]);
     applyStudySelection(api.getState(), {
       trackId: draft.trackId,
       level: draft.level,
@@ -222,6 +262,7 @@ export function initOnboarding(api) {
       backendLanguageId: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendLanguageId : null,
       backendEcosystemIds: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendEcosystemIds : [],
       frontendFrameworkId: careerIncludesFrontend(draft.trackId) ? draft.frontendFrameworkId : null,
+      careerChoiceId: draft.careerChoiceId,
     });
     const primary = api.getState().tracks[draft.trackId];
     if (primary.studyPlan) syncPlanWeeklyHours(primary.studyPlan, draft.hours);
@@ -262,6 +303,11 @@ export function initOnboarding(api) {
         const flow = steps();
         if (flow[draft.step] === 'framework' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
+      if (input.name === 'careerPath') {
+        draft.careerChoiceId = input.value;
+        const flow = steps();
+        if (flow[draft.step] === 'path' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
+      }
       if (input.name === 'companion') draft.companionIds = companions();
       if (input.name === 'level') {
         draft.level = input.value;
@@ -298,6 +344,8 @@ export function initOnboarding(api) {
       }
       if (id === 'framework' && !selected('uiFramework')) return toast('Escolha o framework de front-end.', 'error');
       if (id === 'framework') draft.frontendFrameworkId = selected('uiFramework');
+      if (id === 'path' && !selected('careerPath')) return toast('Escolha um caminho.', 'error');
+      if (id === 'path') draft.careerChoiceId = selected('careerPath');
       if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(item)) && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(item)));
       if (id === 'level' && !selected('level')) return toast('Escolha um nível.', 'error');
       if (id === 'level') draft.level = selected('level');
@@ -325,11 +373,13 @@ export function initOnboarding(api) {
       draft.backendLanguageId = state.profile.backendLanguageId || null;
       draft.backendEcosystemIds = [...(state.profile.backendEcosystemIds || [])];
       draft.frontendFrameworkId = state.profile.frontendFrameworkId || null;
+      draft.careerChoiceId = state.profile.careerChoices?.[state.activeTrackId] || null;
     }
     if (mode === 'create') {
       draft.backendLanguageId = null;
       draft.backendEcosystemIds = [];
       draft.frontendFrameworkId = null;
+      draft.careerChoiceId = null;
     }
     renderChoices();
     api.showScreen('onboarding');
@@ -341,6 +391,10 @@ export function initOnboarding(api) {
     }
     if (mode === 'retake' && step == null && careerIncludesFrontend(state.activeTrackId) && !state.profile.frontendFrameworkId) {
       const at = flow.indexOf('framework');
+      return goToStep(at >= 0 ? at : 1);
+    }
+    if (mode === 'retake' && step == null && careerSplitOptions(state.activeTrackId, catalog()).length && !state.profile.careerChoices?.[state.activeTrackId]) {
+      const at = flow.indexOf('path');
       return goToStep(at >= 0 ? at : 1);
     }
     if (typeof step === 'number') return goToStep(step);

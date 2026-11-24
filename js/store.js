@@ -26,6 +26,7 @@ export const session = {
     backendLanguageId: null,
     backendEcosystemIds: [],
     frontendFrameworkId: null,
+    careerChoiceId: null,
   },
 };
 
