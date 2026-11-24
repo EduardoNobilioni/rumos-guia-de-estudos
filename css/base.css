@@ -80,8 +80,19 @@ a { color: var(--color-accent-text); }
   letter-spacing: -0.03em;
 }
 
-.brand-mark { width: 28px; height: 28px; display: block; }
+.brand-mark { width: 28px; height: 28px; display: block; flex: none; }
 .topnav .brand-mark { width: 36px; height: 36px; }
+.home-title .brand-lockup {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.28em;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+.home-title .brand-lockup > span { min-width: 0; }
+.home-title .brand-mark { width: 1.45em; height: 1.45em; }
 .topnav .brand-lockup { font: 800 22px/26px var(--font-sans); gap: 10px; }
 .logo-ring { stroke: var(--color-text-3); }
 .logo-primary { fill: var(--color-accent-graphic); }
