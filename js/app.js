@@ -37,6 +37,7 @@ import { decodePlan, encodePlan, planFromHash } from './share.js';
 import { drawRoadmap, roadmapLines, roadmapMarkdown, roadmapPdf, textPdf } from './files.js';
 import { initPlanScreen } from './plan-screen.js';
 import { initDashboardScreen } from './dashboard-screen.js';
+import { initProjectsScreen } from './projects-screen.js';
 import { planMarkdown } from './plan.js';
 import { topicIconHtml, trackIconHtml } from './icons.js';
 
@@ -188,6 +189,8 @@ function showScreen(name) {
   }
   const plan = $('planScreen');
   if (plan && name !== 'app') plan.hidden = true;
+  const proj = $('projectsScreen');
+  if (proj && name !== 'app') proj.hidden = true;
 }
 
 function applyTheme() {
@@ -1958,6 +1961,15 @@ function bind() {
     escapeHtml,
     showApp: () => { $('app').hidden = false; refresh(); },
     hideApp: () => { $('app').hidden = true; },
+  });
+  initProjectsScreen({
+    tracks: () => tracks,
+    state: () => state,
+    persist,
+    refresh,
+    escapeHtml,
+    openTrack: (id) => switchToTrack(id),
+    levelLabels: LEVEL_LABELS,
   });
   $('quizDialog').addEventListener('close', () => {
     if (!$('app').hidden) refresh();

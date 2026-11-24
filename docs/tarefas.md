@@ -25,8 +25,8 @@ Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 - [x] Índice unificado de projetos de todas as trilhas
 
 ## 3. Tela "Ideias de projeto"
-- [ ] Área separada com filtros combináveis por nível e por linguagem/tecnologia
-- [ ] Contador de resultados, roteiro e definição de pronto
+- [x] Área separada com filtros combináveis por nível e por linguagem/tecnologia
+- [x] Contador de resultados, roteiro e definição de pronto
 
 ## 4. Novas trilhas (em lotes de 3 a 4, com ícones e `npm run validate`)
 
