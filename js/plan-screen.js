@@ -153,7 +153,7 @@ export function initPlanScreen(api) {
             <button type="button" data-plan="print" class="px-3 py-2 rounded-sm border border-line dark:border-sage/60 text-sm">Imprimir</button>
           </div>
         </section>
-        <section class="rounded-sm border border-ochre bg-soft p-4 mb-4 no-print">
+        <section class="rounded-sm border border-ochre/70 bg-soft dark:bg-card p-4 mb-4 no-print">
           <h2 class="font-bold">Grade da faculdade</h2>
           <p class="read text-muted dark:text-blush mt-3">Importe o .ics do Google Agenda, Outlook, Apple Calendar ou do sistema da universidade. Esses eventos aparecem como ocupados e não vão no .ics do plano.</p>
           <div class="mt-3 flex flex-wrap gap-2 text-sm">
@@ -174,7 +174,7 @@ export function initPlanScreen(api) {
             </label>
           </div>
           <h3 class="mt-4 font-semibold text-sm">Horário manual semanal</h3>
-          <div class="mt-2 grid sm:grid-cols-5 gap-2 text-sm">
+          <div class="mt-2 grid sm:grid-cols-5 gap-2 items-end text-sm">
             <label class="sr-only" for="manualDay">Dia da aula</label>
             <select id="manualDay" data-plan="manual-day" class="${field}">${WEEKDAY_LABELS.map((label, day) => `<option value="${day}">${label}</option>`).join('')}</select>
             <label class="sr-only" for="manualStart">Início da aula</label>
@@ -183,27 +183,27 @@ export function initPlanScreen(api) {
             <input id="manualEnd" data-plan="manual-end" type="time" value="10:00" class="${field}" />
             <label class="sr-only" for="manualTitle">Nome da disciplina</label>
             <input id="manualTitle" data-plan="manual-title" placeholder="Disciplina" class="${field}" />
-            <button type="button" data-plan="add-manual" class="px-3 py-2 rounded-sm bg-soft dark:bg-card">Adicionar</button>
+            <button type="button" data-plan="add-manual" class="mt-1 px-3 py-2 rounded-sm bg-terra dark:bg-ochre text-paper dark:text-night font-semibold">Adicionar</button>
           </div>
           <ul class="mt-2 text-sm">
-            ${university.manual.map((row) => `<li class="flex justify-between gap-2 py-1"><span>${WEEKDAY_SHORT[row.weekday]} ${row.start}–${row.end} ${api.escapeHtml(row.title)}</span><button type="button" data-plan="del-manual" data-id="${row.id}" class="text-terra">Remover</button></li>`).join('')}
+            ${university.manual.map((row) => `<li class="flex justify-between gap-2 py-1"><span>${WEEKDAY_SHORT[row.weekday]} ${row.start}–${row.end} ${api.escapeHtml(row.title)}</span><button type="button" data-plan="del-manual" data-id="${row.id}" class="text-terra dark:text-ochre underline">Remover</button></li>`).join('')}
           </ul>
           <h3 class="mt-4 font-semibold text-sm">Colar CSV</h3>
           <p class="text-xs text-muted">Use <code>seg,08:00,10:00,Cálculo</code> ou <code>2026-11-20,14:00,16:00,Monitoria</code>.</p>
           <textarea data-plan="csv" rows="3" class="${field}" placeholder="seg,08:00,10:00,Cálculo"></textarea>
           <button type="button" data-plan="import-csv" class="mt-2 px-3 py-2 rounded-sm border border-line dark:border-sage/60 text-sm">Importar CSV</button>
           <h3 class="mt-4 font-semibold text-sm">Semana de prova</h3>
-          <div class="mt-2 flex flex-wrap gap-2 text-sm">
+          <div class="mt-2 grid sm:grid-cols-4 gap-2 items-end text-sm">
             <label class="sr-only" for="examStart">Início da semana de prova</label>
             <input id="examStart" data-plan="exam-start" type="date" class="${field}" />
             <label class="sr-only" for="examEnd">Fim da semana de prova</label>
             <input id="examEnd" data-plan="exam-end" type="date" class="${field}" />
             <label class="sr-only" for="examLabel">Nome da semana de prova</label>
             <input id="examLabel" data-plan="exam-label" placeholder="P1, finais..." class="${field}" />
-            <button type="button" data-plan="add-exam" class="px-3 py-2 rounded-sm bg-soft dark:bg-card">Marcar</button>
+            <button type="button" data-plan="add-exam" class="mt-1 px-3 py-2 rounded-sm border border-line dark:border-sage/60 bg-paper dark:bg-night font-medium">Marcar</button>
           </div>
           <ul class="mt-2 text-sm">
-            ${university.examRanges.map((range) => `<li class="flex justify-between gap-2 py-1"><span>${range.start} a ${range.end} · ${api.escapeHtml(range.label)} · ${range.percent}%</span><button type="button" data-plan="del-exam" data-id="${range.id}" class="text-terra">Remover</button></li>`).join('')}
+            ${university.examRanges.map((range) => `<li class="flex justify-between gap-2 py-1"><span>${range.start} a ${range.end} · ${api.escapeHtml(range.label)} · ${range.percent}%</span><button type="button" data-plan="del-exam" data-id="${range.id}" class="text-terra dark:text-ochre underline">Remover</button></li>`).join('')}
           </ul>
           <p class="mt-3 text-xs text-muted">${busyCount} blocos de grade guardados neste navegador. ${university.busy.length} vieram de arquivo.</p>
           <label class="block mt-3 text-sm">Pular datas (feriado ou prova, uma por linha)
