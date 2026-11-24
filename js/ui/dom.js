@@ -35,23 +35,13 @@ export function prefersReduced() {
 }
 
 export function runViewTransition(update) {
-  if (prefersReduced() || typeof document.startViewTransition !== 'function') {
-    update();
-    const next = document.querySelector('.is-screen:not([hidden])');
-    if (next && !prefersReduced()) {
-      next.classList.remove('is-entering');
-      void next.offsetWidth;
-      next.classList.add('is-entering');
-    }
-    return Promise.resolve();
-  }
-  try {
-    const transition = document.startViewTransition(() => update());
-    transition.ready.catch(() => {});
-    transition.finished.catch(() => {});
-  } catch {
-    update();
-  }
+  update();
+  if (prefersReduced()) return;
+  const next = document.querySelector('.is-screen:not([hidden])');
+  if (!next) return;
+  next.classList.remove('is-entering');
+  void next.offsetWidth;
+  next.classList.add('is-entering');
 }
 
 let menuEl = null;

@@ -77,9 +77,9 @@ function showScreen(name) {
   const ids = { loading: 'loading', loadError: 'loadError', onboarding: 'onboarding', roadmap: 'app', plan: 'planScreen', projects: 'projectsScreen', dashboard: 'dashboardScreen' };
   runViewTransition(() => {
     for (const id of Object.values(ids)) $(id).hidden = ids[name] !== id;
-    const inApp = ['roadmap', 'plan', 'projects', 'dashboard'].includes(name);
-    $('topnav').hidden = !inApp;
-    $('tabbar').hidden = !inApp;
+    const showChrome = name !== 'loading' && name !== 'loadError';
+    $('topnav').hidden = !showChrome;
+    $('tabbar').hidden = !showChrome;
     document.querySelectorAll('[data-nav]').forEach((button) => {
       if (button.dataset.nav === name) button.setAttribute('aria-current', 'page');
       else button.removeAttribute('aria-current');
@@ -188,6 +188,7 @@ api.openTopicDialog = dialogs.openTopicDialog;
 api.openProjectDialog = dialogs.openProjectDialog;
 api.openQuiz = quiz.openQuiz;
 api.openSheet = sidebar.openSheet;
+api.showHome = () => onboarding.open(isReady(getState()) && cachedTrack(getState().activeTrackId) ? 'retake' : 'create', 0);
 api.renderNotice = renderNotice;
 api.openShare = async () => {
   const plan = sharePlanFromTrack(getState(), getState().activeTrackId);
@@ -220,9 +221,17 @@ api.confirmRemove = async (kind, id) => {
 function bindChrome() {
   $('brandHome').innerHTML = `${brandMark(false)}<span>Rumos</span>`;
   $('moreBtn').innerHTML = icon('more');
-  $('shareBtn').innerHTML = `${icon('share')} Compartilhar`;
+  $('shareBtn').innerHTML = `${icon('share')}<span class="share-label">Compartilhar</span>`;
   document.querySelectorAll('[data-nav]').forEach((button) => {
-    button.addEventListener('click', () => showScreen(button.dataset.nav));
+    button.addEventListener('click', () => {
+      const ready = isReady(getState()) && cachedTrack(getState().activeTrackId);
+      if (!ready) {
+        toast('Monte o roadmap para abrir esta parte.');
+        onboarding.open('create', 0);
+        return;
+      }
+      showScreen(button.dataset.nav);
+    });
   });
   $('themeToggleBtn').addEventListener('click', toggleTheme);
   $('shareBtn').addEventListener('click', () => api.openShare().catch(() => toast('Não gerei o link.', 'error')));

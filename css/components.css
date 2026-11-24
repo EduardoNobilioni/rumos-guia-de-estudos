@@ -81,6 +81,9 @@ textarea.field { min-height: 88px; resize: vertical; }
   border-color: transparent;
 }
 
+.row .field { width: auto; min-width: 0; flex: 1 1 9rem; max-width: 100%; }
+.row > label { min-width: 0; flex: 1 1 10rem; max-width: 100%; }
+
 .field-wrap { position: relative; }
 .field-wrap .icon { position: absolute; left: 12px; top: 12px; color: var(--color-text-3); }
 .field-wrap .field { padding-left: 36px; }
@@ -377,6 +380,8 @@ dialog::backdrop { background: var(--color-bg-scrim); }
 .topic-node,
 .topic-card {
   display: flex;
+  min-width: 0;
+  align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-3);
   border: 1px solid var(--color-border);
@@ -472,12 +477,20 @@ dialog::backdrop { background: var(--color-bg-scrim); }
 
 .week {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(92px, 1fr));
   gap: 6px;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
-.week-col { display: flex; flex-direction: column; gap: 6px; min-height: 120px; }
+.week-col { display: flex; flex-direction: column; gap: 6px; min-width: 92px; min-height: 0; }
 .week-col strong { font: var(--text-mono-meta); color: var(--color-text-2); }
+.busy-block,
+.study-block {
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  font: var(--text-mono-meta);
+}
 
 .topnav {
   position: sticky;
@@ -559,7 +572,7 @@ dialog::backdrop { background: var(--color-bg-scrim); }
 
 .site-footer {
   border-top: 1px solid var(--color-border);
-  padding: var(--space-8) var(--space-6);
+  padding: var(--space-8) var(--space-6) calc(var(--tab-h) + var(--space-8));
   color: var(--color-text-2);
   font: var(--text-body-s);
 }

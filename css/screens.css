@@ -11,6 +11,7 @@
   gap: var(--space-8);
   align-items: start;
 }
+.hero-grid > *, .bento > *, .home-hero > *, .stat-grid > *, .project-grid > * { min-width: 0; }
 
 .display {
   font: var(--text-display);
@@ -48,7 +49,46 @@
 .onb {
   width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
-  padding: var(--space-6) 0 var(--space-16);
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  gap: var(--space-10);
+  align-items: center;
+}
+
+.home-title {
+  font: var(--text-title-xl);
+  letter-spacing: -0.03em;
+  margin-top: var(--space-4);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps-grid li { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: var(--space-8);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .onb-layout {
@@ -112,14 +152,16 @@
 
 @media (max-width: 1023px) {
   .track-sidebar { display: none; }
-  .hero-grid, .onb-layout, .bento, .topic-grid, .project-grid, .stat-grid { grid-template-columns: 1fr; }
+  .hero-grid, .onb-layout, .bento, .topic-grid, .project-grid, .stat-grid, .home-hero, .feature-grid, .steps-grid, .footer-grid { grid-template-columns: 1fr; }
+  .home-title { font: var(--text-title-l); letter-spacing: -0.02em; }
   .live-preview { position: static; margin-top: var(--space-6); }
   .display { font: var(--text-display-m); letter-spacing: -0.04em; }
   .app-main { padding: var(--space-4) var(--space-4) calc(var(--tab-h) + var(--space-8)); }
   .tabbar { display: grid; }
   .topnav nav { display: none; }
   .cmdk-btn { min-width: 0; width: 36px; padding: 0; justify-content: center; }
-  .cmdk-btn span, .cmdk-btn .kbd { display: none; }
+  .cmdk-btn span, .cmdk-btn .kbd, .share-label { display: none; }
+  #shareBtn { width: 36px; min-height: 36px; padding: 0; }
   .dash-grid, .plan-grid { width: min(100% - 32px, 1200px); }
   .hour-grid { grid-template-columns: 1fr 1fr; }
 }
