@@ -486,6 +486,43 @@
         "pdo",
         "phpunit"
       ]
+    },
+    {
+      "id": "nextjs",
+      "file": "nextjs.json",
+      "group": "tecnologia",
+      "keywords": [
+        "next",
+        "nextjs",
+        "app router",
+        "react",
+        "ssr",
+        "server actions"
+      ]
+    },
+    {
+      "id": "angular",
+      "file": "angular.json",
+      "group": "tecnologia",
+      "keywords": [
+        "angular",
+        "rxjs",
+        "signals",
+        "typescript",
+        "standalone"
+      ]
+    },
+    {
+      "id": "vuejs",
+      "file": "vuejs.json",
+      "group": "tecnologia",
+      "keywords": [
+        "vue",
+        "vuejs",
+        "pinia",
+        "composition api",
+        "vite"
+      ]
     }
   ]
 }

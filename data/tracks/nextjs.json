@@ -1,0 +1,239 @@
+{
+  "id": "nextjs",
+  "name": "Next.js",
+  "tagline": "App Router, Server Components, cache/revalidação, Server Actions e full-stack com React",
+  "description": "Aplicações web modernas com Next.js (App Router): roteamento por arquivos, Server vs. Client Components, busca de dados e revalidação de cache, Server Actions, middleware e otimização.",
+  "phases": [
+    {
+      "id": "nx-fase-1",
+      "number": 1,
+      "badgeTitle": "App Router",
+      "title": "Rotas, layouts e Server vs. Client Components",
+      "topics": [
+        {
+          "id": "nx-routing",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "App Router: `page`, `layout`, `loading` e rotas dinâmicas",
+          "description": "Como pastas definem rotas, layouts aninhados preservam estado e arquivos especiais tratam carregamento (`loading.tsx`) e erro (`error.tsx`).",
+          "tags": ["Next.js", "App Router"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Next.js App Router Docs", "url": "https://nextjs.org/docs/app", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "nx-rsc",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Server Components vs. Client Components (`'use client'`)",
+          "description": "Renderizar no servidor por padrão para reduzir JavaScript enviado ao navegador e isolar `'use client'` apenas nas ilhas interativas.",
+          "tags": ["Next.js", "React"],
+          "prerequisites": ["nx-routing"],
+          "resources": [
+            { "title": "Server and Client Components (Next.js)", "url": "https://nextjs.org/docs/app/getting-started/server-and-client-components", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "nx-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Blog estático em Next.js com rotas dinâmicas",
+          "description": "Crie listagem e página `[slug]` com layout compartilhado e página `not-found.tsx`.",
+          "steps": ["Estruture `/posts/[slug]`.", "Use `generateMetadata` por post.", "Adicione `notFound()` para slug inválido."],
+          "definitionOfDone": ["Sem `'use client'` desnecessário nas páginas de leitura.", "Metadados dinâmicos por post."]
+        },
+        {
+          "id": "nx-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Catálogo com filtros na URL (`searchParams`) e Suspense",
+          "description": "Filtre itens no Server Component lendo `searchParams` com fallback de carregamento via `<Suspense>`.",
+          "steps": ["Sincronize filtro via URL.", "Envolva lista assíncrona em `Suspense`.", "Mantenha barra de busca leve."],
+          "definitionOfDone": ["Link com filtro é compartilhável.", "Streaming visível ao carregar."]
+        },
+        {
+          "id": "nx-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Painel multi-layout com rotas paralelas/interceptadas",
+          "description": "Implemente modal de detalhe usando intercepting routes mantendo URL direta funcional ao recarregar.",
+          "steps": ["Configure pasta `(.)item/[id]`.", "Crie página completa `/item/[id]`.", "Teste F5 na URL aberta."],
+          "definitionOfDone": ["Modal abre sem perder scroll da lista.", "F5 abre página completa normalmente."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "nx-f1-q1",
+          "prompt": "Qual o impacto de colocar `'use client'` no layout raiz de uma aplicação Next.js?",
+          "reviewTopicId": "nx-rsc",
+          "choices": [
+            { "id": "a", "text": "Empurra mais código JS para o cliente e impede usar recursos exclusivos de servidor diretamente nesses filhos.", "correct": true, "explanation": "Empurre `'use client'` para as folhas interativas da árvore." },
+            { "id": "b", "text": "Desliga todas as rotas da aplicação.", "correct": false, "explanation": "As rotas funcionam, mas você perde o benefício dos Server Components." }
+          ]
+        },
+        {
+          "id": "nx-f1-q2",
+          "prompt": "Para que serve o arquivo especial `error.tsx` dentro de uma pasta de rota?",
+          "reviewTopicId": "nx-routing",
+          "choices": [
+            { "id": "a", "text": "Criar um Error Boundary isolado para aquele segmento de rota sem derrubar o restante da página.", "correct": true, "explanation": "Inclui função `reset()` para tentar novamente." },
+            { "id": "b", "text": "Executar migrations no banco.", "correct": false, "explanation": "Serve para recuperação graciosa de erros na UI." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nx-fase-2",
+      "number": 2,
+      "badgeTitle": "Dados e Mutações",
+      "title": "Cache, revalidação, Server Actions e Route Handlers",
+      "topics": [
+        {
+          "id": "nx-cache",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Data Fetching, cache e revalidação (`revalidatePath`/`revalidateTag`)",
+          "description": "Entender renderização estática vs. dinâmica, tempo de cache e invalidação explícita após alterações.",
+          "tags": ["Next.js", "Cache"],
+          "prerequisites": ["nx-rsc"],
+          "resources": [
+            { "title": "Caching in Next.js", "url": "https://nextjs.org/docs/app/building-your-application/caching", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "nx-actions",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Server Actions, validação com Zod e Route Handlers",
+          "description": "Mutações tipadas direto do formulário com validação no servidor (nunca confie só no cliente) e rotas `/api` para webhooks.",
+          "tags": ["Next.js", "Server Actions"],
+          "prerequisites": ["nx-cache"],
+          "resources": [
+            { "title": "Updating Data — Server Actions", "url": "https://nextjs.org/docs/app/getting-started/updating-data", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "nx-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Formulário de contato com Server Action e `useActionState`",
+          "description": "Valide campos com Zod no servidor e exiba erros por campo e estado pendente no botão.",
+          "steps": ["Crie Server Action com `'use server'`.", "Retorne erros validados pelo Zod.", "Desabilite botão durante envio."],
+          "definitionOfDone": ["Funciona com validação real no servidor.", "Feedback claro de erro e sucesso."]
+        },
+        {
+          "id": "nx-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "CRUD completo com `revalidateTag` e SQLite/Postgres",
+          "description": "Persista registros no banco e revalide apenas os dados alterados após cada Server Action.",
+          "steps": ["Separe camada de acesso a dados.", "Marque cache com tags.", "Invalide via `revalidateTag`."],
+          "definitionOfDone": ["Dados atualizados imediatamente após mutação.", "Sem reload completo da página."]
+        },
+        {
+          "id": "nx-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Webhook HTTP seguro + atualização otimista (`useOptimistic`)",
+          "description": "Combine Route Handler validando assinatura HMAC de webhook com lista interativa usando `useOptimistic`.",
+          "steps": ["Valide assinatura em `/api/webhook`.", "Adicione `useOptimistic` na UI.", "Trate rollback se action falhar."],
+          "definitionOfDone": ["Rejeita assinaturas inválidas com 401.", "UI reverte em caso de falha."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "nx-f2-q1",
+          "prompt": "Por que validar entrada e autorização dentro de toda Server Action mesmo já validando no formulário React?",
+          "reviewTopicId": "nx-actions",
+          "choices": [
+            { "id": "a", "text": "Porque Server Actions são endpoints HTTP públicos que podem ser chamados fora da interface.", "correct": true, "explanation": "Sempre trate uma Server Action como uma rota de API." },
+            { "id": "b", "text": "Porque formulários HTML não aceitam atributos `required`.", "correct": false, "explanation": "Validação no cliente é apenas UX; segurança fica no servidor." }
+          ]
+        },
+        {
+          "id": "nx-f2-q2",
+          "prompt": "O que `revalidateTag` faz após uma atualização no banco?",
+          "reviewTopicId": "nx-cache",
+          "choices": [
+            { "id": "a", "text": "Invalida entradas de cache associadas àquela tag para que a próxima leitura busque dados frescos.", "correct": true, "explanation": "Permite granularidade por domínio de dados." },
+            { "id": "b", "text": "Apaga o banco de dados.", "correct": false, "explanation": "Invalida somente o cache do Next.js." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nx-fase-3",
+      "number": 3,
+      "badgeTitle": "Produção",
+      "title": "Middleware, segurança, SEO e otimização",
+      "topics": [
+        {
+          "id": "nx-prod",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Middleware, autenticação, `next/image` e Core Web Vitals",
+          "description": "Proteger rotas verificando sessão na camada de dados (não depender só de middleware), otimizar imagens/fontes e medir LCP/CLS.",
+          "tags": ["Next.js", "SEO", "Performance"],
+          "prerequisites": ["nx-actions"],
+          "resources": [
+            { "title": "Production Checklist (Next.js)", "url": "https://nextjs.org/docs/app/guides/production-checklist", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "nx-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Site com `next/image`, `next/font` e `sitemap.xml`",
+          "description": "Configure fontes locais/Google sem layout shift e gere `sitemap.ts` + `robots.ts` nativos.",
+          "steps": ["Substitua `<img>` por `next/image`.", "Configure `next/font`.", "Adicione `app/sitemap.ts`."],
+          "definitionOfDone": ["CLS próximo de 0.", "Sitemap acessível em `/sitemap.xml`."]
+        },
+        {
+          "id": "nx-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Área logada protegida com verificação em Data Access Layer",
+          "description": "Redirecione no middleware por UX e revalide sessão na camada de dados antes de retornar dados privados.",
+          "steps": ["Crie função `requireUser()` no servidor.", "Proteja ações e leituras.", "Teste acesso direto sem cookie."],
+          "definitionOfDone": ["Zero vazamento de dados sem sessão.", "Redirecionamento limpo."]
+        },
+        {
+          "id": "nx-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Build standalone Dockerizado + testes E2E com Playwright",
+          "description": "Gere output standalone do Next.js em container leve e valide fluxos principais com Playwright no CI.",
+          "steps": ["Ative `output: 'standalone'`.", "Crie Dockerfile multi-stage.", "Rode suíte Playwright contra build de produção."],
+          "definitionOfDone": ["Testes E2E passam em build de produção.", "Imagem enxuta." ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "nx-f3-q1",
+          "prompt": "Por que não confiar APENAS no Middleware do Next.js para autorizar acesso a dados privados?",
+          "reviewTopicId": "nx-prod",
+          "choices": [
+            { "id": "a", "text": "Autorização deve sempre ser validada perto do acesso aos dados e dentro de cada Server Action/API (defesa em profundidade).", "correct": true, "explanation": "Middleware serve bem para redirecionamento rápido, mas não substitui verificação na camada de dados." },
+            { "id": "b", "text": "Porque Middleware só roda no CSS.", "correct": false, "explanation": "Roda no runtime, mas defesa em profundidade evita falhas por bypass ou rotas novas." }
+          ]
+        },
+        {
+          "id": "nx-f3-q2",
+          "prompt": "Como `next/image` melhora Core Web Vitals como LCP e CLS?",
+          "reviewTopicId": "nx-prod",
+          "choices": [
+            { "id": "a", "text": "Redimensiona e serve formatos modernos sob demanda (LCP) e reserva dimensões para evitar saltos de layout (CLS).", "correct": true, "explanation": "Otimiza banda e estabilidade visual automaticamente." },
+            { "id": "b", "text": "Converte todas as imagens em texto.", "correct": false, "explanation": "Serve imagens otimizadas com largura/altura declaradas." }
+          ]
+        }
+      ]
+    }
+  ]
+}

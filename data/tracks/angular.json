@@ -1,0 +1,239 @@
+{
+  "id": "angular",
+  "name": "Angular",
+  "tagline": "Aplicações corporativas escaláveis com Standalone Components, Signals, RxJS e TypeScript",
+  "description": "Desenvolvimento front-end estruturado com Angular moderno: componentes standalone, templates com `@if`/`@for`, reatividade com Signals, Injeção de Dependência, RxJS, Reactive Forms e testes.",
+  "phases": [
+    {
+      "id": "ng-fase-1",
+      "number": 1,
+      "badgeTitle": "Componentes e Signals",
+      "title": "Standalone Components, Templates e Signals",
+      "topics": [
+        {
+          "id": "ng-components",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Standalone Components, `@if`/`@for` e binding",
+          "description": "Estrutura de componentes Angular modernos sem NgModules obrigatórios, inputs/outputs tipados e novo control flow nos templates.",
+          "tags": ["Angular", "TypeScript"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Angular Official Tutorials", "url": "https://angular.dev/tutorials", "lang": "en", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "ng-signals",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Reatividade com Signals (`signal`, `computed`, `effect`)",
+          "description": "Gerenciar estado reativo granular com `signal()`, valores derivados em `computed()` e efeitos colaterais controlados.",
+          "tags": ["Angular", "Signals"],
+          "prerequisites": ["ng-components"],
+          "resources": [
+            { "title": "Angular Signals Guide", "url": "https://angular.dev/guide/signals", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ng-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Lista de tarefas em Angular com Signals",
+          "description": "Crie componente standalone com filtro, adição, conclusão e contador derivado via `computed()`.",
+          "steps": ["Use `@for (...; track item.id)`.", "Calcule pendentes com `computed`.", "Persista no `localStorage`."],
+          "definitionOfDone": ["Sem `NgModule` legado.", "Usa `track` único no `@for`."]
+        },
+        {
+          "id": "ng-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Tabela reutilizável com `input()`/`output()` e projections",
+          "description": "Componente genérico de tabela ordenável usando `ng-content` e signals de entrada.",
+          "steps": ["Aceite dados via `input.required()`.", "Emita eventos tipados.", "Suporte estado vazio customizado."],
+          "definitionOfDone": ["Tipagem TypeScript estrita.", "Reutilizável em 2 listas diferentes."]
+        },
+        {
+          "id": "ng-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Mini loja com Change Detection `OnPush` e `@defer`",
+          "description": "Otimize renderização carregando gráficos ou comentários sob demanda com blocos `@defer (on viewport)`.",
+          "steps": ["Aplique `ChangeDetectionStrategy.OnPush`.", "Adicione `@defer` com `@placeholder`.", "Inspecione chunks gerados no build."],
+          "definitionOfDone": ["Bundle inicial menor.", "Zero erro de expressão alterada."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ng-f1-q1",
+          "prompt": "Para que serve a função `computed()` em Signals no Angular?",
+          "reviewTopicId": "ng-signals",
+          "choices": [
+            { "id": "a", "text": "Criar um valor derivado somente leitura que recalcula e faz cache automaticamente quando suas dependências mudam.", "correct": true, "explanation": "Evita recalcular valores manualmente ou duplicar estado." },
+            { "id": "b", "text": "Fazer requisições HTTP automaticamente.", "correct": false, "explanation": "Serve para estado derivado reativo." }
+          ]
+        },
+        {
+          "id": "ng-f1-q2",
+          "prompt": "Por que o bloco `@for` no Angular exige a expressão `track`?",
+          "reviewTopicId": "ng-components",
+          "choices": [
+            { "id": "a", "text": "Para identificar cada item unicamente e reutilizar nós do DOM ao atualizar a lista sem recriar tudo.", "correct": true, "explanation": "Melhora performance e preserva foco/estado do DOM." },
+            { "id": "b", "text": "Para ordenar alfabeticamente.", "correct": false, "explanation": "Serve para rastreamento de identidade no DOM." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ng-fase-2",
+      "number": 2,
+      "badgeTitle": "DI, RxJS e Forms",
+      "title": "Services, DI, HttpClient/RxJS e Reactive Forms",
+      "topics": [
+        {
+          "id": "ng-rxjs",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "Services, `inject()`, `HttpClient` e operadores RxJS essenciais",
+          "description": "Injetar serviços com `inject()`, combinar fluxos HTTP com `switchMap`/`catchError`, interceptors funcionais e `takeUntilDestroyed`.",
+          "tags": ["Angular", "RxJS"],
+          "prerequisites": ["ng-signals"],
+          "resources": [
+            { "title": "HTTP Client in Angular", "url": "https://angular.dev/guide/http", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "ng-forms",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Reactive Forms tipados, validação e Router com guards",
+          "description": "Formulários reativos fortemente tipados (`NonNullableFormBuilder`), validadores customizados e lazy loading nas rotas.",
+          "tags": ["Angular", "Forms"],
+          "prerequisites": ["ng-rxjs"],
+          "resources": [
+            { "title": "Reactive Forms (Angular)", "url": "https://angular.dev/guide/forms/reactive-forms", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ng-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Formulário de cadastro com Reactive Forms tipados",
+          "description": "Valide senha forte, confirmação de senha e exiba mensagens acessíveis ao usuário.",
+          "steps": ["Use `FormBuilder` tipado.", "Crie validador cross-field de confirmação.", "Mostre erro apenas após interação."],
+          "definitionOfDone": ["Sem `any` nos controles do form.", "Acessível por teclado."]
+        },
+        {
+          "id": "ng-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "Busca com debounce e `switchMap` usando `HttpClient`",
+          "description": "Pesquise em API cancelando automaticamente requisições anteriores quando o usuário continua digitando.",
+          "steps": ["Use `debounceTime` e `distinctUntilChanged`.", "Troque para `switchMap`.", "Trate erro com `catchError`."],
+          "definitionOfDone": ["Sem race conditions de respostas fora de ordem.", "Sem memory leak de subscriptions."]
+        },
+        {
+          "id": "ng-p2-ava",
+          "level": "avancado",
+          "hours": 9,
+          "title": "App multi-rota com lazy loading, interceptor e guard funcional",
+          "description": "Proteja rotas administrativas com `CanActivateFn`, anexe token em `HttpInterceptorFn` e carregue módulos por rota.",
+          "steps": ["Configure `loadComponent`/`loadChildren`.", "Crie interceptor funcional.", "Simule sessão expirada 401."],
+          "definitionOfDone": ["Chunks separados por rota.", "Redireciona no 401."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ng-f2-q1",
+          "prompt": "Em uma caixa de busca reativa com RxJS, por que usar `switchMap` em vez de `mergeMap`?",
+          "reviewTopicId": "ng-rxjs",
+          "choices": [
+            { "id": "a", "text": "`switchMap` cancela a requisição anterior quando chega um novo termo, evitando que uma resposta lenta antiga sobrescreva a mais recente.", "correct": true, "explanation": "Resolve race conditions em buscas digitadas." },
+            { "id": "b", "text": "`switchMap` dispara o dobro de chamadas.", "correct": false, "explanation": "Ele cancela a assinatura interna anterior." }
+          ]
+        },
+        {
+          "id": "ng-f2-q2",
+          "prompt": "Por que usar `takeUntilDestroyed()` ou `async` pipe em Observables dentro de componentes Angular?",
+          "reviewTopicId": "ng-rxjs",
+          "choices": [
+            { "id": "a", "text": "Para cancelar a inscrição automaticamente quando o componente for destruído e evitar vazamento de memória.", "correct": true, "explanation": "Subscriptions abertas mantêm referências vivas em memória." },
+            { "id": "b", "text": "Para desabilitar interceptors HTTP.", "correct": false, "explanation": "Serve para gerenciamento de ciclo de vida." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ng-fase-3",
+      "number": 3,
+      "badgeTitle": "Testes e Arquitetura",
+      "title": "Testes de componentes/serviços e arquitetura em escala",
+      "topics": [
+        {
+          "id": "ng-tests",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Testes com TestBed, `HttpTestingController` e boas práticas",
+          "description": "Testar serviços HTTP mockando respostas sem rede real, componentes com `ComponentFixture` e organização por features.",
+          "tags": ["Angular", "Testes"],
+          "prerequisites": ["ng-forms"],
+          "resources": [
+            { "title": "Testing Guide (Angular)", "url": "https://angular.dev/guide/testing", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "ng-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Testes unitários de serviço HTTP com `HttpTestingController`",
+          "description": "Verifique método GET/POST, URL, headers e tratamento de erro 500 usando `provideHttpClientTesting()`.",
+          "steps": ["Injete `HttpTestingController`.", "Dispare método do serviço.", "Valide `verify()` ao final."],
+          "definitionOfDone": ["Sem requisições reais na rede.", "Cobre caminho de sucesso e erro."]
+        },
+        {
+          "id": "ng-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Testes de componente standalone interagindo com Signals",
+          "description": "Renderize componente, dispare cliques no template e valide atualização do DOM e `@Output`.",
+          "steps": ["Configure `TestBed`.", "Simule entrada do usuário.", "Confira estado renderizado."],
+          "definitionOfDone": ["Todos os testes passam no CI.", "Testa comportamento, não detalhe interno."]
+        },
+        {
+          "id": "ng-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Arquitetura feature-based com testes e build otimizado",
+          "description": "Estruture aplicação Angular média em features isoladas, orçamento de bundle (`budgets`) e pipeline CI.",
+          "steps": ["Separe `core/`, `shared/` e `features/`.", "Configure budgets no `angular.json`.", "Rode lint + test + build no CI."],
+          "definitionOfDone": ["Build respeita limite de tamanho.", "Suíte de testes verde."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "ng-f3-q1",
+          "prompt": "Qual o papel do `httpTesting.verify()` após cada teste de serviço HTTP no Angular?",
+          "reviewTopicId": "ng-tests",
+          "choices": [
+            { "id": "a", "text": "Garantir que não sobrou nenhuma requisição HTTP pendente ou inesperada que o teste não verificou.", "correct": true, "explanation": "Evita falsos positivos em testes de serviços." },
+            { "id": "b", "text": "Limpar o banco de dados real.", "correct": false, "explanation": "Tudo ocorre em memória com backend simulado." }
+          ]
+        },
+        {
+          "id": "ng-f3-q2",
+          "prompt": "Qual o benefício principal de dividir rotas por `features` com lazy loading?",
+          "reviewTopicId": "ng-tests",
+          "choices": [
+            { "id": "a", "text": "Reduzir o JavaScript inicial carregado na primeira visita e isolar responsabilidades de cada área.", "correct": true, "explanation": "O usuário baixa cada tela só quando navega até ela." },
+            { "id": "b", "text": "Eliminar o TypeScript do projeto.", "correct": false, "explanation": "Mantém TypeScript completo em todos os chunks." }
+          ]
+        }
+      ]
+    }
+  ]
+}

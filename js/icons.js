@@ -46,6 +46,9 @@ const TRACK_DEVICONS = {
   cpp: 'devicon-cplusplus-plain colored',
   csharp: 'devicon-csharp-plain colored',
   php: 'devicon-php-plain colored',
+  nextjs: 'devicon-nextjs-plain',
+  angular: 'devicon-angular-plain colored',
+  vuejs: 'devicon-vuejs-plain colored',
 };
 
 const TOPIC_RULES = [
@@ -53,6 +56,8 @@ const TOPIC_RULES = [
   [/\b(jest|testing library)\b/, { devicon: 'devicon-jest-plain colored' }],
   [/\b(vitest)\b/, { devicon: 'devicon-vitest-plain colored' }],
   [/\b(next\.?js)\b/, { devicon: 'devicon-nextjs-plain' }],
+  [/\b(angular|rxjs|signals|testbed)\b/, { devicon: 'devicon-angular-plain colored' }],
+  [/\b(vue\.?js|pinia|composables|vue router)\b/, { devicon: 'devicon-vuejs-plain colored' }],
   [/\b(react)\b/, { devicon: 'devicon-react-original colored' }],
   [/\b(typescript|tsconfig|\.d\.ts|zod)\b/, { devicon: 'devicon-typescript-plain colored' }],
   [/\b(tailwind)\b/, { devicon: 'devicon-tailwindcss-original colored' }],

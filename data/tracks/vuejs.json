@@ -1,0 +1,239 @@
+{
+  "id": "vuejs",
+  "name": "Vue.js",
+  "tagline": "Composition API, componentes reativos, Vue Router, Pinia e testes com Vitest",
+  "description": "Desenvolvimento front-end moderno com Vue 3: `<script setup>`, reatividade (`ref`, `reactive`, `computed`, `watch`), comunicação entre componentes, Vue Router, Pinia e Vitest.",
+  "phases": [
+    {
+      "id": "vue-fase-1",
+      "number": 1,
+      "badgeTitle": "Base e Reatividade",
+      "title": "Composition API, templates e componentes",
+      "topics": [
+        {
+          "id": "vue-reactivity",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Composition API (`<script setup>`), `ref`, `computed` e diretivas",
+          "description": "Criar componentes concisos em Vue 3 usando `v-if`, `v-for` (com `:key`), `v-model`, `ref()` e propriedades derivadas com `computed()`.",
+          "tags": ["Vue.js", "Reatividade"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Vue.js Official Guide", "url": "https://vuejs.org/guide/introduction.html", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "vue-components",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Props, Emits, Slots e Composables reutilizáveis",
+          "description": "Passar dados para baixo via `defineProps`, eventos para cima via `defineEmits`, compor UI com slots e extrair lógica em composables (`use...`).",
+          "tags": ["Vue.js", "Composables"],
+          "prerequisites": ["vue-reactivity"],
+          "resources": [
+            { "title": "Composables in Vue 3", "url": "https://vuejs.org/guide/reusability/composables.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "vue-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Lista de despesas em Vue 3 com filtros",
+          "description": "Adicione receitas/despesas com `v-model`, filtre por categoria e calcule saldo em tempo real com `computed`.",
+          "steps": ["Use `<script setup lang=\"ts\">`.", "Calcule totais com `computed`.", "Garanta `:key` único no `v-for`."],
+          "definitionOfDone": ["Sem mutação direta fora do padrão.", "Formulário acessível."]
+        },
+        {
+          "id": "vue-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Biblioteca de 3 componentes com Slots e `useFetch` composable",
+          "description": "Extraia busca com loading/erro para um composable `useFetch` e construa Card, Modal e Badge com slots nomeados.",
+          "steps": ["Crie composable `useFetch.ts`.", "Trate `AbortController` no `onUnmounted`.", "Documente props e slots."],
+          "definitionOfDone": ["Modal fecha com Esc.", "Requisição antiga abortada ao desmontar."]
+        },
+        {
+          "id": "vue-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Sistema de formulários dinâmicos com validação e `v-model` customizado",
+          "description": "Use `defineModel()` do Vue 3.4+ em campos compostos reutilizáveis com feedback de erro acessível.",
+          "steps": ["Implemente componentes usando `defineModel`.", "Valide regras por esquema.", "Teste entrada por teclado."],
+          "definitionOfDone": ["Bindings limpos em dois sentidos.", "Zero warnings no console."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "vue-f1-q1",
+          "prompt": "Qual a diferença recomendada entre usar `computed()` e `watch()` em Vue 3?",
+          "reviewTopicId": "vue-reactivity",
+          "choices": [
+            { "id": "a", "text": "Use `computed()` para derivar valores de forma síncrona/declarativa; reserve `watch()` para efeitos colaterais (API, localStorage).", "correct": true, "explanation": "`computed` evita estado duplicado e sincronização manual." },
+            { "id": "b", "text": "`computed()` funciona só para números inteiros.", "correct": false, "explanation": "Funciona com strings, arrays, objetos e qualquer valor derivado." }
+          ]
+        },
+        {
+          "id": "vue-f1-q2",
+          "prompt": "Para que servem Composables (funções `use...`) no Vue 3?",
+          "reviewTopicId": "vue-components",
+          "choices": [
+            { "id": "a", "text": "Encapsular e reutilizar lógica com estado reativo e hooks de ciclo de vida entre múltiplos componentes.", "correct": true, "explanation": "Substitui mixins legados com tipagem e clareza muito melhores." },
+            { "id": "b", "text": "Compilar CSS em imagens PNG.", "correct": false, "explanation": "São padrões de reutilização lógica da Composition API." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vue-fase-2",
+      "number": 2,
+      "badgeTitle": "Rotas e Pinia",
+      "title": "Vue Router e gerenciamento de estado com Pinia",
+      "topics": [
+        {
+          "id": "vue-router",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Vue Router: rotas dinâmicas, lazy loading e guards",
+          "description": "Configurar SPA multi-página com carregamento preguiçoso por rota (`() => import(...)`) e `beforeEach` para proteção de acesso.",
+          "tags": ["Vue.js", "Router"],
+          "prerequisites": ["vue-components"],
+          "resources": [
+            { "title": "Vue Router Documentation", "url": "https://router.vuejs.org/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "vue-pinia",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Gerenciamento de estado global com Pinia",
+          "description": "Criar setup stores tipadas no Pinia com `storeToRefs()` para manter reatividade ao desestruturar estado e getters.",
+          "tags": ["Vue.js", "Pinia"],
+          "prerequisites": ["vue-router"],
+          "resources": [
+            { "title": "Pinia Documentation", "url": "https://pinia.vuejs.org/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "vue-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "App de catálogo com Vue Router e página 404",
+          "description": "Crie páginas de lista, detalhe `/produto/:id` e rota fallback para URLs inexistentes.",
+          "steps": ["Configure rotas lazy.", "Leia parâmetro `route.params.id`.", "Adicione botão voltar."],
+          "definitionOfDone": ["Code splitting por rota ativo.", "404 amigável."]
+        },
+        {
+          "id": "vue-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "Carrinho de compras em Pinia com persistência local",
+          "description": "Store Pinia gerenciando itens, quantidades, cupom e getters de subtotal com `storeToRefs`.",
+          "steps": ["Crie setup store no Pinia.", "Use `storeToRefs` nos componentes.", "Salve alterações via `$subscribe` ou watch."],
+          "definitionOfDone": ["Reatividade intacta ao desestruturar.", "Estado sobrevive ao recarregar."]
+        },
+        {
+          "id": "vue-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Painel autenticado com Navigation Guards e estado compartilhado",
+          "description": "Combine store de sessão Pinia com `router.beforeEach` redirecionando para login com retorno pós-autenticação.",
+          "steps": ["Guarde rota pretendida em `query.redirect`.", "Proteja rotas meta `requiresAuth`.", "Limpe estado ao fazer logout."],
+          "definitionOfDone": ["Rotas protegidas não vazam tela privada.", "Redireciona de volta após login."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "vue-f2-q1",
+          "prompt": "Por que usamos `storeToRefs(store)` ao desestruturar propriedades de uma store Pinia?",
+          "reviewTopicId": "vue-pinia",
+          "choices": [
+            { "id": "a", "text": "Para preservar a reatividade das propriedades e getters (ações podem ser desestruturadas diretamente).", "correct": true, "explanation": "Desestruturar direto quebraria a ligação reativa." },
+            { "id": "b", "text": "Para apagar a store.", "correct": false, "explanation": "Mantém as referências reativas intactas." }
+          ]
+        },
+        {
+          "id": "vue-f2-q2",
+          "prompt": "Como ativar lazy loading de páginas no Vue Router?",
+          "reviewTopicId": "vue-router",
+          "choices": [
+            { "id": "a", "text": "Usando importação dinâmica na rota: `component: () => import('./views/HomeView.vue')`.", "correct": true, "explanation": "O Vite gera um chunk separado baixado só quando necessário." },
+            { "id": "b", "text": "Usando `setTimeout` no `main.ts`.", "correct": false, "explanation": "Importação dinâmica faz o code splitting nativo." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vue-fase-3",
+      "number": 3,
+      "badgeTitle": "Testes e Build",
+      "title": "Testes com Vitest e otimização para produção",
+      "topics": [
+        {
+          "id": "vue-tests",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Testes de componentes/stores com Vitest e Vue Test Utils",
+          "description": "Testar comportamento do usuário (eventos, texto renderizado, emissão de eventos) e stores Pinia com `@pinia/testing`.",
+          "tags": ["Vue.js", "Vitest"],
+          "prerequisites": ["vue-pinia"],
+          "resources": [
+            { "title": "Testing Guide (Vue.js)", "url": "https://vuejs.org/guide/scaling-up/testing.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "vue-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Testes unitários de composable e store Pinia com Vitest",
+          "description": "Configure `setActivePinia(createPinia())` em `beforeEach` e teste ações e getters.",
+          "steps": ["Isole cada teste com Pinia nova.", "Valide getters derivados.", "Rode `vitest run`."],
+          "definitionOfDone": ["Testes rápidos em memória.", "Zero vazamento de estado entre testes."]
+        },
+        {
+          "id": "vue-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Suíte de componentes com Vue Test Utils / Testing Library",
+          "description": "Monte componentes reais, preencha inputs, dispare submits e verifique eventos emitidos.",
+          "steps": ["Teste renderização condicional.", "Verifique `wrapper.emitted()`.", "Teste estados de erro."],
+          "definitionOfDone": ["Cobre interações principais.", "Sem acoplamento a classes CSS." ]
+        },
+        {
+          "id": "vue-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Projeto Vue 3 + Vite completo com TypeCheck, Vitest e CI",
+          "description": "Configure `vue-tsc --noEmit`, ESLint, Vitest e build de produção em pipeline automatizado.",
+          "steps": ["Adicione checagem de tipos `vue-tsc`.", "Configure CI no GitHub Actions.", "Analise chunks do bundle Vite."],
+          "definitionOfDone": ["CI valida tipos + testes + build.", "Zero warnings de runtime."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "vue-f3-q1",
+          "prompt": "Por que chamar `setActivePinia(createPinia())` no `beforeEach` dos testes de store?",
+          "reviewTopicId": "vue-tests",
+          "choices": [
+            { "id": "a", "text": "Para garantir uma instância limpa e isolada de Pinia em cada teste, sem estado sobrando do teste anterior.", "correct": true, "explanation": "Independência entre testes evita falhas intermitentes." },
+            { "id": "b", "text": "Para conectar ao banco SQL.", "correct": false, "explanation": "Trata apenas de isolamento de estado em testes." }
+          ]
+        },
+        {
+          "id": "vue-f3-q2",
+          "prompt": "Qual ferramenta valida erros de TypeScript dentro dos blocos `<template>` de arquivos `.vue`?",
+          "reviewTopicId": "vue-tests",
+          "choices": [
+            { "id": "a", "text": "`vue-tsc`.", "correct": true, "explanation": "O `tsc` padrão não entende `.vue`; `vue-tsc` verifica script e template juntos." },
+            { "id": "b", "text": "`cssnano`.", "correct": false, "explanation": "`cssnano` apenas minifica CSS." }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,7 +3,10 @@ import { normalizeLevel } from './model.js';
 const LANGUAGE_RULES = [
   [/\b(html5?|css3?|flexbox|grid|tailwind|acessibilidade|wcag|dom)\b/, 'HTML/CSS'],
   [/\b(typescript|tsconfig|zod)\b/, 'TypeScript'],
-  [/\b(react|jsx|hooks|next\.?js|testing library)\b/, 'React'],
+  [/\b(next\.?js|app router|server actions)\b/, 'Next.js'],
+  [/\b(angular|rxjs|signals|testbed)\b/, 'Angular'],
+  [/\b(vue\.?js|pinia|composables|vue router)\b/, 'Vue.js'],
+  [/\b(react|jsx|hooks|testing library)\b/, 'React'],
   [/\b(javascript|es6\+?|fetch|vite)\b/, 'JavaScript'],
   [/\b(node\.?js|express|fastify|npm)\b/, 'Node.js'],
   [/\b(python|pandas|numpy|matplotlib|jupyter|ruff|mypy|pytest|scikit|pytorch|tensorflow)\b/, 'Python'],
@@ -72,6 +75,9 @@ const TRACK_DEFAULT_LANGS = {
   cpp: ['C/C++'],
   csharp: ['C# / .NET'],
   php: ['PHP', 'SQL'],
+  nextjs: ['Next.js', 'React', 'TypeScript'],
+  angular: ['Angular', 'TypeScript'],
+  vuejs: ['Vue.js', 'TypeScript'],
 };
 
 function normalizeText(value) {
