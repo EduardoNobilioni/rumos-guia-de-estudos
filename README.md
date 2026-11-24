@@ -15,7 +15,7 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 - Em Front-end e Full-Stack, escolher um framework de interface (React, Vue ou Angular). HTML, CSS e JavaScript ficam. Sem escolha salva, o conteúdo em React continua.
 - Em Jogos, escolher C# ou C e C++. O resto da trilha fica. Mobile, Dados e nuvem não pedem caminho: ainda não há trilha para o outro lado.
 - Marcar tópico, anotar, ocultar, reordenar, criar tópico e link seu.
-- Ideias de projeto com busca, doze por página.
+- Ideias de projeto com busca, doze por página, e um guia "Como começar" em cada ideia.
 - Autoavaliação por etapa. Abaixo de 70% aparece revisão. Não é nota.
 - Plano de estudo em volta da grade (`.ics`, CSV ou horário manual). Gerar baixa `.ics`, PDF e Markdown. A página mostra só o resumo.
 - Backup JSON, PNG e PDF da trilha, link de compartilhar sem anotação nem progresso.

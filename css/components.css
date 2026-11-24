@@ -314,6 +314,14 @@ dialog::backdrop { background: var(--color-bg-scrim); }
   overflow: auto;
 }
 
+.guide-list {
+  margin: 0;
+  padding-left: 1.25em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 .cmdk {
   width: min(640px, calc(100vw - 32px));
 }
