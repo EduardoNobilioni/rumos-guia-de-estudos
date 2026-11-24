@@ -191,7 +191,9 @@ html.dark .rumo-icon-badge {
 
 html.dark .rumo-icon-badge .devicon-github-original,
 html.dark .rumo-icon-badge .devicon-nextjs-plain,
-html.dark .rumo-icon-badge .devicon-linux-plain {
+html.dark .rumo-icon-badge .devicon-linux-plain,
+html.dark .rumo-icon-badge .devicon-rust-original,
+html.dark .rumo-icon-badge .devicon-unity-plain {
   color: #f8fafc;
 }
 

@@ -42,7 +42,7 @@ Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 - [x] C# / .NET ou PHP / Laravel
 
 ### Linguagens e tecnologias (~12)
-- [ ] Linguagens: Go, Rust, C / C++, C#, PHP
+- [x] Linguagens: Go, Rust, C / C++, C#, PHP
 - [ ] Front-end / Web: Next.js, Angular, Vue.js
 - [ ] Dados / Back-end / Infra: GraphQL, MongoDB, Terraform, Power BI
 

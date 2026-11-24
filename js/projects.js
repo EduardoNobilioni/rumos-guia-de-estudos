@@ -22,6 +22,10 @@ const LANGUAGE_RULES = [
   [/\b(ux|ui|figma|wireframe|heuristica|usabilidade|design system)\b/, 'UX/UI'],
   [/\b(produto|discovery|rice|prd)\b/, 'Produto'],
   [/\b(c#|csharp|\.net|dotnet|aspnet|xunit|ef core)\b/, 'C# / .NET'],
+  [/\b(golang|goroutines|go test)\b/, 'Go'],
+  [/\b(rust|cargo|tokio|axum)\b/, 'Rust'],
+  [/\b(c\+\+|cpp|cmake|raii|stl|ponteiros)\b/, 'C/C++'],
+  [/\b(php|composer|laravel|phpunit|pdo)\b/, 'PHP'],
   [/\b(godot|unity|game loop|jogos|fsm)\b/, 'Jogos'],
 ];
 
@@ -63,6 +67,11 @@ const TRACK_DEFAULT_LANGS = {
   linux: ['Linux'],
   docker: ['Docker'],
   kubernetes: ['Kubernetes', 'Docker'],
+  go: ['Go'],
+  rust: ['Rust'],
+  cpp: ['C/C++'],
+  csharp: ['C# / .NET'],
+  php: ['PHP', 'SQL'],
 };
 
 function normalizeText(value) {

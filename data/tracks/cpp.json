@@ -1,0 +1,251 @@
+{
+  "id": "cpp",
+  "name": "C e C++",
+  "tagline": "Fundamentos de memória, ponteiros, RAII, STL moderna e ferramentas de build",
+  "description": "Programação de sistemas e alta performance com C e C++ moderno: ponteiros e alocação de memória, RAII e smart pointers, containers e algoritmos da STL, CMake e sanitizers.",
+  "phases": [
+    {
+      "id": "cpp-fase-1",
+      "number": 1,
+      "badgeTitle": "Memória e C",
+      "title": "Ponteiros, stack vs. heap e base em C",
+      "topics": [
+        {
+          "id": "cpp-ponteiros",
+          "level": "iniciante",
+          "hours": 8,
+          "title": "Ponteiros, arrays, strings C e Stack vs. Heap",
+          "description": "Entenda endereços de memória, passagem por valor vs. referência, estouro de buffer e diferença entre vida automática na stack e alocação no heap.",
+          "tags": ["C", "C++", "Memória"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Learn C++ — Introduction", "url": "https://www.learncpp.com/", "lang": "en", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "cpp-compilacao",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Compilação, headers, warnings (`-Wall -Wextra`) e Sanitizers",
+          "description": "Como funciona pré-processador, compilação e linking, e como usar `-fsanitize=address,undefined` para pegar vazamentos e bugs cedo.",
+          "tags": ["C++", "Sanitizers"],
+          "prerequisites": ["cpp-ponteiros"],
+          "resources": [
+            { "title": "GCC AddressSanitizer / UndefinedBehaviorSanitizer", "url": "https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cpp-p1-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Implementação de vetor dinâmico em C com testes",
+          "description": "Implemente estrutura `IntVec` com `malloc`, `realloc` e `free`, validando com AddressSanitizer sem vazamentos.",
+          "steps": ["Dobre capacidade ao encher.", "Libere tudo em função `destroy`.", "Compile com `-fsanitize=address`."],
+          "definitionOfDone": ["Zero vazamentos no ASan.", "Trata alocação nula."]
+        },
+        {
+          "id": "cpp-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Alocador de arena linear simples em C/C++",
+          "description": "Reserve bloco único de memória e faça sub-alocações rápidas liberadas todas juntas ao final de uma fase.",
+          "steps": ["Alinhe ponteiros corretamente.", "Proteja contra overflow do bloco.", "Compare velocidade vs. `new/delete`."],
+          "definitionOfDone": ["Alinhamento correto.", "Passa em UBSan + ASan."]
+        },
+        {
+          "id": "cpp-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Tabela hash por encadeamento ou open addressing em C",
+          "description": "Implemente tabela hash com fator de carga, redimensionamento e cobertura de testes sem nenhum vazamento.",
+          "steps": ["Escreva função hash e igualdade.", "Faça rehash ao passar de 70%.", "Valide com valgrind ou ASan."],
+          "definitionOfDone": ["Busca O(1) amortizada.", "Sem leak ou invalid read."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cpp-f1-q1",
+          "prompt": "Qual a vantagem de compilar e testar em desenvolvimento com `-fsanitize=address,undefined`?",
+          "reviewTopicId": "cpp-compilacao",
+          "choices": [
+            { "id": "a", "text": "Detectar imediatamente acessos fora dos limites, uso após liberação (use-after-free), leaks e comportamento indefinido.", "correct": true, "explanation": "Evita bugs silenciosos que só apareceriam em produção." },
+            { "id": "b", "text": "Remover a necessidade de escrever testes.", "correct": false, "explanation": "Potencializa os testes pegando erros de memória." }
+          ]
+        },
+        {
+          "id": "cpp-f1-q2",
+          "prompt": "Qual a principal diferença entre alocação na Stack e no Heap?",
+          "reviewTopicId": "cpp-ponteiros",
+          "choices": [
+            { "id": "a", "text": "A Stack libera automaticamente ao sair do escopo e tem tamanho limitado; o Heap permite vida dinâmica maior exigindo gerenciamento.", "correct": true, "explanation": "Em C++ moderno gerenciamos o heap com RAII." },
+            { "id": "b", "text": "Variáveis na Stack nunca podem ser passadas para funções.", "correct": false, "explanation": "Podem ser passadas por valor ou referência enquanto o escopo viver." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cpp-fase-2",
+      "number": 2,
+      "badgeTitle": "C++ Moderno",
+      "title": "RAII, Smart Pointers e STL",
+      "topics": [
+        {
+          "id": "cpp-raii",
+          "level": "intermediario",
+          "hours": 8,
+          "title": "RAII, Move Semantics e `unique_ptr` / `shared_ptr`",
+          "description": "Em C++ moderno raramente se escreve `delete` na mão: vincule memória, arquivos e locks a destrutores de objetos (`RAII`).",
+          "tags": ["C++", "RAII"],
+          "prerequisites": ["cpp-compilacao"],
+          "resources": [
+            { "title": "C++ Core Guidelines — Resource Management", "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "cpp-stl",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "STL: `std::vector`, `unordered_map`, `string_view` e `<algorithm>`",
+          "description": "Usar os containers e algoritmos da biblioteca padrão (`std::sort`, `ranges`, `optional`) evitando reinventar estruturas propensas a erro.",
+          "tags": ["C++", "STL"],
+          "prerequisites": ["cpp-raii"],
+          "resources": [
+            { "title": "cppreference — Containers & Algorithms", "url": "https://en.cppreference.com/w/cpp", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cpp-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Leitor seguro de arquivo usando wrapper RAII",
+          "description": "Encapsule `FILE*` ou use `std::ifstream` com `std::optional` garantindo fechamento automático mesmo em erro.",
+          "steps": ["Remova `delete`/`fclose` manuais.", "Desabilite cópia ou implemente move.", "Teste fluxo normal e de falha."],
+          "definitionOfDone": ["Nenhum `new` ou `delete` cru.", "Passa nos sanitizers."]
+        },
+        {
+          "id": "cpp-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Índice invertido com `std::unordered_map` e `std::string_view`",
+          "description": "Indexe palavras de textos ordenando resultados com `std::sort` e algoritmos da STL.",
+          "steps": ["Use `const&` e `string_view` para evitar cópias.", "Ordene top N resultados.", "Escreva testes unitários."],
+          "definitionOfDone": ["Código limpo estilo C++17/20.", "Sem cópias desnecessárias."]
+        },
+        {
+          "id": "cpp-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Cache LRU genérico (template) usando `std::list` + `unordered_map`",
+          "description": "Implemente cache O(1) parametrizado por chave/valor suportando tipos movíveis (`unique_ptr`).",
+          "steps": ["Use `std::list::splice` para mover para frente em O(1).", "Suporte move semantics.", "Teste despejo por capacidade."],
+          "definitionOfDone": ["Complexidade O(1) em get e put.", "Zero vazamentos."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cpp-f2-q1",
+          "prompt": "Qual smart pointer deve ser sua primeira escolha padrão em C++ moderno quando há apenas um dono do recurso?",
+          "reviewTopicId": "cpp-raii",
+          "choices": [
+            { "id": "a", "text": "`std::unique_ptr`, criado com `std::make_unique`, pois tem zero overhead comparado a um ponteiro cru.", "correct": true, "explanation": "Só recorra a `shared_ptr` quando houver posse realmente compartilhada." },
+            { "id": "b", "text": "Ponteiro cru com `malloc`.", "correct": false, "explanation": "Ponteiro cru exige liberação manual sujeita a vazamentos." }
+          ]
+        },
+        {
+          "id": "cpp-f2-q2",
+          "prompt": "O que significa o princípio RAII em C++?",
+          "reviewTopicId": "cpp-raii",
+          "choices": [
+            { "id": "a", "text": "Resource Acquisition Is Initialization: o recurso é adquirido no construtor e liberado deterministicamente no destrutor.", "correct": true, "explanation": "Funciona mesmo quando exceções ocorrem." },
+            { "id": "b", "text": "Liberar memória apenas quando o PC reiniciar.", "correct": false, "explanation": "Garante liberação imediata ao sair do escopo." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cpp-fase-3",
+      "number": 3,
+      "badgeTitle": "Build e Concorrência",
+      "title": "CMake, testes automatizados e concorrência",
+      "topics": [
+        {
+          "id": "cpp-cmake",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Projetos multi-arquivo com CMake, CTest e depuração",
+          "description": "Estruturar targets (`add_library`, `add_executable`), flags por target e testes automatizados com CTest/Catch2 ou GoogleTest.",
+          "tags": ["C++", "CMake"],
+          "prerequisites": ["cpp-stl"],
+          "resources": [
+            { "title": "CMake Tutorial (Official Docs)", "url": "https://cmake.org/cmake/help/latest/guide/tutorial/index.html", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "cpp-threads",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Concorrência em C++ (`std::jthread`, `scoped_lock`, atomics)",
+          "description": "Proteger estado compartilhado com RAII (`std::lock_guard`/`scoped_lock`) e evitar deadlocks ao adquirir múltiplos locks.",
+          "tags": ["C++", "Threads"],
+          "prerequisites": ["cpp-cmake"],
+          "resources": [
+            { "title": "Concurrency support library (cppreference)", "url": "https://en.cppreference.com/w/cpp/thread", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "cpp-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Projeto organizado com CMake + biblioteca separada + CTest",
+          "description": "Separe biblioteca de cálculo do executável principal em `CMakeLists.txt` e registre teste no CTest.",
+          "steps": ["Crie biblioteca `mathlib`.", "Vincule via `target_link_libraries`.", "Rode `ctest`."],
+          "definitionOfDone": ["Compila fora da árvore de fontes (`build/`).", "CTest passa."]
+        },
+        {
+          "id": "cpp-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Fila thread-safe com `std::mutex` e `condition_variable`",
+          "description": "Implemente fila bloqueante produtor-consumidor sem busy waiting e encerramento limpo.",
+          "steps": ["Use `std::unique_lock` na espera.", "Proteja contra despertar espúrio com predicado.", "Teste com 4 threads."],
+          "definitionOfDone": ["Sem `-fsanitize=thread` data race.", "Sem busy loop consumindo 100% CPU."]
+        },
+        {
+          "id": "cpp-p3-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Mini motor de busca ou servidor local em C++ com CI",
+          "description": "Projeto completo com CMake, sanitizers no CI (ASan/UBSan/TSan) e suíte de testes automatizada.",
+          "steps": ["Configure presets CMake.", "Adicione GitHub Action com testes.", "Corrija todos os warnings."],
+          "definitionOfDone": ["CI verde com sanitizers.", "Zero memory leak."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "cpp-f3-q1",
+          "prompt": "Por que usar `std::lock_guard` ou `std::scoped_lock` em vez de chamar `mutex.lock()` e `mutex.unlock()` manualmente?",
+          "reviewTopicId": "cpp-threads",
+          "choices": [
+            { "id": "a", "text": "Garantem que o mutex será sempre liberado ao sair do escopo, mesmo se houver `return` antecipado ou exceção.", "correct": true, "explanation": "Evita deadlocks acidentais usando RAII." },
+            { "id": "b", "text": "Para rodar código Python dentro do C++.", "correct": false, "explanation": "É gerenciamento seguro de travas." }
+          ]
+        },
+        {
+          "id": "cpp-f3-q2",
+          "prompt": "Por que preferir comandos `target_*` (como `target_include_directories`) no CMake moderno?",
+          "reviewTopicId": "cpp-cmake",
+          "choices": [
+            { "id": "a", "text": "Para aplicar includes e dependências apenas onde necessário sem poluir todo o projeto.", "correct": true, "explanation": "Torna o grafo de dependências modular." },
+            { "id": "b", "text": "Porque apaga o código após compilar.", "correct": false, "explanation": "É modularização do build." }
+          ]
+        }
+      ]
+    }
+  ]
+}

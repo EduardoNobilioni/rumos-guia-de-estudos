@@ -40,7 +40,7 @@ Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 
 **Fundamentos.** Fundamentos da Computação, Estruturas de Dados e Algoritmos, Banco de Dados e Modelagem, Engenharia de Software e Boas Práticas.
 
-**Tecnologias.** Python, JavaScript, TypeScript, React, Node.js, SQL, Git e GitHub, Linux, Docker, Kubernetes.
+**Tecnologias.** Python, JavaScript, TypeScript, React, Node.js, Go, Rust, C e C++, C#, PHP, SQL, Git e GitHub, Linux, Docker, Kubernetes.
 
 Ciência de Dados é a trilha que se chamava Dados. O identificador no arquivo e no progresso salvo continua `dados`, então tópico marcado, anotação e autoavaliação antiga permanecem. Os tópicos novos (planilha, Power BI, teste A/B, coleta) entram sem apagar os antigos. Analista, Engenharia de Dados e Machine Learning são trilhas novas, com o próprio progresso. Quem abre a Ciência de Dados vê um aviso disso, uma vez.
 

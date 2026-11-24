@@ -1,0 +1,252 @@
+{
+  "id": "php",
+  "name": "PHP",
+  "tagline": "PHP 8 moderno e tipado, Composer/PSR-4, PDO seguro, Laravel essencial e PHPUnit",
+  "description": "Desenvolvimento web moderno com PHP 8+: tipagem estrita, OOP e namespaces PSR-4 com Composer, acesso seguro ao banco com PDO (prepared statements), APIs REST e testes com PHPUnit.",
+  "phases": [
+    {
+      "id": "php-fase-1",
+      "number": 1,
+      "badgeTitle": "PHP Moderno",
+      "title": "PHP 8+, tipagem estrita e Composer (PSR-4)",
+      "topics": [
+        {
+          "id": "php-base",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "PHP 8+: `strict_types`, union types, `match` e arrays",
+          "description": "Deixe o PHP legado para trás: use `declare(strict_types=1)`, tipos em parâmetros/retornos, `readonly` e `match` estrito.",
+          "tags": ["PHP", "Tipos"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Manual do PHP (PT-BR)", "url": "https://www.php.net/manual/pt_BR/", "lang": "pt", "kind": "documentacao" },
+            { "title": "PHP: The Right Way", "url": "https://phptherightway.com/", "lang": "en", "kind": "leitura" }
+          ]
+        },
+        {
+          "id": "php-composer",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Namespaces, autoloading PSR-4 e Composer",
+          "description": "Organizar classes em pacotes reutilizáveis sem dezenas de `require` manuais usando `composer.json`.",
+          "tags": ["PHP", "Composer"],
+          "prerequisites": ["php-base"],
+          "resources": [
+            { "title": "Composer Documentation", "url": "https://getcomposer.org/doc/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "php-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Biblioteca CLI em PHP 8 com PSR-4",
+          "description": "Estruture um projeto com `composer.json`, namespaces próprios e tipagem estrita para processar JSON local.",
+          "steps": ["Ative `strict_types=1`.", "Configure autoload PSR-4.", "Formate seguindo PSR-12."],
+          "definitionOfDone": ["Sem `require` manual entre classes.", "Roda limpo no PHP 8.2+."]
+        },
+        {
+          "id": "php-p1-int",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Validador tipado com classes `readonly` e Enums",
+          "description": "Use backed enums e propriedades `readonly` do PHP 8.2 para modelar regras de pedido.",
+          "steps": ["Substitua constantes soltas por `enum`.", "Impeça mutação externa.", "Trate erros de validação."],
+          "definitionOfDone": ["Tipos verificáveis estaticamente.", "Código claro em PSR-12."]
+        },
+        {
+          "id": "php-p1-ava",
+          "level": "avancado",
+          "hours": 7,
+          "title": "Projeto PHP analisado com PHPStan nível máximo",
+          "description": "Configure PHPStan em pacote próprio eliminando todos os erros potenciais de tipo estático.",
+          "steps": ["Instale `phpstan/phpstan` via Composer.", "Suba nível gradualmente até 8.", "Documente generics em PHPDoc se necessário."],
+          "definitionOfDone": ["0 erros no PHPStan.", "Automatizado em script do Composer."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "php-f1-q1",
+          "prompt": "Qual o objetivo de `declare(strict_types=1);` no topo de arquivos PHP?",
+          "reviewTopicId": "php-base",
+          "choices": [
+            { "id": "a", "text": "Exigir tipos exatos nas chamadas de função daquele arquivo, evitando conversões implícitas silenciosas.", "correct": true, "explanation": "Evita que `'12abc'` passe silenciosamente como `12`." },
+            { "id": "b", "text": "Desativar o Composer.", "correct": false, "explanation": "Controla verificação de tipos em runtime." }
+          ]
+        },
+        {
+          "id": "php-f1-q2",
+          "prompt": "O que o padrão PSR-4 define no ecossistema PHP?",
+          "reviewTopicId": "php-composer",
+          "choices": [
+            { "id": "a", "text": "O mapeamento automático entre namespaces e diretórios de arquivos para autoloading pelo Composer.", "correct": true, "explanation": "Permite carregar classes sob demanda sem `include` manuais." },
+            { "id": "b", "text": "O protocolo de rede TCP.", "correct": false, "explanation": "É a especificação padrão de autoloading PHP." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "php-fase-2",
+      "number": 2,
+      "badgeTitle": "Web, PDO e Segurança",
+      "title": "HTTP, PDO seguro (SQL) e autenticação",
+      "topics": [
+        {
+          "id": "php-pdo",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Banco de dados com PDO e Prepared Statements",
+          "description": "Nunca concatene entrada de usuário em SQL: use PDO com `prepare`/`execute`, `ERRMODE_EXCEPTION` e transações.",
+          "tags": ["PHP", "SQL", "Segurança"],
+          "prerequisites": ["php-composer"],
+          "resources": [
+            { "title": "PDO — Manual do PHP (PT-BR)", "url": "https://www.php.net/manual/pt_BR/book.pdo.php", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "php-web",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "APIs REST em PHP, `password_hash` e segurança web",
+          "description": "Senhas com `password_hash` (bcrypt/Argon2), escape XSS com `htmlspecialchars`, CSRF e cabeçalhos JSON limpos.",
+          "tags": ["PHP", "HTTP", "OWASP"],
+          "prerequisites": ["php-pdo"],
+          "resources": [
+            { "title": "Password Hashing (PHP Manual PT-BR)", "url": "https://www.php.net/manual/pt_BR/book.password.php", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "php-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "CRUD seguro em PHP + SQLite usando PDO",
+          "description": "Implemente busca e cadastro usando apenas prepared statements e escape seguro na saída HTML.",
+          "steps": ["Use `prepare()` em todas as queries.", "Escape saída com `ENT_QUOTES`.", "Teste inserindo aspas simples."],
+          "definitionOfDone": ["Imune a SQL Injection básico.", "Sem XSS em campos de texto."]
+        },
+        {
+          "id": "php-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "API REST JSON em PHP sem framework com roteador simples",
+          "description": "Roteie GET/POST/DELETE retornando JSON, status HTTP adequados e erros estruturados.",
+          "steps": ["Separe controller e repositório PDO.", "Valide payload JSON.", "Use transações ao alterar 2 tabelas."],
+          "definitionOfDone": ["Status 201/400/404 corretos.", "Queries parametrizadas."]
+        },
+        {
+          "id": "php-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Sistema de login seguro (`password_hash` + proteção CSRF)",
+          "description": "Cadastro e autenticação regenerando ID de sessão (`session_regenerate_id`), cookies `HttpOnly` e token CSRF.",
+          "steps": ["Use `password_verify`.", "Proteja formulários POST com CSRF.", "Limite tentativas simples."],
+          "definitionOfDone": ["Nenhuma senha em texto claro.", "Cookies de sessão protegidos."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "php-f2-q1",
+          "prompt": "Como prevenir SQL Injection ao usar PDO em PHP?",
+          "reviewTopicId": "php-pdo",
+          "choices": [
+            { "id": "a", "text": "Usando Prepared Statements (`prepare` + placeholders `?` ou `:nome`) em vez de concatenar variáveis na string SQL.", "correct": true, "explanation": "Separa comando SQL dos dados informados." },
+            { "id": "b", "text": "Usando `md5` no nome da tabela.", "correct": false, "explanation": "Prepared statements são a defesa padrão." }
+          ]
+        },
+        {
+          "id": "php-f2-q2",
+          "prompt": "Qual função nativa do PHP é recomendada para gerar hash seguro de senhas?",
+          "reviewTopicId": "php-web",
+          "choices": [
+            { "id": "a", "text": "`password_hash()` (combinada com `password_verify()` na checagem).", "correct": true, "explanation": "Aplica salt automático e algoritmos lentos como bcrypt/Argon2." },
+            { "id": "b", "text": "`base64_encode()`.", "correct": false, "explanation": "Base64 é codificação reversível, não criptografia nem hash." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "php-fase-3",
+      "number": 3,
+      "badgeTitle": "Laravel e Testes",
+      "title": "Ecossistema Laravel/Symfony e testes com PHPUnit",
+      "topics": [
+        {
+          "id": "php-laravel",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Framework moderno (Laravel): rotas, Eloquent, migrations e filas",
+          "description": "Entender ciclo de requisição, validação com Form Requests, Eloquent sem N+1 (`with`) e jobs assíncronos em fila.",
+          "tags": ["PHP", "Laravel"],
+          "prerequisites": ["php-web"],
+          "resources": [
+            { "title": "Laravel Documentation", "url": "https://laravel.com/docs", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "php-phpunit",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Testes automatizados com PHPUnit / Pest",
+          "description": "Testes unitários de regras de domínio e testes HTTP de feature garantindo migrations, autenticação e respostas JSON.",
+          "tags": ["PHP", "PHPUnit"],
+          "prerequisites": ["php-laravel"],
+          "resources": [
+            { "title": "PHPUnit Documentation", "url": "https://docs.phpunit.de/en/11.5/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "php-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Primeira suíte de testes unitários com PHPUnit",
+          "description": "Teste regras de negócio isoladas em PHP puro usando `DataProvider` no PHPUnit.",
+          "steps": ["Instale `phpunit/phpunit` como `require-dev`.", "Escreva 6 asserções.", "Rode `./vendor/bin/phpunit`."],
+          "definitionOfDone": ["Testes independentes entre si.", "Passam em menos de 1 segundo."]
+        },
+        {
+          "id": "php-p3-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "API em Laravel com Form Requests e Eager Loading",
+          "description": "Construa catálogo com categorias e produtos evitando problema de query N+1 com `::with()`.",
+          "steps": ["Crie migrations e seeders.", "Valide entrada em FormRequest.", "Inspecione queries executadas."],
+          "definitionOfDone": ["Número constante de queries na listagem.", "Retorno JSON padronizado."]
+        },
+        {
+          "id": "php-p3-ava",
+          "level": "avancado",
+          "hours": 9,
+          "title": "API Laravel testada (Feature Tests) + fila de processamento",
+          "description": "Despache envio/processamento assíncrono em Queue e valide endpoints HTTP e filas com testes automatizados.",
+          "steps": ["Escreva Feature Tests com `RefreshDatabase`.", "Use `Queue::fake()` nos testes.", "Configure workflow CI."],
+          "definitionOfDone": ["CI executa PHPStan + PHPUnit verdes.", "Autenticação e permissões testadas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "php-f3-q1",
+          "prompt": "Para que serve Eager Loading (`Model::with('relacao')`) em frameworks como Laravel/Eloquent?",
+          "reviewTopicId": "php-laravel",
+          "choices": [
+            { "id": "a", "text": "Carregar relacionamentos em lote evitando dezenas ou centenas de queries repetidas em loop (problema N+1).", "correct": true, "explanation": "Reduz drasticamente a carga no banco em listagens." },
+            { "id": "b", "text": "Apagar o cache do navegador.", "correct": false, "explanation": "Otimiza consultas SQL de relacionamentos." }
+          ]
+        },
+        {
+          "id": "php-f3-q2",
+          "prompt": "Qual a diferença entre `require` e `require-dev` no `composer.json`?",
+          "reviewTopicId": "php-phpunit",
+          "choices": [
+            { "id": "a", "text": "`require-dev` guarda ferramentas usadas apenas em desenvolvimento e testes (como PHPUnit e PHPStan), omitidas com `--no-dev` em produção.", "correct": true, "explanation": "Deixa o deploy em produção menor e mais seguro." },
+            { "id": "b", "text": "`require-dev` não permite autoloading.", "correct": false, "explanation": "O motivo é separar dependências de runtime vs. dev/testes." }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "id": "rust",
+  "name": "Rust",
+  "tagline": "Segurança de memória sem Garbage Collector: ownership, traits, Cargo e concorrência",
+  "description": "Programação segura e de alta performance em Rust: ownership e borrowing, Pattern Matching com `Option`/`Result`, traits e genéricos, Cargo/testes e código assíncrono/CLI.",
+  "phases": [
+    {
+      "id": "rs-fase-1",
+      "number": 1,
+      "badgeTitle": "Ownership",
+      "title": "Ownership, borrowing, structs e enums",
+      "topics": [
+        {
+          "id": "rs-ownership",
+          "level": "iniciante",
+          "hours": 8,
+          "title": "Ownership, Borrowing (`&` vs. `&mut`) e Lifetimes básicos",
+          "description": "O coração do Rust: cada valor tem um dono, múltiplas referências de leitura OU uma única referência mutável exclusiva em compilação.",
+          "tags": ["Rust", "Memória"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "The Rust Programming Language (The Book)", "url": "https://doc.rust-lang.org/book/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "rs-enums",
+          "level": "iniciante",
+          "hours": 6,
+          "title": "Enums, Pattern Matching, `Option` e `Result`",
+          "description": "Em Rust não há `null`: ausência usa `Option<T>` e falhas explícitas usam `Result<T, E>` tratados com `match` ou operador `?`.",
+          "tags": ["Rust", "Result"],
+          "prerequisites": ["rs-ownership"],
+          "resources": [
+            { "title": "Rust by Example", "url": "https://doc.rust-lang.org/rust-by-example/", "lang": "en", "kind": "pratica" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "rs-p1-ini",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Analisador de texto CLI tratando erros com `Result`",
+          "description": "Crie CLI usando Cargo que lê arquivo, conta linhas/palavras e propaga erros com `?` sem `unwrap()`.",
+          "steps": ["Inicie com `cargo new`.", "Use `fs::read_to_string`.", "Retorne erro amigável no `main`."],
+          "definitionOfDone": ["Zero `.unwrap()` em entrada de usuário.", "Passa em `cargo clippy`."]
+        },
+        {
+          "id": "rs-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Máquina de estados de pedido com `enum` e `match`",
+          "description": "Modele estados com payloads distintos em `enum` tornando transições inválidas impossíveis em compilação.",
+          "steps": ["Defina variantes tipadas.", "Exija `match` exaustivo.", "Escreva testes unitários no módulo."],
+          "definitionOfDone": ["Compilador garante cobertura de todos os estados.", "`cargo test` verde."]
+        },
+        {
+          "id": "rs-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Parser zero-copy usando slices `&str` com lifetimes",
+          "description": "Extraia campos de linhas estruturadas retornando referências para o buffer original sem clonar strings.",
+          "steps": ["Anote lifetimes explícitos quando necessário.", "Teste casos de entrada incompleta.", "Meça alocações reduzidas."],
+          "definitionOfDone": ["Sem `clone()` desnecessário no caminho crítico.", "Testado com entradas malformadas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "rs-f1-q1",
+          "prompt": "Qual regra o borrow checker de Rust garante em tempo de compilação?",
+          "reviewTopicId": "rs-ownership",
+          "choices": [
+            { "id": "a", "text": "Você pode ter várias referências imutáveis (`&T`) OU uma única referência mutável (`&mut T`), nunca ambas ao mesmo tempo.", "correct": true, "explanation": "Isso elimina data races e ponteiros pendentes sem Garbage Collector." },
+            { "id": "b", "text": "Todas as variáveis viram globais automaticamente.", "correct": false, "explanation": "É controle estrito de empréstimo e posse." }
+          ]
+        },
+        {
+          "id": "rs-f1-q2",
+          "prompt": "Por que evitar `.unwrap()` em produção em Rust?",
+          "reviewTopicId": "rs-enums",
+          "choices": [
+            { "id": "a", "text": "Porque encerra a thread com `panic!` se o valor for `None` ou `Err`, em vez de tratar a falha.", "correct": true, "explanation": "Prefira `?`, `unwrap_or_else` ou `match`." },
+            { "id": "b", "text": "Porque não compila no Linux.", "correct": false, "explanation": "Compila, mas derruba o programa em erro inesperado." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rs-fase-2",
+      "number": 2,
+      "badgeTitle": "Traits e Cargo",
+      "title": "Traits, genéricos, iteradores e ecossistema Cargo",
+      "topics": [
+        {
+          "id": "rs-traits",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Traits, genéricos e dispatch estático vs. dinâmico",
+          "description": "Compor comportamento com traits (`Display`, `Debug`, `From`), polimorfismo zero-cost (`impl Trait`) e `dyn Trait`.",
+          "tags": ["Rust", "Traits"],
+          "prerequisites": ["rs-enums"],
+          "resources": [
+            { "title": "Traits (The Rust Book)", "url": "https://doc.rust-lang.org/book/ch10-02-traits.html", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "rs-iterators",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Iteradores, closures e crates com `cargo` / `clippy`",
+          "description": "Processar dados com iteradores lazy (`map`, `filter`, `fold`), serialização com `serde` e qualidade com `cargo clippy`.",
+          "tags": ["Rust", "Cargo"],
+          "prerequisites": ["rs-traits"],
+          "resources": [
+            { "title": "The Cargo Book", "url": "https://doc.rust-lang.org/cargo/", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "rs-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Biblioteca de estatísticas com iteradores e `#[test]`",
+          "description": "Implemente média, mediana e desvio padrão em slices `&[f64]` usando iteradores seguros.",
+          "steps": ["Trate slice vazio retornando `Option<f64>`.", "Escreva testes em `#[cfg(test)]`.", "Rode `cargo clippy`."],
+          "definitionOfDone": ["Sem `panic` em slice vazio.", "0 avisos do Clippy."]
+        },
+        {
+          "id": "rs-p2-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "CLI JSON/CSV com `clap` e `serde`",
+          "description": "Construa ferramenta de linha de comando para converter e filtrar registros CSV para JSON tipado.",
+          "steps": ["Derive `Parser` do `clap`.", "Mapeie structs com `serde::Deserialize`.", "Escreva testes de integração em `tests/`."],
+          "definitionOfDone": ["`--help` gerado automaticamente.", "Mensagens de erro claras."]
+        },
+        {
+          "id": "rs-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Sistema de plugins com `dyn Trait` e erros tipados",
+          "description": "Defina trait compartilhada de exportação e enum de erro próprio implementando `std::error::Error`.",
+          "steps": ["Crie trait pública.", "Implemente 2 adaptadores.", "Teste erro propagando com `?`."],
+          "definitionOfDone": ["Extensível sem alterar o núcleo.", "Documentado com exemplos de `cargo test --doc`."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "rs-f2-q1",
+          "prompt": "Qual a característica dos iteradores em Rust (`iter().map(...).filter(...)`)?",
+          "reviewTopicId": "rs-iterators",
+          "choices": [
+            { "id": "a", "text": "São preguiçosos (lazy) e compilam sem overhead extra (zero-cost abstraction) até serem consumidos.", "correct": true, "explanation": "Frequentemente ficam tão rápidos quanto loops escritos à mão." },
+            { "id": "b", "text": "Alocam um vetor novo em cada etapa.", "correct": false, "explanation": "Não alocam até chamar `.collect()`." }
+          ]
+        },
+        {
+          "id": "rs-f2-q2",
+          "prompt": "Para que serve o `cargo clippy`?",
+          "reviewTopicId": "rs-iterators",
+          "choices": [
+            { "id": "a", "text": "Apontar código não idiomático, possíveis bugs e melhorias de desempenho em Rust.", "correct": true, "explanation": "Funciona como um revisor rigoroso de boas práticas Rust." },
+            { "id": "b", "text": "Gerar chaves SSH.", "correct": false, "explanation": "É o linter oficial do Rust." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rs-fase-3",
+      "number": 3,
+      "badgeTitle": "Concorrência e Web",
+      "title": "Fearless concurrency, Tokio e APIs em Rust",
+      "topics": [
+        {
+          "id": "rs-threads",
+          "level": "avancado",
+          "hours": 6,
+          "title": "Threads, `Send`/`Sync`, `Arc<Mutex<T>>` e canais",
+          "description": "Como o sistema de tipos (`Send` e `Sync`) impede em compilação que você compartilhe estado mutável inseguro entre threads.",
+          "tags": ["Rust", "Concorrência"],
+          "prerequisites": ["rs-iterators"],
+          "resources": [
+            { "title": "Fearless Concurrency (The Book)", "url": "https://doc.rust-lang.org/book/ch16-00-concurrency.html", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "rs-async",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Async Rust com Tokio e APIs web (Axum)",
+          "description": "Entender `Future`, runtime `tokio`, quando usar `spawn_blocking` para CPU pesada e rotas tipadas com Axum.",
+          "tags": ["Rust", "Tokio", "Async"],
+          "prerequisites": ["rs-threads"],
+          "resources": [
+            { "title": "Tokio Tutorial", "url": "https://tokio.rs/tokio/tutorial", "lang": "en", "kind": "curso" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "rs-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Processamento paralelo simples com threads e canais",
+          "description": "Divida uma lista de cálculos entre 4 threads enviando resultados via `std::sync::mpsc`.",
+          "steps": ["Envie chunks via `move` closure.", "Colete resultados no receptor.", "Garanta `join()` em todas as threads."],
+          "definitionOfDone": ["Sem `unsafe`.", "Resultados determinísticos."]
+        },
+        {
+          "id": "rs-p3-int",
+          "level": "intermediario",
+          "hours": 7,
+          "title": "API REST enxuta em Axum + Tokio",
+          "description": "Crie servidor HTTP com estado compartilhado via `State`, JSON tipado e logs com `tracing`.",
+          "steps": ["Defina rotas CRUD.", "Adicione tratamento de erro retornando `IntoResponse`.", "Teste endpoints."],
+          "definitionOfDone": ["Compila limpo com `clippy`.", "Respostas JSON consistentes."]
+        },
+        {
+          "id": "rs-p3-ava",
+          "level": "avancado",
+          "hours": 10,
+          "title": "Serviço TCP/HTTP concorrente com graceful shutdown",
+          "description": "Servidor assíncrono em Tokio com limite de conexões por semáforo, timeouts e encerramento limpo ao receber sinal.",
+          "steps": ["Use `tokio::select!` para sinais.", "Limite concorrência com `Semaphore`.", "Escreva teste de carga leve."],
+          "definitionOfDone": ["Não bloqueia runtime assíncrono.", "Finaliza conexões pendentes corretamente."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "rs-f3-q1",
+          "prompt": "O que o par `Arc<Mutex<T>>` resolve em código multithread em Rust?",
+          "reviewTopicId": "rs-threads",
+          "choices": [
+            { "id": "a", "text": "Permite posse compartilhada entre várias threads (`Arc`) com acesso mutável exclusivo sincronizado (`Mutex`).", "correct": true, "explanation": "`Rc` não é thread-safe; `Arc` usa contagem atômica." },
+            { "id": "b", "text": "Desativa toda verificação do compilador.", "correct": false, "explanation": "O compilador continua validando `Send` e `Sync`." }
+          ]
+        },
+        {
+          "id": "rs-f3-q2",
+          "prompt": "Por que tarefas pesadas de CPU não devem rodar diretamente dentro de uma função `async` no Tokio?",
+          "reviewTopicId": "rs-async",
+          "choices": [
+            { "id": "a", "text": "Porque bloqueiam a thread do executor assíncrono impedindo outras tarefas I/O de avançarem; use `spawn_blocking`.", "correct": true, "explanation": "Executores async assumem que tarefas cedem controle nos pontos `.await`." },
+            { "id": "b", "text": "Porque `async` não aceita números inteiros.", "correct": false, "explanation": "O motivo é bloqueio cooperativo de threads." }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -41,6 +41,11 @@ const TRACK_DEVICONS = {
   docker: 'devicon-docker-plain colored',
   kubernetes: 'devicon-kubernetes-plain colored',
   'csharp-dotnet': 'devicon-csharp-plain colored',
+  go: 'devicon-go-original-wordmark colored',
+  rust: 'devicon-rust-original',
+  cpp: 'devicon-cplusplus-plain colored',
+  csharp: 'devicon-csharp-plain colored',
+  php: 'devicon-php-plain colored',
 };
 
 const TOPIC_RULES = [
@@ -68,6 +73,10 @@ const TOPIC_RULES = [
   [/\b(python|venv|unittest|ruff|mypy|pyproject|dataclasses)\b/, { devicon: 'devicon-python-plain colored' }],
   [/\b(spring)\b/, { devicon: 'devicon-spring-original colored' }],
   [/\b(java|jvm|maven|gradle)\b/, { devicon: 'devicon-java-plain colored' }],
+  [/\b(golang|goroutines|go test)\b/, { devicon: 'devicon-go-original-wordmark colored' }],
+  [/\b(rust|cargo|borrow|ownership|tokio|axum)\b/, { devicon: 'devicon-rust-original' }],
+  [/\b(c\+\+|cpp|cmake|raii|stl|ponteiros)\b/, { devicon: 'devicon-cplusplus-plain colored' }],
+  [/\b(php|composer|laravel|phpunit|pdo)\b/, { devicon: 'devicon-php-plain colored' }],
   [/\b(c#|csharp|\.net|dotnet|aspnet|ef core|linq|xunit)\b/, { devicon: 'devicon-csharp-plain colored' }],
   [/\b(godot)\b/, { devicon: 'devicon-godot-plain colored' }],
   [/\b(unity)\b/, { devicon: 'devicon-unity-plain' }],

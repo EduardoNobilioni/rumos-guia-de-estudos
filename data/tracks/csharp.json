@@ -1,0 +1,251 @@
+{
+  "id": "csharp",
+  "name": "C#",
+  "tagline": "Tipagem forte, OOP moderna, LINQ, programação assíncrona e testes na linguagem C#",
+  "description": "Domínio da linguagem C# moderna independentemente do framework: tipos, `record`, pattern matching, generics, LINQ declarativo, `async`/`await` e testes unitários com xUnit.",
+  "phases": [
+    {
+      "id": "csl-fase-1",
+      "number": 1,
+      "badgeTitle": "Sintaxe e Tipos",
+      "title": "Tipos, nullability, records e pattern matching",
+      "topics": [
+        {
+          "id": "csl-tipos",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Sistema de tipos (valor vs. referência), `nullable` e `record`",
+          "description": "Diferença entre `struct`, `class` e `record`, proteção contra `null` em compilação (`string?`) e imutabilidade prática.",
+          "tags": ["C#", "Tipos"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "Tour of C# (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/tour-of-csharp/", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "csl-pattern",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Pattern Matching, `switch` expressions e tratamento de erros",
+          "description": "Escrever ramificações expressivas e legíveis com `switch` expressions e quando lançar ou retornar resultados tipados.",
+          "tags": ["C#", "Pattern Matching"],
+          "prerequisites": ["csl-tipos"],
+          "resources": [
+            { "title": "Pattern Matching Overview (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/fundamentals/functional/pattern-matching", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "csl-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Calculadora de impostos/descontos com `record` e `switch`",
+          "description": "Modele categorias de produto imutáveis e calcule regras com `switch` expression sem cadeias longas de `if/else`.",
+          "steps": ["Crie `record` para item.", "Use `switch` por padrão.", "Valide entradas nulas."],
+          "definitionOfDone": ["Sem warnings de nullability.", "Regras fáceis de ler."]
+        },
+        {
+          "id": "csl-p1-int",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Tipo `Result<T>` genérico sem exceções de fluxo",
+          "description": "Crie estrutura discriminada de sucesso/erro para operações de validação de formulário.",
+          "steps": ["Implemente `Success` e `Failure`.", "Adicione método `Match`.", "Cubra com testes."],
+          "definitionOfDone": ["Erros de domínio explícitos na assinatura.", "Sem `throw` para erro comum."]
+        },
+        {
+          "id": "csl-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Avaliador simples de expressões usando `switch` recursivo",
+          "description": "Represente AST numérica com hierarquia fechada de `record` e avalie usando pattern matching.",
+          "steps": ["Defina nós Soma, Produto, Literal.", "Avalie recursivamente.", "Trate divisão por zero."],
+          "definitionOfDone": ["Árvore imutável.", "Testes cobrindo expressões aninhadas."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "csl-f1-q1",
+          "prompt": "Qual a principal vantagem de usar `record` em C# para representar dados?",
+          "reviewTopicId": "csl-tipos",
+          "choices": [
+            { "id": "a", "text": "Gera automaticamente igualdade por valor, sintaxe enxuta e suporte natural à imutabilidade (`with`).", "correct": true, "explanation": "Dois `record` com os mesmos valores são considerados iguais." },
+            { "id": "b", "text": "Impede criar objetos na memória.", "correct": false, "explanation": "Facilita DTOs e objetos de valor." }
+          ]
+        },
+        {
+          "id": "csl-f1-q2",
+          "prompt": "O que o compilador verifica quando `Nullable` está ativo?",
+          "reviewTopicId": "csl-tipos",
+          "choices": [
+            { "id": "a", "text": "Avisa onde uma variável possivelmente nula (`T?`) está sendo acessada sem checagem prévia.", "correct": true, "explanation": "Ajuda a evitar `NullReferenceException` antes de executar." },
+            { "id": "b", "text": "Converte strings em inteiros.", "correct": false, "explanation": "Trata apenas segurança contra nulos." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "csl-fase-2",
+      "number": 2,
+      "badgeTitle": "LINQ e Generics",
+      "title": "Generics, coleções, delegados e LINQ",
+      "topics": [
+        {
+          "id": "csl-generics",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Generics, `IEnumerable<T>`, `Func`/`Action` e lambdas",
+          "description": "Escrever algoritmos e coleções reutilizáveis com restrições `where T : ...` e entender execução adiada (`IEnumerable`).",
+          "tags": ["C#", "Generics"],
+          "prerequisites": ["csl-pattern"],
+          "resources": [
+            { "title": "Generic classes and methods (Microsoft Learn)", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/fundamentals/types/generics", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "csl-linq",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "LINQ completo: `Select`, `Where`, `GroupBy` e execução adiada",
+          "description": "Transformar sequências sem loops imperativos e evitar múltipla enumeração acidental de `IEnumerable`.",
+          "tags": ["C#", "LINQ"],
+          "prerequisites": ["csl-generics"],
+          "resources": [
+            { "title": "Language Integrated Query (LINQ)", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/linq/", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "csl-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Relatório de vendas em memória com LINQ",
+          "description": "Use `GroupBy`, `OrderByDescending` e `Select` para calcular top 5 produtos e receita por mês.",
+          "steps": ["Carregue lista simulada.", "Agrupe por categoria.", "Formate saída ordenada."],
+          "definitionOfDone": ["Zero loops aninhados manuais.", "Resultados conferidos em teste."]
+        },
+        {
+          "id": "csl-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Extensões genéricas de paginação sobre `IEnumerable<T>`",
+          "description": "Crie métodos de extensão `Paginate` e `ChunkBy` reutilizáveis com validação de parâmetros.",
+          "steps": ["Valide página e tamanho >= 1.", "Preserve execução preguiçosa com `yield return`.", "Escreva testes."],
+          "definitionOfDone": ["Funciona para qualquer tipo `T`.", "Sem materializar coleção inteira sem precisar."]
+        },
+        {
+          "id": "csl-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Pipeline de processamento com `Span<T>` e zero alocações",
+          "description": "Processe strings grandes fatiando texto com `ReadOnlySpan<char>` reduzindo uso de GC.",
+          "steps": ["Substitua `Split` por slice com `Span`.", "Escreva teste garantindo saída idêntica.", "Compare memória alocada."],
+          "definitionOfDone": ["Saída exata.", "Redução clara de alocações em laço." ]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "csl-f2-q1",
+          "prompt": "O que significa 'execução adiada' (deferred execution) em consultas LINQ?",
+          "reviewTopicId": "csl-linq",
+          "choices": [
+            { "id": "a", "text": "A consulta só é realmente executada quando os itens são iterados (ex.: `foreach`, `ToList()`, `Count()`), não quando `Where/Select` são chamados.", "correct": true, "explanation": "Por isso chamar `.Count()` e depois `foreach` pode rodar a consulta duas vezes." },
+            { "id": "b", "text": "A consulta espera 10 segundos antes de rodar.", "correct": false, "explanation": "Refere-se à avaliação sob demanda." }
+          ]
+        },
+        {
+          "id": "csl-f2-q2",
+          "prompt": "Para que servem constraints genéricas (`where T : class` ou interface) em C#?",
+          "reviewTopicId": "csl-generics",
+          "choices": [
+            { "id": "a", "text": "Restringir os tipos aceitos para que o método possa usar membros garantidos com segurança em compilação.", "correct": true, "explanation": "Une reutilização com segurança de tipos." },
+            { "id": "b", "text": "Transformar código em JavaScript.", "correct": false, "explanation": "São restrições de tipo do compilador C#." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "csl-fase-3",
+      "number": 3,
+      "badgeTitle": "Async e Testes",
+      "title": "Programação assíncrona e testes com xUnit",
+      "topics": [
+        {
+          "id": "csl-async",
+          "level": "avancado",
+          "hours": 6,
+          "title": "`async`/`await`, `Task.WhenAll`, `CancellationToken` e `IAsyncDisposable`",
+          "description": "Paralelizar chamadas independentes com `Task.WhenAll`, propagar cancelamento limpo e liberar streams assíncronos.",
+          "tags": ["C#", "Async"],
+          "prerequisites": ["csl-linq"],
+          "resources": [
+            { "title": "Asynchronous programming with async and await", "url": "https://learn.microsoft.com/pt-br/dotnet/csharp/asynchronous-programming/", "lang": "pt", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "csl-test",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Testes unitários limpos em C# com xUnit",
+          "description": "Organizar suítes Arrange-Act-Assert, testes parametrizados com `[Theory]` e dublês simples usando interfaces.",
+          "tags": ["C#", "xUnit"],
+          "prerequisites": ["csl-async"],
+          "resources": [
+            { "title": "Unit testing C# with xUnit", "url": "https://learn.microsoft.com/pt-br/dotnet/core/testing/unit-testing-with-dotnet-test", "lang": "pt", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "csl-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Suíte de testes para regras de negócio em xUnit",
+          "description": "Teste uma biblioteca de validação de datas e valores com `[Fact]` e `[Theory]`.",
+          "steps": ["Adicione projeto xUnit à solution.", "Teste casos válidos e inválidos.", "Rode `dotnet test`."],
+          "definitionOfDone": ["Testes legíveis em AAA.", "Zero dependência externa."]
+        },
+        {
+          "id": "csl-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Coletor assíncrono com `Task.WhenAll` e cancelamento",
+          "description": "Execute 5 buscas assíncronas simuladas em paralelo abortando corretamente se o token for cancelado.",
+          "steps": ["Aceite `CancellationToken` em toda cadeia.", "Use `Task.WhenAll`.", "Teste tempo total paralelo."],
+          "definitionOfDone": ["Cancela sem vazar tarefas.", "Teste valida exceção `OperationCanceledException`."]
+        },
+        {
+          "id": "csl-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Biblioteca C# testável com `IAsyncEnumerable<T>`",
+          "description": "Implemente leitura paginada assíncrona expondo `IAsyncEnumerable<T>` consumida com `await foreach`.",
+          "steps": ["Use `[EnumeratorCancellation]`.", "Busque páginas sob demanda.", "Teste consumo parcial (break no loop)."],
+          "definitionOfDone": ["Não busca páginas extras após `break`.", "Coberto por testes xUnit."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "csl-f3-q1",
+          "prompt": "Qual a diferença entre esperar duas chamadas com `await a(); await b();` vs. `await Task.WhenAll(a(), b())`?",
+          "reviewTopicId": "csl-async",
+          "choices": [
+            { "id": "a", "text": "O primeiro executa sequencialmente; `Task.WhenAll` dispara ambas concorrentemente e espera o término de todas.", "correct": true, "explanation": "Ideal quando as duas tarefas são independentes." },
+            { "id": "b", "text": "Não há diferença de tempo.", "correct": false, "explanation": "Concorrência reduz o tempo total ao da tarefa mais lenta." }
+          ]
+        },
+        {
+          "id": "csl-f3-q2",
+          "prompt": "No xUnit, quando usar `[Theory]` em vez de `[Fact]`?",
+          "reviewTopicId": "csl-test",
+          "choices": [
+            { "id": "a", "text": "Quando você quer rodar a mesma lógica de teste com várias combinações de entradas (`[InlineData]`/`[MemberData]`).", "correct": true, "explanation": "Mantém os testes enxutos e claros." },
+            { "id": "b", "text": "Para pular o teste.", "correct": false, "explanation": "`Skip` faz isso; `[Theory]` parametriza testes." }
+          ]
+        }
+      ]
+    }
+  ]
+}

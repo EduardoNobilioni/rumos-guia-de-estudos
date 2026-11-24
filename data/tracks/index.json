@@ -427,6 +427,65 @@
         "pod",
         "kubectl"
       ]
+    },
+    {
+      "id": "go",
+      "file": "go.json",
+      "group": "tecnologia",
+      "keywords": [
+        "golang",
+        "go",
+        "goroutines",
+        "channels"
+      ]
+    },
+    {
+      "id": "rust",
+      "file": "rust.json",
+      "group": "tecnologia",
+      "keywords": [
+        "rust",
+        "cargo",
+        "ownership",
+        "tokio"
+      ]
+    },
+    {
+      "id": "cpp",
+      "file": "cpp.json",
+      "group": "tecnologia",
+      "keywords": [
+        "c",
+        "c++",
+        "cpp",
+        "ponteiros",
+        "cmake",
+        "stl"
+      ]
+    },
+    {
+      "id": "csharp",
+      "file": "csharp.json",
+      "group": "tecnologia",
+      "keywords": [
+        "c#",
+        "csharp",
+        "linq",
+        "async",
+        "xunit"
+      ]
+    },
+    {
+      "id": "php",
+      "file": "php.json",
+      "group": "tecnologia",
+      "keywords": [
+        "php",
+        "composer",
+        "laravel",
+        "pdo",
+        "phpunit"
+      ]
     }
   ]
 }

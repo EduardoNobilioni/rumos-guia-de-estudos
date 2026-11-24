@@ -1,0 +1,251 @@
+{
+  "id": "go",
+  "name": "Go",
+  "tagline": "Simplicidade, tipagem estática, goroutines e serviços HTTP rápidos em Go",
+  "description": "Linguagem Go na prática: slices, maps, structs e interfaces explícitas, tratamento de erros sem exceções, concorrência com goroutines/channels, `net/http` e testes com `go test`.",
+  "phases": [
+    {
+      "id": "go-fase-1",
+      "number": 1,
+      "badgeTitle": "Base Go",
+      "title": "Sintaxe, slices, structs e erros",
+      "topics": [
+        {
+          "id": "go-sintaxe",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Variáveis, funções com múltiplos retornos, slices e maps",
+          "description": "Entenda a diferença entre arrays fixos e slices dinâmicos (`append`, capacidade), maps e retorno explícito `(valor, err)`.",
+          "tags": ["Go", "Base"],
+          "prerequisites": [],
+          "resources": [
+            { "title": "A Tour of Go", "url": "https://go.dev/tour/welcome/1", "lang": "en", "kind": "curso" }
+          ]
+        },
+        {
+          "id": "go-structs",
+          "level": "iniciante",
+          "hours": 5,
+          "title": "Structs, ponteiros, métodos e interfaces implícitas",
+          "description": "Em Go não há herança: você compõe structs e implementa interfaces automaticamente ao definir seus métodos.",
+          "tags": ["Go", "Interfaces"],
+          "prerequisites": ["go-sintaxe"],
+          "resources": [
+            { "title": "Effective Go", "url": "https://go.dev/doc/effective_go", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "go-p1-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Contador de palavras CLI em Go",
+          "description": "Leia um arquivo de texto via `os.ReadFile` e liste as 10 palavras mais frequentes usando `map` e `sort.Slice`.",
+          "steps": ["Aceite caminho via `flag` ou `os.Args`.", "Trate `err != nil` explicitamente.", "Ordene do maior para o menor."],
+          "definitionOfDone": ["Compila com `go build`.", "Não usa `panic` em erro de arquivo ausente."]
+        },
+        {
+          "id": "go-p1-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Conversor modular com interface `Formatter`",
+          "description": "Implemente saída em texto e JSON usando uma interface pequena em Go e injeção simples no `main`.",
+          "steps": ["Defina interface de 1 método.", "Crie dois formatadores.", "Teste ambos via tabela."],
+          "definitionOfDone": ["Interfaces pequenas no consumidor.", "Código passa em `go vet`."]
+        },
+        {
+          "id": "go-p1-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Parser streaming de logs com `bufio.Scanner`",
+          "description": "Processe arquivo grande linha a linha sem carregar tudo na RAM, agregando status HTTP e latência.",
+          "steps": ["Use `bufio.NewScanner`.", "Extraia campos sem regex pesado.", "Exporte resumo JSON."],
+          "definitionOfDone": ["Memória constante mesmo em arquivos grandes.", "Benchmark básico com `testing.B`."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "go-f1-q1",
+          "prompt": "Como Go verifica se um tipo implementa uma interface?",
+          "reviewTopicId": "go-structs",
+          "choices": [
+            { "id": "a", "text": "Implicitamente: se o tipo possui todos os métodos da interface, ele a implementa sem palavra-chave `implements`.", "correct": true, "explanation": "Isso facilita desacoplar pacotes." },
+            { "id": "b", "text": "Apenas por herança múltipla.", "correct": false, "explanation": "Go usa composição e interfaces implícitas." }
+          ]
+        },
+        {
+          "id": "go-f1-q2",
+          "prompt": "Qual o padrão idiomático de tratamento de erros em Go?",
+          "reviewTopicId": "go-sintaxe",
+          "choices": [
+            { "id": "a", "text": "Retornar `error` como último valor da função e verificar explicitamente `if err != nil`.", "correct": true, "explanation": "Erros são valores comuns, não exceções ocultas." },
+            { "id": "b", "text": "Usar `try/catch` em toda linha.", "correct": false, "explanation": "Go não tem `try/catch`." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "go-fase-2",
+      "number": 2,
+      "badgeTitle": "Concorrência",
+      "title": "Goroutines, channels e `context`",
+      "topics": [
+        {
+          "id": "go-goroutines",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Goroutines, `sync.WaitGroup` e `channels`",
+          "description": "Executar trabalho concorrente leve, sincronizar término com `WaitGroup` e comunicar resultados com canais sem data races.",
+          "tags": ["Go", "Concorrência"],
+          "prerequisites": ["go-structs"],
+          "resources": [
+            { "title": "Go by Example: Goroutines & Channels", "url": "https://gobyexample.com/goroutines", "lang": "en", "kind": "pratica" }
+          ]
+        },
+        {
+          "id": "go-context",
+          "level": "intermediario",
+          "hours": 5,
+          "title": "Pacote `context` (timeouts e cancelamento) e detector `-race`",
+          "description": "Cancelar goroutines em cascata com `context.WithTimeout` e detectar condições de corrida com `go test -race`.",
+          "tags": ["Go", "Context"],
+          "prerequisites": ["go-goroutines"],
+          "resources": [
+            { "title": "Go Blog: Contexts and structs", "url": "https://go.dev/blog/context-and-structs", "lang": "en", "kind": "leitura" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "go-p2-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "Verificador paralelo de URLs com `WaitGroup`",
+          "description": "Leia 10 URLs e verifique status HTTP concorrentemente com limite de timeout.",
+          "steps": ["Dispare goroutine por URL.", "Proteja resultados com `sync.Mutex` ou canal.", "Imprima tempo total."],
+          "definitionOfDone": ["Sem data race em `go run -race`.", "Aguarda todas as goroutines finalizarem."]
+        },
+        {
+          "id": "go-p2-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Worker Pool com `channels` e `context.WithTimeout`",
+          "description": "Processe fila de tarefas com N workers fixos interrompendo tudo graciosamente ao vencer o timeout.",
+          "steps": ["Crie canal de jobs e resultados.", "Respeite `<-ctx.Done()` nos workers.", "Feche canais no produtor."],
+          "definitionOfDone": ["Nenhuma goroutine vazada.", "Passa em `go test -race`."]
+        },
+        {
+          "id": "go-p2-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Agregador concorrente com rate limit e `errgroup`",
+          "description": "Consulte múltiplos endpoints externos limitando requisições por segundo e abortando rápido na primeira falha crítica.",
+          "steps": ["Use ticker ou token bucket simples.", "Propague `context` compartilhado.", "Registre métricas de latência."],
+          "definitionOfDone": ["Passa no detector `-race`.", "Respeita limite máximo por segundo."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "go-f2-q1",
+          "prompt": "Para que serve rodar `go test -race ./...`?",
+          "reviewTopicId": "go-context",
+          "choices": [
+            { "id": "a", "text": "Detectar acessos concorrentes inseguros à mesma memória (data races) entre goroutines.", "correct": true, "explanation": "É uma ferramenta nativa essencial em Go." },
+            { "id": "b", "text": "Formatar o código-fonte.", "correct": false, "explanation": "Formatação é feita com `gofmt`." }
+          ]
+        },
+        {
+          "id": "go-f2-q2",
+          "prompt": "Qual o primeiro parâmetro idiomático de funções que fazem I/O ou rede em Go?",
+          "reviewTopicId": "go-context",
+          "choices": [
+            { "id": "a", "text": "`ctx context.Context`, para propagar prazos e cancelamentos.", "correct": true, "explanation": "Permite interromper queries e HTTP requests quando o cliente desconecta." },
+            { "id": "b", "text": "`globalState any`.", "correct": false, "explanation": "`context.Context` é o padrão da biblioteca padrão." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "go-fase-3",
+      "number": 3,
+      "badgeTitle": "Web e Testes",
+      "title": "Servidores `net/http`, testes em tabela e produção",
+      "topics": [
+        {
+          "id": "go-http",
+          "level": "avancado",
+          "hours": 6,
+          "title": "APIs com `net/http` moderno, `slog` e shutdown gracioso",
+          "description": "Roteamento por método no `http.ServeMux`, logs estruturados com `log/slog` e `server.Shutdown(ctx)` em sinais OS.",
+          "tags": ["Go", "HTTP"],
+          "prerequisites": ["go-context"],
+          "resources": [
+            { "title": "Writing Web Applications (Go Docs)", "url": "https://go.dev/doc/articles/wiki/", "lang": "en", "kind": "documentacao" }
+          ]
+        },
+        {
+          "id": "go-test",
+          "level": "avancado",
+          "hours": 5,
+          "title": "Testes em tabela (`table-driven`) e `httptest`",
+          "description": "Escrever casos concisos em tabela usando `t.Run` e testar handlers HTTP sem abrir porta real com `httptest.NewRecorder`.",
+          "tags": ["Go", "Testes"],
+          "prerequisites": ["go-http"],
+          "resources": [
+            { "title": "Testing package (Go Docs)", "url": "https://pkg.go.dev/testing", "lang": "en", "kind": "documentacao" }
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "go-p3-ini",
+          "level": "iniciante",
+          "hours": 4,
+          "title": "API REST com `net/http` e `encoding/json`",
+          "description": "Exponha endpoints GET e POST JSON usando apenas biblioteca padrão do Go.",
+          "steps": ["Configure `http.NewServeMux()`.", "Decodifique JSON com limite de tamanho.", "Retorne `Content-Type: application/json`."],
+          "definitionOfDone": ["Zero dependência externa necessária.", "Trata JSON malformado com 400."]
+        },
+        {
+          "id": "go-p3-int",
+          "level": "intermediario",
+          "hours": 6,
+          "title": "Suíte table-driven + testes com `httptest`",
+          "description": "Cubra validação, rotas HTTP e erros usando `t.Run` e `httptest.NewRecorder`.",
+          "steps": ["Agrupe casos em slice de structs.", "Teste códigos 200, 400 e 404.", "Rode `go test -race -cover ./...`."],
+          "definitionOfDone": ["Todos os testes passam com `-race`.", "Cobertura clara das regras."]
+        },
+        {
+          "id": "go-p3-ava",
+          "level": "avancado",
+          "hours": 8,
+          "title": "Microsserviço Go em container distroless",
+          "description": "Compile binário estático e rode em imagem mínima com `slog` JSON, `/healthz` e `Shutdown` gracioso.",
+          "steps": ["Intercepte `SIGINT`/`SIGTERM`.", "Configure timeouts no `http.Server`.", "Empacote com `CGO_ENABLED=0`."],
+          "definitionOfDone": ["Imagem final abaixo de 30 MB.", "Finaliza requests abertos antes de sair."]
+        }
+      ],
+      "quiz": [
+        {
+          "id": "go-f3-q1",
+          "prompt": "Qual a vantagem dos testes `table-driven` com `t.Run` em Go?",
+          "reviewTopicId": "go-test",
+          "choices": [
+            { "id": "a", "text": "Testar dezenas de entradas e casos de borda sem duplicar código e identificando facilmente qual subcaso falhou.", "correct": true, "explanation": "É o padrão mais usado em projetos Go." },
+            { "id": "b", "text": "Desativar verificação de tipos.", "correct": false, "explanation": "Mantém total segurança de tipos." }
+          ]
+        },
+        {
+          "id": "go-f3-q2",
+          "prompt": "Por que configurar `ReadTimeout` e `WriteTimeout` em `http.Server`?",
+          "reviewTopicId": "go-http",
+          "choices": [
+            { "id": "a", "text": "Evitar que clientes lentos ou conexões travadas esgotem descritores de arquivo e memória do servidor.", "correct": true, "explanation": "Essencial para proteção contra Slowloris em produção." },
+            { "id": "b", "text": "Para compilar mais rápido.", "correct": false, "explanation": "Atua na resiliência em execução." }
+          ]
+        }
+      ]
+    }
+  ]
+}
