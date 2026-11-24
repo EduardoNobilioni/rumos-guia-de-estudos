@@ -25,6 +25,7 @@ export const session = {
     query: '',
     backendLanguageId: null,
     backendEcosystemIds: [],
+    frontendFrameworkId: null,
   },
 };
 

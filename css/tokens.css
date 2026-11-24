@@ -30,10 +30,10 @@
   --text-display: 800 56px/60px var(--font-sans);
   --text-display-m: 800 38px/42px var(--font-sans);
   --text-brand: 800 18px/22px var(--font-sans);
-  --text-title-xl: 600 52px/58px var(--font-sans);
-  --text-title-l: 600 32px/38px var(--font-sans);
-  --text-title-m: 600 20px/28px var(--font-sans);
-  --text-title-s: 600 15px/22px var(--font-sans);
+  --text-title-xl: 800 56px/62px var(--font-sans);
+  --text-title-l: 800 36px/42px var(--font-sans);
+  --text-title-m: 600 24px/32px var(--font-sans);
+  --text-title-s: 600 17px/24px var(--font-sans);
   --text-body-m: 400 14px/22px var(--font-sans);
   --text-body-s: 400 13px/20px var(--font-sans);
   --text-label-m: 500 14px/20px var(--font-sans);

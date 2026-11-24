@@ -57,19 +57,19 @@ test('RN linguagens de back-end são as trilhas que existem, sem uma padrão', (
   assert.deepEqual(backendEcosystemChoices(index.tracks, 'csharp').map((item) => item.id), ['csharp-dotnet']);
   assert.deepEqual(
     fullstackOnboardingSteps('frontend', null, index.tracks),
-    ['career', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'framework', 'companions', 'level', 'hours', 'preview'],
   );
   assert.deepEqual(
     fullstackOnboardingSteps('fullstack', null, index.tracks),
-    ['career', 'language', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'language', 'framework', 'companions', 'level', 'hours', 'preview'],
   );
   assert.deepEqual(
     fullstackOnboardingSteps('fullstack', 'python', index.tracks),
-    ['career', 'language', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'language', 'framework', 'companions', 'level', 'hours', 'preview'],
   );
   assert.deepEqual(
     fullstackOnboardingSteps('fullstack', 'csharp', index.tracks),
-    ['career', 'language', 'ecosystem', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'language', 'ecosystem', 'framework', 'companions', 'level', 'hours', 'preview'],
   );
 });
 
@@ -174,6 +174,7 @@ test('RN trocar a linguagem no onboarding guarda progresso e anotação', () => 
     level: 'iniciante',
     hours: 8,
     backendLanguageId: 'python',
+    frontendFrameworkId: 'react',
     companionIds: [],
   });
   state.tracks.fullstack.completed['f3-rest-apis'] = true;
@@ -186,6 +187,7 @@ test('RN trocar a linguagem no onboarding guarda progresso e anotação', () => 
     level: 'intermediario',
     hours: 10,
     backendLanguageId: 'go',
+    frontendFrameworkId: 'vuejs',
     backendEcosystemIds: ['csharp-dotnet', 'php'],
     companionIds: ['git', 'nodejs', 'python'],
   });
