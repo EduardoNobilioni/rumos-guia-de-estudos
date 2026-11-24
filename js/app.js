@@ -697,6 +697,37 @@ function renderTrackSwitcher() {
   }).join('');
 }
 
+function renderTrackSidebar() {
+  const list = $('sidebarList');
+  if (!list) return;
+  const group = session.sidebarGroup || 'all';
+  const query = session.sidebarQuery || '';
+  const allGroups = groupTracks(tracks);
+  $('sidebarGroups').innerHTML = [{ id: 'all', title: 'Todas' }, ...allGroups].map((g) => (
+    `<button type="button" class="sidebar-chip" data-sidebar-group="${escapeHtml(g.id)}" aria-pressed="${g.id === group}">${escapeHtml(g.title)}</button>`
+  )).join('');
+  const visible = new Set(tracksMatching(tracks, query).map((t) => t.id));
+  const planned = new Set([state.profile.primaryTrackId, ...(state.profile.companionIds || [])].filter(Boolean));
+  const html = allGroups
+    .filter((g) => group === 'all' || g.id === group)
+    .map((g) => {
+      const items = g.tracks.filter((t) => visible.has(t.id)).map((t) => {
+        const current = t.id === state.activeTrackId ? ' aria-current="page"' : '';
+        const dot = planned.has(t.id) ? '<span class="sidebar-dot" title="No seu plano"></span>' : '';
+        return `<li><button type="button" class="sidebar-item" data-sidebar-track="${escapeHtml(t.id)}"${current}>${trackIconHtml(t.id, 'sm')}<span class="min-w-0 truncate">${escapeHtml(t.name)}</span>${dot}</button></li>`;
+      }).join('');
+      return items ? `<div><p class="text-[11px] font-mono uppercase tracking-wider text-muted">${escapeHtml(g.title)}</p><ul class="mt-1.5 space-y-0.5">${items}</ul></div>` : '';
+    }).join('');
+  list.innerHTML = html || '<p class="text-xs text-muted">Nenhuma trilha com esse termo.</p>';
+}
+
+function setSidebarOpen(open) {
+  $('trackSidebar').classList.toggle('is-open', open);
+  $('sidebarBackdrop').hidden = !open;
+  $('sidebarToggleBtn').setAttribute('aria-expanded', String(open));
+  if (open) $('sidebarSearch').focus();
+}
+
 function switchToTrack(id) {
   if (!trackById(id) || id === state.activeTrackId) return;
   const current = activeTrackState();
@@ -715,6 +746,7 @@ function updateHeader() {
   $('trackIcon').innerHTML = trackIconHtml(track.id, 'lg');
   document.title = `Rumos — ${track.name}`;
   renderTrackSwitcher();
+  renderTrackSidebar();
   renderRenameNotice();
 }
 
@@ -1671,6 +1703,29 @@ function bind() {
     const button = event.target.closest('[data-switch-track]');
     if (!button) return;
     switchToTrack(button.dataset.switchTrack);
+  });
+  $('sidebarToggleBtn').addEventListener('click', () => setSidebarOpen(true));
+  $('sidebarCloseBtn').addEventListener('click', () => setSidebarOpen(false));
+  $('sidebarBackdrop').addEventListener('click', () => setSidebarOpen(false));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && $('trackSidebar').classList.contains('is-open')) setSidebarOpen(false);
+  });
+  $('sidebarSearch').addEventListener('input', (event) => {
+    session.sidebarQuery = event.target.value;
+    renderTrackSidebar();
+  });
+  $('sidebarGroups').addEventListener('click', (event) => {
+    const chip = event.target.closest('[data-sidebar-group]');
+    if (!chip) return;
+    session.sidebarGroup = chip.dataset.sidebarGroup;
+    renderTrackSidebar();
+  });
+  $('sidebarList').addEventListener('click', (event) => {
+    const item = event.target.closest('[data-sidebar-track]');
+    if (!item) return;
+    setSidebarOpen(false);
+    switchToTrack(item.dataset.sidebarTrack);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   $('renameNoticeDismiss').addEventListener('click', () => {
     if (!state.profile.dismissedNotices.includes('dados-ciencia')) {

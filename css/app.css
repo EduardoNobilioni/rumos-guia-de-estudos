@@ -386,6 +386,126 @@ html.dark .topic-node.is-prereq-highlight {
   box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.28), 0 10px 24px -6px rgba(251, 191, 36, 0.24);
 }
 
+.app-shell {
+  display: flex;
+  align-items: flex-start;
+}
+
+.app-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.track-sidebar {
+  position: sticky;
+  top: 0;
+  flex: none;
+  width: 17rem;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid rgba(100, 116, 139, 0.3);
+  background: var(--blush);
+}
+
+html.dark .track-sidebar {
+  background: var(--card);
+  border-color: rgba(71, 85, 105, 0.6);
+}
+
+.sidebar-chip {
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid var(--line);
+  font-size: 0.72rem;
+}
+
+.sidebar-chip[aria-pressed="true"] {
+  border-color: var(--terra);
+  background: var(--terra);
+  color: #fff;
+}
+
+html.dark .sidebar-chip[aria-pressed="true"] {
+  border-color: var(--ochre);
+  background: var(--ochre);
+  color: var(--night);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+}
+
+.sidebar-item:hover {
+  background: rgba(37, 99, 235, 0.07);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: none !important;
+}
+
+html.dark .sidebar-item:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.sidebar-item[aria-current="page"] {
+  border-color: var(--terra);
+  background: rgba(37, 99, 235, 0.1);
+  font-weight: 600;
+}
+
+html.dark .sidebar-item[aria-current="page"] {
+  border-color: var(--ochre);
+  background: rgba(56, 189, 248, 0.14);
+}
+
+.sidebar-dot {
+  margin-left: auto;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--success);
+  flex: none;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+@media (max-width: 1023px) {
+  .track-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 60;
+    width: min(20rem, 85vw);
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .track-sidebar.is-open {
+    transform: none;
+  }
+}
+
+@media print {
+  .track-sidebar,
+  .sidebar-backdrop {
+    display: none !important;
+  }
+}
+
 .roadmap-legend {
   display: flex;
   flex-wrap: wrap;

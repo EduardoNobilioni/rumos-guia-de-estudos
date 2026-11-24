@@ -206,7 +206,19 @@
   </main>
 
   <div id="app" hidden>
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+   <div class="app-shell">
+    <div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
+    <aside id="trackSidebar" class="track-sidebar no-print" aria-label="Todas as trilhas">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-sm font-bold">Trilhas</p>
+        <button id="sidebarCloseBtn" type="button" class="lg:hidden px-2 py-1 text-xs rounded-sm border border-line dark:border-sage/60" aria-label="Fechar lista de trilhas">Fechar</button>
+      </div>
+      <label class="sr-only" for="sidebarSearch">Buscar trilha</label>
+      <input id="sidebarSearch" type="search" autocomplete="off" placeholder="Buscar trilha" class="mt-3 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2 text-sm" />
+      <div id="sidebarGroups" role="group" aria-label="Filtrar por grupo" class="mt-3 flex flex-wrap gap-1.5"></div>
+      <nav id="sidebarList" class="mt-4 space-y-5" aria-label="Lista de trilhas"></nav>
+    </aside>
+    <div class="app-main max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       <header class="flex flex-col gap-4 mb-8 lg:flex-row lg:items-start lg:justify-between">
         <div class="flex items-start gap-3.5">
           <div id="trackIcon" class="p-3 rounded-sm bg-terra text-paper dark:bg-ochre dark:text-night shrink-0" aria-hidden="true"></div>
@@ -229,6 +241,7 @@
           </div>
         </div>
         <div class="flex flex-wrap gap-2">
+          <button id="sidebarToggleBtn" type="button" class="lg:hidden px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60" aria-controls="trackSidebar" aria-expanded="false">☰ Trilhas</button>
           <button id="openDashboardBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Painel</button>
           <button id="shareBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Compartilhar</button>
           <button id="retakeBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Refazer/Trocar trilha</button>
@@ -357,6 +370,7 @@
 
       <div id="orphans" hidden class="mt-5"></div>
     </div>
+   </div>
   </div>
 
   <dialog id="confirmDialog" aria-labelledby="confirmTitle">
