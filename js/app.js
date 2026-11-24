@@ -1598,7 +1598,6 @@ function bind() {
     if (event.target.name === 'track') {
       session.onboarding.trackId = event.target.value;
       syncCompanionLocks();
-      if (session.onboarding.step === 1) scheduleAutoAdvance(2);
     }
     if (event.target.name === 'companion') session.onboarding.companionIds = selectedCompanionIds();
     if (event.target.name === 'level') {
