@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 32" fill="none">
   <circle cx="16" cy="16" r="13.5" stroke="#71717A" stroke-opacity="0.65" stroke-width="1.5" stroke-dasharray="3 2.5"/>
-  <path d="M7.5 24.5L24.5 7.5L18 21L14.5 17.5L7.5 24.5Z" fill="#B7E34A"/>
-  <path d="M7.5 24.5L12.5 13L24.5 7.5L14.5 17.5L7.5 24.5Z" fill="#6A9A14"/>
+  <path d="M8 24L13 13L24 8L19 19Z" fill="#6A9A14"/>
+  <path d="M8 24L24 8L19 19Z" fill="#B7E34A"/>
   <text x="40" y="23" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="22" font-weight="800" fill="#18181B">Rumos</text>
 </svg>

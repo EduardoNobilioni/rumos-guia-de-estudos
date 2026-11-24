@@ -119,8 +119,8 @@ export function brandMark(animate = false) {
   return `<svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
     <circle cx="16" cy="16" r="13.5" class="logo-ring" stroke-width="1.5" stroke-dasharray="3 2.5"></circle>
     <g class="${animate ? 'compass-needle' : ''}">
-      <path d="M7.5 24.5L24.5 7.5L18 21L14.5 17.5L7.5 24.5Z" class="logo-primary"></path>
-      <path d="M7.5 24.5L12.5 13L24.5 7.5L14.5 17.5L7.5 24.5Z" class="logo-accent"></path>
+      <path d="M8 24L13 13L24 8L19 19Z" class="logo-accent"></path>
+      <path d="M8 24L24 8L19 19Z" class="logo-primary"></path>
     </g>
   </svg>`;
 }

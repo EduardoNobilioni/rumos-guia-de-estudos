@@ -279,28 +279,27 @@ const FONT_UI = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
 
 function brandMarkPdf() {
   return [
-    '0.718 0.890 0.290 rg',
-    '48 784 m 68 804 l 61 789 l h f',
     '0.416 0.604 0.078 rg',
-    '48 784 m 54 798 l 68 804 l h f',
+    '48 784 m 54.25 797.75 l 68 804 l 61.75 790.25 l h f',
+    '0.718 0.890 0.290 rg',
+    '48 784 m 68 804 l 61.75 790.25 l h f',
   ].join('\n');
 }
 
 function drawBrandMark(ctx, x, y, size) {
-  ctx.fillStyle = '#B7E34A';
-  ctx.beginPath();
-  ctx.moveTo(x + size * 0.16, y + size * 0.84);
-  ctx.lineTo(x + size * 0.84, y + size * 0.16);
-  ctx.lineTo(x + size * 0.58, y + size * 0.68);
-  ctx.lineTo(x + size * 0.44, y + size * 0.54);
-  ctx.closePath();
-  ctx.fill();
   ctx.fillStyle = '#6A9A14';
   ctx.beginPath();
-  ctx.moveTo(x + size * 0.16, y + size * 0.84);
-  ctx.lineTo(x + size * 0.36, y + size * 0.40);
-  ctx.lineTo(x + size * 0.84, y + size * 0.16);
-  ctx.lineTo(x + size * 0.44, y + size * 0.54);
+  ctx.moveTo(x + size * 0.25, y + size * 0.75);
+  ctx.lineTo(x + size * 0.40625, y + size * 0.40625);
+  ctx.lineTo(x + size * 0.75, y + size * 0.25);
+  ctx.lineTo(x + size * 0.59375, y + size * 0.59375);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#B7E34A';
+  ctx.beginPath();
+  ctx.moveTo(x + size * 0.25, y + size * 0.75);
+  ctx.lineTo(x + size * 0.75, y + size * 0.25);
+  ctx.lineTo(x + size * 0.59375, y + size * 0.59375);
   ctx.closePath();
   ctx.fill();
 }
