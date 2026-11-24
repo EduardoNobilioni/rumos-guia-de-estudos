@@ -28,10 +28,15 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          tar --exclude _site --exclude tests --exclude docs --exclude .git --exclude node_modules -cf - . | tar -xf - -C _site
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

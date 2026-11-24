@@ -10,7 +10,10 @@
         "react",
         "acessibilidade",
         "playwright"
-      ]
+      ],
+      "name": "Front-end",
+      "tagline": "Interfaces, acessibilidade e o que as pessoas usam",
+      "abbr": "FE"
     },
     {
       "id": "backend",
@@ -21,7 +24,10 @@
         "node",
         "redis",
         "fila"
-      ]
+      ],
+      "name": "Back-end",
+      "tagline": "APIs, dados e as regras que ficam no servidor",
+      "abbr": "BE"
     },
     {
       "id": "fullstack",
@@ -31,7 +37,10 @@
         "redis",
         "cache",
         "web"
-      ]
+      ],
+      "name": "Full-Stack",
+      "tagline": "Da Web ao deploy, com interface, API, Redis e nuvem",
+      "abbr": "FS"
     },
     {
       "id": "dados",
@@ -44,7 +53,10 @@
         "excel",
         "power bi",
         "experimento"
-      ]
+      ],
+      "name": "Ciência de Dados",
+      "tagline": "Pergunta, dado, gráfico e um modelo que você sabe explicar",
+      "abbr": "CD"
     },
     {
       "id": "analista-dados",
@@ -56,7 +68,10 @@
         "sql",
         "planilha",
         "bi"
-      ]
+      ],
+      "name": "Analista de Dados",
+      "tagline": "Planilha, SQL, Power BI, estatística e entrega para decisão",
+      "abbr": "AD"
     },
     {
       "id": "engenharia-dados",
@@ -67,7 +82,10 @@
         "etl",
         "airflow",
         "coleta"
-      ]
+      ],
+      "name": "Engenharia de Dados",
+      "tagline": "Levar o dado de um lugar a outro, com qualidade e repetição",
+      "abbr": "ED"
     },
     {
       "id": "machine-learning",
@@ -79,7 +97,10 @@
         "modelo",
         "sklearn",
         "inteligencia artificial"
-      ]
+      ],
+      "name": "Machine Learning e IA",
+      "tagline": "Um modelo pequeno, com métrica e limite à vista",
+      "abbr": "ML"
     },
     {
       "id": "java",
@@ -89,7 +110,10 @@
         "spring",
         "spring boot",
         "jvm"
-      ]
+      ],
+      "name": "Java e Spring Boot",
+      "tagline": "Back-end em Java, da linguagem ao serviço REST em produção",
+      "abbr": "JV"
     },
     {
       "id": "mobile",
@@ -100,7 +124,10 @@
         "android",
         "ios",
         "riverpod"
-      ]
+      ],
+      "name": "Mobile",
+      "tagline": "Apps de bolso com Flutter, do layout à loja",
+      "abbr": "MB"
     },
     {
       "id": "qa",
@@ -110,7 +137,10 @@
         "teste",
         "qualidade",
         "qa"
-      ]
+      ],
+      "name": "QA e Testes de Software",
+      "tagline": "Encontrar falha cedo, descrever com clareza e automatizar o que se repete",
+      "abbr": "QA"
     },
     {
       "id": "devops",
@@ -121,7 +151,10 @@
         "nuvem",
         "linux",
         "tls"
-      ]
+      ],
+      "name": "DevOps",
+      "tagline": "Do commit ao servidor, com um jeito de saber se caiu",
+      "abbr": "DO"
     },
     {
       "id": "ciberseguranca",
@@ -133,7 +166,10 @@
         "appsec",
         "pentest",
         "redes"
-      ]
+      ],
+      "name": "Cibersegurança",
+      "tagline": "Defender sistemas na prática: rede, código, acesso e resposta a incidentes",
+      "abbr": "CS"
     },
     {
       "id": "cloud",
@@ -145,7 +181,10 @@
         "terraform",
         "iam",
         "serverless"
-      ]
+      ],
+      "name": "Cloud e Arquitetura em Nuvem",
+      "tagline": "Projetar, publicar e controlar custos na nuvem sem clicar no painel às cegas",
+      "abbr": "CL"
     },
     {
       "id": "arquitetura-software",
@@ -157,7 +196,10 @@
         "microsservicos",
         "cache",
         "filas"
-      ]
+      ],
+      "name": "Arquitetura de Software e System Design",
+      "tagline": "Tomar decisões de estrutura, escala e trade-offs sem copiar hype",
+      "abbr": "AR"
     },
     {
       "id": "ux-ui",
@@ -171,7 +213,10 @@
         "usabilidade",
         "prototipo",
         "design system"
-      ]
+      ],
+      "name": "UX / UI Design",
+      "tagline": "Projetar interfaces úteis, acessíveis e consistentes da pesquisa ao Design System",
+      "abbr": "UX"
     },
     {
       "id": "product-manager",
@@ -185,7 +230,10 @@
         "rice",
         "prd",
         "roadmap"
-      ]
+      ],
+      "name": "Product Manager",
+      "tagline": "Descobrir o problema certo, priorizar com critério e medir impacto real",
+      "abbr": "PM"
     },
     {
       "id": "ai-engineer",
@@ -199,7 +247,10 @@
         "agentes",
         "embeddings",
         "evals"
-      ]
+      ],
+      "name": "Engenharia de IA",
+      "tagline": "Aplicações com LLMs em produção: APIs, Prompt Engineering, RAG, Agentes e avaliação",
+      "abbr": "IA"
     },
     {
       "id": "mlops",
@@ -212,7 +263,10 @@
         "fastapi",
         "pipeline",
         "serving"
-      ]
+      ],
+      "name": "MLOps",
+      "tagline": "Levar modelos de Machine Learning do notebook para produção com reprodutibilidade",
+      "abbr": "MO"
     },
     {
       "id": "game-dev",
@@ -225,7 +279,10 @@
         "game loop",
         "fisica",
         "fsm"
-      ]
+      ],
+      "name": "Desenvolvimento de Jogos",
+      "tagline": "Game loop, física 2D/3D, engines (Godot/Unity), IA de jogo e publicação",
+      "abbr": "JG"
     },
     {
       "id": "network-engineer",
@@ -239,7 +296,10 @@
         "vlan",
         "bgp",
         "wireguard"
-      ]
+      ],
+      "name": "Engenharia de Redes",
+      "tagline": "TCP/IP, sub-redes, roteamento, DNS, VPNs, firewall e diagnóstico em produção",
+      "abbr": "ER"
     },
     {
       "id": "devsecops",
@@ -253,7 +313,10 @@
         "sbom",
         "trivy",
         "opa"
-      ]
+      ],
+      "name": "DevSecOps",
+      "tagline": "Integrar segurança contínua no código, dependências, containers, nuvem e CI/CD",
+      "abbr": "SC"
     },
     {
       "id": "bi-analyst",
@@ -266,7 +329,10 @@
         "star schema",
         "kpis",
         "metabase"
-      ]
+      ],
+      "name": "Analista de BI",
+      "tagline": "Modelagem dimensional, ETL analítico, KPIs executivos e governança de painéis",
+      "abbr": "BI"
     },
     {
       "id": "csharp-dotnet",
@@ -279,7 +345,10 @@
         ".net",
         "aspnet",
         "entity framework"
-      ]
+      ],
+      "name": "C# e .NET",
+      "tagline": "Back-end robusto com C# moderno, ASP.NET Core, Entity Framework e testes",
+      "abbr": "DN"
     },
     {
       "id": "computacao",
@@ -290,7 +359,10 @@
         "computacao",
         "rede",
         "sistema operacional"
-      ]
+      ],
+      "name": "Fundamentos da Computação",
+      "tagline": "O que o computador faz, antes da ferramenta da moda",
+      "abbr": "FC"
     },
     {
       "id": "algoritmos",
@@ -301,7 +373,10 @@
         "estrutura de dados",
         "grafo",
         "big o"
-      ]
+      ],
+      "name": "Estruturas de Dados e Algoritmos",
+      "tagline": "Lista, árvore, ordenação e grafo, com o custo ao lado",
+      "abbr": "AL"
     },
     {
       "id": "banco-de-dados",
@@ -313,7 +388,10 @@
         "indices",
         "nosql",
         "acid"
-      ]
+      ],
+      "name": "Banco de Dados e Modelagem",
+      "tagline": "Modelar entidades, garantir integridade, indexar e escolher SQL ou NoSQL",
+      "abbr": "BD"
     },
     {
       "id": "engenharia-software",
@@ -325,7 +403,10 @@
         "design patterns",
         "refatoracao",
         "tdd"
-      ]
+      ],
+      "name": "Engenharia de Software e Boas Práticas",
+      "tagline": "Escrever código que outra pessoa consegue mudar daqui a seis meses",
+      "abbr": "ES"
     },
     {
       "id": "redes-internet",
@@ -338,7 +419,10 @@
         "https",
         "tls",
         "proxy"
-      ]
+      ],
+      "name": "Redes de Computadores e Internet",
+      "tagline": "IP, DNS, TCP/UDP, HTTP/HTTPS, TLS, proxies e diagnóstico prático na Web",
+      "abbr": "RI"
     },
     {
       "id": "design-systems",
@@ -350,7 +434,10 @@
         "wcag",
         "acessibilidade",
         "componentes"
-      ]
+      ],
+      "name": "Design Systems e Acessibilidade",
+      "tagline": "Tokens semânticos, componentes reutilizáveis, WCAG 2.2 AA e consistência entre design e código",
+      "abbr": "DS"
     },
     {
       "id": "engenharia-prompt",
@@ -362,7 +449,10 @@
         "few-shot",
         "json",
         "evals"
-      ]
+      ],
+      "name": "Engenharia de Prompt",
+      "tagline": "Instruções claras, few-shot, saídas estruturadas, controle de alucinações e avaliação",
+      "abbr": "EP"
     },
     {
       "id": "python",
@@ -371,7 +461,10 @@
       "keywords": [
         "python",
         "venv"
-      ]
+      ],
+      "name": "Python",
+      "tagline": "A linguagem, do script ao ambiente isolado",
+      "abbr": "PY"
     },
     {
       "id": "javascript",
@@ -380,7 +473,10 @@
       "keywords": [
         "js",
         "javascript"
-      ]
+      ],
+      "name": "JavaScript",
+      "tagline": "A linguagem no essencial, antes do framework",
+      "abbr": "JS"
     },
     {
       "id": "typescript",
@@ -390,7 +486,10 @@
         "ts",
         "typescript",
         "tipos"
-      ]
+      ],
+      "name": "TypeScript",
+      "tagline": "JavaScript com tipos estáticos para errar no editor, não em produção",
+      "abbr": "TS"
     },
     {
       "id": "react",
@@ -401,7 +500,10 @@
         "jsx",
         "hooks",
         "frontend"
-      ]
+      ],
+      "name": "React",
+      "tagline": "Interfaces declarativas, estado previsível, efeitos limpos e testes",
+      "abbr": "RC"
     },
     {
       "id": "nodejs",
@@ -412,7 +514,10 @@
         "nodejs",
         "express",
         "backend"
-      ]
+      ],
+      "name": "Node.js",
+      "tagline": "JavaScript no servidor: Event Loop, streams, APIs e operação",
+      "abbr": "ND"
     },
     {
       "id": "sql",
@@ -422,7 +527,10 @@
         "banco",
         "join",
         "select"
-      ]
+      ],
+      "name": "SQL",
+      "tagline": "Perguntar a uma tabela e desenhar outra",
+      "abbr": "SQL"
     },
     {
       "id": "git",
@@ -432,7 +540,10 @@
         "github",
         "commit",
         "pull request"
-      ]
+      ],
+      "name": "Git e GitHub",
+      "tagline": "Histórico local, branch e um pull request",
+      "abbr": "GIT"
     },
     {
       "id": "linux",
@@ -442,7 +553,10 @@
         "terminal",
         "shell",
         "bash"
-      ]
+      ],
+      "name": "Linux",
+      "tagline": "Terminal, arquivo, processo e um script curto",
+      "abbr": "LX"
     },
     {
       "id": "docker",
@@ -452,7 +566,10 @@
         "container",
         "compose",
         "conteiner"
-      ]
+      ],
+      "name": "Docker",
+      "tagline": "Empacotar um programa para ele subir igual",
+      "abbr": "DK"
     },
     {
       "id": "kubernetes",
@@ -463,7 +580,10 @@
         "kubernetes",
         "pod",
         "kubectl"
-      ]
+      ],
+      "name": "Kubernetes",
+      "tagline": "Orquestrar containers sem perder a simplicidade antes da hora",
+      "abbr": "K8"
     },
     {
       "id": "go",
@@ -474,7 +594,10 @@
         "go",
         "goroutines",
         "channels"
-      ]
+      ],
+      "name": "Go",
+      "tagline": "Simplicidade, tipagem estática, goroutines e serviços HTTP rápidos em Go",
+      "abbr": "GO"
     },
     {
       "id": "rust",
@@ -485,7 +608,10 @@
         "cargo",
         "ownership",
         "tokio"
-      ]
+      ],
+      "name": "Rust",
+      "tagline": "Segurança de memória sem Garbage Collector: ownership, traits, Cargo e concorrência",
+      "abbr": "RS"
     },
     {
       "id": "cpp",
@@ -498,7 +624,10 @@
         "ponteiros",
         "cmake",
         "stl"
-      ]
+      ],
+      "name": "C e C++",
+      "tagline": "Fundamentos de memória, ponteiros, RAII, STL moderna e ferramentas de build",
+      "abbr": "CP"
     },
     {
       "id": "csharp",
@@ -510,7 +639,10 @@
         "linq",
         "async",
         "xunit"
-      ]
+      ],
+      "name": "C#",
+      "tagline": "Tipagem forte, OOP moderna, LINQ, programação assíncrona e testes na linguagem C#",
+      "abbr": "C#"
     },
     {
       "id": "php",
@@ -522,7 +654,10 @@
         "laravel",
         "pdo",
         "phpunit"
-      ]
+      ],
+      "name": "PHP",
+      "tagline": "PHP 8 moderno e tipado, Composer/PSR-4, PDO seguro, Laravel essencial e PHPUnit",
+      "abbr": "PHP"
     },
     {
       "id": "nextjs",
@@ -535,7 +670,10 @@
         "react",
         "ssr",
         "server actions"
-      ]
+      ],
+      "name": "Next.js",
+      "tagline": "App Router, Server Components, cache/revalidação, Server Actions e full-stack com React",
+      "abbr": "NX"
     },
     {
       "id": "angular",
@@ -547,7 +685,10 @@
         "signals",
         "typescript",
         "standalone"
-      ]
+      ],
+      "name": "Angular",
+      "tagline": "Aplicações corporativas escaláveis com Standalone Components, Signals, RxJS e TypeScript",
+      "abbr": "NG"
     },
     {
       "id": "vuejs",
@@ -559,7 +700,10 @@
         "pinia",
         "composition api",
         "vite"
-      ]
+      ],
+      "name": "Vue.js",
+      "tagline": "Composition API, componentes reativos, Vue Router, Pinia e testes com Vitest",
+      "abbr": "VU"
     },
     {
       "id": "graphql",
@@ -571,7 +715,10 @@
         "dataloader",
         "api",
         "cursor"
-      ]
+      ],
+      "name": "GraphQL",
+      "tagline": "Schemas tipados, Queries, Mutations, DataLoader contra N+1 e segurança em produção",
+      "abbr": "QL"
     },
     {
       "id": "mongodb",
@@ -583,7 +730,10 @@
         "documentos",
         "aggregation",
         "esr"
-      ]
+      ],
+      "name": "MongoDB",
+      "tagline": "Modelagem de documentos, índices compostos, Aggregation Pipeline e performance",
+      "abbr": "MG"
     },
     {
       "id": "terraform",
@@ -595,7 +745,10 @@
         "iac",
         "infraestrutura como codigo",
         "state"
-      ]
+      ],
+      "name": "Terraform",
+      "tagline": "Infraestrutura como Código (IaC): HCL, state remoto, módulos e automação segura",
+      "abbr": "TF"
     },
     {
       "id": "power-bi",
@@ -607,7 +760,10 @@
         "power query",
         "star schema",
         "bi"
-      ]
+      ],
+      "name": "Power BI",
+      "tagline": "Power Query (ETL), modelagem Star Schema, DAX avançado e relatórios executivos",
+      "abbr": "PB"
     }
   ]
 }

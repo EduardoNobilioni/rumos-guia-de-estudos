@@ -1,140 +1,38 @@
-# <img src="assets/brand/mark.svg" alt="" width="32" height="32"> Rumos
+# Rumos
 
-Rumos: roadmap, guia e plano de estudos em tecnologia. A marca é uma agulha de bússola geométrica sem fundo colorido, combinando azul (`#2563EB` / `#38BDF8`) e verde esmeralda (`#059669` / `#34D399`), acompanhada do nome **Rumos** na fonte display **Syne**.
+Mapa de estudos em tecnologia, feito por um estudante de faculdade pra quem também se perdeu no meio de curso. Você escolhe a carreira, o nível e as horas que sobram na semana. O Rumos monta a trilha, guarda o progresso neste navegador e encaixa o estudo em volta da grade.
 
-Guia para quem está na faculdade de tecnologia e não sabe por onde começar. Você escolhe a área, o nível e quantas horas consegue estudar por semana. O app monta uma trilha, guarda o seu progresso neste navegador e ajuda a encaixar o estudo na grade da universidade.
-
-Não é um curso e não emite certificado. Não há cadastro, servidor nem login.
-
-A trilha Full-Stack original continua aqui (os 46 tópicos de antes, mais cache HTTP). Em volta dela há carreiras, fundamentos e tecnologias.
+Não é curso e não dá certificado. Não tem cadastro nem servidor.
 
 Publicação: https://eduardonobilioni.github.io/rumo-guia-de-estudos/
 
 Repositório: https://github.com/EduardoNobilioni/rumo-guia-de-estudos
 
-![Escolha da área no primeiro acesso](docs/screenshots/onboarding.png)
+## O que dá pra fazer
 
-## O que o app faz
+- Escolher carreira, fundamentos e linguagens, nível e horas. O trajeto combinado junta as trilhas, tira tópico repetido e respeita pré-requisito.
+- Marcar tópico, anotar, ocultar, reordenar, criar tópico e link seu.
+- Ideias de projeto com busca, doze por página.
+- Autoavaliação por etapa. Abaixo de 70% aparece revisão. Não é nota.
+- Plano de estudo em volta da grade (`.ics`, CSV ou horário manual). Gerar baixa `.ics`, PDF e Markdown. A página mostra só o resumo.
+- Backup JSON, PNG e PDF da trilha, link de compartilhar sem anotação nem progresso.
+- Tema Limão Escuro (padrão) e Limão Claro. Funciona offline pelo service worker.
 
-- **Onboarding e boas-vindas.** Tela inicial com orientações e objetivo do Rumos, seguida da escolha guiada de trilha, nível (iniciante, intermediário ou avançado) e horas por semana — com avanço automático nos passos de seleção única e botão **Continuar** nos passos com múltipla escolha. A escolha é em três grupos — Carreiras, Fundamentos e Tecnologias — com busca. O botão **Refazer/Trocar trilha** abre as mesmas perguntas. O progresso de cada trilha fica guardado.
-- **Barra lateral de trilhas.** Painel lateral (estilo roadmap.sh) com todas as trilhas agrupadas em Carreiras, Fundamentos e Tecnologias, com busca, filtro por grupo, destaque da trilha aberta e das trilhas do seu plano. No celular abre como gaveta pelo botão **Trilhas**.
-- **Tecnologia junto e trajeto combinado.** Na escolha da trilha dá para marcar fundamentos e tecnologias para estudar junto com a carreira. O app gera um **Trajeto completo** único, ordenado do mais básico ao mais avançado e respeitando pré-requisitos, e também permite alternar no topo ou na barra lateral entre cada trilha individual sem misturar o progresso.
-- **Personalização e links.** Tópicos abaixo do seu nível começam como opcionais. Você pode torná-los obrigatórios, ocultá-los, criar os seus (com múltiplos recursos) e reordenar tópicos e etapas. Em qualquer tópico dá para adicionar links próprios (**+ Link**), marcar materiais como vistos e filtrar por idioma (`PT` / `EN`) ou formato. Trocar de trilha não apaga as outras.
-- **Anotações.** Cada tópico tem anotações. Cada etapa tem um campo **Observações**.
-- **Projetos e tela Ideias de projeto.** Cada etapa traz ideias por nível. Pelo botão **Ideias de projeto** no topo, você acessa uma área dedicada com todos os projetos filtráveis por nível, linguagem/tecnologia e busca, com contador de resultados, roteiro e definição de pronto. Você também pode criar ideias próprias e marcar projetos como feitos.
-- **Autoavaliação.** Perguntas de múltipla escolha por etapa e, em alguns tópicos, no próprio tópico. A resposta aparece na hora, com uma explicação. Se errar, o app aponta o tópico para revisar. Se o acerto ficar abaixo de 70%, a etapa ou o tópico mostra **Revisar**. Não é nota.
-- **Plano de estudo.** Você escolhe a data de início, os dias, o horário de cada dia e o tamanho mínimo/máximo dos blocos de estudo. As horas da trilha já vêm preenchidas. O app distribui tópicos, projetos e revisões (inclusive revisão espaçada +7 dias e tecnologias paralelas intercaladas, se marcado), na ordem e respeitando pré-requisitos. As sessões mostram os links do tópico e permitem concluir direto pelo plano. A prévia deixa mudar data, horário e nome (travando a sessão editada e alertando sobre conflitos com aulas ou outras sessões), apagar, encurtar ou alongar 15 minutos e pular datas. **Recalcular a partir de hoje** remonta o que ainda não passou e preserva o que está travado.
-- **Grade da faculdade.** Dá para importar um `.ics` (Google Agenda, Outlook, Apple Calendar ou o sistema da universidade), cadastrar o horário semanal na mão ou colar um CSV (`seg,08:00,10:00,Cálculo` ou uma data). Aulas aparecem como **Ocupado** e o estudo não cai em cima delas. Você pode reservar minutos antes e depois da aula e reduzir a carga numa semana de prova.
-- **Exportar e compartilhar.** Backup JSON (o arquivo antigo do Full-Stack ainda importa), checklist Markdown, imagem PNG e PDF da trilha (ambos com a **árvore visual** + **caderno de acompanhamento** com caixas de check de etapas e tópicos), PDF e impressão do plano, e um `.ics` só com as sessões de estudo. O link de compartilhar leva a configuração da trilha, não as anotações nem o progresso.
-- **Fluxograma das etapas, mapa visual conectado e ícones coloridos.** Acima da trilha há um fluxograma clicável com todas as etapas (também incluído nas exportações em PNG, PDF e Markdown). No modo padrão (**Mapa visual**), as etapas e tópicos formam uma árvore conectada por espinha dorsal central e ramificações laterais, com legenda visual (obrigatório, opcional, concluído e checkpoint), destaque de pré-requisitos ao passar o mouse e ícones coloridos por tecnologia/carreira (Devicon MIT + SVGs). Clicar no tópico abre o popup com descrição, recursos filtráveis, anotações, quiz e ações — ou você pode alternar para **Modo: Lista detalhada** quando quiser.
-- **Painel de acompanhamento.** Botão **Painel** no topo com indicadores (progresso geral, horas concluídas, projetos e materiais vistos), gráfico semanal de ritmo planejado, anéis de progresso por etapa e tecnologias paralelas, próximas sessões e acesso rápido ao backup JSON (pronto para futura sincronização online).
-- **Temas e offline (PWA).** Claro e escuro (seguindo o sistema quando não há preferência salva) e suporte offline via Service Worker (`sw.js`) e `manifest.webmanifest`.
+As regras de negócio estão em [docs/regras-de-negocio.md](docs/regras-de-negocio.md).
 
-![Trilha com progresso, autoavaliação e o visto no tópico concluído](docs/screenshots/trilha.png)
+## Como rodar
 
-![Plano de estudo com a aula ocupando a segunda e a lista de sessões](docs/screenshots/plano.png)
-
-## Trilhas
-
-**Carreiras.** Front-end, Back-end, Full-Stack, Ciência de Dados, Analista de Dados, Analista de BI, Engenharia de Dados, Machine Learning e IA, Engenharia de IA, MLOps, Java e Spring Boot, C# e .NET, Mobile, Desenvolvimento de Jogos, QA e Testes de Software, DevOps, DevSecOps, Cibersegurança, Engenharia de Redes, Cloud e Arquitetura em Nuvem, Arquitetura de Software e System Design, UX / UI Design, Product Manager.
-
-**Fundamentos.** Fundamentos da Computação, Redes de Computadores e Internet, Estruturas de Dados e Algoritmos, Banco de Dados e Modelagem, Engenharia de Software e Boas Práticas, Design Systems e Acessibilidade, Engenharia de Prompt.
-
-**Tecnologias.** Python, JavaScript, TypeScript, React, Next.js, Angular, Vue.js, Node.js, Go, Rust, C e C++, C#, PHP, GraphQL, SQL, MongoDB, Power BI, Terraform, Git e GitHub, Linux, Docker, Kubernetes.
-
-Ciência de Dados é a trilha que se chamava Dados. O identificador no arquivo e no progresso salvo continua `dados`, então tópico marcado, anotação e autoavaliação antiga permanecem. Os tópicos novos (planilha, Power BI, teste A/B, coleta) entram sem apagar os antigos. Analista, Engenharia de Dados e Machine Learning são trilhas novas, com o próprio progresso. Quem abre a Ciência de Dados vê um aviso disso, uma vez.
-
-## Como usar
-
-1. Abra o site. Se for a primeira vez, busque ou escolha a trilha, o nível e as horas. Se quiser, marque uma tecnologia para estudar junto. Leia o resumo e toque em **Começar trilha**.
-2. Marque um tópico quando terminar. O visto no quadrado confirma, além da cor. A barra mostra só os tópicos obrigatórios do seu plano.
-3. Abra **Anotar** para links e lembretes. Em cada etapa, **Observações** guarda um texto da etapa inteira.
-4. Em **Ideias de projeto**, siga o roteiro e a definição de pronto, ou adicione uma ideia sua.
-5. Faça a **Autoavaliação** antes de avançar. Se aparecer **Revisar**, volte ao tópico indicado.
-6. Abra **Plano de estudo**. Confira dias e horários. Se quiser, importe a grade. Toque em **Gerar plano**.
-7. Ajuste as sessões. Use **Dia anterior**, **Dia seguinte**, **−15 min** e **+15 min** se não quiser editar os campos. **Travar** impede que um recálculo mova aquela sessão.
-8. Baixe o `.ics` e abra no Google Agenda, Outlook ou Calendário da Apple. Esse arquivo não inclui as aulas.
-9. **Exportar JSON** guarda uma cópia. **Importar JSON** restaura, inclusive um backup antigo só com `completed` e `notes`.
-
-## Visual
-
-O visual prioriza leitura confortável, clareza e foco de estudo com base em psicologia das cores e contraste WCAG 2.2 AA: cantos suaves (`6–12 px`), bordas sutis e respiro generoso. O texto corrido e títulos usam Plus Jakarta Sans; horas, metadados e tags usam JetBrains Mono.
-
-| Papel | Claro | Escuro | Uso |
-| --- | --- | --- | --- |
-| Fundo | `#FFFFFF` | `#090D16` | Fundo da página |
-| Superfície | `#F8FAFC` | `#111827` | Cartões, fluxograma e popups |
-| Texto principal | `#0F172A` | `#F8FAFC` | Leitura principal |
-| Texto secundário | `#475569` | `#CBD5E1` | Rótulos e metadados |
-| Destaque / Foco | `#2563EB` | `#38BDF8` | Botões, foco e ação principal |
-| Progresso | `#059669` | `#34D399` | Tópico concluído e barra de progresso |
-| Atenção leve | `#B45309` | `#FBBF24` | Opcional / Revisar |
-| Borda / Neutro | `#64748B` | `#475569` | Contornos e hachura de ocupado |
-
-O horário de aula é hachurado e traz a palavra **Ocupado**. A sessão de estudo tem borda na cor de destaque. Tópico concluído tem um visto desenhado, não só um quadrado pintado. Etapa pela metade mostra um traço.
-
-## Acessibilidade
-
-A meta prática é WCAG 2.2 nível AA. O contraste de texto e de interface também foi medido com APCA, o método de contraste do rascunho WCAG 3.
-
-- O idioma da página é `pt-BR`.
-- Dá para percorrer onboarding, trilha, autoavaliação e plano só com teclado. A busca da trilha é um campo com rótulo; Enter leva à primeira trilha visível. Os grupos são grupos de opção, e a tecnologia junto é caixa de seleção. No plano, **Dia anterior**, **Dia seguinte**, **−15 min** e **+15 min** mudam a sessão sem arrastar.
-- O foco tem contorno de 2 px, com contraste de pelo menos 3:1 com o fundo ao lado.
-- Botões e campos têm pelo menos 24 px de altura.
-- Há um link **Ir para o conteúdo**, títulos em ordem e a prévia do plano também em lista de texto.
-- Campos têm rótulo. Avisos de erro, exportação e o resultado da autoavaliação saem numa região `aria-live`.
-- **Revisar**, **Ocupado** e o visto não dependem só da cor.
-- `prefers-reduced-motion` desliga animação. Sem tema salvo, o app segue `prefers-color-scheme`.
-- O layout quebra em uma coluna por volta de 320 px e usa `rem` e `ch`, para o texto a 200% refluir em vez de ficar preso.
-
-Como foi testado: `axe-core` 4.14 no Chrome, no onboarding (também a 390 px), na trilha e no plano. Os relatórios estão em `docs/auditoria/`. Nesta rodada o axe não apontou violação. O Lighthouse da rodada anterior marcou 100 nas duas visões e não foi reexecutado agora. Isso não substitui um teste com leitor de tela feito por uma pessoa.
-
-## Dados e privacidade
-
-Tudo fica no seu navegador, na chave `localStorage` `rumo_guia_ptbr_v1`. Quem já tinha dados em `trilha_estudos_ptbr_v2` ou no formato antigo `roadmap_fullstack_ptbr_v1` é migrado na primeira abertura. O progresso não é apagado.
-
-O backup JSON inclui progresso, anotações, observações, projetos criados por você, respostas da autoavaliação, o plano de estudo com a grade importada e as tecnologias marcadas para estudar junto. O link de compartilhar não leva isso: só a trilha aberta, nível, horas, ordem e o que você marcou como opcional ou oculto.
-
-Não há analytics, conta nem envio dos seus dados para um servidor deste projeto. O `.ics` que você baixa é um arquivo no seu computador.
-
-## Estrutura
-
-- `index.html` — página
-- `manifest.webmanifest` e `sw.js` — manifesto PWA e cache offline
-- `css/app.css` — tema, foco, nós do mapa, hachura da grade e impressão
-- `js/app.js` — interface da trilha, fluxograma das etapas, mapa/popup e autoavaliação
-- `js/icons.js` — ícones coloridos por carreira, tecnologia e tópico (Devicon MIT + SVGs dedicados)
-- `js/dashboard-screen.js` — painel de acompanhamento com KPIs, gráfico semanal e anéis de progresso
-- `js/plan-screen.js` — plano de estudo e importação da grade
-- `js/plan.js` — distribuição das sessões
-- `js/ics.js` — leitura de `.ics` e CSV
-- `js/model.js` — progresso, importação, validação e combinação de trilhas
-- `js/projects.js` — catálogo unificado de projetos por nível e linguagem/tecnologia
-- `js/projects-screen.js` — tela dedicada de Ideias de projeto com filtros combináveis
-- `js/share.js` — link com a configuração
-- `js/files.js` — Markdown, PNG e PDF (com fluxograma das etapas e codificação WinAnsi)
-- `data/tracks/` — conteúdo das trilhas
-- `examples/backup-legado.json` — exemplo do JSON antigo
-- `docs/screenshots/` — imagens deste README
-- `docs/auditoria/` — resultado do axe e do Lighthouse
-
-## Contribuir
-
-O formato de uma trilha nova, dos projetos, do roteiro e das perguntas está em [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Rodar localmente
-
-Os dados são arquivos separados. Use um servidor estático. Abrir o `index.html` direto bloqueia essa leitura.
+Os dados são arquivos separados. Precisa de um servidor estático.
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Depois acesse http://localhost:8080
+Abre http://localhost:8080
 
 ## Testes
 
-Não há dependência para instalar. O `npm` só chama o Node.
+Não há dependência pra instalar. O `npm` só chama o Node.
 
 ```bash
 npm test
@@ -142,22 +40,25 @@ npm run validate
 npm run check-links
 ```
 
-`npm test` cobre progresso, backup antigo, link, recorrência do `.ics`, plano em volta da grade, detecção de conflitos e intercalação de tecnologias. `npm run validate` confere se cada trilha tem etapas, recursos e autoavaliação. `npm run check-links` verifica a disponibilidade HTTP das URLs das trilhas.
+`npm test` cobre progresso, backup antigo, link, grade, plano e as regras de adaptação da trilha. `npm run validate` confere as trilhas no Node, não no navegador. O workflow `.github/workflows/ci.yml` roda os dois em pull request.
 
-## Publicar no GitHub Pages
+## Mapa dos módulos
 
-O site é estático. Não há build.
+Não tem bundler. O navegador carrega ES modules.
 
-1. No repositório, abra **Settings → Pages**.
-2. Em **Build and deployment**, escolha **GitHub Actions**.
-3. O workflow `.github/workflows/deploy-pages.yml` publica o conteúdo da raiz a cada push na `main`.
-4. O arquivo `.nojekyll` na raiz impede o Jekyll de ignorar pastas.
+- `js/app.js` sobe a página, troca de tela e liga os botões.
+- `js/store.js` guarda estado, sessão e o `localStorage` (`rumo_guia_ptbr_v1`), gravando a trilha que mudou.
+- `js/load-tracks.js` lê `data/tracks/index.json` na abertura e busca a trilha escolhida quando precisa.
+- `js/model.js` reexporta `model/storage.js`, `model/validate.js` e `model/roadmap.js`.
+- `js/ui/` desenha a casa, a trilha, a barra lateral, a folha, os diálogos, o quiz e o ⌘K.
+- `js/screens/` é o plano, o painel e as ideias de projeto.
+- `js/plan.js`, `js/ics.js`, `js/files.js`, `js/share.js`, `js/projects.js` ficam sem DOM.
 
-O site fica em https://eduardonobilioni.github.io/rumo-guia-de-estudos/
+## Visual
 
-O repositório fica em https://github.com/EduardoNobilioni/rumo-guia-de-estudos
+Limão Escuro em `:root`, Limão Claro em `[data-theme="light"]`. Tokens em `css/tokens.css`. O resto está em `base.css`, `components.css`, `screens.css` e `motion.css`. Fonte Plus Jakarta Sans e JetBrains Mono, em `woff2`, com `font-display: swap`. Sem Tailwind, sem Devicon, sem gradiente. O movimento usa `transform` e `opacity`, com `prefers-reduced-motion`.
 
-Quando o repositório for renomeado para `rumo-guia-de-estudos`, o Pages passa a usar esse endereço. O caminho antigo deixa de publicar.
+A marca continua a agulha de bússola em `assets/brand/`, recolorida nos tokens.
 
 ## Como este projeto foi feito
 
@@ -169,4 +70,4 @@ O texto das trilhas e os links de estudo também passaram por essa ajuda e podem
 
 ## Licença
 
-Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para detalhes.
+MIT. Veja [LICENSE](LICENSE).

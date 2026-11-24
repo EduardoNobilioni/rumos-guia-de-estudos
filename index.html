@@ -1,333 +1,219 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rumos</title>
-  <meta name="description" content="Rumos: roadmap, guia e plano de estudos em tecnologia. Sem cadastro, no seu navegador." />
+  <meta name="description" content="Rumos: o mapa de estudos que eu queria na faculdade. Gratuito, no seu navegador." />
   <meta property="og:title" content="Rumos" />
-  <meta property="og:description" content="Rumos: roadmap, guia e plano de estudos em tecnologia." />
+  <meta property="og:description" content="Rumos: roadmap e plano de estudos em volta da grade da faculdade." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:url" content="https://eduardonobilioni.github.io/rumo-guia-de-estudos/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Rumos" />
-  <meta name="twitter:description" content="Rumos: roadmap, guia e plano de estudos em tecnologia." />
+  <meta name="twitter:description" content="Rumos: roadmap e plano de estudos em volta da grade da faculdade." />
   <meta property="og:image" content="https://eduardonobilioni.github.io/rumo-guia-de-estudos/assets/brand/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Rumos: roadmap, guia e plano de estudos em tecnologia." />
+  <meta property="og:image:alt" content="Rumos, guia de estudos em tecnologia." />
   <meta name="twitter:image" content="https://eduardonobilioni.github.io/rumo-guia-de-estudos/assets/brand/og.png" />
   <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/brand/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#0E141B" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-  <link rel="stylesheet" href="css/app.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="theme-color" content="#0B0B0C" />
+  <link rel="preload" href="assets/fonts/plus-jakarta-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/plus-jakarta-sans-600.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+  <link rel="stylesheet" href="css/motion.css" />
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
-            mono: ['JetBrains Mono', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
-          },
-          borderRadius: {
-            none: '0',
-            sm: '6px',
-            DEFAULT: '8px',
-            md: '10px',
-            lg: '12px',
-            xl: '14px',
-            '2xl': '18px',
-            full: '9999px',
-          },
-          colors: {
-            paper: '#FFFFFF',
-            soft: '#FFFFFF',
-            blush: '#F8FAFC',
-            ink: '#0F172A',
-            muted: '#475569',
-            night: '#090D16',
-            card: '#111827',
-            ochre: '#38BDF8',
-            sage: '#475569',
-            line: '#64748B',
-            terra: '#2563EB',
-            warn: '#FCA5A5',
-            emerald: '#059669',
-          }
-        }
-      }
-    };
     try {
       const raw = localStorage.getItem('rumo_guia_ptbr_v1')
         || localStorage.getItem('trilha_estudos_ptbr_v2')
         || localStorage.getItem('roadmap_fullstack_ptbr_v1');
       const saved = raw ? JSON.parse(raw).theme : '';
-      const theme = saved === 'light' || saved === 'dark'
-        ? saved
-        : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.classList.toggle('dark', theme !== 'light');
+      if (saved === 'light') document.documentElement.dataset.theme = 'light';
       const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.content = theme === 'light' ? '#FFFFFF' : '#090D16';
-    } catch (error) {
-      /* o app segue no tema do sistema, ou escuro se a preferência não puder ser lida */
-    }
+      if (meta) meta.content = saved === 'light' ? '#FAFAF9' : '#0B0B0C';
+    } catch (error) { /* segue no escuro */ }
   </script>
 </head>
-<body class="bg-paper text-ink dark:bg-night dark:text-blush font-sans antialiased min-h-screen selection:bg-ochre/40">
-  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<body>
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
 
-  <div id="loading" role="status" class="max-w-3xl mx-auto px-4 py-24 text-center">
-    <p class="text-sm font-medium text-muted dark:text-blush">Carregando trilhas…</p>
-  </div>
+  <header id="topnav" class="topnav" hidden>
+    <a href="./" class="brand-lockup" id="brandHome" aria-label="Rumos"></a>
+    <nav aria-label="Seções">
+      <button type="button" data-nav="roadmap">Roadmap</button>
+      <button type="button" data-nav="plan">Plano de estudo</button>
+      <button type="button" data-nav="projects">Ideias de projeto</button>
+      <button type="button" data-nav="dashboard">Painel</button>
+    </nav>
+    <button type="button" id="cmdkBtn" class="cmdk-btn" aria-haspopup="dialog">
+      <span>Buscar tópico, trilha ou ação</span>
+      <span class="kbd">⌘K</span>
+    </button>
+    <button type="button" id="shareBtn" class="btn btn-ghost btn-small">Compartilhar</button>
+    <button type="button" id="themeToggleBtn" class="btn-icon" aria-label="Tema claro">
+      <span id="themeIcon"></span>
+    </button>
+    <span id="themeLabel" class="sr-only">Tema claro</span>
+    <button type="button" id="moreBtn" class="btn-icon" aria-label="Mais ações" aria-haspopup="menu"></button>
+  </header>
 
-  <div id="loadError" hidden class="max-w-xl mx-auto px-4 py-24">
-    <div class="rounded-sm border border-terra bg-soft dark:bg-card p-6">
-      <h1 class="text-xl font-bold">Não foi possível abrir as trilhas</h1>
-      <p id="loadErrorText" class="read mt-3 text-muted dark:text-blush"></p>
+  <div id="loading" class="onb" role="status">
+    <div class="stack">
+      <div class="skeleton" style="width:180px;height:18px"></div>
+      <div class="skeleton" style="width:70%;height:36px"></div>
+      <div class="skeleton" style="height:72px"></div>
+      <div class="skeleton" style="height:72px"></div>
     </div>
   </div>
 
-  <main id="onboarding" hidden aria-labelledby="onbHeading" class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-    <div class="flex items-start justify-between gap-3 mb-8">
-      <a href="./" class="brand-lockup" aria-label="Rumos">
-        <svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <circle cx="16" cy="16" r="13.5" class="logo-ring" stroke-width="1.5" stroke-dasharray="3 2.5"/>
-          <path d="M7.5 24.5L24.5 7.5L18 21L14.5 17.5L7.5 24.5Z" class="logo-primary"/>
-          <path d="M7.5 24.5L12.5 13L24.5 7.5L14.5 17.5L7.5 24.5Z" class="logo-accent"/>
-        </svg>
-        <span class="brand-word">Rumos</span>
-      </a>
-      <button id="onbThemeBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Tema</button>
+  <div id="loadError" class="onb" hidden>
+    <div class="card card-pad stack">
+      <h1 style="font:var(--text-title-m)">Não consegui abrir as trilhas</h1>
+      <p id="loadErrorText" class="read muted"></p>
+      <button type="button" id="retryBtn" class="btn btn-primary">Tentar de novo</button>
     </div>
-    <p class="read text-muted dark:text-blush mb-6">Roadmap, guia e plano de estudos em tecnologia</p>
-    <p id="onbStepLabel" class="text-xs font-mono text-muted">Passo 1 de 4</p>
-    <h1 id="onbHeading" class="mt-2 text-2xl sm:text-3xl font-semibold">Qual é a sua área?</h1>
-    <p id="onbLead" class="read mt-3 text-muted dark:text-blush"></p>
+  </div>
 
-    <div id="onbStep0" hidden class="mt-6 space-y-6">
-      <section class="rounded-xl bg-soft dark:bg-card border border-line/40 dark:border-sage/50 p-5 sm:p-6">
-        <h2 class="text-lg sm:text-xl font-bold">Objetivo do Rumos</h2>
-        <p class="read mt-2 text-muted dark:text-blush">O <strong>Rumos</strong> é um guia gratuito, em português e sem cadastro para você planejar seus estudos em tecnologia com clareza — desde a escolha da área até um plano semanal realista.</p>
-        <div class="mt-5 grid sm:grid-cols-3 gap-4">
-          <div class="rounded-lg border border-line/35 dark:border-sage/50 bg-paper dark:bg-night p-4">
-            <p class="text-xs font-mono font-semibold text-terra dark:text-ochre">01 · Trilhas guiadas</p>
-            <p class="mt-1.5 text-sm font-semibold">Fluxograma e pré-requisitos</p>
-            <p class="mt-1 text-xs text-muted">Carreiras, fundamentos e linguagens organizados por etapas, projetos práticos e links gratuitos.</p>
-          </div>
-          <div class="rounded-lg border border-line/35 dark:border-sage/50 bg-paper dark:bg-night p-4">
-            <p class="text-xs font-mono font-semibold text-terra dark:text-ochre">02 · Ritmo realista</p>
-            <p class="mt-1.5 text-sm font-semibold">Plano semanal e agenda</p>
-            <p class="mt-1 text-xs text-muted">Distribui seus estudos em torno das suas aulas ou trabalho e exporta para <code>.ics</code>, PDF, PNG e Markdown.</p>
-          </div>
-          <div class="rounded-lg border border-line/35 dark:border-sage/50 bg-paper dark:bg-night p-4">
-            <p class="text-xs font-mono font-semibold text-emerald dark:text-emerald-400">03 · Privacidade local</p>
-            <p class="mt-1.5 text-sm font-semibold">Sem login nem rastreio</p>
-            <p class="mt-1 text-xs text-muted">Tudo fica salvo no seu navegador, com backup e restauração em JSON a qualquer momento.</p>
+  <main id="onboarding" class="onb is-screen" hidden>
+    <div class="spread" style="margin-bottom:var(--space-6)">
+      <a href="./" class="brand-lockup" id="onbBrand" aria-label="Rumos"></a>
+      <div class="row">
+        <button type="button" id="welcomeBackBtn" class="btn btn-secondary btn-small" hidden>Voltar pra minha trilha</button>
+        <button type="button" id="onbThemeBtn" class="btn-icon" aria-label="Alternar tema"></button>
+      </div>
+    </div>
+    <div class="onb-layout">
+      <div>
+        <div class="onb-copy">
+          <p class="eyebrow">Feito na faculdade, pra quem estuda junto</p>
+          <p id="onbStepLabel" class="mono" style="margin-top:8px">Passo 1 de 5</p>
+          <h1 id="onbHeading">Qual carreira você quer seguir?</h1>
+          <p id="onbLead" class="muted" style="margin-top:8px">Eu me perdi no meio de curso demais. Escolhe uma carreira. O resto a gente encaixa na semana.</p>
+        </div>
+        <div class="onb-steps" id="onbSegments" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div id="onbStep1">
+          <label class="stack" for="onbSearch"><span class="sr-only">Buscar carreira</span>
+            <input id="onbSearch" class="field" type="search" autocomplete="off" placeholder="Front-end, dados, jogos…" />
+          </label>
+          <p id="onbSearchStatus" class="mono" style="margin:8px 0" aria-live="polite"></p>
+          <div id="onbTrackGroups" class="choice-list"></div>
+        </div>
+        <div id="onbStep2" hidden><div id="onbCompanionList" class="choice-list"></div></div>
+        <fieldset id="onbStep3" hidden class="choice-list"><legend class="sr-only">Nível atual</legend></fieldset>
+        <fieldset id="onbStep4" hidden>
+          <legend class="sr-only">Horas por semana</legend>
+          <div id="hourChoices" class="hour-grid"></div>
+          <label class="stack" style="margin-top:12px" for="hoursCustom">Outra quantidade
+            <input id="hoursCustom" class="field" type="number" min="1" max="60" inputmode="numeric" />
+          </label>
+        </fieldset>
+        <div id="onbStep5" hidden class="card card-pad"><div id="planPreview"></div></div>
+        <div id="onbNavRow">
+          <div class="onb-nav">
+            <div class="row">
+              <button type="button" id="onbBack" class="btn btn-secondary">Voltar</button>
+              <label class="check" id="autoWrap"><input id="onbAutoAdvance" type="checkbox" checked /> Avançar sozinho</label>
+            </div>
+            <div class="row">
+              <button type="button" id="onbNext" class="btn btn-primary">Continuar</button>
+              <button type="button" id="onbStart" class="btn btn-primary" hidden>Montar a trilha</button>
+            </div>
           </div>
         </div>
-      </section>
-
-      <section class="rounded-xl bg-soft dark:bg-card border border-line/40 dark:border-sage/50 p-5 sm:p-6">
-        <h2 class="text-base sm:text-lg font-bold">Como montar seu roadmap</h2>
-        <ol class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
-          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
-            <span class="font-mono font-bold text-terra dark:text-ochre">1.</span>
-            <span><strong>Escolha sua carreira:</strong> defina seu objetivo principal e avance automaticamente para o próximo passo.</span>
-          </li>
-          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
-            <span class="font-mono font-bold text-terra dark:text-ochre">2.</span>
-            <span><strong>Adicione fundamentos e linguagens:</strong> opcionalmente marque trilhas paralelas e clique em Continuar.</span>
-          </li>
-          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
-            <span class="font-mono font-bold text-terra dark:text-ochre">3.</span>
-            <span><strong>Informe nível e horas:</strong> tópicos abaixo do seu nível ficam opcionais e o prazo segue seu ritmo real.</span>
-          </li>
-          <li class="flex gap-3 p-3 rounded-lg border border-line/30 dark:border-sage/40 bg-paper dark:bg-night">
-            <span class="font-mono font-bold text-emerald dark:text-emerald-400">4.</span>
-            <span><strong>Gere e acompanhe:</strong> visualize seu fluxograma completo, marque tópicos, faça revisões e exporte.</span>
-          </li>
-        </ol>
-        <div class="mt-5 flex flex-wrap items-center gap-3">
-          <button id="welcomeStartBtn" type="button" class="px-5 py-2.5 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Começar a montar meu roadmap</button>
-          <button id="welcomeBackBtn" type="button" hidden class="px-4 py-2.5 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Voltar para minha trilha</button>
-        </div>
-      </section>
-    </div>
-
-    <div id="onbStep1">
-      <label class="block text-sm font-medium" for="onbSearch">Buscar carreira</label>
-      <input id="onbSearch" type="search" autocomplete="off" placeholder="Ex.: Front-end, Dados, DevOps, Java" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-      <p id="onbSearchStatus" class="mt-2 text-xs font-mono text-muted" aria-live="polite"></p>
-      <div id="onbTrackGroups" class="mt-4 space-y-6"></div>
-    </div>
-
-    <div id="onbStep2" hidden class="mt-6 space-y-6">
-      <div id="onbCompanionList" class="space-y-6"></div>
-    </div>
-
-    <fieldset id="onbStep3" hidden class="mt-6 space-y-3">
-      <legend class="sr-only">Nível atual</legend>
-    </fieldset>
-
-    <fieldset id="onbStep4" hidden class="mt-6 space-y-3">
-      <legend class="sr-only">Horas por semana</legend>
-      <div id="hourChoices" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
-      <label class="block text-sm" for="hoursCustom">Outra quantidade
-        <input id="hoursCustom" type="number" min="1" max="60" inputmode="numeric" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-      </label>
-    </fieldset>
-
-    <div id="onbStep5" hidden class="mt-6 rounded-sm border border-line dark:border-sage/50 bg-soft dark:bg-card p-4 sm:p-5">
-      <div id="planPreview"></div>
-    </div>
-
-    <div id="onbNavRow" class="mt-6 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex flex-wrap items-center gap-3">
-        <button id="onbBack" type="button" class="px-4 py-2.5 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Voltar</button>
-        <label class="inline-flex items-center gap-2 text-xs text-muted">
-          <input id="onbAutoAdvance" type="checkbox" checked />
-          <span>Avançar automaticamente ao selecionar</span>
-        </label>
       </div>
-      <div class="flex gap-2">
-        <button id="onbNext" type="button" class="px-4 py-2.5 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Continuar</button>
-        <button id="onbStart" type="button" hidden class="px-4 py-2.5 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Começar trilha</button>
-      </div>
+      <aside id="livePreview" class="card live-preview" aria-live="polite"></aside>
     </div>
   </main>
 
-  <div id="app" hidden>
-   <div class="app-shell">
-    <div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
-    <aside id="trackSidebar" class="track-sidebar no-print" aria-label="Todas as trilhas">
-      <div class="flex items-center justify-between gap-2">
-        <p class="text-sm font-bold">Trilhas</p>
-        <button id="sidebarCloseBtn" type="button" class="lg:hidden px-2 py-1 text-xs rounded-sm border border-line dark:border-sage/60" aria-label="Fechar lista de trilhas">Fechar</button>
-      </div>
-      <label class="sr-only" for="sidebarSearch">Buscar trilha</label>
-      <input id="sidebarSearch" type="search" autocomplete="off" placeholder="Buscar trilha" class="mt-3 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2 text-sm" />
-      <div id="sidebarGroups" role="group" aria-label="Filtrar por grupo" class="mt-3 flex flex-wrap gap-1.5"></div>
-      <nav id="sidebarList" class="mt-4 space-y-5" aria-label="Lista de trilhas"></nav>
-    </aside>
-    <div class="app-main max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-      <header class="flex flex-col gap-4 mb-8 lg:flex-row lg:items-start lg:justify-between">
-        <div class="flex items-start gap-3.5">
-          <div id="trackIcon" class="p-3 rounded-sm bg-terra text-paper dark:bg-ochre dark:text-night shrink-0" aria-hidden="true"></div>
+  <div id="app" class="is-screen" hidden>
+    <div class="app-shell">
+      <aside id="trackSidebar" class="track-sidebar" aria-label="Todas as trilhas">
+        <p style="font:var(--text-title-s)">Trilhas</p>
+        <label class="sr-only" for="sidebarSearch">Buscar trilha</label>
+        <input id="sidebarSearch" class="field" type="search" autocomplete="off" placeholder="Buscar trilha" />
+        <div id="sidebarGroups" class="row" role="group" aria-label="Filtrar por grupo"></div>
+        <nav id="sidebarList" aria-label="Lista de trilhas"></nav>
+      </aside>
+      <main class="app-main">
+        <div id="renameNotice" class="card card-pad" hidden style="margin-bottom:16px">
+          <p id="renameNoticeText" class="read"></p>
+          <button type="button" id="renameNoticeDismiss" class="btn btn-secondary btn-small" style="margin-top:12px">Entendi</button>
+        </div>
+        <section class="hero-grid" aria-label="Trilha aberta">
           <div>
-            <div class="flex items-center gap-2.5 flex-wrap">
-              <h1>
-                <a href="./" class="brand-lockup" aria-label="Rumos">
-                  <svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                    <circle cx="16" cy="16" r="13.5" class="logo-ring" stroke-width="1.5" stroke-dasharray="3 2.5"/>
-                    <path d="M7.5 24.5L24.5 7.5L18 21L14.5 17.5L7.5 24.5Z" class="logo-primary"/>
-                    <path d="M7.5 24.5L12.5 13L24.5 7.5L14.5 17.5L7.5 24.5Z" class="logo-accent"/>
-                  </svg>
-                  <span class="brand-word">Rumos</span>
-                </a>
-              </h1>
-              <span id="trackBadge" class="px-2.5 py-0.5 text-xs font-mono font-semibold rounded-sm text-terra dark:text-ochre border border-terra dark:border-ochre"></span>
+            <div class="row" id="trackMeta"></div>
+            <h1 class="display" id="trackTitle" style="margin-top:8px"></h1>
+            <p id="trackTagline" class="muted read" style="margin-top:8px"></p>
+            <nav id="trackSwitcher" class="row" aria-label="Trilhas do seu plano" hidden style="margin-top:12px"></nav>
+            <p id="levelLabel" class="mono" style="margin-top:8px"></p>
+          </div>
+          <div class="card card-pad" style="display:flex;gap:16px;align-items:center">
+            <div id="progressRing"></div>
+            <div>
+              <p id="overallPercent" class="kpi-value">0%</p>
+              <p id="overallCounter" class="mono"></p>
+              <p id="planEstimate" class="muted" style="margin-top:8px"></p>
+              <span id="overallStatusTag" class="tag" style="margin-top:8px"></span>
             </div>
-            <p id="trackTagline" class="read text-muted dark:text-blush mt-3"></p>
-            <nav id="trackSwitcher" class="mt-3 flex flex-wrap gap-2" aria-label="Trilhas do seu plano" hidden></nav>
+          </div>
+        </section>
+        <section id="phaseFlowchart" aria-label="Etapas" style="margin-top:28px"></section>
+        <div class="bento">
+          <article class="card card-pad">
+            <p class="tag tag-highlight" id="focusTag">Agora</p>
+            <p id="currentPhaseName" style="font:var(--text-title-s);margin-top:8px"></p>
+            <p id="currentPhaseSub" class="mono" style="margin-top:4px"></p>
+            <label class="stack" style="margin-top:12px" for="weeklyHoursInput">Horas por semana, fora da aula
+              <input id="weeklyHoursInput" class="field" type="number" min="1" max="60" style="max-width:120px" />
+            </label>
+          </article>
+          <article class="card card-pad">
+            <p class="mono">Pra praticar</p>
+            <p id="projectCounter" style="font:var(--text-title-s);margin-top:8px"></p>
+          </article>
+          <article class="card card-pad">
+            <p class="mono">No seu ritmo</p>
+            <p id="paceLine" style="font:var(--text-title-s);margin-top:8px"></p>
+            <label class="check" style="margin-top:12px"><input id="includeBelowLevel" type="checkbox" /> Contar o que está abaixo do meu nível. <span id="optionalHint"></span></label>
+          </article>
+        </div>
+        <div class="card card-pad" style="margin-top:12px">
+          <div class="spread">
+            <span class="mono">Etapas</span>
+            <span id="badgesUnlockedCounter" class="mono"></span>
+          </div>
+          <div id="badgesContainer" class="row" style="margin-top:8px"></div>
+        </div>
+        <div class="toolbar">
+          <div class="segment" role="group" aria-label="Filtrar por status">
+            <button type="button" data-filter="all" class="filter-btn" aria-pressed="true">Todos</button>
+            <button type="button" data-filter="pending" class="filter-btn">Pendentes</button>
+            <button type="button" data-filter="completed" class="filter-btn">Concluídos</button>
+            <button type="button" data-filter="optional" class="filter-btn">Opcionais</button>
+            <button type="button" data-filter="hidden" class="filter-btn">Ocultos</button>
+          </div>
+          <div class="row">
+            <label class="sr-only" for="searchInput">Buscar na trilha</label>
+            <input id="searchInput" class="field" type="search" placeholder="Buscar nesta trilha" style="max-width:240px" />
+            <button type="button" id="filtersBtn" class="btn btn-secondary btn-small" aria-haspopup="menu">Filtros</button>
+            <button type="button" id="toggleAllPhasesBtn" class="btn btn-ghost btn-small"><span id="toggleAllPhasesLabel">Recolher todas</span></button>
+            <button type="button" id="addTopicBtn" class="btn btn-secondary btn-small">Tópico seu</button>
           </div>
         </div>
-        <div class="flex flex-wrap gap-2">
-          <button id="sidebarToggleBtn" type="button" class="lg:hidden px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60" aria-controls="trackSidebar" aria-expanded="false">☰ Trilhas</button>
-          <button id="openDashboardBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Painel</button>
-          <button id="openProjectsBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Ideias de projeto</button>
-          <button id="shareBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Compartilhar</button>
-          <button id="retakeBtn" type="button" class="px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Refazer/Trocar trilha</button>
-          <button id="themeToggleBtn" type="button" class="inline-flex items-center gap-2 px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">
-            <span id="themeIcon" aria-hidden="true"></span>
-            <span id="themeLabel">Tema claro</span>
-          </button>
-        </div>
-      </header>
-
-      <div id="renameNotice" hidden class="mb-4 rounded-sm border border-terra dark:border-ochre bg-soft dark:bg-card p-4">
-        <p id="renameNoticeText" class="read"></p>
-        <button id="renameNoticeDismiss" type="button" class="mt-3 px-3 py-2 rounded-sm text-sm font-medium border border-line dark:border-sage/60">Entendi</button>
-      </div>
-
-      <section aria-label="Painel geral de progresso" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-5 sm:p-6 mb-6">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          <div class="lg:col-span-7 space-y-3">
-            <div class="flex items-baseline justify-between gap-2">
-              <div>
-                <span class="text-xs font-mono text-muted font-medium">Progresso do seu plano</span>
-                <div class="flex items-baseline gap-3 mt-1 flex-wrap">
-                  <span id="overallPercent" class="text-3xl sm:text-4xl font-semibold font-mono text-terra dark:text-ochre">0%</span>
-                  <span id="overallCounter" class="text-sm font-mono text-muted dark:text-blush"></span>
-                </div>
-              </div>
-              <span id="overallStatusTag" class="hidden sm:inline-flex px-3 py-1 rounded-sm text-xs font-medium bg-sage/20 text-muted dark:text-blush border border-sage"></span>
-            </div>
-            <div class="w-full h-3.5 rounded-full bg-line/20 dark:bg-night overflow-hidden p-0.5">
-              <div id="overallProgressBar" class="h-full rounded-full bg-emerald dark:bg-emerald-400 transition-all duration-300" style="width:0%"></div>
-            </div>
-            <p id="planEstimate" class="read text-muted dark:text-blush"></p>
-            <p id="projectCounter" class="text-xs font-mono text-muted"></p>
-          </div>
-          <div class="lg:col-span-5 rounded-sm bg-paper dark:bg-night border border-line dark:border-sage/50 p-4">
-            <p class="text-xs font-mono text-terra dark:text-ochre font-medium">Foco atual</p>
-            <p id="currentPhaseName" class="mt-1 text-sm sm:text-base font-bold"></p>
-            <p id="currentPhaseSub" class="text-xs text-muted mt-1 font-mono"></p>
-          </div>
-        </div>
-        <div class="mt-5 flex flex-col sm:flex-row sm:items-end gap-3">
-          <label class="text-sm" for="weeklyHoursInput">Horas por semana
-            <input id="weeklyHoursInput" type="number" min="1" max="60" class="mt-1 block w-28 rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
+        <div id="filterPanel" hidden>
+          <label class="stack">Idioma dos links
+            <select id="resourceLangFilter" class="field"><option value="all">Todos</option><option value="pt">PT</option><option value="en">EN</option></select>
           </label>
-          <p id="levelLabel" class="text-sm text-muted dark:text-blush sm:mb-2"></p>
-        </div>
-        <label class="mt-3 flex items-start gap-2 text-sm">
-          <input id="includeBelowLevel" type="checkbox" class="mt-1" />
-          <span>Contar tópicos abaixo do meu nível no progresso. <span id="optionalHint" class="text-muted"></span></span>
-        </label>
-        <div class="mt-6 pt-5 border-t border-line dark:border-sage/50">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-mono text-muted font-medium">Conquistas por etapa</span>
-            <span id="badgesUnlockedCounter" class="text-xs font-mono text-muted"></span>
-          </div>
-          <div id="badgesContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
-        </div>
-      </section>
-
-      <section aria-label="Busca, filtros e ações" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-4 mb-6 space-y-3">
-        <div class="flex flex-col md:flex-row gap-3">
-          <div class="relative flex-1">
-            <label class="sr-only" for="searchInput">Buscar tópicos</label>
-            <input id="searchInput" type="search" placeholder="Buscar tópico, tecnologia, projeto ou observação" class="w-full px-3 py-2.5 rounded-sm text-sm bg-paper dark:bg-night border border-line dark:border-sage/50" />
-          </div>
-          <div role="group" aria-label="Filtrar por status" class="inline-flex flex-wrap rounded-sm bg-soft dark:bg-night p-1 border border-line dark:border-sage/50">
-            <button type="button" data-filter="all" class="filter-btn px-3 py-1.5 rounded-sm text-xs sm:text-sm">Todos</button>
-            <button type="button" data-filter="pending" class="filter-btn px-3 py-1.5 rounded-sm text-xs sm:text-sm">Pendentes</button>
-            <button type="button" data-filter="completed" class="filter-btn px-3 py-1.5 rounded-sm text-xs sm:text-sm">Concluídos</button>
-            <button type="button" data-filter="optional" class="filter-btn px-3 py-1.5 rounded-sm text-xs sm:text-sm">Opcionais</button>
-            <button type="button" data-filter="hidden" class="filter-btn px-3 py-1.5 rounded-sm text-xs sm:text-sm">Ocultos</button>
-          </div>
-        </div>
-        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-line dark:border-sage/50">
-          <label class="inline-flex items-center gap-1.5 text-xs font-medium">
-            <span class="text-muted">Idioma dos links</span>
-            <select id="resourceLangFilter" class="px-2 py-1.5 rounded-sm text-xs bg-paper dark:bg-night border border-line dark:border-sage/60">
-              <option value="all">Todos</option>
-              <option value="pt">PT</option>
-              <option value="en">EN</option>
-            </select>
-          </label>
-          <label class="inline-flex items-center gap-1.5 text-xs font-medium">
-            <span class="text-muted">Formato</span>
-            <select id="resourceKindFilter" class="px-2 py-1.5 rounded-sm text-xs bg-paper dark:bg-night border border-line dark:border-sage/60">
+          <label class="stack">Formato
+            <select id="resourceKindFilter" class="field">
               <option value="all">Todos</option>
               <option value="documentacao">Documentação</option>
               <option value="curso">Curso</option>
@@ -336,245 +222,184 @@
               <option value="video">Vídeo</option>
             </select>
           </label>
-          <button id="viewModeBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-semibold border border-terra dark:border-ochre text-terra dark:text-ochre">Modo: Mapa visual</button>
-          <button id="toggleAllPhasesBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60"><span id="toggleAllPhasesLabel">Recolher todas</span></button>
-          <label class="inline-flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">
-            <input id="strikethroughToggle" type="checkbox" checked />
-            <span>Tachar concluídos</span>
-          </label>
-          <label class="inline-flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">
-            <input id="allProjectLevels" type="checkbox" />
-            <span>Mostrar projetos de outros níveis</span>
-          </label>
-          <button id="addTopicBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-terra/60 dark:border-ochre/60 text-terra dark:text-ochre">Novo tópico</button>
-          <button id="openPlanBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-semibold border border-terra/70 dark:border-ochre/70 text-terra dark:text-ochre">Plano de estudo</button>
-          <button id="exportJsonBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Exportar JSON</button>
-          <button id="exportMdBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Markdown</button>
-          <button id="exportPngBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">PNG</button>
-          <button id="exportPdfBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">PDF</button>
-          <button id="importJsonBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Importar JSON</button>
-          <label class="sr-only" for="importFileInput">Arquivo JSON de backup</label>
-          <input id="importFileInput" type="file" accept=".json,application/json" class="sr-only" />
-          <button id="resetProgressBtn" type="button" class="px-3 py-2 rounded-sm text-xs font-medium border border-terra text-terra dark:text-warn">Resetar</button>
+          <button type="button" id="viewModeBtn" class="btn btn-secondary btn-small">Modo: mapa</button>
+          <label class="check"><input id="strikethroughToggle" type="checkbox" checked /> Tachar concluídos</label>
+          <label class="check"><input id="allProjectLevels" type="checkbox" /> Mostrar prática de outros níveis</label>
         </div>
-      </section>
-
-      <div id="emptyState" hidden class="rounded-sm border border-line dark:border-sage/50 bg-soft dark:bg-card p-10 text-center mb-6">
-        <h2 class="text-base font-bold">Nenhum tópico encontrado</h2>
-        <p class="read text-muted mt-3">Limpe a busca ou mude o filtro.</p>
-        <button id="resetFiltersBtn" type="button" class="mt-4 px-4 py-2 rounded-sm text-xs font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Limpar filtros e busca</button>
-      </div>
-
-      <section id="phaseFlowchart" aria-label="Fluxograma das etapas" class="rounded-xl bg-soft dark:bg-card border border-line/35 dark:border-sage/50 p-4 sm:p-5 mb-6"></section>
-
-      <main id="conteudo" class="space-y-5" aria-label="Etapas da trilha"></main>
-
-      <div id="orphans" hidden class="mt-5"></div>
+        <div id="emptyState" class="card empty" hidden>
+          <h2 style="font:var(--text-title-s)">Nada com esse filtro</h2>
+          <p class="muted" style="margin-top:8px">Limpa a busca ou troca o filtro.</p>
+          <button type="button" id="resetFiltersBtn" class="btn btn-primary btn-small" style="margin-top:12px">Limpar</button>
+        </div>
+        <div id="conteudo" class="phases" aria-label="Etapas da trilha"></div>
+        <div id="orphans" hidden style="margin-top:16px"></div>
+        <p id="footerStats" class="mono" style="margin-top:24px"></p>
+      </main>
     </div>
-   </div>
   </div>
 
-  <dialog id="confirmDialog" aria-labelledby="confirmTitle">
-    <form method="dialog" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-6">
-      <h2 id="confirmTitle" class="text-lg font-bold"></h2>
-      <p id="confirmBody" class="read mt-3 text-muted dark:text-blush"></p>
-      <div class="mt-6 flex justify-end gap-2">
-        <button value="cancel" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Cancelar</button>
-        <button id="confirmAccept" value="confirm" class="px-4 py-2 rounded-sm text-sm font-semibold bg-terra text-paper dark:text-night">Confirmar</button>
-      </div>
-    </form>
-  </dialog>
+  <main id="planScreen" class="plan-grid is-screen" hidden></main>
+  <main id="projectsScreen" class="dash-grid is-screen" hidden></main>
+  <main id="dashboardScreen" class="dash-grid is-screen" hidden></main>
 
-  <dialog id="shareDialog" aria-labelledby="shareTitle">
-    <form method="dialog" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-6">
-      <h2 id="shareTitle" class="text-lg font-bold">Compartilhar plano</h2>
-      <p class="read mt-3 text-muted dark:text-blush">O link leva a área, o nível, as horas, a ordem, os tópicos opcionais ou ocultos e as ideias que você criou. Progresso, anotações e observações ficam só no seu navegador.</p>
-      <label class="sr-only" for="shareUrl">Link do plano</label>
-      <input id="shareUrl" readonly class="mt-4 w-full rounded-sm border border-line dark:border-sage/60 bg-paper dark:bg-night px-3 py-2 text-xs" />
-      <div class="mt-4 flex justify-end gap-2">
-        <button id="copyShareBtn" type="button" class="px-4 py-2 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Copiar link</button>
-        <button value="close" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Fechar</button>
-      </div>
-    </form>
-  </dialog>
+  <nav id="tabbar" class="tabbar" hidden aria-label="Seções">
+    <button type="button" data-nav="roadmap"><span class="label">Roadmap</span></button>
+    <button type="button" data-nav="plan"><span class="label">Plano</span></button>
+    <button type="button" data-nav="projects"><span class="label">Ideias</span></button>
+    <button type="button" data-nav="dashboard"><span class="label">Painel</span></button>
+  </nav>
 
-  <dialog id="sharedDialog" aria-labelledby="sharedTitle">
-    <form method="dialog" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-6">
-      <h2 id="sharedTitle" class="text-lg font-bold">Aplicar plano compartilhado?</h2>
-      <p id="sharedBody" class="read mt-3 text-muted dark:text-blush"></p>
-      <div class="mt-6 flex justify-end gap-2">
-        <button value="cancel" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Agora não</button>
-        <button id="applyShareBtn" type="button" class="px-4 py-2 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Aplicar plano</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="topicDialog" aria-labelledby="topicDialogTitle">
-    <form id="topicForm" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-6 max-h-[80vh] overflow-y-auto">
-      <h2 id="topicDialogTitle" class="text-lg font-bold">Novo tópico</h2>
-      <div class="mt-4 space-y-3 text-sm">
-        <label class="block">Etapa
-          <select id="topicPhase" required class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2"></select>
-        </label>
-        <label class="block">Título
-          <input id="topicTitle" required maxlength="140" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-        </label>
-        <label class="block">Descrição
-          <textarea id="topicDescription" rows="3" maxlength="600" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2"></textarea>
-        </label>
-        <div class="grid grid-cols-2 gap-3">
-          <label>Nível
-            <select id="topicLevel" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2"></select>
-          </label>
-          <label>Horas
-            <input id="topicHours" type="number" min="1" max="60" value="4" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-          </label>
-        </div>
-        <label class="block">Tags, separadas por vírgula
-          <input id="topicTags" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-        </label>
-        <div class="pt-2 border-t border-line dark:border-sage/50 space-y-2">
-          <p class="text-xs font-mono text-muted">Recursos gratuitos (você pode adicionar vários)</p>
-          <ul id="topicResourcesList" class="space-y-1 text-xs"></ul>
-          <label class="block">Nome do recurso
-            <input id="topicResourceTitle" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-          </label>
-          <label class="block">URL do recurso
-            <input id="topicResourceUrl" type="url" placeholder="https://" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-          </label>
-          <div class="grid grid-cols-2 gap-3">
-            <label>Idioma
-              <select id="topicResourceLang" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2">
-                <option value="pt">PT</option>
-                <option value="en">EN</option>
-              </select>
-            </label>
-            <label>Formato
-              <select id="topicResourceKind" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2">
-                <option value="leitura">Leitura</option>
-                <option value="documentacao">Documentação</option>
-                <option value="curso">Curso</option>
-                <option value="pratica">Prática</option>
-                <option value="video">Vídeo</option>
-              </select>
-            </label>
-          </div>
-          <button type="button" id="topicAddResourceBtn" class="px-3 py-1.5 rounded-sm text-xs border border-line dark:border-sage/60">+ Adicionar recurso à lista</button>
-        </div>
-      </div>
-      <div class="mt-5 flex justify-end gap-2">
-        <button type="button" id="topicCancel" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Cancelar</button>
-        <button type="submit" class="px-4 py-2 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Salvar</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="projectDialog" aria-labelledby="projectDialogTitle">
-    <form id="projectForm" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-6">
-      <h2 id="projectDialogTitle" class="text-lg font-bold">Nova ideia de projeto</h2>
-      <div class="mt-4 space-y-3 text-sm">
-        <label class="block">Etapa
-          <select id="projectPhase" required class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2"></select>
-        </label>
-        <label class="block">Título
-          <input id="projectTitle" required maxlength="140" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-        </label>
-        <label class="block">Descrição
-          <textarea id="projectDescription" rows="3" maxlength="600" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2"></textarea>
-        </label>
-        <div class="grid grid-cols-2 gap-3">
-          <label>Nível
-            <select id="projectLevel" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2"></select>
-          </label>
-          <label>Horas
-            <input id="projectHours" type="number" min="1" max="60" value="6" class="mt-1 w-full rounded-sm border border-line dark:border-sage/60 bg-soft dark:bg-night px-3 py-2" />
-          </label>
-        </div>
-      </div>
-      <div class="mt-5 flex justify-end gap-2">
-        <button type="button" id="projectCancel" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Cancelar</button>
-        <button type="submit" class="px-4 py-2 rounded-sm text-sm font-semibold bg-terra dark:bg-ochre text-paper dark:text-night">Salvar</button>
-      </div>
-    </form>
-  </dialog>
-
-  <main id="dashboardScreen" hidden class="min-h-screen bg-paper dark:bg-night"></main>
-  <main id="projectsScreen" hidden class="min-h-screen bg-paper dark:bg-night"></main>
-  <main id="planScreen" hidden class="min-h-screen bg-paper dark:bg-night"></main>
-
-  <dialog id="quizDialog" aria-labelledby="quizTitle">
-    <form method="dialog" class="rounded-sm bg-soft dark:bg-card border border-line dark:border-sage/50 p-6 max-h-[85vh] overflow-y-auto">
-      <h2 id="quizTitle" class="text-lg font-bold">Autoavaliação</h2>
-      <p class="read mt-3 text-muted">Isto não é nota nem certificado. Serve para ver se vale revisar antes de seguir.</p>
-      <div id="quizLive" class="sr-only" role="status" aria-live="polite"></div>
-      <div id="quizBody" class="mt-4 space-y-4"></div>
-      <div class="mt-5 flex justify-end">
-        <button value="close" class="px-4 py-2 rounded-sm text-sm border border-line dark:border-sage/60">Fechar</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="topicDetailDialog" aria-labelledby="topicDetailTitle">
-    <div class="rounded-lg bg-soft dark:bg-card border border-line dark:border-sage/50 p-6 max-h-[85vh] overflow-y-auto shadow-xl">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <p id="topicDetailEyebrow" class="text-xs font-mono uppercase tracking-wider text-terra dark:text-ochre font-semibold"></p>
-          <h2 id="topicDetailTitle" class="mt-1 text-xl font-bold"></h2>
-        </div>
-        <button type="button" id="topicDetailClose" class="px-3 py-1.5 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Fechar</button>
-      </div>
-      <div id="topicDetailBody" class="mt-4"></div>
-    </div>
-  </dialog>
-
-  <dialog id="infoDialog" aria-labelledby="infoDialogTitle">
-    <div class="rounded-lg bg-soft dark:bg-card border border-line dark:border-sage/50 p-6 max-h-[85vh] overflow-y-auto shadow-xl">
-      <div class="flex items-start justify-between gap-3">
-        <h2 id="infoDialogTitle" class="text-lg font-bold"></h2>
-        <button type="button" id="infoDialogClose" class="px-3 py-1.5 rounded-sm text-xs font-medium border border-line dark:border-sage/60">Fechar</button>
-      </div>
-      <div id="infoDialogBody" class="mt-4 space-y-3 text-sm text-muted dark:text-blush"></div>
-    </div>
-  </dialog>
-
-  <footer id="siteFooter" class="mt-12 border-t border-line/40 dark:border-sage/50 bg-blush/70 dark:bg-card/60 text-xs text-muted">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <p class="font-bold text-sm text-ink dark:text-blush">Rumos — Guia de Estudos</p>
-          <p class="mt-2 leading-relaxed">Plataforma aberta, gratuita e em português para montar roadmaps de estudo em tecnologia, acompanhar progresso e organizar sua rotina semanal.</p>
-        </div>
-        <div>
-          <p class="font-semibold text-ink dark:text-blush">Informações e transparência</p>
-          <ul class="mt-2 space-y-1.5">
-            <li><button type="button" data-footer-action="about" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Sobre e orientações</button></li>
-            <li><button type="button" data-footer-action="privacy" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Política de Privacidade</button></li>
-            <li><button type="button" data-footer-action="terms" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Termos de Uso</button></li>
-            <li><button type="button" data-footer-action="accessibility" class="underline underline-offset-2 hover:text-terra dark:hover:text-ochre">Declaração de Acessibilidade</button></li>
-          </ul>
-        </div>
-        <div>
-          <p class="font-semibold text-ink dark:text-blush">Projeto e comunidade</p>
-          <ul class="mt-2 space-y-1.5">
-            <li><a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">Código-fonte no GitHub</a></li>
-            <li><a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos/issues" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">Reportar erro ou sugerir trilha</a></li>
-            <li><span>Dados 100% locais no navegador (sem cadastro e sem cookies de rastreamento)</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="pt-4 border-t border-line/30 dark:border-sage/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <p>© 2026 Rumos · Idealizado por Eduardo Nobilioni · Licença MIT · Conteúdo educacional gratuito.</p>
-        <p id="footerStats" class="font-mono"></p>
+  <footer id="siteFooter" class="site-footer">
+    <label class="sr-only" for="importFileInput">Arquivo JSON de backup</label>
+    <input id="importFileInput" type="file" accept=".json,application/json" class="sr-only" />
+    <div class="foot-grid">
+      <p>© 2026 Rumos · Feito por Eduardo Nobilioni, na faculdade · MIT · Gratuito</p>
+      <div class="row">
+        <button type="button" data-footer-action="privacy">Privacidade</button>
+        <button type="button" data-footer-action="terms">Termos</button>
+        <button type="button" data-footer-action="accessibility">Acessibilidade</button>
+        <a href="https://github.com/EduardoNobilioni/rumo-guia-de-estudos" target="_blank" rel="noopener noreferrer">Código no GitHub</a>
       </div>
     </div>
   </footer>
 
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0" role="status" aria-live="polite"></div>
+  <dialog id="confirmDialog" aria-labelledby="confirmTitle"><form method="dialog" class="dialog-panel">
+    <h2 id="confirmTitle" style="font:var(--text-title-m)"></h2>
+    <p id="confirmBody" class="muted" style="margin-top:8px"></p>
+    <div class="row" style="justify-content:flex-end;margin-top:16px">
+      <button value="cancel" class="btn btn-secondary">Cancelar</button>
+      <button id="confirmAccept" value="confirm" class="btn btn-danger">Confirmar</button>
+    </div>
+  </form></dialog>
+
+  <dialog id="shareDialog" aria-labelledby="shareTitle"><form method="dialog" class="dialog-panel">
+    <h2 id="shareTitle" style="font:var(--text-title-m)">Compartilhar o plano</h2>
+    <p class="muted" style="margin-top:8px">O link leva a carreira, o nível, as horas e a ordem. Anotação e progresso ficam neste navegador.</p>
+    <label class="sr-only" for="shareUrl">Link</label>
+    <input id="shareUrl" class="field" readonly style="margin-top:12px" />
+    <div class="row" style="justify-content:flex-end;margin-top:12px">
+      <button type="button" id="copyShareBtn" class="btn btn-primary">Copiar link</button>
+      <button value="close" class="btn btn-secondary">Fechar</button>
+    </div>
+  </form></dialog>
+
+  <dialog id="sharedDialog" aria-labelledby="sharedTitle"><form method="dialog" class="dialog-panel">
+    <h2 id="sharedTitle" style="font:var(--text-title-m)">Aplicar este plano?</h2>
+    <p id="sharedBody" class="muted" style="margin-top:8px"></p>
+    <div class="row" style="justify-content:flex-end;margin-top:16px">
+      <button value="cancel" class="btn btn-secondary">Agora não</button>
+      <button type="button" id="applyShareBtn" class="btn btn-primary">Aplicar</button>
+    </div>
+  </form></dialog>
+
+  <dialog id="topicDialog" aria-labelledby="topicDialogTitle"><form id="topicForm" class="dialog-panel stack">
+    <h2 id="topicDialogTitle" style="font:var(--text-title-m)">Tópico seu</h2>
+    <label>Etapa <select id="topicPhase" class="field" required></select></label>
+    <label>Título <input id="topicTitle" class="field" required maxlength="140" /></label>
+    <label>Descrição <textarea id="topicDescription" class="field" rows="3" maxlength="600"></textarea></label>
+    <div class="row">
+      <label style="flex:1">Nível <select id="topicLevel" class="field"></select></label>
+      <label style="flex:1">Horas <input id="topicHours" class="field" type="number" min="1" max="60" value="4" /></label>
+    </div>
+    <label>Tags, separadas por vírgula <input id="topicTags" class="field" /></label>
+    <div class="stack">
+      <p class="mono">Links</p>
+      <ul id="topicResourcesList" class="stack"></ul>
+      <input id="topicResourceTitle" class="field" placeholder="Nome do material" />
+      <input id="topicResourceUrl" class="field" type="url" placeholder="https://" />
+      <div class="row">
+        <select id="topicResourceLang" class="field"><option value="pt">PT</option><option value="en">EN</option></select>
+        <select id="topicResourceKind" class="field">
+          <option value="leitura">Leitura</option>
+          <option value="documentacao">Documentação</option>
+          <option value="curso">Curso</option>
+          <option value="pratica">Prática</option>
+          <option value="video">Vídeo</option>
+        </select>
+      </div>
+      <button type="button" id="topicAddResourceBtn" class="btn btn-secondary btn-small">Adicionar link</button>
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button type="button" id="topicCancel" class="btn btn-secondary">Cancelar</button>
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+  </form></dialog>
+
+  <dialog id="projectDialog" aria-labelledby="projectDialogTitle"><form id="projectForm" class="dialog-panel stack">
+    <h2 id="projectDialogTitle" style="font:var(--text-title-m)">Ideia sua</h2>
+    <label>Etapa <select id="projectPhase" class="field" required></select></label>
+    <label>Título <input id="projectTitle" class="field" required maxlength="140" /></label>
+    <label>Descrição <textarea id="projectDescription" class="field" rows="3" maxlength="600"></textarea></label>
+    <div class="row">
+      <label style="flex:1">Nível <select id="projectLevel" class="field"></select></label>
+      <label style="flex:1">Horas <input id="projectHours" class="field" type="number" min="1" max="60" value="6" /></label>
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button type="button" id="projectCancel" class="btn btn-secondary">Cancelar</button>
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+  </form></dialog>
+
+  <dialog id="quizDialog" aria-labelledby="quizTitle"><form method="dialog" class="dialog-panel">
+    <h2 id="quizTitle" style="font:var(--text-title-m)">Autoavaliação</h2>
+    <p class="muted" style="margin-top:8px">Não é nota. Serve pra ver se vale voltar num tópico antes de seguir.</p>
+    <div id="quizLive" class="sr-only" role="status" aria-live="polite"></div>
+    <div id="quizBody" style="margin-top:12px"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:16px"><button value="close" class="btn btn-secondary">Fechar</button></div>
+  </form></dialog>
+
+  <dialog id="topicDetailDialog" aria-labelledby="topicDetailTitle"><div class="dialog-panel">
+    <div class="spread">
+      <div>
+        <p id="topicDetailEyebrow" class="eyebrow"></p>
+        <h2 id="topicDetailTitle" style="font:var(--text-title-m);margin-top:4px"></h2>
+      </div>
+      <button type="button" id="topicDetailClose" class="btn-icon" aria-label="Fechar"></button>
+    </div>
+    <div id="topicDetailBody" style="margin-top:12px"></div>
+  </div></dialog>
+
+  <dialog id="infoDialog" aria-labelledby="infoDialogTitle"><div class="dialog-panel">
+    <div class="spread">
+      <h2 id="infoDialogTitle" style="font:var(--text-title-m)"></h2>
+      <button type="button" id="infoDialogClose" class="btn-icon" aria-label="Fechar"></button>
+    </div>
+    <div id="infoDialogBody" class="stack muted" style="margin-top:12px"></div>
+  </div></dialog>
+
+  <dialog id="cmdkDialog" class="cmdk" aria-labelledby="cmdkLabel"><div class="dialog-panel">
+    <h2 id="cmdkLabel" class="sr-only">Busca</h2>
+    <label class="sr-only" for="cmdkInput">Busca</label>
+    <input id="cmdkInput" class="field" type="search" placeholder="Tópico, trilha ou ação" autocomplete="off" />
+    <div id="cmdkList" class="cmdk-list" role="listbox"></div>
+  </div></dialog>
+
+  <dialog id="sheetDialog" class="sheet" aria-label="Trocar de trilha"><div class="sheet-panel">
+    <div class="sheet-handle" id="sheetHandle"></div>
+    <label class="sr-only" for="sheetSearch">Buscar trilha</label>
+    <input id="sheetSearch" class="field" type="search" placeholder="Buscar trilha" />
+    <div id="sheetList" style="margin-top:12px"></div>
+  </div></dialog>
+
+  <div id="toastContainer" class="toast-wrap" role="status" aria-live="polite"></div>
+  <button type="button" id="openDashboardBtn" hidden>Painel</button>
+  <button type="button" id="openProjectsBtn" hidden>Ideias</button>
+  <button type="button" id="openPlanBtn" hidden>Plano</button>
+  <button type="button" id="retakeBtn" hidden>Trocar trilha</button>
+  <button type="button" id="exportJsonBtn" hidden></button>
+  <button type="button" id="exportMdBtn" hidden></button>
+  <button type="button" id="exportPngBtn" hidden></button>
+  <button type="button" id="exportPdfBtn" hidden></button>
+  <button type="button" id="importJsonBtn" hidden></button>
+  <button type="button" id="resetProgressBtn" hidden></button>
+  <button type="button" id="sidebarToggleBtn" hidden aria-controls="trackSidebar" aria-expanded="false"></button>
+  <button type="button" id="sidebarCloseBtn" hidden></button>
+  <div id="sidebarBackdrop" hidden></div>
+  <div id="trackIcon" hidden></div>
+  <span id="trackBadge" hidden></span>
   <script type="module" src="js/app.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
   </script>
 </body>
 </html>

@@ -279,15 +279,15 @@ const FONT_UI = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
 
 function brandMarkPdf() {
   return [
-    '0.145 0.388 0.922 rg',
+    '0.718 0.890 0.290 rg',
     '48 784 m 68 804 l 61 789 l h f',
-    '0.020 0.588 0.412 rg',
+    '0.416 0.604 0.078 rg',
     '48 784 m 54 798 l 68 804 l h f',
   ].join('\n');
 }
 
 function drawBrandMark(ctx, x, y, size) {
-  ctx.fillStyle = '#2563EB';
+  ctx.fillStyle = '#B7E34A';
   ctx.beginPath();
   ctx.moveTo(x + size * 0.16, y + size * 0.84);
   ctx.lineTo(x + size * 0.84, y + size * 0.16);
@@ -295,7 +295,7 @@ function drawBrandMark(ctx, x, y, size) {
   ctx.lineTo(x + size * 0.44, y + size * 0.54);
   ctx.closePath();
   ctx.fill();
-  ctx.fillStyle = '#059669';
+  ctx.fillStyle = '#6A9A14';
   ctx.beginPath();
   ctx.moveTo(x + size * 0.16, y + size * 0.84);
   ctx.lineTo(x + size * 0.36, y + size * 0.40);
@@ -328,11 +328,11 @@ export function drawRoadmap(canvas, track, view) {
   ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(0, 0, width, height);
   drawBrandMark(ctx, 48, 22, 40);
-  ctx.fillStyle = '#0F172A';
-  ctx.font = `800 32px "Syne", ${FONT_UI}`;
+  ctx.fillStyle = '#18181B';
+  ctx.font = `800 32px ${FONT_UI}`;
   ctx.fillText('Rumos', 100, 52);
   ctx.font = `700 22px ${FONT_UI}`;
-  ctx.fillStyle = '#1D4ED8';
+  ctx.fillStyle = '#4D7A0E';
   ctx.fillText(track.name, 48, 102);
 
   // Fluxograma das etapas
@@ -343,24 +343,24 @@ export function drawRoadmap(canvas, track, view) {
     const col = idx % cols;
     const x = 48 + col * (boxW + 28);
     const y = fy + row * 74;
-    ctx.fillStyle = phase.progress.complete ? '#ECFDF5' : '#F8FAFC';
-    ctx.strokeStyle = phase.progress.complete ? '#059669' : '#2563EB';
+    ctx.fillStyle = phase.progress.complete ? '#F3F8E8' : '#FAFAF9';
+    ctx.strokeStyle = phase.progress.complete ? '#2F7A4E' : '#6A9A14';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.roundRect(x, y, boxW, 54, 10);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = phase.progress.complete ? '#047857' : '#1D4ED8';
+    ctx.fillStyle = phase.progress.complete ? '#2F7A4E' : '#4D7A0E';
     ctx.font = `700 12px ${FONT_UI}`;
     ctx.fillText(`ETAPA ${phase.number} · ${phase.progress.done}/${phase.progress.total}`, x + 12, y + 20);
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = '#18181B';
     ctx.font = `600 14px ${FONT_UI}`;
     const label = phase.title.length > 24 ? `${phase.title.slice(0, 23)}…` : phase.title;
     ctx.fillText(label, x + 12, y + 40);
 
     if (col < cols - 1 && idx < view.phases.length - 1) {
-      ctx.strokeStyle = '#64748B';
+      ctx.strokeStyle = '#71717A';
       ctx.beginPath();
       ctx.moveTo(x + boxW + 4, y + 27);
       ctx.lineTo(x + boxW + 24, y + 27);
@@ -380,15 +380,15 @@ export function drawRoadmap(canvas, track, view) {
     const offsetX = phaseIdx % 2 === 0 ? -24 : 24;
     const centerX = baseCenterX + offsetX;
     // Marco da etapa deslocado
-    ctx.fillStyle = phase.progress.complete ? '#ECFDF5' : '#EFF6FF';
-    ctx.strokeStyle = phase.progress.complete ? '#059669' : '#2563EB';
+    ctx.fillStyle = phase.progress.complete ? '#F3F8E8' : '#F4F4F5';
+    ctx.strokeStyle = phase.progress.complete ? '#2F7A4E' : '#6A9A14';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.roundRect(centerX - 240, y, 480, 42, 10);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = '#18181B';
     ctx.font = `700 15px ${FONT_UI}`;
     const pTitle = `Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`;
     ctx.fillText(pTitle.length > 54 ? `${pTitle.slice(0, 53)}…` : pTitle, centerX - 220, y + 26);
@@ -399,7 +399,7 @@ export function drawRoadmap(canvas, track, view) {
     const branchEndY = branchStartY + rows * 62;
 
     // Espinha dorsal vertical
-    ctx.strokeStyle = '#93C5FD';
+    ctx.strokeStyle = '#6A9A14';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(centerX, branchStartY);
@@ -412,22 +412,22 @@ export function drawRoadmap(canvas, track, view) {
       const ny = branchStartY + 14 + row * 62;
       const nx = isLeft ? centerX - 40 - nodeW : centerX + 40;
 
-      ctx.strokeStyle = '#93C5FD';
+      ctx.strokeStyle = '#6A9A14';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(centerX, ny + nodeH / 2);
       ctx.lineTo(isLeft ? nx + nodeW : nx, ny + nodeH / 2);
       ctx.stroke();
 
-      ctx.fillStyle = topic.done ? '#ECFDF5' : '#FFFFFF';
-      ctx.strokeStyle = topic.done ? '#059669' : (topic.status === 'optional' ? '#D97706' : '#2563EB');
+      ctx.fillStyle = topic.done ? '#F3F8E8' : '#FFFFFF';
+      ctx.strokeStyle = topic.done ? '#2F7A4E' : (topic.status === 'optional' ? '#71717A' : '#6A9A14');
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.roundRect(nx, ny, nodeW, nodeH, 8);
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = topic.done ? '#047857' : '#0F172A';
+      ctx.fillStyle = topic.done ? '#2F7A4E' : '#18181B';
       ctx.font = `600 13px ${FONT_BODY}`;
       const prefix = topic.done ? '✓ ' : '';
       const opt = topic.status === 'optional' ? ' (opc.)' : '';
@@ -440,15 +440,15 @@ export function drawRoadmap(canvas, track, view) {
 
   // Caderno de acompanhamento — Checklist de etapas e tópicos
   y += 16;
-  ctx.fillStyle = '#0F172A';
+  ctx.fillStyle = '#18181B';
   ctx.font = `700 20px ${FONT_UI}`;
   ctx.fillText('Caderno de acompanhamento — Etapas e tópicos', 48, y);
   y += 32;
 
   for (const phase of view.phases) {
     // Caixinha de check da etapa
-    ctx.strokeStyle = phase.progress.complete ? '#059669' : '#2563EB';
-    ctx.fillStyle = phase.progress.complete ? '#059669' : '#FFFFFF';
+    ctx.strokeStyle = phase.progress.complete ? '#2F7A4E' : '#6A9A14';
+    ctx.fillStyle = phase.progress.complete ? '#2F7A4E' : '#FFFFFF';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.roundRect(48, y - 14, 18, 18, 4);
@@ -460,15 +460,15 @@ export function drawRoadmap(canvas, track, view) {
       ctx.fillText('✓', 52, y);
     }
 
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = '#18181B';
     ctx.font = `700 16px ${FONT_UI}`;
     ctx.fillText(`Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`, 76, y);
     y += 32;
 
     for (const topic of phase.topics) {
       if (topic.status === 'hidden') continue;
-      ctx.strokeStyle = topic.done ? '#059669' : '#64748B';
-      ctx.fillStyle = topic.done ? '#059669' : '#FFFFFF';
+      ctx.strokeStyle = topic.done ? '#2F7A4E' : '#71717A';
+      ctx.fillStyle = topic.done ? '#2F7A4E' : '#FFFFFF';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.roundRect(76, y - 12, 15, 15, 3);
@@ -480,7 +480,7 @@ export function drawRoadmap(canvas, track, view) {
         ctx.fillText('✓', 79, y - 1);
       }
 
-      ctx.fillStyle = topic.done ? '#047857' : '#0F172A';
+      ctx.fillStyle = topic.done ? '#2F7A4E' : '#18181B';
       ctx.font = `400 14px ${FONT_BODY}`;
       const opt = topic.status === 'optional' ? ' · opcional' : '';
       const hrs = Number(topic.hours) ? ` (${topic.hours} h)` : '';

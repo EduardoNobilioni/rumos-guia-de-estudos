@@ -1,0 +1,95 @@
+.mark-box.is-on { transform: scale(1); }
+.mark-box path,
+.bar > span,
+.ring circle.arc,
+.dot,
+.toast,
+.reveal,
+.phase,
+.choice-card,
+.topic-node,
+.topic-card,
+.btn,
+dialog::backdrop,
+.dialog-panel,
+.sheet-panel {
+  transition-property: transform, opacity, stroke-dashoffset, border-color;
+  transition-duration: var(--dur-base);
+  transition-timing-function: var(--ease-out);
+}
+
+.mark-box path { transition-duration: var(--dur-base); }
+.mark-box.is-on { animation: pop var(--dur-fast) var(--ease-spring); }
+.bar > span { transition-duration: var(--dur-slow); }
+.ring circle.arc { transition: stroke-dashoffset var(--dur-slow) var(--ease-out); }
+
+.topic-node:hover,
+.topic-card:hover,
+.choice-card:hover,
+.project-card:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-2px);
+}
+
+.topic-node:active,
+.choice-card:active { transform: scale(0.99); }
+
+.reveal { opacity: 0; transform: translateY(12px); }
+.reveal.is-in { opacity: 1; transform: none; transition-duration: var(--dur-slow); }
+.topic-grid .topic-node { transition-delay: calc(min(var(--i, 0), 8) * 40ms); }
+
+.dot.is-current { animation: pop var(--dur-base) var(--ease-spring); }
+
+.tag-pulse { animation: pulse var(--dur-slow) var(--ease-spring); }
+
+.skeleton { animation: blink 1.2s var(--ease-in-out) infinite alternate; }
+
+.compass-needle { transform-origin: 16px 16px; animation: aim 700ms var(--ease-out) both; }
+.compass-path path {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: draw 700ms var(--ease-out) 120ms both;
+}
+
+.is-entering { animation: enter var(--dur-base) var(--ease-out); }
+
+dialog[open] .dialog-panel,
+#cmdkDialog[open] .dialog-panel {
+  animation: rise var(--dur-base) var(--ease-out);
+}
+
+#sheetDialog[open] .sheet-panel { animation: sheet-in var(--dur-slow) var(--ease-out); }
+
+.toast { animation: toast-in var(--dur-base) var(--ease-out); }
+
+::view-transition-old(root) {
+  animation: vt-out var(--dur-fast) var(--ease-out) both;
+}
+::view-transition-new(root) {
+  animation: vt-in var(--dur-base) var(--ease-out) both;
+}
+
+@keyframes pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes blink { from { opacity: 0.5; } to { opacity: 1; } }
+@keyframes aim { from { transform: rotate(-36deg); } to { transform: rotate(0deg); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes enter { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes vt-out { to { opacity: 0; transform: translateX(-8px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .skeleton { opacity: 0.7; }
+  .mark-box path { stroke-dashoffset: 0; }
+  .compass-path path { stroke-dashoffset: 0; }
+  .topic-node:hover, .choice-card:hover, .topic-card:hover { transform: none; }
+}
