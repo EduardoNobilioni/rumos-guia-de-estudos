@@ -3,23 +3,17 @@ import {
   emptyTrackState, ensureTrack, formatDuration, fullstackOnboardingSteps, FULLSTACK_TRACK_ID, groupTracks,
   projectPlanStats, roadmapStats, tracksMatching,
 } from '../model.js';
-import { suggestSlot, syncPlanWeeklyHours } from '../plan.js';
+import { syncPlanWeeklyHours } from '../plan.js';
 import { trackIconHtml } from '../icons.js';
-import { catalog, loadTrack } from '../load-tracks.js';
-import { brandMark, escapeHtml, icon } from './dom.js';
+import { catalog } from '../load-tracks.js';
+import { brandMark, escapeHtml, icon, watchReveals } from './dom.js';
 
 const LEVELS = [
-  ['iniciante', 'Começando', 'Vi pouco disso na faculdade.'],
-  ['intermediario', 'Já programo', 'O básico da área eu já uso.'],
-  ['avancado', 'Quero o buraco', 'Já fiz projeto e falta o que ainda trava.'],
+  ['iniciante', 'Iniciante', 'Estou começando ou vi pouco disso.'],
+  ['intermediario', 'Intermediário', 'Já programo e entendo o básico da área.'],
+  ['avancado', 'Avançado', 'Já fiz projetos e quero o que ainda não domino.'],
 ];
 const HOURS = [4, 8, 12, 20];
-const SAMPLE = [
-  [1, '08:00', '10:00', 'Cálculo'],
-  [2, '14:00', '16:00', 'Física'],
-  [3, '08:00', '10:00', 'Cálculo'],
-  [4, '10:00', '12:00', 'Laboratório'],
-];
 
 const STEP_DOM = {
   career: 'onbStep1',
@@ -32,13 +26,13 @@ const STEP_DOM = {
 };
 
 const STEP_COPY = {
-  career: ['Qual carreira você quer seguir?', 'Eu me perdi no meio de curso demais. Escolhe uma. Dá pra somar fundamento e linguagem no próximo passo.'],
-  language: ['Qual linguagem no back-end?', 'Nenhuma vem marcada. HTTP, REST, banco, auth, teste e deploy continuam.'],
-  ecosystem: ['Qual framework?', 'Um só. Entra no lugar do framework de back-end. O resto da trilha fica.'],
-  companions: ['Leva algum fundamento ou linguagem junto?', 'Opcional. Marca o que você quer estudar em paralelo e segue.'],
-  level: ['Onde você está agora?', 'O que estiver abaixo desse ponto entra como opcional. Continua na lista.'],
-  hours: ['Quantas horas sobram na semana, fora da aula?', 'A etapa usa esse ritmo. Você muda depois.'],
-  preview: ['Olha se ficou do seu tamanho', 'Carreira, companhia e horas. O progresso que você já marcou continua.'],
+  career: ['Qual carreira é o seu objetivo?', 'Escolha sua trilha principal de carreira. Ao selecionar, você avança automaticamente para o próximo passo.'],
+  language: ['Qual linguagem no back-end?', 'Escolha uma. Nenhuma vem marcada. HTTP, REST, banco, autenticação, testes e deploy continuam.'],
+  ecosystem: ['Qual framework?', 'Escolha um. Ele entra só no lugar do framework de back-end. O restante da trilha permanece.'],
+  companions: ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque as trilhas adicionais e clique em Continuar.'],
+  level: ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
+  hours: ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
+  preview: ['Seu plano', 'Confira a carreira, a linguagem e as etapas antes de gerar seu roadmap completo.'],
 };
 
 export function initOnboarding(api) {
@@ -53,7 +47,7 @@ export function initOnboarding(api) {
   }
 
   function steps() {
-    return fullstackOnboardingSteps(draft.trackId, draft.backendLanguageId, catalog());
+    return ['home', ...fullstackOnboardingSteps(draft.trackId, draft.backendLanguageId, catalog())];
   }
 
   function renderLanguages() {
@@ -110,33 +104,6 @@ export function initOnboarding(api) {
     $('onbSearchStatus').textContent = query.trim() ? (count ? `${count} carreiras` : 'Nenhuma carreira com esse nome.') : '';
   }
 
-  async function preview() {
-    const root = $('livePreview');
-    const hours = draft.hours || 8;
-    const slot = suggestSlot(hours, 4);
-    const track = draft.trackId ? await loadTrack(draft.trackId).catch(() => null) : null;
-    const phases = track ? track.phases.slice(0, 4) : [];
-    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-    const language = backendLanguageChoices(catalog()).find((item) => item.id === draft.backendLanguageId);
-    const languageLine = draft.trackId !== FULLSTACK_TRACK_ID
-      ? ''
-      : `<p class="mono">${language ? `Back-end em ${escapeHtml(language.name)}.` : 'Back-end: escolhe a linguagem. Nenhuma vem marcada.'}</p>`;
-    root.innerHTML = `
-      <div class="compass-wrap">${brandMark(true)}
-        <svg class="compass-path" viewBox="0 0 160 28" aria-hidden="true"><path d="M2 20 C 40 20, 50 6, 90 8 S 140 18, 158 6" fill="none" stroke="var(--color-accent-graphic)" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-      <p class="eyebrow">${track ? escapeHtml(track.name) : 'Ainda sem carreira'}</p>
-      <p style="font:var(--text-title-s);margin-top:6px">${track ? 'O começo da trilha' : 'Escolhe uma carreira pra eu montar o trajeto.'}</p>
-      ${languageLine}
-      <div class="preview-stages">${phases.map((phase) => `<p class="mono">Etapa ${phase.number} · ${escapeHtml(phase.title)}</p>`).join('') || '<div class="skeleton" style="height:64px"></div>'}</div>
-      <p class="mono">Semana de exemplo. A aula ocupa o horário. O estudo entra no vão, ${hours} h.</p>
-      <div class="week" style="margin-top:8px">${days.map((label, day) => {
-        const classes = SAMPLE.filter((item) => item[0] === day).map((item) => `<span class="busy-block">${item[1].slice(0, 5)} ${escapeHtml(item[3])}</span>`).join('');
-        const study = [1, 2, 3, 4].includes(day) ? `<span class="study-block">${slot.start} estudo</span>` : '';
-        return `<div class="week-col"><strong>${label}</strong>${classes}${study}</div>`;
-      }).join('')}</div>`;
-  }
-
   function paint() {
     document.querySelectorAll('#onboarding .choice-card').forEach((card) => {
       card.classList.toggle('is-selected', card.querySelector('input')?.checked);
@@ -160,6 +127,15 @@ export function initOnboarding(api) {
     const index = Math.max(0, Math.min(step, flow.length - 1));
     draft.step = index;
     const id = flow[index];
+    $('onbStep0').hidden = id !== 'home';
+    $('onbFlow').hidden = id === 'home';
+    if (id === 'home') {
+      $('onbNavRow').hidden = true;
+      const state = api.getState();
+      $('welcomeBackBtn').hidden = !(state.profile.onboarded && state.tracks[state.activeTrackId]);
+      watchReveals($('onbStep0'));
+      return;
+    }
     for (const domId of new Set(Object.values(STEP_DOM))) $(domId).hidden = true;
     if (id === 'language') renderLanguages();
     if (id === 'ecosystem') renderEcosystem();
@@ -168,24 +144,23 @@ export function initOnboarding(api) {
     const [heading, lead] = STEP_COPY[id];
     $('onbHeading').textContent = heading;
     $('onbLead').textContent = draft.mode === 'retake' && id === 'preview'
-      ? 'O que você já marcou e anotou fica. O nível novo recoloca o que era opcional.'
+      ? 'Progresso, anotações e ideias criadas por você continuam. Opcionais e ocultos desta trilha voltam para a recomendação do novo nível.'
       : lead;
-    $('onbStepLabel').textContent = `Passo ${index + 1} de ${flow.length}`;
-    $('onbSegments').innerHTML = flow.map((_, bar) => `<i${bar <= index ? ' class="is-done"' : ''}></i>`).join('');
-    $('onbBack').hidden = index === 0;
+    $('onbStepLabel').textContent = `Passo ${index} de ${flow.length - 1}`;
+    $('onbSegments').innerHTML = flow.slice(1).map((_, bar) => `<i${bar < index ? ' class="is-done"' : ''}></i>`).join('');
+    $('onbBack').hidden = false;
     $('onbNext').hidden = id === 'preview';
     $('onbStart').hidden = id !== 'preview';
-    $('onbStart').textContent = draft.mode === 'retake' ? 'Atualizar a trilha' : 'Montar a trilha';
+    $('onbStart').textContent = draft.mode === 'retake' ? 'Atualizar trilha' : 'Gerar roadmap completo';
     $('autoWrap').hidden = id === 'companions' || id === 'ecosystem' || id === 'preview';
     $('onbNavRow').hidden = false;
     if (id === 'preview') renderPlan();
-    preview();
   }
 
   function renderPlan() {
     const entry = catalog().find((item) => item.id === draft.trackId);
     if (!entry || !draft.level || !draft.hours || (draft.trackId === FULLSTACK_TRACK_ID && !draft.backendLanguageId)) {
-      $('planPreview').textContent = 'Faltou uma resposta. Volta um passo.';
+      $('planPreview').textContent = 'Faltou uma resposta. Volte um passo.';
       return;
     }
     const names = draft.companionIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
@@ -200,7 +175,7 @@ export function initOnboarding(api) {
 
   async function confirm() {
     if (draft.trackId === FULLSTACK_TRACK_ID && !draft.backendLanguageId) {
-      toast('Escolhe a linguagem do back-end.', 'error');
+      toast('Escolha a linguagem do back-end.', 'error');
       const at = steps().indexOf('language');
       if (at >= 0) goToStep(at);
       return;
@@ -223,7 +198,7 @@ export function initOnboarding(api) {
     if (primary.studyPlan) syncPlanWeeklyHours(primary.studyPlan, draft.hours);
     session.combinedView = ids.length > 0;
     api.persistAll();
-    toast(draft.mode === 'retake' ? 'Trilha atualizada. O que você já fez continua.' : 'Trilha montada. Bom estudo.');
+    toast(draft.mode === 'retake' ? 'Trilha atualizada. Seu progresso continua.' : 'Roadmap gerado.');
     api.refresh();
   }
 
@@ -243,14 +218,12 @@ export function initOnboarding(api) {
           box.disabled = box.value === draft.trackId;
           if (box.disabled) box.checked = false;
         });
-        preview();
         const flow = steps();
         if (flow[draft.step] === 'career' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
       if (input.name === 'backendLanguage') {
         draft.backendLanguageId = input.value;
         draft.backendEcosystemIds = [];
-        preview();
         const flow = steps();
         if (flow[draft.step] === 'language' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
@@ -263,7 +236,6 @@ export function initOnboarding(api) {
       }
       if (input.name === 'hours' && input.value !== 'custom') {
         draft.hours = clampHours(input.value);
-        preview();
         const flow = steps();
         if (flow[draft.step] === 'hours' && draft.hours && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
@@ -274,14 +246,14 @@ export function initOnboarding(api) {
       if (custom) custom.checked = true;
       draft.hours = clampHours($('hoursCustom').value);
       paint();
-      preview();
     });
-    $('onbBack').addEventListener('click', () => goToStep(draft.step - 1));
+    $('welcomeStartBtn').addEventListener('click', () => goToStep(1));
+    $('onbBack').addEventListener('click', () => goToStep(Math.max(0, draft.step - 1)));
     $('onbNext').addEventListener('click', () => {
       const id = steps()[draft.step];
-      if (id === 'career' && !selected('track')) return toast('Escolhe uma carreira.', 'error');
+      if (id === 'career' && !selected('track')) return toast('Escolha uma carreira.', 'error');
       if (id === 'career') draft.trackId = selected('track');
-      if (id === 'language' && !selected('backendLanguage')) return toast('Escolhe a linguagem do back-end.', 'error');
+      if (id === 'language' && !selected('backendLanguage')) return toast('Escolha a linguagem do back-end.', 'error');
       if (id === 'language') {
         const nextLanguage = selected('backendLanguage');
         if (nextLanguage !== draft.backendLanguageId) draft.backendEcosystemIds = [];
@@ -290,8 +262,8 @@ export function initOnboarding(api) {
       if (id === 'ecosystem') {
         draft.backendEcosystemIds = ecosystems().filter((item) => item !== draft.backendLanguageId);
       }
-      if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId);
-      if (id === 'level' && !selected('level')) return toast('Escolhe onde você está.', 'error');
+      if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(item)));
+      if (id === 'level' && !selected('level')) return toast('Escolha um nível.', 'error');
       if (id === 'level') draft.level = selected('level');
       if (id === 'hours') {
         draft.hours = selected('hours') === 'custom' ? clampHours($('hoursCustom').value) : clampHours(selected('hours'));
@@ -301,10 +273,10 @@ export function initOnboarding(api) {
     });
     $('onbStart').addEventListener('click', () => { confirm().catch(() => toast('Não consegui montar a trilha.', 'error')); });
     $('welcomeBackBtn').addEventListener('click', () => api.refresh());
-    $('backendLanguageNoticeBtn').addEventListener('click', () => open('retake', { focus: 'language' }));
+    $('backendLanguageNoticeBtn').addEventListener('click', () => open('retake'));
   }
 
-  function open(mode, options = {}) {
+  function open(mode, step) {
     draft.mode = mode;
     const state = api.getState();
     const current = state.tracks[state.activeTrackId];
@@ -321,21 +293,18 @@ export function initOnboarding(api) {
       draft.backendEcosystemIds = [];
     }
     renderChoices();
-    $('welcomeBackBtn').hidden = !(state.profile.onboarded && current);
     api.showScreen('onboarding');
     const flow = steps();
-    let start = 0;
-    if (options.focus) {
-      const at = flow.indexOf(options.focus);
-      if (at >= 0) start = at;
-    } else if (mode === 'retake' && state.activeTrackId === FULLSTACK_TRACK_ID && !state.profile.backendLanguageId) {
+    if (step === 0) return goToStep(0);
+    if (mode === 'retake' && state.activeTrackId === FULLSTACK_TRACK_ID && !state.profile.backendLanguageId && step == null) {
       const at = flow.indexOf('language');
-      if (at >= 0) start = at;
+      return goToStep(at >= 0 ? at : 1);
     }
-    goToStep(start);
+    if (typeof step === 'number') return goToStep(step);
+    goToStep(mode === 'create' ? 0 : 1);
   }
 
-  return { bind, open, preview };
+  return { bind, open };
 }
 
 export { emptyTrackState, ensureTrack, roadmapStats, projectPlanStats };

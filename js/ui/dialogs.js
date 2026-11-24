@@ -161,6 +161,10 @@ export function initDialogs(api) {
     $('siteFooter').addEventListener('click', (event) => {
       const button = event.target.closest('[data-footer-action]');
       if (!button) return;
+      if (button.dataset.footerAction === 'about') {
+        api.showHome();
+        return;
+      }
       const copy = {
         privacy: ['Privacidade', '<p>O Rumos não tem cadastro, cookie de rastreio nem analytics. Progresso, anotação e plano ficam no localStorage deste navegador. O link de compartilhar leva só a configuração, no # da URL.</p><p>O site é estático no GitHub Pages. As fontes vêm do próprio repositório. Link externo segue a regra de quem publicou.</p>'],
         terms: ['Termos', '<p>O Rumos é gratuito, licença MIT, feito pra estudar. Trilha, hora e projeto são orientação, não certificado.</p><p>Os links saem pra documentação e curso de outras pessoas. Se um quebrou, abre uma issue.</p>'],
