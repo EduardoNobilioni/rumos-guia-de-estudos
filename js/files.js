@@ -148,7 +148,7 @@ export function roadmapPdf(track, view) {
   const streams = [];
   const tree = [];
   pushAscii(tree, `1 1 1 rg\n0 0 595 842 re f\n${brandMarkPdf()}\n0.059 0.090 0.165 rg\n`);
-  pushWinText(tree, 78, 792, `Rumo - ${track.name}`, 13);
+  pushWinText(tree, 78, 792, `Rumos - ${track.name}`, 13);
   pushAscii(tree, '0.145 0.388 0.922 rg\n');
   pushWinText(tree, 48, 764, 'Arvore visual do roadmap', 11);
 
@@ -222,7 +222,7 @@ export function roadmapPdf(track, view) {
 
 export function roadmapLines(track, view) {
   const lines = [
-    `Rumo - ${track.name}`,
+    `Rumos - ${track.name}`,
     track.description,
     '',
     'Fluxograma das etapas:',
@@ -248,7 +248,7 @@ export function roadmapLines(track, view) {
 export function roadmapMarkdown(track, view) {
   const flow = view.phases.map((p) => `**${p.number}. ${p.title}** (${p.progress.done}/${p.progress.total})`).join(' → ');
   const lines = [
-    `# Rumo — ${track.name}`,
+    `# Rumos — ${track.name}`,
     '',
     track.description,
     '',
@@ -330,7 +330,7 @@ export function drawRoadmap(canvas, track, view) {
   drawBrandMark(ctx, 48, 22, 40);
   ctx.fillStyle = '#18181B';
   ctx.font = `800 32px ${FONT_UI}`;
-  ctx.fillText('Rumo', 100, 52);
+  ctx.fillText('Rumos', 100, 52);
   ctx.font = `700 22px ${FONT_UI}`;
   ctx.fillStyle = '#4D7A0E';
   ctx.fillText(track.name, 48, 102);

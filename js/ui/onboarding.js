@@ -148,7 +148,7 @@ export function initOnboarding(api) {
   }
 
   function bind() {
-    $('onbBrand').innerHTML = `${brandMark(false)}<span>Rumo</span>`;
+    $('onbBrand').innerHTML = `${brandMark(false)}<span>Rumos</span>`;
     $('onbThemeBtn').innerHTML = icon('sun');
     $('onbThemeBtn').addEventListener('click', () => api.toggleTheme());
     renderChoices();

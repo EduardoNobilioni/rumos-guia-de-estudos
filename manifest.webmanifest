@@ -1,6 +1,6 @@
 {
-  "name": "Rumo — Guia de Estudos",
-  "short_name": "Rumo",
+  "name": "Rumos — Guia de Estudos",
+  "short_name": "Rumos",
   "description": "Roadmap e plano de estudos em tecnologia, no seu navegador.",
   "start_url": "./",
   "display": "standalone",

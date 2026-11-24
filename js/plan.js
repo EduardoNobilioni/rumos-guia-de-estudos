@@ -484,7 +484,7 @@ export function sessionsToIcs(sessions, calendarName, timeZone = '') {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Rumo//Guia de estudos//PT',
+    'PRODID:-//Rumos//Guia de estudos//PT',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     `X-WR-CALNAME:${icsEscape(calendarName || 'Plano de estudo')}`,
@@ -520,7 +520,7 @@ export function planMarkdown(trackName, sessions) {
     if (!groups.has(session.date)) groups.set(session.date, []);
     groups.get(session.date).push(session);
   }
-  const lines = [`# Rumo — Plano de estudo — ${trackName}`, ''];
+  const lines = [`# Rumos — Plano de estudo — ${trackName}`, ''];
   for (const [date, list] of groups) {
     lines.push(`## ${date}`);
     for (const session of list) {

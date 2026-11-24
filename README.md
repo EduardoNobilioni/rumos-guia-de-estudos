@@ -1,6 +1,6 @@
-# Rumo
+# Rumos
 
-Mapa de estudos em tecnologia, feito por um estudante de faculdade pra quem também se perdeu no meio de curso. Você escolhe a carreira, o nível e as horas que sobram na semana. O Rumo monta a trilha, guarda o progresso neste navegador e encaixa o estudo em volta da grade.
+Mapa de estudos em tecnologia, feito por um estudante de faculdade pra quem também se perdeu no meio de curso. Você escolhe a carreira, o nível e as horas que sobram na semana. O Rumos monta a trilha, guarda o progresso neste navegador e encaixa o estudo em volta da grade.
 
 Não é curso e não dá certificado. Não tem cadastro nem servidor.
 

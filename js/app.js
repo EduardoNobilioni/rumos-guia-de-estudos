@@ -218,7 +218,7 @@ api.confirmRemove = async (kind, id) => {
 };
 
 function bindChrome() {
-  $('brandHome').innerHTML = `${brandMark(false)}<span>Rumo</span>`;
+  $('brandHome').innerHTML = `${brandMark(false)}<span>Rumos</span>`;
   $('moreBtn').innerHTML = icon('more');
   $('shareBtn').innerHTML = `${icon('share')} Compartilhar`;
   document.querySelectorAll('[data-nav]').forEach((button) => {
@@ -228,9 +228,9 @@ function bindChrome() {
   $('shareBtn').addEventListener('click', () => api.openShare().catch(() => toast('Não gerei o link.', 'error')));
   $('moreBtn').addEventListener('click', () => openMenu($('moreBtn'), [
     { label: 'Exportar JSON', run: () => dialogs.exportJson() },
-    { label: 'Markdown', run: () => download(`rumo-${activeTrack().id}.md`, roadmapMarkdown(activeTrack(), activeView()), 'text/markdown') },
-    { label: 'PNG', run: async () => { const canvas = document.createElement('canvas'); drawRoadmap(canvas, activeTrack(), activeView()); const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png')); download(`rumo-${activeTrack().id}.png`, blob, 'image/png'); } },
-    { label: 'PDF', run: () => download(`rumo-${activeTrack().id}.pdf`, roadmapPdf(activeTrack(), activeView()), 'application/pdf') },
+    { label: 'Markdown', run: () => download(`rumos-${activeTrack().id}.md`, roadmapMarkdown(activeTrack(), activeView()), 'text/markdown') },
+    { label: 'PNG', run: async () => { const canvas = document.createElement('canvas'); drawRoadmap(canvas, activeTrack(), activeView()); const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png')); download(`rumos-${activeTrack().id}.png`, blob, 'image/png'); } },
+    { label: 'PDF', run: () => download(`rumos-${activeTrack().id}.pdf`, roadmapPdf(activeTrack(), activeView()), 'application/pdf') },
     { label: 'Importar JSON', run: () => $('importFileInput').click() },
     { label: 'Trocar de trilha', run: () => onboarding.open('retake') },
     { label: 'Resetar esta trilha', danger: true, run: async () => {

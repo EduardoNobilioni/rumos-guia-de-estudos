@@ -286,7 +286,7 @@ test('a trilha Dados continua no id dados ao se chamar Ciência de Dados', () =>
   assert.deepEqual(restored.profile.companionIds, ['python']);
 });
 
-test('a chave nova do Rumo lê o progresso salvo nas chaves antigas', () => {
+test('a chave nova do Rumos lê o progresso salvo nas chaves antigas', () => {
   const previous = {
     version: 2,
     theme: 'light',

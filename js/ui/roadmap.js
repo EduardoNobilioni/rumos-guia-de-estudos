@@ -143,7 +143,7 @@ export function initRoadmap(api) {
       if (window.matchMedia('(max-width: 1023px)').matches) api.openSheet();
       else $('sidebarSearch').focus();
     }, { once: true });
-    document.title = `Rumo — ${names}`;
+    document.title = `Rumos — ${names}`;
     $('overallPercent').textContent = `${stats.percent}%`;
     $('overallCounter').textContent = `${stats.requiredDone} de ${stats.required} tópicos`;
     $('planEstimate').textContent = stats.hours ? `${formatDuration(stats.hoursLeft, trackState.weeklyHours)} ainda pela frente.` : 'Nada obrigatório neste nível.';

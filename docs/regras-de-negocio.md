@@ -1,6 +1,6 @@
 # Regras de negócio
 
-O que o Rumo promete pra quem estuda. O código que decide isso fica em `js/model/` e `js/plan.js`. A interface só aplica.
+O que o Rumos promete pra quem estuda. O código que decide isso fica em `js/model/` e `js/plan.js`. A interface só aplica.
 
 ## Adaptação da trilha
 

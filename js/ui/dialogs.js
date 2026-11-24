@@ -162,8 +162,8 @@ export function initDialogs(api) {
       const button = event.target.closest('[data-footer-action]');
       if (!button) return;
       const copy = {
-        privacy: ['Privacidade', '<p>O Rumo não tem cadastro, cookie de rastreio nem analytics. Progresso, anotação e plano ficam no localStorage deste navegador. O link de compartilhar leva só a configuração, no # da URL.</p><p>O site é estático no GitHub Pages. As fontes vêm do próprio repositório. Link externo segue a regra de quem publicou.</p>'],
-        terms: ['Termos', '<p>O Rumo é gratuito, licença MIT, feito pra estudar. Trilha, hora e projeto são orientação, não certificado.</p><p>Os links saem pra documentação e curso de outras pessoas. Se um quebrou, abre uma issue.</p>'],
+        privacy: ['Privacidade', '<p>O Rumos não tem cadastro, cookie de rastreio nem analytics. Progresso, anotação e plano ficam no localStorage deste navegador. O link de compartilhar leva só a configuração, no # da URL.</p><p>O site é estático no GitHub Pages. As fontes vêm do próprio repositório. Link externo segue a regra de quem publicou.</p>'],
+        terms: ['Termos', '<p>O Rumos é gratuito, licença MIT, feito pra estudar. Trilha, hora e projeto são orientação, não certificado.</p><p>Os links saem pra documentação e curso de outras pessoas. Se um quebrou, abre uma issue.</p>'],
         accessibility: ['Acessibilidade', '<p>A meta é WCAG 2.2 AA: teclado, foco visível, contraste e prefers-reduced-motion. Se travar em algum ponto, abre uma issue.</p>'],
       };
       const info = copy[button.dataset.footerAction];
@@ -185,7 +185,7 @@ export function initDialogs(api) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `rumo-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      link.download = `rumos-backup-${new Date().toISOString().slice(0, 10)}.json`;
       link.click();
       URL.revokeObjectURL(url);
     },

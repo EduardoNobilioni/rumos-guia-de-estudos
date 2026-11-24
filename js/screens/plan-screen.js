@@ -47,10 +47,10 @@ export function initPlanScreen(api) {
   function downloadAll(sessions) {
     const track = api.track();
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-    api.download(`rumo-plano-${track.id}.ics`, sessionsToIcs(sessions, `Rumo — ${track.name}`, zone), 'text/calendar');
+    api.download(`rumos-plano-${track.id}.ics`, sessionsToIcs(sessions, `Rumos — ${track.name}`, zone), 'text/calendar');
     const markdown = planMarkdown(track.name, sessions);
-    api.download(`rumo-plano-${track.id}.md`, markdown, 'text/markdown');
-    api.download(`rumo-plano-${track.id}.pdf`, textPdf(markdown.split('\n')), 'application/pdf');
+    api.download(`rumos-plano-${track.id}.md`, markdown, 'text/markdown');
+    api.download(`rumos-plano-${track.id}.pdf`, textPdf(markdown.split('\n')), 'application/pdf');
   }
 
   function generate(fromDate) {
