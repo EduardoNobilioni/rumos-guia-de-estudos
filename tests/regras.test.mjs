@@ -126,6 +126,7 @@ test('RN refazer o onboarding re-adapta nível e horas e guarda progresso e anot
     level: 'avancado',
     hours: 12,
     companionIds: ['python', 'frontend'],
+    frontendFrameworkId: 'react',
   });
 
   assert.equal(state.profile.onboarded, true);

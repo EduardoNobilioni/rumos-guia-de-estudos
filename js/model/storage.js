@@ -493,6 +493,7 @@ function emptyProfile() {
     dismissedNotices: [],
     backendLanguageId: null,
     backendEcosystemIds: [],
+    frontendFrameworkId: null,
   };
 }
 
@@ -509,6 +510,7 @@ function sanitizeProfile(raw) {
   profile.backendEcosystemIds = sanitizeIdList(raw.backendEcosystemIds)
     .filter((id) => id !== profile.backendLanguageId)
     .slice(0, 1);
+  profile.frontendFrameworkId = isId(raw.frontendFrameworkId) ? raw.frontendFrameworkId : null;
   return profile;
 }
 
@@ -636,6 +638,7 @@ export function buildExport(state, exportedAt = new Date().toISOString()) {
       dismissedNotices: state.profile.dismissedNotices,
       backendLanguageId: state.profile.backendLanguageId || null,
       backendEcosystemIds: state.profile.backendEcosystemIds || [],
+      frontendFrameworkId: state.profile.frontendFrameworkId || null,
     },
     completed: active.completed,
     notes: active.notes,

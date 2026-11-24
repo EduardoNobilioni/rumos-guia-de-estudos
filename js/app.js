@@ -1,6 +1,7 @@
 import {
   CIENCIA_DE_DADOS_ID, applySharePlan, backendEcosystemChoices, backendLanguageChoices, buildCombinedRoadmap, buildStudyRoadmap,
-  currentPhase, ensureTrack, isReady, needsBackendLanguageChoice, sharePlanFromTrack,
+  careerIncludesFrontend, currentPhase, ensureTrack, frontendFrameworkChoices, isReady, needsBackendLanguageChoice,
+  needsFrontendFrameworkChoice, sharePlanFromTrack,
 } from './model.js';
 import { decodePlan, encodePlan, planFromHash } from './share.js';
 import { drawRoadmap, roadmapMarkdown, roadmapPdf } from './files.js';
@@ -62,6 +63,17 @@ function languageEntries() {
   return out;
 }
 
+function frameworkEntry() {
+  const state = getState();
+  if (!careerIncludesFrontend(state.activeTrackId) && !(session.combinedView && careerIncludesFrontend(state.profile.primaryTrackId))) return null;
+  const id = state.profile.frontendFrameworkId;
+  if (!frontendFrameworkChoices(catalog()).some((track) => track.id === id)) return null;
+  const track = cachedTrack(id);
+  const trackState = state.tracks[id];
+  if (!track || !trackState) return null;
+  return { track, trackState };
+}
+
 function planTrackIds(state) {
   return [
     state.activeTrackId,
@@ -69,11 +81,12 @@ function planTrackIds(state) {
     ...(state.profile.companionIds || []),
     state.profile.backendLanguageId,
     ...(state.profile.backendEcosystemIds || []),
+    state.profile.frontendFrameworkId,
   ];
 }
 
 function activeView() {
-  return buildStudyRoadmap(activeEntries(), languageEntries());
+  return buildStudyRoadmap(activeEntries(), languageEntries(), frameworkEntry());
 }
 
 function findTopic(topicId, sourceTrackId = null) {
@@ -129,6 +142,11 @@ function renderNotice() {
   $('backendLanguageNotice').hidden = !askLanguage;
   if (askLanguage) {
     $('backendLanguageNoticeText').textContent = 'O back-end desta trilha ainda é o de Node.js, do jeito que estava salvo. Escolhe a linguagem pra eu trocar essa parte. O que você já marcou e anotou fica.';
+  }
+  const askFramework = needsFrontendFrameworkChoice(state, catalog());
+  $('frontendFrameworkNotice').hidden = !askFramework;
+  if (askFramework) {
+    $('frontendFrameworkNoticeText').textContent = 'O front-end desta trilha ainda usa React, do jeito que estava salvo. Escolha o framework. O que você já marcou e anotou fica.';
   }
 }
 
@@ -253,7 +271,7 @@ api.confirmRemove = async (kind, id) => {
 };
 
 function bindChrome() {
-  $('brandHome').innerHTML = `${brandMark(false)}<span>Rumos</span>`;
+  $('brandHome').innerHTML = `${brandMark(true)}<span>Rumos</span>`;
   $('moreBtn').innerHTML = icon('more');
   $('shareBtn').innerHTML = `${icon('share')}<span class="share-label">Compartilhar</span>`;
   document.querySelectorAll('[data-nav]').forEach((button) => {

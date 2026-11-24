@@ -18,6 +18,9 @@ body {
 }
 
 h1, h2, h3, p { margin: 0; }
+h1 { font: var(--text-title-l); letter-spacing: -0.035em; }
+h2 { font: var(--text-title-m); letter-spacing: -0.025em; margin-top: var(--space-2); }
+h3 { font: var(--text-title-s); letter-spacing: -0.02em; margin-top: var(--space-1); }
 
 button, input, select, textarea { font: inherit; color: inherit; }
 
@@ -78,6 +81,8 @@ a { color: var(--color-accent-text); }
 }
 
 .brand-mark { width: 28px; height: 28px; display: block; }
+.topnav .brand-mark { width: 36px; height: 36px; }
+.topnav .brand-lockup { font: 800 22px/26px var(--font-sans); gap: 10px; }
 .logo-ring { stroke: var(--color-text-3); }
 .logo-primary { fill: var(--color-accent-graphic); }
 .logo-accent { fill: var(--color-text-2); }

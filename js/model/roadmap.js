@@ -280,6 +280,18 @@ function dedupeSharedTopics(nodes) {
 }
 
 export const FULLSTACK_TRACK_ID = 'fullstack';
+export const FRONTEND_TRACK_ID = 'frontend';
+
+/** Carreiras cuja etapa de interface pede um framework. */
+export const FRONTEND_CAREER_IDS = [FRONTEND_TRACK_ID, FULLSTACK_TRACK_ID];
+
+/** Frameworks de interface com trilha. Svelte não entra: não há arquivo. */
+export const FRONTEND_FRAMEWORK_IDS = ['react', 'vuejs', 'angular'];
+
+const UI_FRAMEWORK_TOPIC_IDS = {
+  fullstack: new Set(['f2-frameworks']),
+  frontend: new Set(['fe-react', 'fe-state', 'fe-next']),
+};
 
 /** Linguagens de back-end com trilha. A oferta é a interseção com o catálogo, sem ordem de preferência. */
 export const BACKEND_LANGUAGE_IDS = ['nodejs', 'python', 'java', 'csharp', 'php', 'go'];
@@ -303,6 +315,26 @@ export function blocksFullStackCompanion(trackId) {
   return Object.values(BACKEND_ECOSYSTEM_IDS).some((ids) => ids.includes(trackId));
 }
 
+export function careerIncludesFrontend(trackId) {
+  return FRONTEND_CAREER_IDS.includes(trackId);
+}
+
+export function frontendFrameworkChoices(list) {
+  const byId = new Map((Array.isArray(list) ? list : []).filter((track) => track && track.id).map((track) => [track.id, track]));
+  return FRONTEND_FRAMEWORK_IDS
+    .map((id) => byId.get(id))
+    .filter(Boolean)
+    .sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR'));
+}
+
+export function needsFrontendFrameworkChoice(state, list) {
+  if (!state?.profile?.onboarded || !careerIncludesFrontend(state.activeTrackId)) return false;
+  const id = state.profile.frontendFrameworkId;
+  if (!isId(id)) return true;
+  if (Array.isArray(list) && !frontendFrameworkChoices(list).some((track) => track.id === id)) return true;
+  return false;
+}
+
 export function backendLanguageChoices(list) {
   const byId = new Map((Array.isArray(list) ? list : []).filter((track) => track && track.id).map((track) => [track.id, track]));
   return BACKEND_LANGUAGE_IDS
@@ -323,6 +355,7 @@ export function fullstackOnboardingSteps(trackId, languageId, list) {
     steps.push('language');
     if (backendEcosystemChoices(list, languageId).length) steps.push('ecosystem');
   }
+  if (careerIncludesFrontend(trackId) && frontendFrameworkChoices(list).length) steps.push('framework');
   steps.push('companions', 'level', 'hours', 'preview');
   return steps;
 }
@@ -413,11 +446,20 @@ function backendHostPhase(view) {
  * A linguagem escolhida troca só o nó de linguagem da etapa de back-end.
  * O framework, se houver um, troca só o nó de framework. HTTP, REST, banco, auth, teste e deploy ficam.
  */
-export function buildStudyRoadmap(entries, languageEntries = []) {
+export function buildStudyRoadmap(entries, languageEntries = [], uiFrameworkEntry = null) {
   const list = (entries || []).filter((entry) => entry && entry.track && entry.trackState);
   const chosen = (languageEntries || []).filter((entry) => entry && entry.track && entry.trackState);
   const hasFullstack = list.some((entry) => entry.track.id === FULLSTACK_TRACK_ID);
-  if (!hasFullstack || !chosen.length) return buildCombinedRoadmap(list);
+  const career = list.find((entry) => careerIncludesFrontend(entry.track.id));
+  const finish = (view) => {
+    if (career && uiFrameworkEntry?.track && uiFrameworkEntry.trackState && !list.some((entry) => entry.track.id === uiFrameworkEntry.track.id)) {
+      spliceUiFramework(view, career.track.id, uiFrameworkEntry);
+      for (const phase of view.phases) phase.progress = phaseProgress(phase.topics);
+      view.frontendFrameworkName = uiFrameworkEntry.track.name;
+    }
+    return view;
+  };
+  if (!hasFullstack || !chosen.length) return finish(buildCombinedRoadmap(list));
 
   const present = new Set(list.map((entry) => entry.track.id));
   const language = chosen[0] && !present.has(chosen[0].track.id) ? chosen[0] : null;
@@ -444,6 +486,36 @@ export function buildStudyRoadmap(entries, languageEntries = []) {
   for (const phase of view.phases) phase.progress = phaseProgress(phase.topics);
   view.backendLanguageName = chosen[0].track.name;
   view.backendStackNames = [chosen[0].track.name, framework?.track?.name].filter(Boolean);
+  return finish(view);
+}
+
+function spliceUiFramework(view, careerId, entry) {
+  const drop = UI_FRAMEWORK_TOPIC_IDS[careerId];
+  if (!drop || !entry) return view;
+  let host = null;
+  for (const phase of view.phases) {
+    if (phase.topics.some((topic) => drop.has(topic.id))) host = phase;
+  }
+  for (const phase of view.phases) {
+    phase.topics = phase.topics
+      .filter((topic) => !drop.has(topic.id))
+      .map((topic) => ({
+        ...topic,
+        prerequisites: (topic.prerequisites || []).filter((id) => !drop.has(id)),
+      }));
+  }
+  if (!host) {
+    const anchor = careerId === FULLSTACK_TRACK_ID ? ['f2-html5', 'f2-js-base'] : ['fe-vite', 'fe-ts'];
+    host = view.phases.find((phase) => phase.topics.some((topic) => anchor.includes(topic.id))) || null;
+  }
+  if (!host) return view;
+  const incoming = dedupeLanguageTopics(view.phases.flatMap((phase) => phase.topics), topicsFromEntry(entry));
+  const afterId = careerId === FULLSTACK_TRACK_ID ? 'f2-estado-estilo' : 'fe-ts';
+  const index = host.topics.findIndex((topic) => topic.id === afterId);
+  const at = careerId === FRONTEND_TRACK_ID
+    ? (index >= 0 ? index + 1 : host.topics.length)
+    : (index >= 0 ? index : host.topics.length);
+  host.topics = [...host.topics.slice(0, at), ...incoming, ...host.topics.slice(at)];
   return view;
 }
 
@@ -785,11 +857,17 @@ export function applyStudySelection(state, selection) {
     throw new Error('Seleção de estudo inválida.');
   }
   const languageId = isId(selection.backendLanguageId) ? selection.backendLanguageId : null;
+  const uiFrameworkId = isId(selection.frontendFrameworkId) ? selection.frontendFrameworkId : null;
   if (trackId === FULLSTACK_TRACK_ID && !languageId) {
     throw new Error('Escolhe a linguagem do back-end.');
   }
+  if (careerIncludesFrontend(trackId) && !uiFrameworkId) {
+    throw new Error('Escolha o framework de front-end.');
+  }
   const companionIds = sanitizeIdList(selection.companionIds || [])
-    .filter((id) => id !== trackId && (trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id)))
+    .filter((id) => id !== trackId
+      && (trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id))
+      && (!careerIncludesFrontend(trackId) || !FRONTEND_FRAMEWORK_IDS.includes(id)))
     .slice(0, 6);
   const ecosystemIds = sanitizeIdList(selection.backendEcosystemIds || [])
     .filter((id) => id !== trackId && id !== languageId)
@@ -812,6 +890,10 @@ export function applyStudySelection(state, selection) {
     state.profile.backendEcosystemIds = ecosystemIds;
     adapt(languageId);
     ecosystemIds.forEach(adapt);
+  }
+  if (careerIncludesFrontend(trackId)) {
+    state.profile.frontendFrameworkId = uiFrameworkId;
+    adapt(uiFrameworkId);
   }
   state.profile.primaryTrackId = trackId;
   state.profile.companionIds = companionIds;

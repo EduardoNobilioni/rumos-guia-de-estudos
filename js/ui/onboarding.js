@@ -1,7 +1,7 @@
 import {
-  applyStudySelection, backendEcosystemChoices, backendLanguageChoices, blocksFullStackCompanion, clampHours,
-  emptyTrackState, ensureTrack, formatDuration, fullstackOnboardingSteps, FULLSTACK_TRACK_ID, groupTracks,
-  projectPlanStats, roadmapStats, tracksMatching,
+  applyStudySelection, backendEcosystemChoices, backendLanguageChoices, blocksFullStackCompanion, careerIncludesFrontend,
+  clampHours, emptyTrackState, ensureTrack, formatDuration, FRONTEND_FRAMEWORK_IDS, frontendFrameworkChoices,
+  fullstackOnboardingSteps, FULLSTACK_TRACK_ID, groupTracks, projectPlanStats, roadmapStats, tracksMatching,
 } from '../model.js';
 import { syncPlanWeeklyHours } from '../plan.js';
 import { trackIconHtml } from '../icons.js';
@@ -19,6 +19,7 @@ const STEP_DOM = {
   career: 'onbStep1',
   language: 'onbStepLanguage',
   ecosystem: 'onbStepEcosystem',
+  framework: 'onbStepUiFramework',
   companions: 'onbStep2',
   level: 'onbStep3',
   hours: 'onbStep4',
@@ -28,7 +29,8 @@ const STEP_DOM = {
 const STEP_COPY = {
   career: ['Qual carreira é o seu objetivo?', 'Escolha sua trilha principal de carreira. Ao selecionar, você avança automaticamente para o próximo passo.'],
   language: ['Qual linguagem no back-end?', 'Escolha uma. Nenhuma vem marcada. HTTP, REST, banco, autenticação, testes e deploy continuam.'],
-  ecosystem: ['Qual framework?', 'Escolha um. Ele entra só no lugar do framework de back-end. O restante da trilha permanece.'],
+  ecosystem: ['Qual framework de back-end?', 'Escolha um. Ele entra só no lugar do framework de servidor. O restante da trilha permanece.'],
+  framework: ['Qual framework de front-end?', 'Escolha um. Nenhuma vem marcada. HTML, CSS e JavaScript continuam.'],
   companions: ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque as trilhas adicionais e clique em Continuar.'],
   level: ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
   hours: ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
@@ -63,6 +65,19 @@ export function initOnboarding(api) {
     )).join('') || '<p class="muted">Nenhuma linguagem de back-end com trilha.</p>';
   }
 
+  function renderUiFramework() {
+    const options = frontendFrameworkChoices(catalog());
+    $('onbUiFrameworkList').innerHTML = options.map((track) => choice(
+      'uiFramework',
+      track.id,
+      track.name,
+      track.tagline || '',
+      draft.frontendFrameworkId === track.id,
+      'radio',
+      trackIconHtml(track.id, 'sm', track.name),
+    )).join('') || '<p class="muted">Nenhum framework de front-end com trilha.</p>';
+  }
+
   function renderEcosystem() {
     const options = backendEcosystemChoices(catalog(), draft.backendLanguageId);
     $('onbEcosystemList').innerHTML = options.map((track) => choice(
@@ -83,7 +98,7 @@ export function initOnboarding(api) {
     )).join('');
     $('onbCompanionList').innerHTML = groups.filter((group) => group.id !== 'carreira').map((group) => (
       `<fieldset class="stack"><legend class="eyebrow">${escapeHtml(group.title)}</legend><p class="muted">${escapeHtml(group.lead)}</p>
-        ${group.tracks.filter((track) => draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(track.id)).map((track) => choice('companion', track.id, track.name, track.tagline || '', draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'sm', track.name))).join('')}
+        ${group.tracks.filter((track) => (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(track.id)) && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(track.id))).map((track) => choice('companion', track.id, track.name, track.tagline || '', draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'sm', track.name))).join('')}
       </fieldset>`
     )).join('');
     $('onbStep3').innerHTML = `<legend class="sr-only">Nível</legend>${LEVELS.map(([id, title, text]) => choice('level', id, title, text, draft.level === id)).join('')}`;
@@ -91,6 +106,7 @@ export function initOnboarding(api) {
       + choice('hours', 'custom', 'Outro', 'eu digo quantas', draft.hours && !HOURS.includes(draft.hours));
     renderLanguages();
     renderEcosystem();
+    renderUiFramework();
   }
 
   function filter(query) {
@@ -139,6 +155,7 @@ export function initOnboarding(api) {
     for (const domId of new Set(Object.values(STEP_DOM))) $(domId).hidden = true;
     if (id === 'language') renderLanguages();
     if (id === 'ecosystem') renderEcosystem();
+    if (id === 'framework') renderUiFramework();
     if (id === 'companions') renderChoices();
     $(STEP_DOM[id]).hidden = false;
     const [heading, lead] = STEP_COPY[id];
@@ -159,18 +176,20 @@ export function initOnboarding(api) {
 
   function renderPlan() {
     const entry = catalog().find((item) => item.id === draft.trackId);
-    if (!entry || !draft.level || !draft.hours || (draft.trackId === FULLSTACK_TRACK_ID && !draft.backendLanguageId)) {
+    if (!entry || !draft.level || !draft.hours || (draft.trackId === FULLSTACK_TRACK_ID && !draft.backendLanguageId) || (careerIncludesFrontend(draft.trackId) && !draft.frontendFrameworkId)) {
       $('planPreview').textContent = 'Faltou uma resposta. Volte um passo.';
       return;
     }
     const names = draft.companionIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
     const language = backendLanguageChoices(catalog()).find((item) => item.id === draft.backendLanguageId);
     const eco = draft.backendEcosystemIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
+    const ui = frontendFrameworkChoices(catalog()).find((item) => item.id === draft.frontendFrameworkId);
     const backendLine = draft.trackId === FULLSTACK_TRACK_ID && language
       ? ` Back-end em ${language.name}${eco.length ? `, com ${eco.join(', ')}` : ''}.`
       : '';
+    const uiLine = ui ? ` Front-end com ${ui.name}.` : '';
     $('planPreview').innerHTML = `<p style="font:var(--text-title-s)">${escapeHtml(entry.name)} · ${escapeHtml(LEVELS.find((item) => item[0] === draft.level)?.[1] || draft.level)} · ${draft.hours} h por semana</p>
-      <p class="muted" style="margin-top:8px">${names.length ? `Junto: ${escapeHtml(names.join(', '))}.` : 'Só a carreira, por enquanto.'}${escapeHtml(backendLine)} ${escapeHtml(formatDuration(draft.hours * 8, draft.hours))} dá uma noção do mês, o prazo real sai das etapas.</p>`;
+      <p class="muted" style="margin-top:8px">${names.length ? `Junto: ${escapeHtml(names.join(', '))}.` : 'Só a carreira, por enquanto.'}${escapeHtml(backendLine)}${escapeHtml(uiLine)} ${escapeHtml(formatDuration(draft.hours * 8, draft.hours))} dá uma noção do mês, o prazo real sai das etapas.</p>`;
   }
 
   async function confirm() {
@@ -180,12 +199,21 @@ export function initOnboarding(api) {
       if (at >= 0) goToStep(at);
       return;
     }
-    const ids = companions().filter((id) => id !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id)));
+    if (careerIncludesFrontend(draft.trackId) && !draft.frontendFrameworkId) {
+      toast('Escolha o framework de front-end.', 'error');
+      const at = steps().indexOf('framework');
+      if (at >= 0) goToStep(at);
+      return;
+    }
+    const ids = companions().filter((id) => id !== draft.trackId
+      && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id))
+      && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(id)));
     draft.companionIds = ids;
     const languageIds = draft.trackId === FULLSTACK_TRACK_ID
       ? [draft.backendLanguageId, ...draft.backendEcosystemIds]
       : [];
-    await api.ensureTracks([draft.trackId, ...ids, ...languageIds]);
+    const frameworkIds = careerIncludesFrontend(draft.trackId) && draft.frontendFrameworkId ? [draft.frontendFrameworkId] : [];
+    await api.ensureTracks([draft.trackId, ...ids, ...languageIds, ...frameworkIds]);
     applyStudySelection(api.getState(), {
       trackId: draft.trackId,
       level: draft.level,
@@ -193,6 +221,7 @@ export function initOnboarding(api) {
       companionIds: ids,
       backendLanguageId: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendLanguageId : null,
       backendEcosystemIds: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendEcosystemIds : [],
+      frontendFrameworkId: careerIncludesFrontend(draft.trackId) ? draft.frontendFrameworkId : null,
     });
     const primary = api.getState().tracks[draft.trackId];
     if (primary.studyPlan) syncPlanWeeklyHours(primary.studyPlan, draft.hours);
@@ -228,6 +257,11 @@ export function initOnboarding(api) {
         if (flow[draft.step] === 'language' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
       if (input.name === 'backendEcosystem') draft.backendEcosystemIds = ecosystems();
+      if (input.name === 'uiFramework') {
+        draft.frontendFrameworkId = input.value;
+        const flow = steps();
+        if (flow[draft.step] === 'framework' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
+      }
       if (input.name === 'companion') draft.companionIds = companions();
       if (input.name === 'level') {
         draft.level = input.value;
@@ -262,7 +296,9 @@ export function initOnboarding(api) {
       if (id === 'ecosystem') {
         draft.backendEcosystemIds = ecosystems().filter((item) => item !== draft.backendLanguageId);
       }
-      if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(item)));
+      if (id === 'framework' && !selected('uiFramework')) return toast('Escolha o framework de front-end.', 'error');
+      if (id === 'framework') draft.frontendFrameworkId = selected('uiFramework');
+      if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(item)) && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(item)));
       if (id === 'level' && !selected('level')) return toast('Escolha um nível.', 'error');
       if (id === 'level') draft.level = selected('level');
       if (id === 'hours') {
@@ -274,6 +310,7 @@ export function initOnboarding(api) {
     $('onbStart').addEventListener('click', () => { confirm().catch(() => toast('Não consegui montar a trilha.', 'error')); });
     $('welcomeBackBtn').addEventListener('click', () => api.refresh());
     $('backendLanguageNoticeBtn').addEventListener('click', () => open('retake'));
+    $('frontendFrameworkNoticeBtn').addEventListener('click', () => open('retake'));
   }
 
   function open(mode, step) {
@@ -287,17 +324,23 @@ export function initOnboarding(api) {
       draft.companionIds = [...(state.profile.companionIds || [])];
       draft.backendLanguageId = state.profile.backendLanguageId || null;
       draft.backendEcosystemIds = [...(state.profile.backendEcosystemIds || [])];
+      draft.frontendFrameworkId = state.profile.frontendFrameworkId || null;
     }
     if (mode === 'create') {
       draft.backendLanguageId = null;
       draft.backendEcosystemIds = [];
+      draft.frontendFrameworkId = null;
     }
     renderChoices();
     api.showScreen('onboarding');
     const flow = steps();
     if (step === 0) return goToStep(0);
-    if (mode === 'retake' && state.activeTrackId === FULLSTACK_TRACK_ID && !state.profile.backendLanguageId && step == null) {
+    if (mode === 'retake' && step == null && state.activeTrackId === FULLSTACK_TRACK_ID && !state.profile.backendLanguageId) {
       const at = flow.indexOf('language');
+      return goToStep(at >= 0 ? at : 1);
+    }
+    if (mode === 'retake' && step == null && careerIncludesFrontend(state.activeTrackId) && !state.profile.frontendFrameworkId) {
+      const at = flow.indexOf('framework');
       return goToStep(at >= 0 ? at : 1);
     }
     if (typeof step === 'number') return goToStep(step);
