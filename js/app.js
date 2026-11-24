@@ -1670,7 +1670,7 @@ function bind() {
       },
       terms: {
         title: 'Termos de Uso',
-        body: '<p>O <strong>Rumos</strong> é uma ferramenta educacional gratuita e aberta. As trilhas, estimativas de carga horária e sugestões de projetos têm caráter orientativo para apoiar seus estudos.</p><p>Os links externos apontam para documentações, cursos e materiais gratuitos de terceiros, cujos conteúdos e disponibilidade pertencem aos respectivos autores.</p>',
+        body: '<p>O <strong>Rumos</strong> é uma ferramenta educacional gratuita e aberta. As trilhas, estimativas de carga horária e sugestões de projetos têm caráter exclusivamente orientativo para apoiar seus estudos.</p><p>O aplicativo apenas agrega e organiza links públicos para documentações, cursos e materiais externos de terceiros. O mantenedor do projeto não possui controle sobre esses sites externos e <strong>não se responsabiliza</strong> pelo conteúdo, disponibilidade, atualizações, segurança, práticas de privacidade ou quaisquer consequências decorrentes de acessos realizados fora da aplicação.</p><p>O acesso a links externos ocorre por conta e risco do usuário. Caso encontre algum link quebrado, desatualizado ou inadequado, você pode reportar na página de issues do GitHub para revisão e remoção.</p>',
       },
       accessibility: {
         title: 'Declaração de Acessibilidade',
