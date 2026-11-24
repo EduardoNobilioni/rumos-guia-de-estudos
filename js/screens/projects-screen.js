@@ -1,6 +1,7 @@
 import { ensureTrack } from '../model.js';
 import { availableProjectLanguages, buildProjectCatalog, filterProjects } from '../projects.js';
-import { escapeHtml } from '../ui/dom.js';
+import { buildProjectGuide } from '../project-guides.js';
+import { escapeHtml, icon } from '../ui/dom.js';
 
 const PAGE = 12;
 
@@ -65,7 +66,7 @@ export function initProjectsScreen(api) {
           <label class="check"><input type="checkbox" data-proj-done="${escapeHtml(project.id)}" data-proj-track-id="${escapeHtml(project.trackId)}" ${project.done ? 'checked' : ''} /> ${project.done ? 'Feito' : 'Marcar'}</label>
         </div>
         <p class="muted">${escapeHtml(project.description || '')}</p>
-        <div class="row">${(project.languages || []).map((lang) => `<span class="tag">${escapeHtml(lang)}</span>`).join('')}<button type="button" class="btn btn-ghost btn-small" data-proj-track="${escapeHtml(project.trackId)}">${escapeHtml(project.trackName || '')}</button></div>
+        <div class="row">${(project.languages || []).map((lang) => `<span class="tag">${escapeHtml(lang)}</span>`).join('')}<button type="button" class="btn btn-ghost btn-small" data-proj-track="${escapeHtml(project.trackId)}">${escapeHtml(project.trackName || '')}</button><button type="button" class="btn btn-secondary btn-small" data-proj-guide="${escapeHtml(project.id)}" data-proj-guide-track="${escapeHtml(project.trackId)}">Como começar</button></div>
         ${(project.steps || []).length ? `<details><summary>Roteiro</summary><ol>${project.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol></details>` : ''}
       </article>`).join('') || '<p class="muted">Nenhuma ideia nesse recorte.</p>';
     const pager = screen.querySelector('#projPager');
@@ -90,7 +91,46 @@ export function initProjectsScreen(api) {
     const page = event.target.closest('[data-page]');
     if (page && !page.disabled) { ui.page = Number(page.dataset.page); return paint(); }
     const track = event.target.closest('[data-proj-track]');
-    if (track) { await api.switchToTrack(track.dataset.projTrack); api.showScreen('roadmap'); }
+    if (track) { await api.switchToTrack(track.dataset.projTrack); api.showScreen('roadmap'); return; }
+    const guideBtn = event.target.closest('[data-proj-guide]');
+    if (guideBtn) { openGuide(guideBtn.dataset.projGuide, guideBtn.dataset.projGuideTrack); }
+  });
+
+  function openGuide(projectId, trackId) {
+    const track = (api.tracks() || []).find((item) => item.id === trackId);
+    const catalog = buildProjectCatalog(track ? [track] : [], api.state());
+    const project = catalog.find((item) => item.id === projectId);
+    if (!project || !track) return;
+    const guide = buildProjectGuide(project, track, api.state().profile || {});
+    const dialog = document.getElementById('projectGuideDialog');
+    document.getElementById('projectGuideEyebrow').textContent = guide.handwritten ? 'Como começar · guia curto' : 'Como começar';
+    document.getElementById('projectGuideTitle').textContent = project.title;
+    const topics = guide.topics.map((topic) => `<li><button type="button" class="btn btn-ghost btn-small" data-guide-topic="${escapeHtml(topic.id)}" data-guide-track="${escapeHtml(guide.place.trackId)}">${escapeHtml(topic.title)}</button></li>`).join('');
+    const steps = guide.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('');
+    const pitfalls = guide.pitfalls.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+    const done = guide.done.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+    document.getElementById('projectGuideBody').innerHTML = `
+      <p><strong>O que você precisa saber antes</strong></p>
+      ${topics ? `<ul class="guide-list">${topics}</ul>` : '<p class="muted">Os tópicos desta etapa, na ordem do roadmap.</p>'}
+      <p><strong>Onde isso entra no roadmap</strong></p>
+      <p class="muted">${escapeHtml(guide.place.trackName)} · Etapa ${guide.place.phaseNumber}: ${escapeHtml(guide.place.phaseTitle)} · ${escapeHtml(guide.typeLabel)}</p>
+      <p><strong>Passo a passo</strong></p>
+      <ol class="guide-list">${steps}</ol>
+      <p class="muted">${escapeHtml(guide.stack)}</p>
+      ${pitfalls ? `<p><strong>Onde costuma quebrar</strong></p><ul class="guide-list">${pitfalls}</ul>` : ''}
+      ${done ? `<p><strong>Como saber que terminou</strong></p><ul class="guide-list">${done}</ul>` : ''}
+    `;
+    if (!dialog.open) dialog.showModal();
+  }
+
+  document.getElementById('projectGuideClose').innerHTML = icon('x');
+  document.getElementById('projectGuideClose').addEventListener('click', () => document.getElementById('projectGuideDialog').close());
+  document.getElementById('projectGuideBody').addEventListener('click', async (event) => {
+    const button = event.target.closest('[data-guide-topic]');
+    if (!button) return;
+    document.getElementById('projectGuideDialog').close();
+    await api.switchToTrack(button.dataset.guideTrack);
+    api.focusTopic(button.dataset.guideTopic, button.dataset.guideTrack);
   });
 
   screen.addEventListener('change', (event) => {

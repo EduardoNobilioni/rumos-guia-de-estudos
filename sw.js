@@ -1,4 +1,4 @@
-const CACHE = 'rumos-cache-v7';
+const CACHE = 'rumos-cache-v8';
 const PRECACHE = [
   './',
   './index.html',
@@ -22,6 +22,7 @@ const PRECACHE = [
   './js/files.js',
   './js/share.js',
   './js/projects.js',
+  './js/project-guides.js',
   './js/ui/dom.js',
   './js/ui/glyph.js',
   './js/ui/onboarding.js',

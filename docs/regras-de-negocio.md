@@ -20,7 +20,8 @@ O que o Rumos promete pra quem estuda. O código que decide isso fica em `js/mod
 - **RN-11.** Autoavaliação abaixo de 70% pede revisão. Não é nota.
 - **RN-12.** O plano não marca estudo em cima de aula. O `.ics` exportado só tem sessão de estudo.
 - **RN-13.** A página do plano não lista cada sessão. Gerar monta o plano e baixa `.ics`, PDF e Markdown. Na tela fica o resumo: quantidade, intervalo de datas e horas.
-- **RN-14.** A busca de ideias espera cerca de 200 ms e mostra 12 projetos por página.
+- **RN-14.** A busca de ideias espera cerca de 200 ms e mostra 12 projetos por página. O guia **Como começar** só é montado quando a pessoa abre o projeto.
+- **RN-21.** Cada ideia de projeto tem um guia gerado: tópicos anteriores da mesma trilha, a etapa em que o projeto entra e um passo a passo do tipo (API, interface, jogo, dados e outros). Cerca de vinte projetos têm texto curto extra, com armadilha e critério de pronto. A sugestão de ferramenta segue a linguagem ou o framework já escolhido, quando existe.
 - **RN-15.** Na abertura o navegador lê só o índice das trilhas. O JSON de uma trilha baixa quando ela é aberta. A validação das 52 trilhas roda no `npm run validate`, não no navegador.
 - **RN-16.** No Full-Stack, a pessoa escolhe uma linguagem de back-end, sem valor marcado. Só entram linguagens que têm trilha (Node.js, Python, Java, C#, PHP e Go, se o arquivo existir). Se essa linguagem tiver um framework com trilha própria, o passo seguinte pede um só (hoje, C# e .NET). A trilha inteira continua na ordem: fundamentos, front-end, back-end, banco, teste e deploy. A linguagem troca só o nó de linguagem da etapa de back-end; o framework troca só o nó de framework. HTTP, REST, banco, auth, teste e deploy ficam. Estado antigo sem escolha continua na versão em Node e pede a escolha no onboarding. Trocar a linguagem não apaga progresso nem anotação.
 - **RN-17.** Em Front-end e Full-Stack, a pessoa escolhe um framework de interface, sem valor marcado. Só entram os que têm trilha (React, Vue.js e Angular). Ele troca só os nós de framework. HTML, CSS, JavaScript e o resto da trilha ficam na ordem. Estado antigo sem escolha continua com o conteúdo em React e pede a escolha no próximo onboarding. Progresso e anotação permanecem.
@@ -45,3 +46,4 @@ O que o Rumos promete pra quem estuda. O código que decide isso fica em `js/mod
 | RN-18 caminho da carreira | Ausente | Só quando há duas trilhas para o desvio; Jogos escolhe C# ou C e C++; o resto sem dados fica de fora |
 | RN-19 resetar | Apagava a trilha aberta sem voltar à home | Confirmação avisa progresso e anotações; confirmar volta à home; cancelar não muda nada |
 | RN-20 logo e continuar | O logo recarregava a página | O logo abre a home; Continuar trilha leva de volta ao roadmap salvo |
+| RN-21 como começar | O card só tinha roteiro genérico | Todo projeto ganha guia ao abrir; vinte têm texto curto extra; a busca não monta o guia |
