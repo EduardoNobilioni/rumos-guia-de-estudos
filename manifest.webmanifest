@@ -1,11 +1,11 @@
 {
-  "name": "Rumo — Guia de Estudos",
-  "short_name": "Rumo",
+  "name": "Rumos — Guia de Estudos",
+  "short_name": "Rumos",
   "description": "Roadmap, guia e plano de estudos em tecnologia no seu navegador.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#0E141B",
-  "theme_color": "#1D4ED8",
+  "background_color": "#090D16",
+  "theme_color": "#2563EB",
   "lang": "pt-BR",
   "icons": [
     {

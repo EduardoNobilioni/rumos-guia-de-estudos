@@ -112,27 +112,41 @@ html.dark .skip-link {
 
 .brand-lockup {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.55rem;
+  gap: 1.25rem;
   color: inherit;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  letter-spacing: 0;
+  font-family: "Syne", var(--font-ui);
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1;
   text-decoration: none;
 }
 
 .brand-word {
-  font-family: var(--font-ui);
-  font-weight: 600;
+  font-family: "Syne", var(--font-ui);
+  font-weight: 800;
+  font-size: clamp(2.75rem, 6vw, 4.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
 }
 
 .brand-mark {
   display: block;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 250px;
+  height: 250px;
+  max-width: 100%;
   flex: none;
+  background: transparent;
 }
+
+.logo-primary { fill: #2563EB; }
+.logo-accent { fill: #059669; }
+.logo-ring { stroke: rgba(37, 99, 235, 0.35); }
+
+html.dark .logo-primary { fill: #38BDF8; }
+html.dark .logo-accent { fill: #34D399; }
+html.dark .logo-ring { stroke: rgba(56, 189, 248, 0.4); }
 
 .rumo-icon-badge {
   display: inline-flex;
@@ -180,11 +194,7 @@ html.dark .rumo-icon-badge .devicon-linux-plain {
   color: #f8fafc;
 }
 
-.logo-north { fill: #7a3329; }
-.logo-tail { fill: #887655; }
-
-html.dark .logo-north { fill: #9b655d; }
-html.dark .logo-tail { fill: #ddc08a; }
+/* logo colors handled by .logo-primary / .logo-accent / .logo-ring */
 
 :focus-visible {
   outline: 2px solid var(--focus);

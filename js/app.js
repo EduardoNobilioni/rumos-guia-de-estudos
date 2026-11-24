@@ -688,7 +688,7 @@ function updateHeader() {
   $('trackBadge').textContent = track.name;
   $('trackTagline').textContent = track.description;
   $('trackIcon').innerHTML = trackIconHtml(track.id, 'lg');
-  document.title = `Rumo — ${track.name}`;
+  document.title = `Rumos — ${track.name}`;
   renderTrackSwitcher();
   renderRenameNotice();
 }

@@ -283,7 +283,7 @@ export function initPlanScreen(api) {
     if (action === 'reschedule') generate(localISODate());
     if (action === 'ics') {
       const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      api.download(`rumo-plano-${api.track().id}.ics`, sessionsToIcs(current.sessions, `Rumo — ${api.track().name}`, zone), 'text/calendar');
+      api.download(`rumos-plano-${api.track().id}.ics`, sessionsToIcs(current.sessions, `Rumos — ${api.track().name}`, zone), 'text/calendar');
     }
     if (action === 'pdf') api.downloadPdf(current.sessions);
     if (action === 'print') {

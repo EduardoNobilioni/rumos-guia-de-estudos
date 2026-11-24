@@ -134,7 +134,7 @@ export function textPdf(lines) {
 
 export function roadmapLines(track, view) {
   const lines = [
-    `Rumo - ${track.name}`,
+    `Rumos - ${track.name}`,
     track.description,
     '',
     'Fluxograma das etapas:',
@@ -160,7 +160,7 @@ export function roadmapLines(track, view) {
 export function roadmapMarkdown(track, view) {
   const flow = view.phases.map((p) => `**${p.number}. ${p.title}** (${p.progress.done}/${p.progress.total})`).join(' → ');
   const lines = [
-    `# Rumo — ${track.name}`,
+    `# Rumos — ${track.name}`,
     '',
     track.description,
     '',
@@ -192,32 +192,27 @@ const FONT_UI = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
 function brandMarkPdf() {
   return [
     '0.145 0.388 0.922 rg',
-    '48 784 22 22 re f',
-    '1 1 1 rg',
-    '54 790 m 65 801 l 61 793 l h f',
+    '48 784 m 68 804 l 61 789 l h f',
     '0.020 0.588 0.412 rg',
-    '54 790 m 58 797 l 65 801 l h f',
+    '48 784 m 54 798 l 68 804 l h f',
   ].join('\n');
 }
 
 function drawBrandMark(ctx, x, y, size) {
-  const r = size * 0.24;
   ctx.fillStyle = '#2563EB';
   ctx.beginPath();
-  ctx.roundRect(x, y, size, size, r);
-  ctx.fill();
-  ctx.fillStyle = '#FFFFFF';
-  ctx.beginPath();
-  ctx.moveTo(x + size * 0.26, y + size * 0.74);
-  ctx.lineTo(x + size * 0.76, y + size * 0.24);
-  ctx.lineTo(x + size * 0.56, y + size * 0.62);
+  ctx.moveTo(x + size * 0.16, y + size * 0.84);
+  ctx.lineTo(x + size * 0.84, y + size * 0.16);
+  ctx.lineTo(x + size * 0.58, y + size * 0.68);
+  ctx.lineTo(x + size * 0.44, y + size * 0.54);
   ctx.closePath();
   ctx.fill();
-  ctx.fillStyle = '#34D399';
+  ctx.fillStyle = '#059669';
   ctx.beginPath();
-  ctx.moveTo(x + size * 0.26, y + size * 0.74);
-  ctx.lineTo(x + size * 0.40, y + size * 0.42);
-  ctx.lineTo(x + size * 0.76, y + size * 0.24);
+  ctx.moveTo(x + size * 0.16, y + size * 0.84);
+  ctx.lineTo(x + size * 0.36, y + size * 0.40);
+  ctx.lineTo(x + size * 0.84, y + size * 0.16);
+  ctx.lineTo(x + size * 0.44, y + size * 0.54);
   ctx.closePath();
   ctx.fill();
 }
@@ -241,8 +236,8 @@ export function drawRoadmap(canvas, track, view) {
   ctx.fillRect(0, 0, width, height);
   drawBrandMark(ctx, 48, 22, 40);
   ctx.fillStyle = '#0F172A';
-  ctx.font = `700 30px ${FONT_UI}`;
-  ctx.fillText('rumo', 100, 52);
+  ctx.font = `800 32px "Syne", ${FONT_UI}`;
+  ctx.fillText('Rumos', 100, 52);
   ctx.font = `700 22px ${FONT_UI}`;
   ctx.fillStyle = '#1D4ED8';
   ctx.fillText(track.name, 48, 102);

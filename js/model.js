@@ -6,8 +6,8 @@
 export const STORAGE_KEY = 'rumo_guia_ptbr_v1';
 export const PREVIOUS_STORAGE_KEY = 'trilha_estudos_ptbr_v2';
 export const LEGACY_STORAGE_KEY = 'roadmap_fullstack_ptbr_v1';
-export const APP_NAME = 'Rumo';
-export const APP_TAGLINE = 'Rumo: roadmap, guia e plano de estudos em tecnologia';
+export const APP_NAME = 'Rumos';
+export const APP_TAGLINE = 'Rumos: roadmap, guia e plano de estudos em tecnologia';
 
 const STORAGE_KEYS = [STORAGE_KEY, PREVIOUS_STORAGE_KEY, LEGACY_STORAGE_KEY];
 

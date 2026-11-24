@@ -1,6 +1,6 @@
-# <img src="assets/brand/logo-light.svg" alt="" width="32" height="32"> Rumo
+# <img src="assets/brand/mark.svg" alt="" width="32" height="32"> Rumos
 
-Rumo: roadmap, guia e plano de estudos em tecnologia. A marca é uma agulha geométrica, desenhada para este projeto: a ponta terracota aponta para nordeste e a cauda é bege. No fundo claro a cauda escurece para `#887655`, porque o bege `#ddc08a` não chega a 3:1 sobre `#e3ded2`. No fundo escuro a ponta clareia para `#9b655d`, porque o terracota `#7a3329` não chega a 3:1 sobre `#2a201a`.
+Rumos: roadmap, guia e plano de estudos em tecnologia. A marca é uma agulha de bússola geométrica sem fundo colorido, combinando azul (`#2563EB` / `#38BDF8`) e verde esmeralda (`#059669` / `#34D399`), acompanhada do nome **Rumos** na fonte display **Syne**.
 
 Guia para quem está na faculdade de tecnologia e não sabe por onde começar. Você escolhe a área, o nível e quantas horas consegue estudar por semana. O app monta uma trilha, guarda o seu progresso neste navegador e ajuda a encaixar o estudo na grade da universidade.
 
