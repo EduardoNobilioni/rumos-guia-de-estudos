@@ -42,6 +42,20 @@ export function suggestSlot(weeklyHours, dayCount) {
   return { start: fromMinutes(start), end: fromMinutes(end) };
 }
 
+export function syncPlanWeeklyHours(plan, weeklyHours) {
+  if (!plan) return plan;
+  const hours = clampHours(weeklyHours);
+  if (!hours) return plan;
+  plan.weeklyHours = hours;
+  const days = Math.max(1, (plan.weekdays || []).length);
+  const slot = suggestSlot(hours, days);
+  plan.slots = plan.slots || {};
+  for (const day of plan.weekdays || []) {
+    plan.slots[day] = { ...slot };
+  }
+  return plan;
+}
+
 export function defaultStudyPlan(weeklyHours = 10) {
   const weekdays = [1, 2, 3, 4, 5];
   const slot = suggestSlot(weeklyHours, weekdays.length);
@@ -271,36 +285,22 @@ function cloneSession(session) {
   };
 }
 
-export function previewRows(plan, fromDate, untilDate) {
-  const university = plan.university || emptyUniversity();
-  const rows = [];
-  let cursor = parseISODate(fromDate || plan.startDate);
-  const end = parseISODate(untilDate) || addUtcDays(cursor, 21);
-  const sessions = [...(plan.sessions || [])].sort(compareSessions);
-  while (cursor <= end) {
-    const date = formatISODate(cursor);
-    const weekday = cursor.getUTCDay();
-    const daySessions = sessions.filter((session) => session.date === date);
-    const busy = busyOnDate(date, university).map((block) => ({
-      ...block,
-      date,
-      kind: 'busy',
-      startLabel: fromMinutes(block.start),
-      endLabel: fromMinutes(block.end === 24 * 60 ? 23 * 60 + 59 : block.end),
-    }));
-    if (daySessions.length || busy.length || (plan.slots && plan.slots[weekday] && plan.weekdays.includes(weekday))) {
-      rows.push({
-        date,
-        weekday,
-        exam: examPercent(date, university.examRanges) < 100,
-        busy,
-        sessions: daySessions,
-      });
-    }
-    cursor = addUtcDays(cursor, 1);
-    if (rows.length > 420) break;
-  }
-  return rows;
+export function summarizeSessions(sessions) {
+  const list = Array.isArray(sessions) ? sessions : [];
+  if (!list.length) return { count: 0, from: '', to: '', minutes: 0, hours: 0 };
+  const dates = list.map((session) => session.date).filter(Boolean).sort();
+  const minutes = list.reduce((sum, session) => {
+    const start = toMinutes(session.start);
+    const end = toMinutes(session.end);
+    return sum + (start != null && end != null && end > start ? end - start : 0);
+  }, 0);
+  return {
+    count: list.length,
+    from: dates[0] || '',
+    to: dates[dates.length - 1] || '',
+    minutes,
+    hours: Math.round((minutes / 60) * 10) / 10,
+  };
 }
 
 export function findSessionConflicts(plan, session) {
@@ -484,7 +484,7 @@ export function sessionsToIcs(sessions, calendarName, timeZone = '') {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Rumos//Guia de estudos//PT',
+    'PRODID:-//Rumo//Guia de estudos//PT',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     `X-WR-CALNAME:${icsEscape(calendarName || 'Plano de estudo')}`,
@@ -520,7 +520,7 @@ export function planMarkdown(trackName, sessions) {
     if (!groups.has(session.date)) groups.set(session.date, []);
     groups.get(session.date).push(session);
   }
-  const lines = [`# Rumos — Plano de estudo — ${trackName}`, ''];
+  const lines = [`# Rumo — Plano de estudo — ${trackName}`, ''];
   for (const [date, list] of groups) {
     lines.push(`## ${date}`);
     for (const session of list) {
