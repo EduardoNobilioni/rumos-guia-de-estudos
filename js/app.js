@@ -37,6 +37,7 @@ import { drawRoadmap, roadmapLines, roadmapMarkdown, textPdf } from './files.js'
 import { initPlanScreen } from './plan-screen.js';
 import { initDashboardScreen } from './dashboard-screen.js';
 import { planMarkdown } from './plan.js';
+import { topicIconHtml, trackIconHtml } from './icons.js';
 
 const KIND_LABEL = {
   leitura: 'Leitura',
@@ -93,31 +94,6 @@ function safeUrl(url) {
     return '';
   }
   return '';
-}
-
-function icon(name) {
-  const paths = {
-    frontend: '<path d="M4 7h16M4 12h10M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    backend: '<path d="M8 8l-3 4 3 4M16 8l3 4-3 4M13 7l-2 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    fullstack: '<path d="M12 4l7 4v8l-7 4-7-4V8l7-4z" stroke="currentColor" stroke-width="1.8" fill="none"/>',
-    dados: '<path d="M5 16V8M10 18V6M15 14V10M19 17V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    mobile: '<rect x="8" y="3" width="8" height="18" rx="2" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    devops: '<path d="M12 3v4M12 17v4M4.9 6.5l2.8 2.8M16.3 14.7l2.8 2.8M3 12h4M17 12h4M4.9 17.5l2.8-2.8M16.3 9.3l2.8-2.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    computacao: '<rect x="5" y="4" width="14" height="10" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 20h8M12 14v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    algoritmos: '<path d="M6 18V6M12 18V10M18 18V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    java: '<path d="M8 16c2 2 6 2 8 0M7 12c2-3 8-3 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>',
-    qa: '<path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    'analista-dados': '<path d="M5 17V7h14v10H5zM5 11h14" stroke="currentColor" stroke-width="1.8" fill="none"/>',
-    'engenharia-dados': '<path d="M4 12h5l2-4 3 8 2-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    'machine-learning': '<path d="M6 16l4-8 4 6 4-10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    python: '<path d="M8 8h5a3 3 0 0 1 0 6H8V8zM16 16H11a3 3 0 0 1 0-6h5v6z" stroke="currentColor" stroke-width="1.6" fill="none"/>',
-    javascript: '<path d="M8 5h8v14H8zM11 17c.4.6 1 .8 1.7.8 1 0 1.6-.5 1.6-1.3 0-2-3.3-.9-3.3-3.1 0-.8.7-1.4 1.6-1.4.7 0 1.2.3 1.5.8" stroke="currentColor" stroke-width="1.6" fill="none"/>',
-    sql: '<ellipse cx="12" cy="7" rx="6" ry="2.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M6 7v10c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5V7" stroke="currentColor" stroke-width="1.6" fill="none"/>',
-    git: '<circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="17" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 8.5l2.5 6.5M15.5 8.5 13 15" stroke="currentColor" stroke-width="1.6"/>',
-    linux: '<path d="M6 16c0-4 2-8 6-8s6 4 6 8" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M9 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    docker: '<path d="M4 14h14a3 3 0 0 0 0-6h-1M4 14v2h12M7 11V8M10 11V8M13 11V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
-  };
-  return `<svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">${paths[name] || paths.fullstack}</svg>`;
 }
 
 function toast(message, type = 'success') {
@@ -271,7 +247,10 @@ function renderTopicNode(topic, titleById, doneIds) {
         ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
       </div>
       <button type="button" data-action="open-topic-detail" data-item-id="${topic.id}" class="min-w-0 flex-1 text-left">
-        <p class="text-sm font-semibold leading-snug ${strike}">${escapeHtml(topic.title)}</p>
+        <div class="flex items-start gap-2.5">
+          ${topicIconHtml(topic, activeTrack()?.id, 'md')}
+          <p class="text-sm font-semibold leading-snug ${strike}">${escapeHtml(topic.title)}</p>
+        </div>
         <p class="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-muted">
           <span>${LEVEL_LABELS[topic.level] || topic.level}</span>
           <span>·</span>
@@ -364,7 +343,10 @@ function renderTopic(topic, phase, index, total, titleById, doneIds) {
         ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
         <div class="min-w-0 flex-1">
           <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-            <h3 class="font-semibold ${strike}">${escapeHtml(topic.title)}</h3>
+            <div class="flex items-center gap-2.5 min-w-0">
+              ${topicIconHtml(topic, activeTrack()?.id, 'md')}
+              <h3 class="font-semibold ${strike}">${escapeHtml(topic.title)}</h3>
+            </div>
             <button type="button" data-action="toggle-note" data-item-id="${topic.id}" class="self-start px-2.5 py-1 rounded-sm text-xs border ${topic.note || noteOpen ? 'border-ochre text-ink dark:text-ochre' : 'border-transparent bg-soft dark:bg-card'}">${topic.note ? 'Anotações' : 'Anotar'}</button>
           </div>
           <p class="read mt-3 text-muted dark:text-blush">${escapeHtml(topic.description)}</p>
@@ -686,7 +668,7 @@ function renderTrackSwitcher() {
   nav.innerHTML = ids.map((id) => {
     const track = trackById(id);
     const current = id === state.activeTrackId ? ' aria-current="page"' : '';
-    return `<button type="button" class="track-switch" data-switch-track="${escapeHtml(id)}"${current}>${escapeHtml(track.name)}</button>`;
+    return `<button type="button" class="track-switch inline-flex items-center gap-2" data-switch-track="${escapeHtml(id)}"${current}>${trackIconHtml(id, 'sm')}<span>${escapeHtml(track.name)}</span></button>`;
   }).join('');
 }
 
@@ -705,7 +687,7 @@ function updateHeader() {
   const track = activeTrack();
   $('trackBadge').textContent = track.name;
   $('trackTagline').textContent = track.description;
-  $('trackIcon').innerHTML = icon(track.id);
+  $('trackIcon').innerHTML = trackIconHtml(track.id, 'lg');
   document.title = `Rumo — ${track.name}`;
   renderTrackSwitcher();
   renderRenameNotice();
@@ -724,12 +706,14 @@ function refresh() {
   if ($('topicDetailDialog').open && session.detailTopicId) renderTopicDetail(session.detailTopicId);
 }
 
-function choiceCard(name, value, title, text, selected, type = 'radio') {
+function choiceCard(name, value, title, text, selected, type = 'radio', iconHtml = '') {
   const checked = selected ? 'checked' : '';
+  const body = iconHtml
+    ? `<span class="flex items-start gap-3">${iconHtml}<span class="min-w-0 flex-1"><span class="block font-semibold">${escapeHtml(title)}</span><span class="block mt-1 text-xs text-muted">${escapeHtml(text)}</span></span></span>`
+    : `<span class="block font-semibold">${escapeHtml(title)}</span><span class="block mt-1 text-xs text-muted">${escapeHtml(text)}</span>`;
   return `<label class="choice-card ${selected ? 'is-selected' : ''}" data-choice="${escapeHtml(name)}" data-value="${escapeHtml(value)}" data-track-card data-search="">
     <input class="sr-only" type="${type}" name="${escapeHtml(name)}" value="${escapeHtml(value)}" ${checked} />
-    <span class="block font-semibold">${escapeHtml(title)}</span>
-    <span class="block mt-1 text-xs text-muted">${escapeHtml(text)}</span>
+    ${body}
   </label>`;
 }
 
@@ -749,7 +733,7 @@ function renderOnboardingChoices() {
   const groups = groupTracks(tracks);
   $('onbTrackGroups').innerHTML = groups.map((group) => {
     const cards = group.tracks.map((track) => {
-      const card = choiceCard('track', track.id, track.name, track.tagline, draft.trackId === track.id);
+      const card = choiceCard('track', track.id, track.name, track.tagline, draft.trackId === track.id, 'radio', trackIconHtml(track.id, 'md'));
       return card.replace('data-search=""', `data-search="${escapeHtml(trackSearchBlob(track))}"`);
     }).join('');
     return `<fieldset class="onb-group" data-track-group="${escapeHtml(group.id)}">
@@ -760,7 +744,7 @@ function renderOnboardingChoices() {
   }).join('');
   const skills = tracks.filter((track) => track.group === 'tecnologia');
   $('onbCompanionList').innerHTML = skills.map((track) => {
-    const card = choiceCard('companion', track.id, track.name, track.tagline, draft.companionIds.includes(track.id), 'checkbox');
+    const card = choiceCard('companion', track.id, track.name, track.tagline, draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'md'));
     return card.replace('data-search=""', `data-search="${escapeHtml(trackSearchBlob(track))}" data-companion`);
   }).join('');
   $('onbSearch').value = draft.query || '';

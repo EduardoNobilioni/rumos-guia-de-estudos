@@ -134,6 +134,52 @@ html.dark .skip-link {
   flex: none;
 }
 
+.rumo-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.045);
+  line-height: 1;
+}
+
+html.dark .rumo-icon-badge {
+  background: rgba(248, 250, 252, 0.06);
+}
+
+.rumo-icon-badge.is-sm {
+  width: 1.35rem;
+  height: 1.35rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+.rumo-icon-badge.is-md {
+  width: 1.85rem;
+  height: 1.85rem;
+  font-size: 1.15rem;
+}
+
+.rumo-icon-badge.is-lg {
+  width: 2.35rem;
+  height: 2.35rem;
+  font-size: 1.45rem;
+  border-radius: 10px;
+}
+
+.rumo-icon-badge svg {
+  width: 72%;
+  height: 72%;
+  display: block;
+}
+
+html.dark .rumo-icon-badge .devicon-github-original,
+html.dark .rumo-icon-badge .devicon-nextjs-plain,
+html.dark .rumo-icon-badge .devicon-linux-plain {
+  color: #f8fafc;
+}
+
 .logo-north { fill: #7a3329; }
 .logo-tail { fill: #887655; }
 

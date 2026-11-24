@@ -102,6 +102,7 @@ Não há analytics, conta nem envio dos seus dados para um servidor deste projet
 - `manifest.webmanifest` e `sw.js` — manifesto PWA e cache offline
 - `css/app.css` — tema, foco, nós do mapa, hachura da grade e impressão
 - `js/app.js` — interface da trilha, fluxograma das etapas, mapa/popup e autoavaliação
+- `js/icons.js` — ícones coloridos por carreira, tecnologia e tópico (Devicon MIT + SVGs dedicados)
 - `js/dashboard-screen.js` — painel de acompanhamento com KPIs, gráfico semanal e anéis de progresso
 - `js/plan-screen.js` — plano de estudo e importação da grade
 - `js/plan.js` — distribuição das sessões
