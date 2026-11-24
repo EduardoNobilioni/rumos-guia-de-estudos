@@ -108,7 +108,8 @@ Não há analytics, conta nem envio dos seus dados para um servidor deste projet
 - `js/plan-screen.js` — plano de estudo e importação da grade
 - `js/plan.js` — distribuição das sessões
 - `js/ics.js` — leitura de `.ics` e CSV
-- `js/model.js` — progresso, importação e validação
+- `js/model.js` — progresso, importação, validação e combinação de trilhas
+- `js/projects.js` — catálogo unificado de projetos por nível e linguagem/tecnologia
 - `js/share.js` — link com a configuração
 - `js/files.js` — Markdown, PNG e PDF (com fluxograma das etapas e codificação WinAnsi)
 - `data/tracks/` — conteúdo das trilhas

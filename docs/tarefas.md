@@ -21,8 +21,8 @@ Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 - [x] Gaveta no celular
 
 ## 2. Modelo de dados dos projetos
-- [ ] Adicionar `languages`/`tags` aos projetos existentes
-- [ ] Índice unificado de projetos de todas as trilhas
+- [x] Adicionar `languages`/`tags` aos projetos existentes
+- [x] Índice unificado de projetos de todas as trilhas
 
 ## 3. Tela "Ideias de projeto"
 - [ ] Área separada com filtros combináveis por nível e por linguagem/tecnologia
