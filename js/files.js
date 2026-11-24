@@ -54,54 +54,27 @@ function pushAscii(target, str) {
   }
 }
 
-export function textPdf(lines) {
-  const wrapped = [];
-  for (const line of lines) {
-    for (const part of wrapLine(line, 72)) wrapped.push(part);
-  }
-  const pageSize = 42;
-  const pages = [];
-  for (let index = 0; index < wrapped.length; index += pageSize) {
-    pages.push(wrapped.slice(index, index + pageSize));
-  }
-  if (!pages.length) pages.push(['(vazio)']);
+function pushWinText(target, x, y, text, size = 10) {
+  pushAscii(target, `BT /F1 ${size} Tf ${x} ${y} Td (`);
+  for (const b of encodeWin(text)) target.push(b);
+  pushAscii(target, ') Tj ET\n');
+}
 
+function buildPdfDocument(pageStreams) {
+  const pages = pageStreams.length ? pageStreams : [[]];
   const fontId = 3 + pages.length * 2;
   const objects = [];
   const kids = [];
 
-  pages.forEach((page, pageIndex) => {
-    const streamBytes = [];
-    const header = [
-      '1 1 1 rg\n',
-      '0 0 595 842 re f\n',
-      pageIndex === 0 ? `${brandMarkPdf()}\n` : '',
-      '0.059 0.090 0.165 rg\n',
-      'BT\n',
-      '/F1 10 Tf\n',
-      pageIndex === 0 ? '48 764 Td\n' : '48 790 Td\n',
-      '16 TL\n',
-    ].join('');
-    pushAscii(streamBytes, header);
-    page.forEach((line, lineIndex) => {
-      const encoded = encodeWin(line);
-      if (lineIndex > 0) pushAscii(streamBytes, 'T* ');
-      streamBytes.push(0x28); // (
-      for (const b of encoded) streamBytes.push(b);
-      pushAscii(streamBytes, ') Tj\n');
-    });
-    pushAscii(streamBytes, 'ET\n');
-
+  pages.forEach((streamBytes, pageIndex) => {
     const contentId = 3 + pageIndex * 2;
     const pageId = contentId + 1;
     kids.push(`${pageId} 0 R`);
 
-    const contentHead = `${contentId} 0 obj\n<< /Length ${streamBytes.length} >>\nstream\n`;
-    const contentTail = `\nendstream\nendobj\n`;
     const contentObj = [];
-    pushAscii(contentObj, contentHead);
+    pushAscii(contentObj, `${contentId} 0 obj\n<< /Length ${streamBytes.length} >>\nstream\n`);
     for (const b of streamBytes) contentObj.push(b);
-    pushAscii(contentObj, contentTail);
+    pushAscii(contentObj, '\nendstream\nendobj\n');
     objects.push(contentObj);
 
     const pageObj = [];
@@ -130,6 +103,121 @@ export function textPdf(lines) {
   const xrefStart = pdf.length;
   pushAscii(pdf, `xref\n0 ${xref.length}\n${xref.join('')}trailer\n<< /Size ${xref.length} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`);
   return new Uint8Array(pdf);
+}
+
+export function textPdf(lines) {
+  const wrapped = [];
+  for (const line of lines) {
+    for (const part of wrapLine(line, 72)) wrapped.push(part);
+  }
+  const pageSize = 42;
+  const pages = [];
+  for (let index = 0; index < wrapped.length; index += pageSize) {
+    pages.push(wrapped.slice(index, index + pageSize));
+  }
+  if (!pages.length) pages.push(['(vazio)']);
+
+  const streams = pages.map((page, pageIndex) => {
+    const streamBytes = [];
+    const header = [
+      '1 1 1 rg\n',
+      '0 0 595 842 re f\n',
+      pageIndex === 0 ? `${brandMarkPdf()}\n` : '',
+      '0.059 0.090 0.165 rg\n',
+      'BT\n',
+      '/F1 10 Tf\n',
+      pageIndex === 0 ? '48 764 Td\n' : '48 790 Td\n',
+      '16 TL\n',
+    ].join('');
+    pushAscii(streamBytes, header);
+    page.forEach((line, lineIndex) => {
+      const encoded = encodeWin(line);
+      if (lineIndex > 0) pushAscii(streamBytes, 'T* ');
+      streamBytes.push(0x28);
+      for (const b of encoded) streamBytes.push(b);
+      pushAscii(streamBytes, ') Tj\n');
+    });
+    pushAscii(streamBytes, 'ET\n');
+    return streamBytes;
+  });
+
+  return buildPdfDocument(streams);
+}
+
+export function roadmapPdf(track, view) {
+  const streams = [];
+  const tree = [];
+  pushAscii(tree, `1 1 1 rg\n0 0 595 842 re f\n${brandMarkPdf()}\n0.059 0.090 0.165 rg\n`);
+  pushWinText(tree, 78, 792, `Rumos - ${track.name}`, 13);
+  pushAscii(tree, '0.145 0.388 0.922 rg\n');
+  pushWinText(tree, 48, 764, 'Arvore visual do roadmap', 11);
+
+  let yTop = 738;
+  let prevCenterX = null;
+  let prevBottomY = null;
+  for (let i = 0; i < view.phases.length && yTop >= 110; i += 1) {
+    const phase = view.phases[i];
+    const isLeft = i % 2 === 0;
+    const boxX = isLeft ? 48 : 112;
+    const boxW = 435;
+    const boxH = 44;
+    const boxY = yTop - boxH;
+    const centerX = boxX + boxW / 2;
+
+    if (prevCenterX !== null && prevBottomY !== null) {
+      const midY = Math.round((prevBottomY + yTop) / 2);
+      pushAscii(tree, `0.392 0.455 0.545 RG 1.2 w ${prevCenterX} ${prevBottomY} m ${prevCenterX} ${midY} l ${centerX} ${midY} l ${centerX} ${yTop} l S\n`);
+    }
+
+    if (phase.progress.complete) {
+      pushAscii(tree, `0.925 0.992 0.961 rg 0.020 0.588 0.412 RG 1.5 w ${boxX} ${boxY} ${boxW} ${boxH} re B\n`);
+    } else {
+      pushAscii(tree, `0.973 0.980 0.988 rg 0.145 0.388 0.922 RG 1.2 w ${boxX} ${boxY} ${boxW} ${boxH} re B\n`);
+    }
+
+    pushAscii(tree, '0.059 0.090 0.165 rg\n');
+    const stageMark = phase.progress.complete ? '[x]' : '[ ]';
+    const stageLine = `${stageMark} Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`;
+    pushWinText(tree, boxX + 10, boxY + 26, stageLine.slice(0, 66), 9);
+
+    const visible = phase.topics.filter((t) => t.status !== 'hidden').slice(0, 3);
+    const previewTopics = visible.map((t) => `${t.done ? '[x]' : '[ ]'} ${t.title}`).join('  |  ');
+    pushAscii(tree, '0.278 0.333 0.412 rg\n');
+    pushWinText(tree, boxX + 10, boxY + 10, previewTopics.slice(0, 74), 8);
+
+    prevCenterX = centerX;
+    prevBottomY = boxY;
+    yTop = boxY - 22;
+  }
+  streams.push(tree);
+
+  const notebookLines = [
+    `Caderno de acompanhamento - ${track.name}`,
+    track.description || '',
+    '',
+    ...roadmapLines(track, view).slice(2),
+  ];
+  const wrapped = [];
+  for (const line of notebookLines) {
+    for (const part of wrapLine(line, 72)) wrapped.push(part);
+  }
+  const pageSize = 44;
+  for (let index = 0; index < wrapped.length; index += pageSize) {
+    const page = wrapped.slice(index, index + pageSize);
+    const streamBytes = [];
+    pushAscii(streamBytes, '1 1 1 rg\n0 0 595 842 re f\n0.059 0.090 0.165 rg\nBT\n/F1 10 Tf\n48 796 Td\n16 TL\n');
+    page.forEach((line, lineIndex) => {
+      const encoded = encodeWin(line);
+      if (lineIndex > 0) pushAscii(streamBytes, 'T* ');
+      streamBytes.push(0x28);
+      for (const b of encoded) streamBytes.push(b);
+      pushAscii(streamBytes, ') Tj\n');
+    });
+    pushAscii(streamBytes, 'ET\n');
+    streams.push(streamBytes);
+  }
+
+  return buildPdfDocument(streams);
 }
 
 export function roadmapLines(track, view) {
@@ -228,7 +316,11 @@ export function drawRoadmap(canvas, track, view) {
     const pairs = Math.ceil(visible.length / 2);
     return sum + 64 + Math.max(1, pairs) * 62 + 24;
   }, 0);
-  const height = 220 + flowHeight + treeHeight;
+  const checklistHeight = 72 + view.phases.reduce(
+    (sum, phase) => sum + 42 + phase.topics.filter((t) => t.status !== 'hidden').length * 28 + 16,
+    0,
+  );
+  const height = 220 + flowHeight + treeHeight + checklistHeight;
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
@@ -279,13 +371,15 @@ export function drawRoadmap(canvas, track, view) {
     }
   });
 
-  // Mapa visual conectado (espinha dorsal + ramificações)
-  const centerX = width / 2;
-  const nodeW = 360;
+  // Mapa visual conectado (espinha dorsal + ramificações com deslocamento entre etapas)
+  const baseCenterX = width / 2;
+  const nodeW = 350;
   const nodeH = 44;
   let y = fy + flowHeight + 24;
-  for (const phase of view.phases) {
-    // Marco da etapa no eixo central
+  view.phases.forEach((phase, phaseIdx) => {
+    const offsetX = phaseIdx % 2 === 0 ? -24 : 24;
+    const centerX = baseCenterX + offsetX;
+    // Marco da etapa deslocado
     ctx.fillStyle = phase.progress.complete ? '#ECFDF5' : '#EFF6FF';
     ctx.strokeStyle = phase.progress.complete ? '#059669' : '#2563EB';
     ctx.lineWidth = 2;
@@ -316,9 +410,8 @@ export function drawRoadmap(canvas, track, view) {
       const row = Math.floor(idx / 2);
       const isLeft = idx % 2 === 0;
       const ny = branchStartY + 14 + row * 62;
-      const nx = isLeft ? centerX - 44 - nodeW : centerX + 44;
+      const nx = isLeft ? centerX - 40 - nodeW : centerX + 40;
 
-      // Conector horizontal até o tronco
       ctx.strokeStyle = '#93C5FD';
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -339,9 +432,61 @@ export function drawRoadmap(canvas, track, view) {
       const prefix = topic.done ? '✓ ' : '';
       const opt = topic.status === 'optional' ? ' (opc.)' : '';
       const text = `${prefix}${topic.title}${opt}`;
-      ctx.fillText(text.length > 44 ? `${text.slice(0, 43)}…` : text, nx + 12, ny + 27);
+      ctx.fillText(text.length > 42 ? `${text.slice(0, 41)}…` : text, nx + 12, ny + 27);
     });
 
     y = branchEndY + 24;
+  });
+
+  // Caderno de acompanhamento — Checklist de etapas e tópicos
+  y += 16;
+  ctx.fillStyle = '#0F172A';
+  ctx.font = `700 20px ${FONT_UI}`;
+  ctx.fillText('Caderno de acompanhamento — Etapas e tópicos', 48, y);
+  y += 32;
+
+  for (const phase of view.phases) {
+    // Caixinha de check da etapa
+    ctx.strokeStyle = phase.progress.complete ? '#059669' : '#2563EB';
+    ctx.fillStyle = phase.progress.complete ? '#059669' : '#FFFFFF';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(48, y - 14, 18, 18, 4);
+    ctx.fill();
+    ctx.stroke();
+    if (phase.progress.complete) {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = `700 13px ${FONT_UI}`;
+      ctx.fillText('✓', 52, y);
+    }
+
+    ctx.fillStyle = '#0F172A';
+    ctx.font = `700 16px ${FONT_UI}`;
+    ctx.fillText(`Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`, 76, y);
+    y += 32;
+
+    for (const topic of phase.topics) {
+      if (topic.status === 'hidden') continue;
+      ctx.strokeStyle = topic.done ? '#059669' : '#64748B';
+      ctx.fillStyle = topic.done ? '#059669' : '#FFFFFF';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(76, y - 12, 15, 15, 3);
+      ctx.fill();
+      ctx.stroke();
+      if (topic.done) {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = `700 11px ${FONT_UI}`;
+        ctx.fillText('✓', 79, y - 1);
+      }
+
+      ctx.fillStyle = topic.done ? '#047857' : '#0F172A';
+      ctx.font = `400 14px ${FONT_BODY}`;
+      const opt = topic.status === 'optional' ? ' · opcional' : '';
+      const hrs = Number(topic.hours) ? ` (${topic.hours} h)` : '';
+      ctx.fillText(`${topic.title}${hrs}${opt}`, 100, y);
+      y += 28;
+    }
+    y += 16;
   }
 }

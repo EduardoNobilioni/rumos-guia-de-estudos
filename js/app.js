@@ -34,7 +34,7 @@ import {
   visibleProjects,
 } from './model.js';
 import { decodePlan, encodePlan, planFromHash } from './share.js';
-import { drawRoadmap, roadmapLines, roadmapMarkdown, textPdf } from './files.js';
+import { drawRoadmap, roadmapLines, roadmapMarkdown, roadmapPdf, textPdf } from './files.js';
 import { initPlanScreen } from './plan-screen.js';
 import { initDashboardScreen } from './dashboard-screen.js';
 import { planMarkdown } from './plan.js';
@@ -1889,7 +1889,7 @@ function bind() {
   $('exportPdfBtn').addEventListener('click', () => {
     const view = activeView();
     const label = isCombinedView() ? { ...activeTrack(), name: `Trajeto completo (${activeTrack().name})` } : activeTrack();
-    downloadFile(`rumos-${activeTrack().id}.pdf`, textPdf(roadmapLines(label, view)), 'application/pdf');
+    downloadFile(`rumos-${activeTrack().id}.pdf`, roadmapPdf(label, view), 'application/pdf');
   });
   $('exportPngBtn').addEventListener('click', async () => {
     await document.fonts.ready;
