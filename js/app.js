@@ -1666,7 +1666,7 @@ function bind() {
     const INFO_COPY = {
       privacy: {
         title: 'Política de Privacidade',
-        body: '<p>O <strong>Rumos</strong> funciona 100% no seu navegador. Não exigimos cadastro, não coletamos dados pessoais, não usamos cookies de rastreamento e não enviamos seu progresso para servidores externos.</p><p>Todo o seu progresso, anotações, respostas da autoavaliação e plano semanal ficam armazenados localmente no <code>localStorage</code> do seu dispositivo. Você pode exportar ou apagar seus dados a qualquer momento usando os botões de backup JSON.</p>',
+        body: '<p>O <strong>Rumos</strong> não possui cadastro, não usa cookies próprios nem ferramentas de analytics, e não envia seu progresso, anotações ou plano de estudos para servidores próprios.</p><p>Seus dados (progresso, anotações, autoavaliações e plano semanal) ficam salvos localmente no <code>localStorage</code> do seu navegador. Você pode exportar, restaurar ou limpar tudo quando quiser usando os botões de backup JSON. O link de compartilhamento grava apenas a configuração básica (trilha, nível, horas e ordem) no fragmento <code>#</code> da URL, sem dados pessoais.</p><p><strong>Serviços de infraestrutura e terceiros:</strong> como site estático hospedado no GitHub Pages, o provedor de hospedagem e as CDNs usadas para carregar fontes, estilos e ícones (Google Fonts, Tailwind CDN e jsDelivr/Devicon) recebem requisições HTTP padrão do navegador (como endereço IP e cabeçalho <code>User-Agent</code>) estritamente para entregar os arquivos. Ao acessar links externos de estudo ou o GitHub, aplicam-se as políticas de privacidade de cada site de destino.</p>',
       },
       terms: {
         title: 'Termos de Uso',
