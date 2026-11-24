@@ -1,8 +1,7 @@
 import {
-  LEVEL_LABELS, clampHours, currentPhase, effectiveStatus, formatDuration, moveId, naturalStatus,
-  phaseDeadlines, projectPlanStats, quizScore, roadmapStats, setTopicStatus, visibleProjects,
+  LEVEL_LABELS, clampHours, currentPhase, effectiveStatus, formatDuration, layoutStudyMap, moveId,
+  naturalStatus, phaseDeadlines, projectPlanStats, quizScore, roadmapStats, setTopicStatus, visibleProjects,
 } from '../model.js';
-import { topicIconHtml } from '../icons.js';
 import { checkbox, escapeHtml, icon, openMenu, safeUrl, watchReveals } from './dom.js';
 
 const KIND = { leitura: 'Leitura', curso: 'Curso', documentacao: 'Documentação', pratica: 'Prática', video: 'Vídeo' };
@@ -10,20 +9,99 @@ const KIND = { leitura: 'Leitura', curso: 'Curso', documentacao: 'Documentação
 export function initRoadmap(api) {
   const { $, session, toast, persist } = api;
 
-  function topicNode(topic, titleById, doneIds, index) {
+  function topicNode(topic, titleById, doneIds, index, nextId) {
     const optional = topic.status === 'optional';
     const strike = topic.done && api.getState().strikethrough ? ' is-strike' : '';
     const source = topic.sourceTrackId || api.activeTrack()?.id || '';
-    const badge = session.combinedView && topic.sourceTrackName ? `<span class="tag tag-highlight">${escapeHtml(topic.sourceTrackName)}</span>` : '';
     const pending = (topic.prerequisites || []).filter((id) => !doneIds.has(id) && titleById.has(id));
-    return `<article class="topic-node reveal${topic.done ? ' is-done' : ''}${optional ? ' is-optional' : ''}" style="--i:${index}" data-node-id="${topic.id}" data-prereqs="${escapeHtml((topic.prerequisites || []).join(','))}">
+    const next = topic.id === nextId;
+    return `<article class="topic-node${topic.done ? ' is-done' : ''}${optional ? ' is-optional' : ''}${next ? ' is-next' : ''}" data-node-id="${topic.id}">
       ${checkbox(topic.done, `data-action="toggle-item" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}"`, `${topic.done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
-      <button type="button" class="stack" style="flex:1;border:0;background:transparent;text-align:left;padding:0" data-action="open-topic-detail" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}">
-        <span class="row">${topicIconHtml(topic, source, 'sm')}<span class="topic-title${strike}" style="font:var(--text-label-m)">${escapeHtml(topic.title)}</span></span>
-        <span class="mono">${badge} ${escapeHtml(LEVEL_LABELS[topic.level] || topic.level)} · ${Number(topic.hours) || 0} h · ${(topic.resources || []).length} links${optional ? ' · Opcional' : ''}</span>
+      <button type="button" class="stack" style="flex:1;border:0;background:transparent;text-align:left;padding:0" data-action="open-topic-detail" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}" ${next ? 'id="comece-aqui"' : ''}>
+        ${next ? '<span class="map-kicker">Comece aqui</span>' : ''}
+        <span class="topic-title${strike}" style="font:var(--text-label-m)">${escapeHtml(topic.title)}</span>
+        <span class="mono">${escapeHtml(LEVEL_LABELS[topic.level] || topic.level)}${optional ? ' · Opcional' : ''}</span>
         ${pending.length ? `<span class="faint">Antes: ${escapeHtml(pending.map((id) => titleById.get(id)).join(', '))}</span>` : ''}
       </button>
     </article>`;
+  }
+
+  function mapNode(topic, nextId, branch) {
+    const source = topic.sourceTrackId || api.activeTrack()?.id || '';
+    const done = !!topic.done;
+    const optional = branch || topic.status === 'optional';
+    const next = topic.id === nextId;
+    const strike = done && api.getState().strikethrough ? ' is-strike' : '';
+    const cls = ['map-node', done ? 'is-done' : '', optional ? 'is-optional' : '', next ? 'is-next' : ''].filter(Boolean).join(' ');
+    return `<div class="${cls}">
+      ${checkbox(done, `data-action="toggle-item" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}"`, `${done ? 'Desmarcar' : 'Concluir'} ${topic.title}`)}
+      <button type="button" class="map-open" data-action="open-topic-detail" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}" ${next ? 'id="comece-aqui"' : ''}>
+        ${next ? '<span class="map-kicker">Comece aqui</span>' : ''}
+        <span class="topic-title${strike}">${escapeHtml(topic.title)}</span>
+      </button>
+    </div>`;
+  }
+
+  function mapWing(topics, side, nextId) {
+    if (!topics.length) return '<div class="map-wing"></div>';
+    return `<div class="map-wing map-wing-${side}">${topics.map((topic) => {
+      const optional = topic.status === 'optional';
+      const arm = '<span class="map-arm" aria-hidden="true"></span>';
+      const node = mapNode(topic, nextId, true);
+      return `<div class="map-link${optional ? ' is-optional' : ''}">${side === 'right' ? arm : ''}${node}${side === 'left' ? arm : ''}</div>`;
+    }).join('')}</div>`;
+  }
+
+  function visibleTopics(phase, query, phaseHit) {
+    return phase.topics.filter((topic) => {
+      if (session.filter === 'hidden') return topic.status === 'hidden' && (phaseHit || matches(topic, query));
+      if (topic.status === 'hidden') return false;
+      if (session.filter === 'pending' && topic.done) return false;
+      if (session.filter === 'completed' && !topic.done) return false;
+      if (session.filter === 'optional' && topic.status !== 'optional') return false;
+      if (query && !phaseHit && !matches(topic, query)) return false;
+      return true;
+    });
+  }
+
+  function renderMap(view, query) {
+    const state = api.getState();
+    const branchTrackIds = (state.profile.companionIds || []).filter((id) => id !== state.activeTrackId);
+    const filtered = view.phases.map((phase) => {
+      const phaseHit = query && `${phase.title} ${phase.badgeTitle} ${phase.note}`.toLowerCase().includes(query);
+      return { ...phase, topics: visibleTopics(phase, query, phaseHit) };
+    });
+    const stops = layoutStudyMap(filtered, { branchTrackIds });
+    const next = currentPhase(filtered)?.topics.find((topic) => topic.status === 'required' && !topic.done);
+    const nextId = next?.id;
+    const stats = roadmapStats(view.phases);
+    const rows = [`<div class="map-row"><div></div><div class="map-core"><p class="map-flag">Começo</p><span class="map-stem" aria-hidden="true"></span></div><div></div></div>`];
+    rows.push(`<div class="map-row"><div></div><div class="map-core"><p class="map-progress">${stats.requiredDone} de ${stats.required} tópicos</p><div class="bar" aria-hidden="true"><span style="transform:scaleX(${stats.required ? stats.requiredDone / stats.required : 0})"></span></div></div><div></div></div>`);
+    for (const stop of stops) {
+      const phase = stop.phase;
+      const here = next && phase.topics.some((topic) => topic.id === nextId);
+      rows.push(`<div class="map-row map-stage-row"><div></div><div class="map-core"><span class="map-stem" aria-hidden="true"></span><div class="map-stage${here ? ' is-current' : ''}"><p class="eyebrow">Etapa ${phase.number}${here ? ' · Próximo passo' : ''}</p><h3>${escapeHtml(phase.title)}</h3><p class="mono">${phase.progress.requiredDone} de ${phase.progress.requiredTotal || phase.progress.total}</p></div></div><div></div></div>`);
+      const spineSet = new Set(stop.spine);
+      const slots = [];
+      let pending = [];
+      const park = (bucket) => pending.forEach((topic, index) => (index % 2 === 0 ? bucket.left : bucket.right).push(topic));
+      for (const topic of stop.phase.topics) {
+        if (topic.status === 'hidden') continue;
+        if (!spineSet.has(topic) && !stop.branches.includes(topic)) continue;
+        if (spineSet.has(topic)) {
+          const slot = { topic, left: [], right: [] };
+          park(slot);
+          pending = [];
+          slots.push(slot);
+        } else pending.push(topic);
+      }
+      if (pending.length && slots.length) park(slots[slots.length - 1]);
+      for (const slot of slots) {
+        rows.push(`<div class="map-row">${mapWing(slot.left, 'left', nextId)}<div class="map-core"><span class="map-stem" aria-hidden="true"></span>${mapNode(slot.topic, nextId, false)}<span class="map-stem" aria-hidden="true"></span></div>${mapWing(slot.right, 'right', nextId)}</div>`);
+      }
+    }
+    rows.push(`<div class="map-row"><div></div><div class="map-core"><span class="map-stem" aria-hidden="true"></span><p class="map-flag">Fim da trilha</p></div><div></div></div>`);
+    return `<div class="study-map" aria-label="Mapa da trilha, do começo ao fim">${rows.join('')}</div>`;
   }
 
   function detail(topic, phase, index, total, titleById, doneIds) {
@@ -59,8 +137,8 @@ export function initRoadmap(api) {
       <p class="read">${escapeHtml(topic.description)}</p>
       ${resources ? `<ul class="stack">${resources}</ul>` : ''}
       <div class="row">${buttons}</div>
-      ${linkOpen ? `<div class="stack"><input id="link-title-${topic.id}" class="field" placeholder="Título" /><input id="link-url-${topic.id}" class="field" placeholder="https://" /><div class="row"><select id="link-lang-${topic.id}" class="field"><option value="pt">PT</option><option value="en">EN</option></select><select id="link-kind-${topic.id}" class="field"><option value="leitura">Leitura</option><option value="documentacao">Documentação</option><option value="curso">Curso</option><option value="pratica">Prática</option><option value="video">Vídeo</option></select><button type="button" class="btn btn-primary btn-small" data-action="add-topic-link" data-item-id="${topic.id}">Salvar link</button></div></div>` : ''}
-      ${noteOpen ? `<textarea id="note-${topic.id}" class="field" data-action="edit-note" data-item-id="${topic.id}" rows="3">${escapeHtml(topic.note || '')}</textarea>` : ''}
+      ${linkOpen ? `<div class="stack"><input id="link-title-${topic.id}" class="field" placeholder="Título" /><input id="link-url-${topic.id}" class="field" placeholder="https://" /><div class="row"><select id="link-lang-${topic.id}" class="field"><option value="pt">PT</option><option value="en">EN</option></select><select id="link-kind-${topic.id}" class="field"><option value="leitura">Leitura</option><option value="documentacao">Documentação</option><option value="curso">Curso</option><option value="pratica">Prática</option><option value="video">Vídeo</option></select><button type="button" class="btn btn-primary btn-small" data-action="add-topic-link" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}">Salvar link</button></div></div>` : ''}
+      ${noteOpen ? `<textarea id="note-${topic.id}" class="field" data-action="edit-note" data-item-id="${topic.id}" data-source-track="${escapeHtml(source)}" rows="3">${escapeHtml(topic.note || '')}</textarea>` : ''}
     </div>`;
   }
 
@@ -69,18 +147,10 @@ export function initRoadmap(api) {
     return `<li class="row" style="align-items:flex-start">${checkbox(project.done, `data-action="toggle-project" data-project-id="${project.id}" data-source-track="${escapeHtml(source)}"`, project.title)}<div><p style="font:var(--text-label-m)">${escapeHtml(project.title)}</p><p class="muted">${escapeHtml(project.description || '')}</p><p class="mono">${LEVEL_LABELS[project.level] || ''} · ${project.hours || 0} h${project.sourceTrackName && session.combinedView ? ` · ${escapeHtml(project.sourceTrackName)}` : ''}</p>${project.custom ? `<button type="button" class="btn btn-ghost btn-small" data-action="edit-project" data-project-id="${project.id}">Editar</button><button type="button" class="btn btn-ghost btn-small" data-action="delete-project" data-project-id="${project.id}">Excluir</button>` : ''}</div></li>`;
   }
 
-  function renderPhase(phase, query, phaseHit, maps, deadlines) {
+  function renderPhase(phase, query, phaseHit, maps, deadlines, nextId) {
     const trackState = api.activeTrackState();
     const collapsed = !!trackState.collapsedPhases[phase.id];
-    const topics = phase.topics.filter((topic) => {
-      if (session.filter === 'hidden') return topic.status === 'hidden' && (phaseHit || matches(topic, query));
-      if (topic.status === 'hidden') return false;
-      if (session.filter === 'pending' && topic.done) return false;
-      if (session.filter === 'completed' && !topic.done) return false;
-      if (session.filter === 'optional' && topic.status !== 'optional') return false;
-      if (query && !phaseHit && !matches(topic, query)) return false;
-      return true;
-    });
+    const topics = visibleTopics(phase, query, phaseHit);
     const projects = visibleProjects(phase.projects, trackState.level, trackState.showAllProjectLevels).filter((project) => {
       if (session.filter === 'hidden' || session.filter === 'optional') return false;
       if (session.filter === 'pending' && project.done) return false;
@@ -104,7 +174,7 @@ export function initRoadmap(api) {
         </span>
       </div>
       <div class="bar" style="margin:0 16px 12px"><span style="transform:scaleX(${(phase.progress.percent || 0) / 100})"></span></div>
-      ${collapsed ? '' : `<div class="topic-grid${session.viewMode === 'list' ? ' is-list' : ''}">${topics.map((topic, index) => topicNode(topic, maps.titles, maps.done, index)).join('')}</div>
+      ${collapsed ? '' : `<div class="topic-grid is-list">${topics.map((topic, index) => topicNode(topic, maps.titles, maps.done, index, nextId)).join('')}</div>
         <div class="phase-foot"><div class="spread"><p style="font:var(--text-title-s)">Ideia de projeto</p><button type="button" class="btn btn-ghost btn-small" data-action="add-project" data-phase-id="${phase.id}">Adicionar ideia</button></div>
           ${projects.length ? `<ul class="stack" style="margin-top:8px">${projects.map(projectItem).join('')}</ul>` : '<p class="muted">Nada neste nível nesta etapa.</p>'}
           <label class="stack" style="margin-top:8px">Nota da etapa<textarea id="obs-${phase.id}" class="field" data-action="edit-phase-note" data-phase-id="${phase.id}" rows="2">${escapeHtml(phase.note || '')}</textarea></label>
@@ -138,7 +208,8 @@ export function initRoadmap(api) {
     const names = session.combinedView ? api.activeEntries().map((entry) => entry.track.name).join(' + ') : track.name;
     $('trackTitle').textContent = names;
     $('trackTagline').textContent = session.combinedView ? 'Trajeto único, do mais básico ao que pede prática.' : (track.description || track.tagline || '');
-    $('trackMeta').innerHTML = `<span class="tag">${escapeHtml(track.group === 'carreira' ? 'Carreira' : track.group === 'fundamentos' ? 'Fundamento' : 'Tecnologia')}</span><span class="tag tag-highlight" id="focusTagLive">${stats.percent === 100 ? 'Trilha fechada' : stats.percent === 0 ? 'Começando' : 'No meio'}</span><span class="tag">${escapeHtml(LEVEL_LABELS[trackState.level] || '')}</span><span class="tag">${trackState.weeklyHours} h/semana</span><button type="button" id="trackSwitchBtn" class="btn btn-ghost btn-small">${icon('chevronDown')} Trocar</button>`;
+    const stack = !session.combinedView && view.backendStackNames?.length ? `Back-end · ${view.backendStackNames.join(' + ')}` : '';
+    $('trackMeta').innerHTML = `<span class="tag">${escapeHtml(track.group === 'carreira' ? 'Carreira' : track.group === 'fundamentos' ? 'Fundamento' : 'Tecnologia')}</span><span class="tag tag-highlight" id="focusTagLive">${stats.percent === 100 ? 'Trilha fechada' : stats.percent === 0 ? 'Começando' : 'No meio'}</span>${stack ? `<span class="tag">${escapeHtml(stack)}</span>` : ''}<span class="tag">${escapeHtml(LEVEL_LABELS[trackState.level] || '')}</span><span class="tag">${trackState.weeklyHours} h/semana</span><button type="button" id="trackSwitchBtn" class="btn btn-ghost btn-small">${icon('chevronDown')} Trocar</button>`;
     $('trackSwitchBtn').addEventListener('click', () => {
       if (window.matchMedia('(max-width: 1023px)').matches) api.openSheet();
       else $('sidebarSearch').focus();
@@ -169,8 +240,13 @@ export function initRoadmap(api) {
     }).join('')}</div>`;
     const query = session.search.trim().toLowerCase();
     const maps = mapsOf(view);
-    const html = view.phases.map((phase) => renderPhase(phase, query, query && `${phase.title} ${phase.badgeTitle} ${phase.note}`.toLowerCase().includes(query), maps, deadlines)).join('');
+    const nextId = focus?.topics.find((topic) => topic.status === 'required' && !topic.done)?.id;
+    const html = session.viewMode === 'list'
+      ? view.phases.map((phase) => renderPhase(phase, query, query && `${phase.title} ${phase.badgeTitle} ${phase.note}`.toLowerCase().includes(query), maps, deadlines, nextId)).join('')
+      : renderMap(view, query);
     $('conteudo').innerHTML = html;
+    $('phaseFlowchart').hidden = session.viewMode !== 'list';
+    $('stageBadges').hidden = session.viewMode !== 'list';
     $('emptyState').hidden = !!html.trim() || !query;
     const focusTag = document.getElementById('focusTag');
     if (focusTag && !session.focusPulsed) { focusTag.classList.add('tag-pulse'); session.focusPulsed = true; }
@@ -257,20 +333,22 @@ export function initRoadmap(api) {
       render();
       return;
     }
-    if (action === 'add-topic-link') return addLink(el.dataset.itemId);
+    if (action === 'add-topic-link') return addLink(el.dataset.itemId, source);
     if (action === 'remove-topic-link') {
       const id = el.dataset.itemId;
-      trackState.customLinks[id] = (trackState.customLinks[id] || []).filter((item) => item.url !== el.dataset.url);
-      persist(state.activeTrackId);
+      const bucket = topicBucket(id, source);
+      bucket.state.customLinks[id] = (bucket.state.customLinks[id] || []).filter((item) => item.url !== el.dataset.url);
+      persist(bucket.id);
       render();
       return;
     }
     if (action === 'toggle-resource') {
       const key = `${el.dataset.itemId}::${el.dataset.url}`;
-      trackState.doneResources = trackState.doneResources || {};
-      if (trackState.doneResources[key]) delete trackState.doneResources[key];
-      else trackState.doneResources[key] = true;
-      persist(state.activeTrackId);
+      const bucket = topicBucket(el.dataset.itemId, el.dataset.sourceTrack || source);
+      bucket.state.doneResources = bucket.state.doneResources || {};
+      if (bucket.state.doneResources[key]) delete bucket.state.doneResources[key];
+      else bucket.state.doneResources[key] = true;
+      persist(bucket.id);
       return;
     }
     if (action === 'toggle-project') {
@@ -313,12 +391,14 @@ export function initRoadmap(api) {
     const pool = phase.topics.filter((topic) => topic.status === 'required');
     const list = pool.length ? pool : phase.topics.filter((topic) => topic.status !== 'hidden');
     const done = list.every((topic) => topic.done);
+    const touched = new Set();
     list.forEach((topic) => {
-      const bucket = api.getState().tracks[topic.sourceTrackId] || api.activeTrackState();
-      if (done) delete bucket.completed[topic.id];
-      else bucket.completed[topic.id] = true;
+      const bucket = topicBucket(topic.id, topic.sourceTrackId);
+      if (done) delete bucket.state.completed[topic.id];
+      else bucket.state.completed[topic.id] = true;
+      touched.add(bucket.id);
     });
-    persist(api.getState().activeTrackId);
+    touched.forEach((id) => persist(id));
     render();
   }
 
@@ -330,18 +410,24 @@ export function initRoadmap(api) {
     render();
   }
 
-  function addLink(id) {
+  function topicBucket(topicId, source) {
+    const located = api.findTopic(topicId, source);
+    const id = source || located?.topic?.sourceTrackId || api.getState().activeTrackId;
+    return { id, state: api.getState().tracks[id] || api.activeTrackState() };
+  }
+
+  function addLink(id, source) {
     const title = document.getElementById(`link-title-${id}`)?.value.trim();
     const url = document.getElementById(`link-url-${id}`)?.value.trim();
     if (!title || !safeUrl(url)) return toast('Título e um link http(s).', 'error');
-    const trackState = api.activeTrackState();
-    trackState.customLinks = trackState.customLinks || {};
-    const list = trackState.customLinks[id] || [];
+    const bucket = topicBucket(id, source);
+    bucket.state.customLinks = bucket.state.customLinks || {};
+    const list = bucket.state.customLinks[id] || [];
     if (list.length >= 6) return toast('Seis links seus por tópico.', 'error');
     list.push({ title: title.slice(0, 180), url, lang: document.getElementById(`link-lang-${id}`)?.value === 'en' ? 'en' : 'pt', kind: document.getElementById(`link-kind-${id}`)?.value || 'leitura' });
-    trackState.customLinks[id] = list;
+    bucket.state.customLinks[id] = list;
     delete session.openLinkForms[id];
-    persist(api.getState().activeTrackId);
+    persist(bucket.id);
     render();
   }
 
@@ -350,9 +436,10 @@ export function initRoadmap(api) {
     const trackState = api.activeTrackState();
     if (!trackState) return;
     if (el.dataset.action === 'edit-note') {
-      if (el.value.trim()) trackState.notes[el.dataset.itemId] = el.value.slice(0, 20000);
-      else delete trackState.notes[el.dataset.itemId];
-      persist(api.getState().activeTrackId);
+      const bucket = topicBucket(el.dataset.itemId, el.dataset.sourceTrack);
+      if (el.value.trim()) bucket.state.notes[el.dataset.itemId] = el.value.slice(0, 20000);
+      else delete bucket.state.notes[el.dataset.itemId];
+      persist(bucket.id);
     }
     if (el.dataset.action === 'edit-phase-note') {
       if (el.value.trim()) trackState.phaseNotes[el.dataset.phaseId] = el.value.slice(0, 20000);

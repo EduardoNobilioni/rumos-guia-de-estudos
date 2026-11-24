@@ -491,6 +491,8 @@ function emptyProfile() {
     primaryTrackId: null,
     companionIds: [],
     dismissedNotices: [],
+    backendLanguageId: null,
+    backendEcosystemIds: [],
   };
 }
 
@@ -503,6 +505,10 @@ function sanitizeProfile(raw) {
     .filter((id) => id !== profile.primaryTrackId)
     .slice(0, 6);
   profile.dismissedNotices = sanitizeIdList(raw.dismissedNotices).slice(0, 20);
+  profile.backendLanguageId = isId(raw.backendLanguageId) ? raw.backendLanguageId : null;
+  profile.backendEcosystemIds = sanitizeIdList(raw.backendEcosystemIds)
+    .filter((id) => id !== profile.backendLanguageId)
+    .slice(0, 1);
   return profile;
 }
 
@@ -628,6 +634,8 @@ export function buildExport(state, exportedAt = new Date().toISOString()) {
       primaryTrackId: state.profile.primaryTrackId,
       companionIds: state.profile.companionIds,
       dismissedNotices: state.profile.dismissedNotices,
+      backendLanguageId: state.profile.backendLanguageId || null,
+      backendEcosystemIds: state.profile.backendEcosystemIds || [],
     },
     completed: active.completed,
     notes: active.notes,
