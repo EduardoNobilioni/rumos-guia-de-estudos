@@ -10,8 +10,10 @@ import {
   careerSplitReport,
   emptyState,
   emptyTrackState,
+  isReady,
   needsCareerChoice,
   normalizeState,
+  resetRoadmapSelection,
   resetTrackProgress,
 } from '../js/model.js';
 
@@ -79,4 +81,51 @@ test('RN estado antigo sem caminho pede a escolha e o reset apaga progresso e an
   });
   assert.equal(state.profile.careerChoices['game-dev'], 'csharp');
   assert.equal(needsCareerChoice(state, index.tracks), false);
+});
+
+test('RN resetRoadmapSelection limpa trilha ativa, onboarding e plano de estudo sem apagar outras trilhas', () => {
+  const state = normalizeState({
+    version: 2,
+    activeTrackId: 'frontend',
+    profile: {
+      onboarded: true,
+      primaryTrackId: 'frontend',
+      companionIds: ['git'],
+      frontendFrameworkId: 'react',
+    },
+    tracks: {
+      frontend: {
+        level: 'iniciante',
+        weeklyHours: 8,
+        completed: { 'html-basico': true },
+        notes: { 'html-basico': 'anotado' },
+        studyPlan: {
+          startDate: '2026-11-24',
+          weeklyHours: 8,
+          weekdays: [1, 2, 3, 4, 5],
+          slots: { 1: { start: '19:00', end: '20:36' } },
+          sessions: [{ id: 's1', date: '2026-11-24', start: '19:00', end: '20:30', title: 'HTML' }],
+        },
+      },
+      backend: {
+        level: 'intermediario',
+        weeklyHours: 10,
+        completed: { 'http-rest': true },
+      },
+    },
+  });
+  assert.equal(isReady(state), true);
+  assert.equal(state.tracks.frontend.studyPlan.sessions.length, 1);
+
+  resetRoadmapSelection(state);
+
+  assert.equal(state.activeTrackId, null);
+  assert.equal(state.profile.onboarded, false);
+  assert.equal(state.profile.primaryTrackId, null);
+  assert.equal(state.profile.frontendFrameworkId, null);
+  assert.deepEqual(state.profile.companionIds, []);
+  assert.equal(state.tracks.frontend.studyPlan, null);
+  assert.deepEqual(state.tracks.frontend.completed, {});
+  assert.equal(isReady(state), false);
+  assert.equal(state.tracks.backend.completed['http-rest'], true);
 });

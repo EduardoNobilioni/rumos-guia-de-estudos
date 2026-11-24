@@ -497,7 +497,36 @@ export function resetTrackProgress(trackState) {
   trackState.doneResources = {};
   trackState.guideChecks = {};
   trackState.overrides = {};
+  trackState.customTopics = [];
+  trackState.customProjects = [];
+  trackState.customLinks = {};
+  trackState.phaseOrder = [];
+  trackState.topicOrder = {};
+  trackState.studyPlan = null;
   return trackState;
+}
+
+export function resetRoadmapSelection(state, trackId = state?.activeTrackId) {
+  if (!state) return state;
+  const targetId = trackId || state.activeTrackId;
+  if (targetId && state.tracks?.[targetId]) {
+    resetTrackProgress(state.tracks[targetId]);
+    state.tracks[targetId].level = null;
+    state.tracks[targetId].weeklyHours = null;
+  }
+  state.activeTrackId = null;
+  if (state.profile) {
+    state.profile.onboarded = false;
+    state.profile.primaryTrackId = null;
+    state.profile.companionIds = [];
+    state.profile.backendLanguageId = null;
+    state.profile.backendEcosystemIds = [];
+    state.profile.frontendFrameworkId = null;
+    if (targetId && state.profile.careerChoices) {
+      delete state.profile.careerChoices[targetId];
+    }
+  }
+  return state;
 }
 
 export function buildStudyRoadmap(entries, languageEntries = [], uiFrameworkEntry = null, careerChoiceEntry = null) {

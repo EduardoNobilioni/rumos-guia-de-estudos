@@ -1,7 +1,7 @@
 import {
   CIENCIA_DE_DADOS_ID, applySharePlan, backendEcosystemChoices, backendLanguageChoices, buildCombinedRoadmap, buildStudyRoadmap,
   careerIncludesFrontend, careerSplitOptions, currentPhase, ensureTrack, frontendFrameworkChoices, isReady,
-  needsBackendLanguageChoice, needsFrontendFrameworkChoice, resetTrackProgress, sharePlanFromTrack,
+  needsBackendLanguageChoice, needsFrontendFrameworkChoice, resetRoadmapSelection, resetTrackProgress, sharePlanFromTrack,
 } from './model.js';
 import { decodePlan, encodePlan, planFromHash } from './share.js';
 import { drawRoadmap, roadmapMarkdown, roadmapPdf } from './files.js';
@@ -250,6 +250,7 @@ const projectsUi = initProjectsScreen(api);
 
 api.openTopicDialog = dialogs.openTopicDialog;
 api.openProjectDialog = dialogs.openProjectDialog;
+api.askConfirm = dialogs.askConfirm;
 api.openQuiz = quiz.openQuiz;
 api.openSheet = sidebar.openSheet;
 api.showHome = () => onboarding.open(isReady(getState()) && cachedTrack(getState().activeTrackId) ? 'retake' : 'create', 0);
@@ -313,12 +314,13 @@ function bindChrome() {
     { label: 'Resetar esta trilha', danger: true, run: async () => {
       const ok = await dialogs.askConfirm({
         title: 'Resetar o roadmap?',
-        body: 'O progresso e as anotações desta trilha serão apagados. Não dá para desfazer.',
+        body: 'O progresso, o plano de estudo e as anotações desta trilha serão apagados, e você voltará para a escolha inicial. Não dá para desfazer.',
         confirmLabel: 'Apagar e voltar ao início',
       });
       if (!ok) return;
-      resetTrackProgress(activeTrackState());
-      persist(getState().activeTrackId);
+      resetRoadmapSelection(getState());
+      session.combinedView = false;
+      persistAll();
       api.showHome();
     } },
   ]));

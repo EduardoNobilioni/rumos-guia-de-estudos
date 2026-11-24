@@ -378,6 +378,11 @@ export function initOnboarding(api) {
       draft.careerChoiceId = state.profile.careerChoices?.[state.activeTrackId] || null;
     }
     if (mode === 'create') {
+      draft.trackId = null;
+      draft.level = null;
+      draft.hours = 8;
+      draft.companionIds = [];
+      draft.query = '';
       draft.backendLanguageId = null;
       draft.backendEcosystemIds = [];
       draft.frontendFrameworkId = null;

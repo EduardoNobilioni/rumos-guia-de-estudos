@@ -74,6 +74,7 @@ export function initPlanScreen(api) {
     const university = current.university;
     const companions = api.companions ? api.companions() : [];
     const busyCount = university.busy.length + university.manual.length;
+    const hasSessions = (current.sessions || []).length > 0;
     root.innerHTML = `
       <h1 style="font:var(--text-title-l);letter-spacing:-0.02em">Plano de estudo</h1>
       <p class="muted read" style="margin-top:8px">A aula ocupa a grade. O estudo entra no vão. A lista de cada dia vai no arquivo, não nesta página.</p>
@@ -101,9 +102,10 @@ export function initPlanScreen(api) {
           <label>Bloco máximo <select data-plan="max-block" class="${field}">${[{ v: 60, l: '60 min' }, { v: 90, l: '90 min' }, { v: 120, l: '120 min' }, { v: 0, l: 'Sem limite' }].map((option) => `<option value="${option.v}" ${(current.maxBlockMinutes ?? 90) === option.v ? 'selected' : ''}>${option.l}</option>`).join('')}</select></label>
         </div>
         <div class="row">
-          <button type="button" data-plan="generate" class="btn btn-primary">Gerar e baixar</button>
-          <button type="button" data-plan="reschedule" class="btn btn-secondary">Recalcular de hoje</button>
-          <button type="button" data-plan="again" class="btn btn-ghost">Baixar de novo</button>
+          <button type="button" data-plan="generate" class="btn btn-primary">${hasSessions ? 'Gerar novo plano e baixar' : 'Gerar e baixar'}</button>
+          ${hasSessions ? '<button type="button" data-plan="reschedule" class="btn btn-secondary">Recalcular de hoje</button>' : ''}
+          ${hasSessions ? '<button type="button" data-plan="again" class="btn btn-ghost">Baixar de novo</button>' : ''}
+          <button type="button" data-plan="reset" class="btn btn-ghost">Resetar plano</button>
         </div>
         <p data-plan-summary class="mono">${summaryText(current)}</p>
       </section>
@@ -143,7 +145,7 @@ export function initPlanScreen(api) {
 
   function save() { api.persist(api.track().id); render(); }
 
-  root.addEventListener('click', (event) => {
+  root.addEventListener('click', async (event) => {
     const target = event.target.closest('[data-plan]');
     if (!target) return;
     const current = plan();
@@ -152,6 +154,24 @@ export function initPlanScreen(api) {
     if (action === 'generate') generate();
     if (action === 'reschedule') generate(localISODate());
     if (action === 'again') downloadAll(current.sessions);
+    if (action === 'reset') {
+      const hasGenerated = (current.sessions || []).length > 0
+        || current.university.busy.length > 0
+        || current.university.manual.length > 0
+        || current.university.examRanges.length > 0;
+      if (hasGenerated && api.askConfirm) {
+        const ok = await api.askConfirm({
+          title: 'Resetar plano de estudo?',
+          body: 'As sessões geradas e a grade cadastrada nesta trilha serão apagadas para você montar um novo plano do zero.',
+          confirmLabel: 'Resetar plano',
+        });
+        if (!ok) return;
+      }
+      const trackState = api.trackState();
+      trackState.studyPlan = defaultStudyPlan(trackState.weeklyHours || 8);
+      save();
+      api.toast('Plano de estudo resetado. Ajuste os dias e clique em Gerar e baixar.');
+    }
     if (action === 'clear-ics') { current.university.busy = current.university.busy.filter((item) => item.source !== 'ics'); save(); }
     if (action === 'add-manual') {
       const title = root.querySelector('[data-plan="manual-title"]').value.trim();
