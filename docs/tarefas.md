@@ -2,6 +2,18 @@
 
 Lista viva das próximas entregas do Rumos. Cada tarefa vira um commit separado.
 
+## Regras que valem para todas as tarefas
+1. **Montagem dinâmica:** o roadmap final é montado a partir do que foi selecionado em cada etapa (carreira, trilhas adicionais, nível e horas). Mudou a seleção, o roadmap muda.
+2. **Trajeto coerente:** a ordem final vai do mais básico ao mais avançado, respeitando nível e pré-requisitos, mesmo combinando várias trilhas.
+3. **Apresentação em árvore:** a trilha é exibida como mapa visual conectado (espinha dorsal + ramificações).
+4. **Exportação completa:** toda exportação traz os **tópicos em lista** e a **apresentação visual** (árvore/fluxograma).
+5. Nada disso pode quebrar ao adicionar trilhas, projetos ou telas novas.
+
+## 0. Ajustes para cumprir as regras (antes das próximas tarefas)
+- [ ] Roadmap combinado: juntar carreira + trilhas adicionais num único trajeto ordenado por nível e pré-requisitos
+- [ ] PNG: incluir a lista de tópicos junto com a árvore
+- [ ] PDF: incluir a árvore visual junto com a lista de tópicos
+
 ## 1. Barra lateral de trilhas (estilo roadmap.sh)
 - [x] Painel lateral com Carreiras, Fundamentos e Tecnologias
 - [x] Busca e filtro por grupo
