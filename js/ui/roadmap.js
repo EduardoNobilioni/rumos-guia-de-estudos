@@ -44,12 +44,14 @@ export function initRoadmap(api) {
 
   function mapWing(topics, side, nextId) {
     if (!topics.length) return '<div class="map-wing"></div>';
-    return `<div class="map-wing map-wing-${side}">${topics.map((topic) => {
+    const list = `<div class="map-branch-list">${topics.map((topic) => {
       const optional = topic.status === 'optional';
       const arm = '<span class="map-arm" aria-hidden="true"></span>';
       const node = mapNode(topic, nextId, true);
       return `<div class="map-link${optional ? ' is-optional' : ''}">${side === 'right' ? arm : ''}${node}${side === 'left' ? arm : ''}</div>`;
     }).join('')}</div>`;
+    const trunk = '<span class="map-trunk" aria-hidden="true"></span>';
+    return `<div class="map-wing map-wing-${side}">${side === 'right' ? trunk : ''}${list}${side === 'left' ? trunk : ''}</div>`;
   }
 
   function visibleTopics(phase, query, phaseHit) {
@@ -82,20 +84,29 @@ export function initRoadmap(api) {
       const here = next && phase.topics.some((topic) => topic.id === nextId);
       rows.push(`<div class="map-row map-stage-row"><div></div><div class="map-core"><span class="map-stem" aria-hidden="true"></span><div class="map-stage${here ? ' is-current' : ''}"><p class="eyebrow">Etapa ${phase.number}${here ? ' · Próximo passo' : ''}</p><h3>${escapeHtml(phase.title)}</h3><p class="mono">${phase.progress.requiredDone} de ${phase.progress.requiredTotal || phase.progress.total}</p></div></div><div></div></div>`);
       const spineSet = new Set(stop.spine);
-      const slots = [];
-      let pending = [];
-      const park = (bucket) => pending.forEach((topic, index) => (index % 2 === 0 ? bucket.left : bucket.right).push(topic));
+      const slots = stop.spine.map((topic) => ({ topic, left: [], right: [] }));
+      const slotByTopicId = new Map(slots.map((slot) => [slot.topic.id, slot]));
+      let lastSeenSlot = slots[0] || null;
+      const pushToSlot = (slot, topic) => {
+        if (!slot) return;
+        if (slot.left.length <= slot.right.length) slot.left.push(topic);
+        else slot.right.push(topic);
+        slotByTopicId.set(topic.id, slot);
+      };
       for (const topic of stop.phase.topics) {
         if (topic.status === 'hidden') continue;
-        if (!spineSet.has(topic) && !stop.branches.includes(topic)) continue;
         if (spineSet.has(topic)) {
-          const slot = { topic, left: [], right: [] };
-          park(slot);
-          pending = [];
-          slots.push(slot);
-        } else pending.push(topic);
+          lastSeenSlot = slotByTopicId.get(topic.id) || lastSeenSlot;
+          continue;
+        }
+        if (!stop.branches.includes(topic) || !slots.length) continue;
+        const prereqSlot = (topic.prerequisites || []).map((id) => slotByTopicId.get(id)).find(Boolean);
+        const sameTrackSlot = topic.sourceTrackId
+          ? [...slots].reverse().find((slot) => slot.topic.sourceTrackId === topic.sourceTrackId)
+          : null;
+        const hostSlot = prereqSlot || sameTrackSlot || lastSeenSlot || slots[0];
+        pushToSlot(hostSlot, topic);
       }
-      if (pending.length && slots.length) park(slots[slots.length - 1]);
       for (const slot of slots) {
         rows.push(`<div class="map-row">${mapWing(slot.left, 'left', nextId)}<div class="map-core"><span class="map-stem" aria-hidden="true"></span>${mapNode(slot.topic, nextId, false)}<span class="map-stem" aria-hidden="true"></span></div>${mapWing(slot.right, 'right', nextId)}</div>`);
       }

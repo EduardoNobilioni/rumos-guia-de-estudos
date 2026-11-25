@@ -12,6 +12,7 @@ import {
   emptyTrackState,
   ensureTrack,
   fullstackOnboardingSteps,
+  layoutStudyMap,
   MAX_COMPANION_FUNDAMENTALS,
   MAX_COMPANION_TECHNOLOGIES,
   phaseDeadlines,
@@ -227,4 +228,29 @@ test('RN limita até 2 fundamentos e até 3 tecnologias para evitar roadmaps gig
     state.profile.companionIds,
     ['banco-de-dados', 'redes-internet', 'python', 'nodejs', 'sql'],
   );
+});
+
+test('RN etapa inicial combinada ancora o primeiro tópico de cada trilha na espinha e ramifica o restante', () => {
+  const prompt = JSON.parse(readFileSync(join(root, '../data/tracks/engenharia-prompt.json'), 'utf8'));
+  const algo = JSON.parse(readFileSync(join(root, '../data/tracks/algoritmos.json'), 'utf8'));
+  const py = JSON.parse(readFileSync(join(root, '../data/tracks/python.json'), 'utf8'));
+  const ai = JSON.parse(readFileSync(join(root, '../data/tracks/ai-engineer.json'), 'utf8'));
+  const ts = () => ({ ...emptyTrackState(), level: 'iniciante', weeklyHours: 10 });
+  const combined = buildCombinedRoadmap([
+    { track: { ...ai, group: 'carreira' }, trackState: ts() },
+    { track: { ...prompt, group: 'fundamentos' }, trackState: ts() },
+    { track: { ...algo, group: 'fundamentos' }, trackState: ts() },
+    { track: { ...py, group: 'tecnologia' }, trackState: ts() },
+  ]);
+  const stops = layoutStudyMap(combined.phases, {
+    branchTrackIds: ['engenharia-prompt', 'algoritmos', 'python'],
+  });
+  const baseStop = stops[0];
+  assert.equal(baseStop.phase.id, 'combined-base-fundamentos');
+  assert.equal(baseStop.spine.length, 3);
+  assert.deepEqual(
+    baseStop.spine.map((t) => t.sourceTrackId).sort(),
+    ['algoritmos', 'engenharia-prompt', 'python'],
+  );
+  assert.ok(baseStop.branches.length > 0);
 });

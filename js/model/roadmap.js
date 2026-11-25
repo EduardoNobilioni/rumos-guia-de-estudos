@@ -807,7 +807,21 @@ export function layoutStudyMap(phases, { branchTrackIds = [] } = {}) {
       if (side) branches.push(topic);
       else spine.push(topic);
     }
-    if (!spine.length && branches.length) spine.push(branches.shift());
+    if (!spine.length && branches.length) {
+      const seenTracks = new Set();
+      const remaining = [];
+      for (const topic of branches) {
+        const trackKey = topic.sourceTrackId || '__default__';
+        if (topic.status !== 'optional' && !seenTracks.has(trackKey)) {
+          seenTracks.add(trackKey);
+          spine.push(topic);
+        } else {
+          remaining.push(topic);
+        }
+      }
+      if (!spine.length && remaining.length) spine.push(remaining.shift());
+      return { phase, spine, branches: remaining };
+    }
     return { phase, spine, branches };
   }).filter((stop) => stop.spine.length || stop.branches.length);
 }

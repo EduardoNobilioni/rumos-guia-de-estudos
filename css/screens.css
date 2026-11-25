@@ -91,12 +91,28 @@
   font: var(--text-label-m);
 }
 .map-open:focus-visible { outline: 2px solid var(--color-accent-graphic); outline-offset: 2px; }
-.map-wing { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-width: 0; padding: 8px 0; }
-.map-wing-left { align-items: flex-end; }
-.map-wing-right { align-items: flex-start; }
-.map-link { display: flex; align-items: center; width: min(100%, 240px); }
-.map-arm { width: 28px; flex: none; border-top: 2px solid var(--color-border-strong); }
-.map-link.is-optional .map-arm { border-top-style: dashed; }
+.map-wing { display: flex; align-items: center; min-width: 0; padding: 8px 0; }
+.map-wing-left { justify-content: flex-end; }
+.map-wing-right { justify-content: flex-start; }
+.map-branch-list { display: flex; flex-direction: column; gap: 8px; min-width: 0; max-width: calc(100% - 18px); }
+.map-wing-left .map-branch-list { align-items: flex-end; }
+.map-wing-right .map-branch-list { align-items: flex-start; }
+.map-trunk { width: 18px; height: 2px; flex: none; background: var(--color-border-strong); }
+.map-link { position: relative; display: flex; align-items: center; width: min(100%, 236px); }
+.map-arm { width: 16px; height: 2px; flex: none; background: var(--color-border-strong); }
+.map-link.is-optional .map-arm { background: none; height: 0; border-top: 2px dashed var(--color-border-strong); }
+.map-link:not(:only-child)::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  background: var(--color-border-strong);
+  top: -4px;
+  bottom: -4px;
+}
+.map-wing-left .map-link:not(:only-child)::after { right: 0; }
+.map-wing-right .map-link:not(:only-child)::after { left: 0; }
+.map-link:first-child:not(:only-child)::after { top: calc(50% - 1px); }
+.map-link:last-child:not(:only-child)::after { bottom: calc(50% - 1px); }
 
 @media (min-width: 768px) {
   #topicDetailDialog {
@@ -123,9 +139,10 @@
     border-left: 2px solid var(--color-border-strong);
     padding: 0 0 8px 14px;
   }
-  .map-stem, .map-arm { display: none; }
+  .map-stem, .map-arm, .map-trunk, .map-link::after { display: none; }
   .map-core { align-items: stretch; order: 0; }
   .map-wing { order: 1; align-items: stretch; padding-left: 10px; }
+  .map-branch-list { max-width: 100%; width: 100%; align-items: stretch; }
   .map-link { width: 100%; }
   .map-stage, .map-flag, .map-progress { text-align: left; }
 }

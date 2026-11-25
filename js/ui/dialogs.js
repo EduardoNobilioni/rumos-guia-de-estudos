@@ -65,6 +65,16 @@ export function initDialogs(api) {
     $('projectCancel').addEventListener('click', () => $('projectDialog').close());
     $('topicDetailClose').addEventListener('click', () => $('topicDetailDialog').close());
     $('infoDialogClose').addEventListener('click', () => $('infoDialog').close());
+    document.querySelectorAll('dialog').forEach((dialog) => {
+      let downOnBackdrop = false;
+      dialog.addEventListener('pointerdown', (event) => {
+        downOnBackdrop = event.target === dialog;
+      });
+      dialog.addEventListener('click', (event) => {
+        if (downOnBackdrop && event.target === dialog) dialog.close('cancel');
+        downOnBackdrop = false;
+      });
+    });
     $('topicAddResourceBtn').addEventListener('click', () => {
       const title = $('topicResourceTitle').value.trim();
       const url = $('topicResourceUrl').value.trim();
