@@ -1,4 +1,4 @@
-const CACHE = 'rumos-cache-v16';
+const CACHE = 'rumos-cache-v17';
 const PRECACHE = [
   './',
   './index.html',
@@ -41,7 +41,6 @@ const PRECACHE = [
   './assets/fonts/plus-jakarta-sans-800.woff2',
   './assets/fonts/jetbrains-mono-400.woff2',
   './assets/fonts/jetbrains-mono-500.woff2',
-  './assets/brand/mark.svg',
   './assets/brand/favicon.svg',
   './data/tracks/index.json',
 ];
