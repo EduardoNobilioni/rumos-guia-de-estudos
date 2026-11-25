@@ -1,16 +1,26 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   applyStudySelection,
   buildCombinedRoadmap,
   buildRoadmap,
+  companionOptionsForCareer,
   emptyState,
   emptyTrackState,
   ensureTrack,
+  fullstackOnboardingSteps,
+  MAX_COMPANION_FUNDAMENTALS,
+  MAX_COMPANION_TECHNOLOGIES,
   phaseDeadlines,
   roadmapStats,
 } from '../js/model.js';
 import { suggestSlot, summarizeSessions, syncPlanWeeklyHours } from '../js/plan.js';
+
+const root = dirname(fileURLToPath(import.meta.url));
+const index = JSON.parse(readFileSync(join(root, '../data/tracks/index.json'), 'utf8'));
 
 function phase(id, topics, projects = []) {
   return {
@@ -175,4 +185,46 @@ test('RN o resumo do plano não depende da lista de datas na tela', () => {
   assert.equal(summary.to, '2026-04-01');
   assert.equal(summary.minutes, 210);
   assert.equal(summary.hours, 3.5);
+});
+
+test('RN fundamentos e tecnologias ficam em etapas separadas com sugestões para todas as 23 carreiras', () => {
+  const steps = fullstackOnboardingSteps('backend', null, index.tracks);
+  assert.deepEqual(steps, ['career', 'fundamentals', 'technologies', 'level', 'hours', 'preview']);
+
+  const careers = index.tracks.filter((track) => track.group === 'carreira');
+  assert.equal(careers.length, 23);
+  for (const career of careers) {
+    const fund = companionOptionsForCareer(career.id, index.tracks, 'fundamentos');
+    const tech = companionOptionsForCareer(career.id, index.tracks, 'tecnologia', {
+      backendLanguageId: career.id === 'fullstack' ? 'python' : null,
+      frontendFrameworkId: career.id === 'frontend' || career.id === 'fullstack' ? 'react' : null,
+      careerChoiceId: career.id === 'game-dev' ? 'csharp' : null,
+    });
+    assert.ok(fund.suggested.length >= 2, `faltou fundamento sugerido para ${career.id}`);
+    assert.ok(tech.suggested.length >= 3, `faltou tecnologia sugerida para ${career.id}`);
+    if (career.id === 'game-dev') {
+      assert.ok(!tech.suggested.some((item) => item.id === 'csharp'));
+      assert.ok(!tech.others.some((item) => item.id === 'csharp'));
+    }
+  }
+});
+
+test('RN limita até 2 fundamentos e até 3 tecnologias para evitar roadmaps gigantes', () => {
+  assert.equal(MAX_COMPANION_FUNDAMENTALS, 2);
+  assert.equal(MAX_COMPANION_TECHNOLOGIES, 3);
+  const state = emptyState();
+  applyStudySelection(state, {
+    trackId: 'backend',
+    level: 'iniciante',
+    hours: 10,
+    catalog: index.tracks,
+    companionIds: [
+      'banco-de-dados', 'redes-internet', 'algoritmos', 'computacao',
+      'python', 'nodejs', 'sql', 'docker', 'git', 'go',
+    ],
+  });
+  assert.deepEqual(
+    state.profile.companionIds,
+    ['banco-de-dados', 'redes-internet', 'python', 'nodejs', 'sql'],
+  );
 });

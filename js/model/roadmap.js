@@ -389,6 +389,174 @@ export function backendEcosystemChoices(list, languageId) {
   return ids.map((id) => byId.get(id)).filter((track) => track && track.id !== languageId);
 }
 
+export const MAX_COMPANION_FUNDAMENTALS = 2;
+export const MAX_COMPANION_TECHNOLOGIES = 3;
+
+const KNOWN_FUNDAMENTALS_IDS = new Set([
+  'computacao',
+  'algoritmos',
+  'banco-de-dados',
+  'engenharia-software',
+  'redes-internet',
+  'design-systems',
+  'engenharia-prompt',
+]);
+
+export const CAREER_SUGGESTIONS = {
+  frontend: {
+    fundamentals: ['design-systems', 'redes-internet', 'algoritmos'],
+    technologies: ['typescript', 'nextjs', 'git', 'graphql', 'javascript'],
+  },
+  backend: {
+    fundamentals: ['banco-de-dados', 'redes-internet', 'engenharia-software', 'algoritmos'],
+    technologies: ['nodejs', 'python', 'go', 'sql', 'docker', 'git'],
+  },
+  fullstack: {
+    fundamentals: ['banco-de-dados', 'redes-internet', 'engenharia-software', 'design-systems'],
+    technologies: ['typescript', 'sql', 'docker', 'git', 'graphql', 'mongodb'],
+  },
+  dados: {
+    fundamentals: ['banco-de-dados', 'algoritmos', 'engenharia-prompt'],
+    technologies: ['python', 'sql', 'power-bi', 'git', 'mongodb'],
+  },
+  'analista-dados': {
+    fundamentals: ['banco-de-dados', 'engenharia-prompt'],
+    technologies: ['sql', 'power-bi', 'python', 'git'],
+  },
+  'bi-analyst': {
+    fundamentals: ['banco-de-dados', 'design-systems'],
+    technologies: ['power-bi', 'sql', 'python', 'mongodb'],
+  },
+  'engenharia-dados': {
+    fundamentals: ['banco-de-dados', 'algoritmos', 'redes-internet'],
+    technologies: ['python', 'sql', 'mongodb', 'docker', 'linux', 'terraform'],
+  },
+  'machine-learning': {
+    fundamentals: ['algoritmos', 'banco-de-dados', 'engenharia-prompt'],
+    technologies: ['python', 'sql', 'docker', 'git', 'linux'],
+  },
+  'ai-engineer': {
+    fundamentals: ['engenharia-prompt', 'algoritmos', 'engenharia-software'],
+    technologies: ['python', 'typescript', 'docker', 'sql', 'git'],
+  },
+  mlops: {
+    fundamentals: ['engenharia-software', 'redes-internet', 'banco-de-dados'],
+    technologies: ['python', 'docker', 'kubernetes', 'linux', 'terraform', 'git'],
+  },
+  java: {
+    fundamentals: ['engenharia-software', 'banco-de-dados', 'algoritmos'],
+    technologies: ['sql', 'docker', 'git', 'linux', 'mongodb'],
+  },
+  'csharp-dotnet': {
+    fundamentals: ['engenharia-software', 'banco-de-dados', 'algoritmos'],
+    technologies: ['csharp', 'sql', 'docker', 'git'],
+  },
+  mobile: {
+    fundamentals: ['design-systems', 'engenharia-software', 'redes-internet'],
+    technologies: ['typescript', 'javascript', 'react', 'graphql', 'git'],
+  },
+  'game-dev': {
+    fundamentals: ['algoritmos', 'computacao', 'engenharia-software'],
+    technologies: ['git', 'python', 'rust'],
+  },
+  qa: {
+    fundamentals: ['engenharia-software', 'redes-internet', 'banco-de-dados'],
+    technologies: ['javascript', 'typescript', 'python', 'sql', 'git', 'docker'],
+  },
+  devops: {
+    fundamentals: ['redes-internet', 'computacao', 'engenharia-software'],
+    technologies: ['linux', 'docker', 'kubernetes', 'terraform', 'git', 'python'],
+  },
+  devsecops: {
+    fundamentals: ['redes-internet', 'computacao', 'engenharia-software'],
+    technologies: ['linux', 'docker', 'kubernetes', 'terraform', 'python', 'git'],
+  },
+  ciberseguranca: {
+    fundamentals: ['redes-internet', 'computacao', 'banco-de-dados'],
+    technologies: ['linux', 'python', 'docker', 'sql', 'git'],
+  },
+  'network-engineer': {
+    fundamentals: ['redes-internet', 'computacao'],
+    technologies: ['linux', 'python', 'docker', 'terraform', 'git'],
+  },
+  cloud: {
+    fundamentals: ['redes-internet', 'banco-de-dados', 'computacao'],
+    technologies: ['linux', 'docker', 'kubernetes', 'terraform', 'python', 'git'],
+  },
+  'arquitetura-software': {
+    fundamentals: ['engenharia-software', 'banco-de-dados', 'redes-internet', 'algoritmos'],
+    technologies: ['docker', 'kubernetes', 'sql', 'mongodb', 'graphql', 'go'],
+  },
+  'ux-ui': {
+    fundamentals: ['design-systems', 'engenharia-prompt'],
+    technologies: ['javascript', 'react', 'git'],
+  },
+  'product-manager': {
+    fundamentals: ['engenharia-prompt', 'design-systems', 'banco-de-dados'],
+    technologies: ['sql', 'power-bi', 'git'],
+  },
+};
+
+const DEFAULT_SUGGESTIONS = {
+  fundamentals: ['computacao', 'algoritmos', 'engenharia-software'],
+  technologies: ['git', 'sql', 'python', 'javascript'],
+};
+
+export function isBlockedCompanion(trackId, candidateId, context = {}) {
+  if (!isId(candidateId) || candidateId === trackId) return true;
+  if (trackId === FULLSTACK_TRACK_ID && blocksFullStackCompanion(candidateId)) return true;
+  if (careerIncludesFrontend(trackId) && FRONTEND_FRAMEWORK_IDS.includes(candidateId)) return true;
+  if (context.backendLanguageId && candidateId === context.backendLanguageId) return true;
+  if (Array.isArray(context.backendEcosystemIds) && context.backendEcosystemIds.includes(candidateId)) return true;
+  if (context.frontendFrameworkId && candidateId === context.frontendFrameworkId) return true;
+  if (context.careerChoiceId && candidateId === context.careerChoiceId) return true;
+  return false;
+}
+
+export function companionOptionsForCareer(trackId, list, group, context = {}) {
+  const tracks = (Array.isArray(list) ? list : []).filter(
+    (track) => track && track.group === group && !isBlockedCompanion(trackId, track.id, context),
+  );
+  const byId = new Map(tracks.map((track) => [track.id, track]));
+  const mapKey = group === 'fundamentos' ? 'fundamentals' : 'technologies';
+  const rawSuggested = CAREER_SUGGESTIONS[trackId]?.[mapKey] || DEFAULT_SUGGESTIONS[mapKey] || [];
+  const suggested = [];
+  const seen = new Set();
+  for (const id of rawSuggested) {
+    const item = byId.get(id);
+    if (item && !seen.has(id)) {
+      seen.add(id);
+      suggested.push(item);
+    }
+  }
+  const others = tracks.filter((track) => !seen.has(track.id));
+  return { suggested, others };
+}
+
+export function filterCompanionSelection(rawIds, trackId, list = null, context = {}) {
+  const byId = Array.isArray(list)
+    ? new Map(list.filter((item) => item && item.id).map((item) => [item.id, item]))
+    : null;
+  let fundCount = 0;
+  let techCount = 0;
+  const out = [];
+  for (const id of sanitizeIdList(rawIds || [])) {
+    if (isBlockedCompanion(trackId, id, context)) continue;
+    const group = byId?.get(id)?.group || (KNOWN_FUNDAMENTALS_IDS.has(id) ? 'fundamentos' : 'tecnologia');
+    if (group === 'carreira') continue;
+    if (group === 'fundamentos') {
+      if (fundCount >= MAX_COMPANION_FUNDAMENTALS) continue;
+      fundCount += 1;
+      out.push(id);
+    } else {
+      if (techCount >= MAX_COMPANION_TECHNOLOGIES) continue;
+      techCount += 1;
+      out.push(id);
+    }
+  }
+  return out;
+}
+
 export function fullstackOnboardingSteps(trackId, languageId, list) {
   const steps = ['career'];
   if (trackId === FULLSTACK_TRACK_ID) {
@@ -397,7 +565,7 @@ export function fullstackOnboardingSteps(trackId, languageId, list) {
   }
   if (careerIncludesFrontend(trackId) && frontendFrameworkChoices(list).length) steps.push('framework');
   if (careerSplitOptions(trackId, list).length) steps.push('path');
-  steps.push('companions', 'level', 'hours', 'preview');
+  steps.push('fundamentals', 'technologies', 'level', 'hours', 'preview');
   return steps;
 }
 
@@ -972,14 +1140,20 @@ export function applyStudySelection(state, selection) {
   if (careerIncludesFrontend(trackId) && !uiFrameworkId) {
     throw new Error('Escolha o framework de front-end.');
   }
-  const companionIds = sanitizeIdList(selection.companionIds || [])
-    .filter((id) => id !== trackId
-      && (trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id))
-      && (!careerIncludesFrontend(trackId) || !FRONTEND_FRAMEWORK_IDS.includes(id)))
-    .slice(0, 6);
   const ecosystemIds = sanitizeIdList(selection.backendEcosystemIds || [])
     .filter((id) => id !== trackId && id !== languageId)
     .slice(0, 1);
+  const companionIds = filterCompanionSelection(
+    selection.companionIds || [],
+    trackId,
+    selection.catalog || null,
+    {
+      backendLanguageId: trackId === FULLSTACK_TRACK_ID ? languageId : null,
+      backendEcosystemIds: trackId === FULLSTACK_TRACK_ID ? ecosystemIds : [],
+      frontendFrameworkId: careerIncludesFrontend(trackId) ? uiFrameworkId : null,
+      careerChoiceId: isId(selection.careerChoiceId) ? selection.careerChoiceId : null,
+    },
+  );
 
   const adapt = (id) => {
     const track = ensureTrack(state, id);

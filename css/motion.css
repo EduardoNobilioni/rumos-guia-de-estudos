@@ -25,14 +25,14 @@ dialog::backdrop,
 
 .topic-node:hover,
 .topic-card:hover,
-.choice-card:hover,
+.choice-card:not(.is-disabled):hover,
 .project-card:hover {
   border-color: var(--color-border-strong);
   transform: translateY(-2px);
 }
 
 .topic-node:active,
-.choice-card:active { transform: scale(0.99); }
+.choice-card:not(.is-disabled):active { transform: scale(0.99); }
 
 .reveal { opacity: 0; transform: translateY(12px); }
 .reveal.is-in { opacity: 1; transform: none; transition-duration: var(--dur-slow); }

@@ -211,7 +211,31 @@ textarea.field { min-height: 88px; resize: vertical; }
   border-color: var(--color-accent-graphic);
 }
 
+.choice-card.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .choice-card input { position: absolute; opacity: 0; pointer-events: none; }
+
+.onb-more {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-panel);
+  padding: var(--space-3) var(--space-4);
+}
+
+.onb-more > summary {
+  cursor: pointer;
+  font: var(--text-label-m);
+  color: var(--color-text-2);
+  user-select: none;
+}
+
+.onb-more[open] > summary {
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
 
 .bar {
   height: 4px;

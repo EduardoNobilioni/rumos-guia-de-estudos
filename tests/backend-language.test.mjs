@@ -57,19 +57,19 @@ test('RN linguagens de back-end são as trilhas que existem, sem uma padrão', (
   assert.deepEqual(backendEcosystemChoices(index.tracks, 'csharp').map((item) => item.id), ['csharp-dotnet']);
   assert.deepEqual(
     fullstackOnboardingSteps('frontend', null, index.tracks),
-    ['career', 'framework', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'framework', 'fundamentals', 'technologies', 'level', 'hours', 'preview'],
   );
   assert.deepEqual(
     fullstackOnboardingSteps('fullstack', null, index.tracks),
-    ['career', 'language', 'framework', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'language', 'framework', 'fundamentals', 'technologies', 'level', 'hours', 'preview'],
   );
   assert.deepEqual(
     fullstackOnboardingSteps('fullstack', 'python', index.tracks),
-    ['career', 'language', 'framework', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'language', 'framework', 'fundamentals', 'technologies', 'level', 'hours', 'preview'],
   );
   assert.deepEqual(
     fullstackOnboardingSteps('fullstack', 'csharp', index.tracks),
-    ['career', 'language', 'ecosystem', 'framework', 'companions', 'level', 'hours', 'preview'],
+    ['career', 'language', 'ecosystem', 'framework', 'fundamentals', 'technologies', 'level', 'hours', 'preview'],
   );
 });
 

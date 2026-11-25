@@ -143,7 +143,7 @@
         <h2 id="howTitle" style="font:var(--text-title-m)">Como montar seu roadmap</h2>
         <ol class="steps-grid">
           <li><span class="letter-badge">1</span><strong>Escolha sua carreira</strong><span class="muted">Defina seu objetivo principal e avance automaticamente para o próximo passo.</span></li>
-          <li><span class="letter-badge">2</span><strong>Adicione fundamentos e linguagens</strong><span class="muted">Opcionalmente marque trilhas paralelas e clique em Continuar.</span></li>
+          <li><span class="letter-badge">2</span><strong>Fundamentos e tecnologias</strong><span class="muted">Em etapas separadas, inclua até 2 fundamentos e até 3 tecnologias sugeridas para seu objetivo.</span></li>
           <li><span class="letter-badge">3</span><strong>Informe nível e horas</strong><span class="muted">Tópicos abaixo do seu nível ficam opcionais e o prazo segue seu ritmo real.</span></li>
           <li><span class="letter-badge">4</span><strong>Gere e acompanhe</strong><span class="muted">Visualize seu fluxograma completo, marque tópicos, faça revisões e exporte.</span></li>
         </ol>
@@ -179,7 +179,8 @@
           <legend class="sr-only">Caminho da carreira</legend>
           <div id="onbPathList" class="choice-list"></div>
         </fieldset>
-        <div id="onbStep2" hidden><div id="onbCompanionList" class="choice-list"></div></div>
+        <div id="onbStepFundamentals" hidden class="stack"><div id="onbFundamentalsList" class="stack"></div></div>
+        <div id="onbStepTechnologies" hidden class="stack"><div id="onbTechnologiesList" class="stack"></div></div>
         <fieldset id="onbStep3" hidden class="choice-list"><legend class="sr-only">Nível atual</legend></fieldset>
         <fieldset id="onbStep4" hidden>
           <legend class="sr-only">Horas por semana</legend>

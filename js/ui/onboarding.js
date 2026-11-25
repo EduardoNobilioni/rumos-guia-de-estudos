@@ -1,8 +1,9 @@
 import {
-  applyStudySelection, backendEcosystemChoices, backendLanguageChoices, blocksFullStackCompanion, careerIncludesFrontend,
-  careerSplitOptions,
-  clampHours, emptyTrackState, ensureTrack, formatDuration, FRONTEND_FRAMEWORK_IDS, frontendFrameworkChoices,
-  fullstackOnboardingSteps, FULLSTACK_TRACK_ID, groupTracks, projectPlanStats, roadmapStats, tracksMatching,
+  applyStudySelection, backendEcosystemChoices, backendLanguageChoices, careerIncludesFrontend,
+  careerSplitOptions, clampHours, companionOptionsForCareer, emptyTrackState, ensureTrack,
+  filterCompanionSelection, formatDuration, frontendFrameworkChoices, fullstackOnboardingSteps,
+  FULLSTACK_TRACK_ID, groupTracks, MAX_COMPANION_FUNDAMENTALS, MAX_COMPANION_TECHNOLOGIES,
+  projectPlanStats, roadmapStats, tracksMatching,
 } from '../model.js';
 import { syncPlanWeeklyHours } from '../plan.js';
 import { trackIconHtml } from '../icons.js';
@@ -22,7 +23,8 @@ const STEP_DOM = {
   ecosystem: 'onbStepEcosystem',
   framework: 'onbStepUiFramework',
   path: 'onbStepPath',
-  companions: 'onbStep2',
+  fundamentals: 'onbStepFundamentals',
+  technologies: 'onbStepTechnologies',
   level: 'onbStep3',
   hours: 'onbStep4',
   preview: 'onbStep5',
@@ -34,21 +36,47 @@ const STEP_COPY = {
   ecosystem: ['Qual framework de back-end?', 'Escolha um. Ele entra só no lugar do framework de servidor. O restante da trilha permanece.'],
   framework: ['Qual framework de front-end?', 'Escolha um. Nenhuma vem marcada. HTML, CSS e JavaScript continuam.'],
   path: ['Qual caminho nesta parte?', 'Escolha um. Nada vem marcado. O resto da trilha continua na mesma ordem.'],
-  companions: ['Quer adicionar fundamentos ou linguagens?', 'Opcional. Marque as trilhas adicionais e clique em Continuar.'],
+  fundamentals: [
+    'Quer incluir fundamentos da computação?',
+    `Opcional — escolha até ${MAX_COMPANION_FUNDAMENTALS} trilhas de base para reforçar sua carreira. Os mais indicados para seu objetivo aparecem primeiro.`,
+  ],
+  technologies: [
+    'Quais linguagens ou ferramentas quer estudar junto?',
+    `Opcional — escolha até ${MAX_COMPANION_TECHNOLOGIES} tecnologias complementares para não inflar seu roadmap. Destacamos as sugeridas para seu objetivo.`,
+  ],
   level: ['Qual é o seu nível hoje?', 'Tópicos abaixo desse nível entram como opcionais. Eles continuam visíveis.'],
   hours: ['Quantas horas por semana você consegue estudar?', 'A estimativa de cada etapa usa esse ritmo. Dá para ajustar depois.'],
-  preview: ['Seu plano', 'Confira a carreira, a linguagem e as etapas antes de gerar seu roadmap completo.'],
+  preview: ['Seu plano', 'Confira a carreira, os fundamentos e as tecnologias antes de gerar seu roadmap completo.'],
 };
 
 export function initOnboarding(api) {
   const { $, session, toast } = api;
   const draft = session.onboarding;
 
-  function choice(name, value, title, text, selected, type = 'radio', iconHtml = '') {
-    return `<label class="choice-card${selected ? ' is-selected' : ''}" data-value="${escapeHtml(value)}">
-      <input type="${type}" name="${escapeHtml(name)}" value="${escapeHtml(value)}" ${selected ? 'checked' : ''} />
-      <span class="row" style="align-items:flex-start">${iconHtml}<span><strong>${escapeHtml(title)}</strong><span class="muted" style="display:block;margin-top:4px">${escapeHtml(text)}</span></span></span>
+  function choice(name, value, title, text, selected, type = 'radio', iconHtml = '', badge = '', disabled = false) {
+    const badgeHtml = badge ? ` <span class="tag tag-highlight">${escapeHtml(badge)}</span>` : '';
+    return `<label class="choice-card${selected ? ' is-selected' : ''}${disabled ? ' is-disabled' : ''}" data-value="${escapeHtml(value)}">
+      <input type="${type}" name="${escapeHtml(name)}" value="${escapeHtml(value)}" ${selected ? 'checked' : ''} ${disabled ? 'disabled' : ''} />
+      <span class="row" style="align-items:flex-start">${iconHtml}<span style="flex:1;min-width:0"><span class="row" style="gap:8px"><strong>${escapeHtml(title)}</strong>${badgeHtml}</span><span class="muted" style="display:block;margin-top:4px">${escapeHtml(text)}</span></span></span>
     </label>`;
+  }
+
+  function companionContext() {
+    return {
+      backendLanguageId: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendLanguageId : null,
+      backendEcosystemIds: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendEcosystemIds : [],
+      frontendFrameworkId: careerIncludesFrontend(draft.trackId) ? draft.frontendFrameworkId : null,
+      careerChoiceId: draft.careerChoiceId,
+    };
+  }
+
+  function pruneCompanions() {
+    draft.companionIds = filterCompanionSelection(
+      draft.companionIds || [],
+      draft.trackId,
+      catalog(),
+      companionContext(),
+    );
   }
 
   function steps() {
@@ -107,15 +135,96 @@ export function initOnboarding(api) {
     )).join('');
   }
 
+  function syncCompanionLocks(inputName, max, nounPlural) {
+    const boxes = [...document.querySelectorAll(`#onboarding input[name="${inputName}"]`)];
+    const checkedCount = boxes.filter((box) => box.checked).length;
+    const atLimit = checkedCount >= max;
+    boxes.forEach((box) => {
+      const lock = atLimit && !box.checked;
+      box.disabled = lock;
+      box.closest('.choice-card')?.classList.toggle('is-disabled', lock);
+      box.closest('.choice-card')?.classList.toggle('is-selected', box.checked);
+    });
+    const counter = document.querySelector(`[data-limit-counter="${inputName}"]`);
+    if (counter) {
+      counter.textContent = atLimit
+        ? `${checkedCount} de ${max} ${nounPlural} (limite atingido)`
+        : `${checkedCount} de ${max} ${nounPlural}`;
+      counter.className = atLimit ? 'tag tag-highlight' : 'tag';
+    }
+  }
+
+  function renderCompanionStep(group) {
+    pruneCompanions();
+    const isFund = group === 'fundamentos';
+    const container = $(isFund ? 'onbFundamentalsList' : 'onbTechnologiesList');
+    if (!container) return;
+    const inputName = isFund ? 'fundamental' : 'technology';
+    const max = isFund ? MAX_COMPANION_FUNDAMENTALS : MAX_COMPANION_TECHNOLOGIES;
+    const badge = isFund ? 'Sugerido' : 'Sugerida';
+    const nounPlural = isFund ? 'selecionados' : 'selecionadas';
+    const moreLabel = isFund ? 'Outros fundamentos' : 'Outras tecnologias';
+    const careerName = catalog().find((item) => item.id === draft.trackId)?.name || 'seu objetivo';
+    const { suggested, others } = companionOptionsForCareer(draft.trackId, catalog(), group, companionContext());
+    const chosenSet = new Set(draft.companionIds || []);
+    const hasSelectedInOthers = others.some((track) => chosenSet.has(track.id));
+
+    const suggestedHtml = suggested.length
+      ? `<div class="choice-list">${suggested.map((track) => choice(
+        inputName,
+        track.id,
+        track.name,
+        track.tagline || '',
+        chosenSet.has(track.id),
+        'checkbox',
+        trackIconHtml(track.id, 'sm', track.name),
+        badge,
+      )).join('')}</div>`
+      : '<p class="muted">Nenhuma sugestão específica para esta carreira.</p>';
+
+    const othersHtml = others.length
+      ? `<details class="onb-more"${hasSelectedInOthers ? ' open' : ''}>
+          <summary>${moreLabel} (${others.length})</summary>
+          <div class="choice-list">${others.map((track) => choice(
+        inputName,
+        track.id,
+        track.name,
+        track.tagline || '',
+        chosenSet.has(track.id),
+        'checkbox',
+        trackIconHtml(track.id, 'sm', track.name),
+      )).join('')}</div>
+        </details>`
+      : '';
+
+    container.innerHTML = `
+      <div class="spread">
+        <span class="eyebrow">${isFund ? 'Recomendados' : 'Sugeridas'} para ${escapeHtml(careerName)}</span>
+        <span class="tag" data-limit-counter="${inputName}" role="status" aria-live="polite"></span>
+      </div>
+      ${suggestedHtml}
+      ${othersHtml}
+    `;
+    syncCompanionLocks(inputName, max, nounPlural);
+  }
+
+  function updateDraftCompanionsFromGroup(group, inputName) {
+    const byId = new Map(catalog().map((item) => [item.id, item]));
+    const keptOtherGroup = (draft.companionIds || []).filter((id) => {
+      const itemGroup = byId.get(id)?.group;
+      return itemGroup && itemGroup !== group;
+    });
+    const currentGroupIds = [...document.querySelectorAll(`#onboarding input[name="${inputName}"]:checked`)].map((el) => el.value);
+    const ordered = group === 'fundamentos'
+      ? [...currentGroupIds, ...keptOtherGroup]
+      : [...keptOtherGroup, ...currentGroupIds];
+    draft.companionIds = filterCompanionSelection(ordered, draft.trackId, catalog(), companionContext());
+  }
+
   function renderChoices() {
     const groups = groupTracks(catalog());
     $('onbTrackGroups').innerHTML = groups.filter((group) => group.id === 'carreira').map((group) => (
       `<div data-track-group="${group.id}">${group.tracks.map((track) => choice('track', track.id, track.name, track.tagline || '', draft.trackId === track.id, 'radio', trackIconHtml(track.id, 'md', track.name)).replace('data-value=', `data-search="${escapeHtml(`${track.name} ${track.tagline || ''} ${(track.keywords || []).join(' ')}`)}" data-value=`)).join('')}</div>`
-    )).join('');
-    $('onbCompanionList').innerHTML = groups.filter((group) => group.id !== 'carreira').map((group) => (
-      `<fieldset class="stack"><legend class="eyebrow">${escapeHtml(group.title)}</legend><p class="muted">${escapeHtml(group.lead)}</p>
-        ${group.tracks.filter((track) => (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(track.id)) && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(track.id))).map((track) => choice('companion', track.id, track.name, track.tagline || '', draft.companionIds.includes(track.id), 'checkbox', trackIconHtml(track.id, 'sm', track.name))).join('')}
-      </fieldset>`
     )).join('');
     $('onbStep3').innerHTML = `<legend class="sr-only">Nível</legend>${LEVELS.map(([id, title, text]) => choice('level', id, title, text, draft.level === id)).join('')}`;
     $('hourChoices').innerHTML = HOURS.map((hours) => choice('hours', String(hours), `${hours} h`, 'por semana', draft.hours === hours)).join('')
@@ -124,6 +233,8 @@ export function initOnboarding(api) {
     renderEcosystem();
     renderUiFramework();
     renderPath();
+    renderCompanionStep('fundamentos');
+    renderCompanionStep('tecnologia');
   }
 
   function filter(query) {
@@ -139,16 +250,14 @@ export function initOnboarding(api) {
 
   function paint() {
     document.querySelectorAll('#onboarding .choice-card').forEach((card) => {
-      card.classList.toggle('is-selected', card.querySelector('input')?.checked);
+      const input = card.querySelector('input');
+      card.classList.toggle('is-selected', !!input?.checked);
+      card.classList.toggle('is-disabled', !!input?.disabled);
     });
   }
 
   function selected(name) {
     return document.querySelector(`#onboarding input[name="${name}"]:checked`)?.value || null;
-  }
-
-  function companions() {
-    return [...document.querySelectorAll('#onboarding input[name="companion"]:checked')].map((input) => input.value);
   }
 
   function ecosystems() {
@@ -189,7 +298,8 @@ export function initOnboarding(api) {
     if (id === 'ecosystem') renderEcosystem();
     if (id === 'framework') renderUiFramework();
     if (id === 'path') renderPath();
-    if (id === 'companions') renderChoices();
+    if (id === 'fundamentals') renderCompanionStep('fundamentos');
+    if (id === 'technologies') renderCompanionStep('tecnologia');
     $(STEP_DOM[id]).hidden = false;
     const [heading, lead] = STEP_COPY[id];
     $('onbHeading').textContent = heading;
@@ -202,7 +312,7 @@ export function initOnboarding(api) {
     $('onbNext').hidden = id === 'preview';
     $('onbStart').hidden = id !== 'preview';
     $('onbStart').textContent = draft.mode === 'retake' ? 'Atualizar trilha' : 'Gerar roadmap completo';
-    $('autoWrap').hidden = id === 'companions' || id === 'ecosystem' || id === 'preview';
+    $('autoWrap').hidden = id === 'fundamentals' || id === 'technologies' || id === 'ecosystem' || id === 'preview';
     $('onbNavRow').hidden = false;
     if (id === 'preview') renderPlan();
   }
@@ -213,16 +323,23 @@ export function initOnboarding(api) {
       $('planPreview').textContent = 'Faltou uma resposta. Volte um passo.';
       return;
     }
-    const names = draft.companionIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
+    pruneCompanions();
+    const byId = new Map(catalog().map((item) => [item.id, item]));
+    const fundNames = draft.companionIds.map((id) => byId.get(id)).filter((t) => t?.group === 'fundamentos').map((t) => t.name);
+    const techNames = draft.companionIds.map((id) => byId.get(id)).filter((t) => t && t.group !== 'fundamentos').map((t) => t.name);
     const language = backendLanguageChoices(catalog()).find((item) => item.id === draft.backendLanguageId);
-    const eco = draft.backendEcosystemIds.map((id) => catalog().find((item) => item.id === id)?.name).filter(Boolean);
+    const eco = draft.backendEcosystemIds.map((id) => byId.get(id)?.name).filter(Boolean);
     const ui = frontendFrameworkChoices(catalog()).find((item) => item.id === draft.frontendFrameworkId);
     const backendLine = draft.trackId === FULLSTACK_TRACK_ID && language
       ? ` Back-end em ${language.name}${eco.length ? `, com ${eco.join(', ')}` : ''}.`
       : '';
     const uiLine = ui ? ` Front-end com ${ui.name}.` : '';
+    const extraParts = [];
+    if (fundNames.length) extraParts.push(`Fundamentos: ${fundNames.join(', ')}.`);
+    if (techNames.length) extraParts.push(`Tecnologias: ${techNames.join(', ')}.`);
+    const extraText = extraParts.length ? extraParts.join(' ') : 'Só a carreira principal, por enquanto.';
     $('planPreview').innerHTML = `<p style="font:var(--text-title-s)">${escapeHtml(entry.name)} · ${escapeHtml(LEVELS.find((item) => item[0] === draft.level)?.[1] || draft.level)} · ${draft.hours} h por semana</p>
-      <p class="muted" style="margin-top:8px">${names.length ? `Junto: ${escapeHtml(names.join(', '))}.` : 'Só a carreira, por enquanto.'}${escapeHtml(backendLine)}${escapeHtml(uiLine)} ${escapeHtml(formatDuration(draft.hours * 8, draft.hours))} dá uma noção do mês, o prazo real sai das etapas.</p>`;
+      <p class="muted" style="margin-top:8px">${escapeHtml(extraText)}${escapeHtml(backendLine)}${escapeHtml(uiLine)} ${escapeHtml(formatDuration(draft.hours * 8, draft.hours))} dá uma noção do mês, o prazo real sai das etapas.</p>`;
   }
 
   async function confirm() {
@@ -244,10 +361,8 @@ export function initOnboarding(api) {
       if (at >= 0) goToStep(at);
       return;
     }
-    const ids = companions().filter((id) => id !== draft.trackId
-      && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(id))
-      && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(id)));
-    draft.companionIds = ids;
+    pruneCompanions();
+    const ids = [...draft.companionIds];
     const languageIds = draft.trackId === FULLSTACK_TRACK_ID
       ? [draft.backendLanguageId, ...draft.backendEcosystemIds]
       : [];
@@ -259,6 +374,7 @@ export function initOnboarding(api) {
       level: draft.level,
       hours: draft.hours,
       companionIds: ids,
+      catalog: catalog(),
       backendLanguageId: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendLanguageId : null,
       backendEcosystemIds: draft.trackId === FULLSTACK_TRACK_ID ? draft.backendEcosystemIds : [],
       frontendFrameworkId: careerIncludesFrontend(draft.trackId) ? draft.frontendFrameworkId : null,
@@ -283,34 +399,56 @@ export function initOnboarding(api) {
       if (!$('onboarding') || $('onboarding').hidden) return;
       const input = event.target;
       if (!(input instanceof HTMLInputElement)) return;
+      if (input.name === 'fundamental') {
+        const checked = document.querySelectorAll('#onboarding input[name="fundamental"]:checked');
+        if (checked.length > MAX_COMPANION_FUNDAMENTALS) {
+          input.checked = false;
+          toast(`Escolha no máximo ${MAX_COMPANION_FUNDAMENTALS} fundamentos.`, 'error');
+        }
+        updateDraftCompanionsFromGroup('fundamentos', 'fundamental');
+        syncCompanionLocks('fundamental', MAX_COMPANION_FUNDAMENTALS, 'selecionados');
+        return;
+      }
+      if (input.name === 'technology') {
+        const checked = document.querySelectorAll('#onboarding input[name="technology"]:checked');
+        if (checked.length > MAX_COMPANION_TECHNOLOGIES) {
+          input.checked = false;
+          toast(`Escolha no máximo ${MAX_COMPANION_TECHNOLOGIES} tecnologias.`, 'error');
+        }
+        updateDraftCompanionsFromGroup('tecnologia', 'technology');
+        syncCompanionLocks('technology', MAX_COMPANION_TECHNOLOGIES, 'selecionadas');
+        return;
+      }
       paint();
       if (input.name === 'track') {
         draft.trackId = input.value;
-        document.querySelectorAll('#onboarding input[name="companion"]').forEach((box) => {
-          box.disabled = box.value === draft.trackId;
-          if (box.disabled) box.checked = false;
-        });
+        pruneCompanions();
         const flow = steps();
         if (flow[draft.step] === 'career' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
       if (input.name === 'backendLanguage') {
         draft.backendLanguageId = input.value;
         draft.backendEcosystemIds = [];
+        pruneCompanions();
         const flow = steps();
         if (flow[draft.step] === 'language' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
-      if (input.name === 'backendEcosystem') draft.backendEcosystemIds = ecosystems();
+      if (input.name === 'backendEcosystem') {
+        draft.backendEcosystemIds = ecosystems();
+        pruneCompanions();
+      }
       if (input.name === 'uiFramework') {
         draft.frontendFrameworkId = input.value;
+        pruneCompanions();
         const flow = steps();
         if (flow[draft.step] === 'framework' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
       if (input.name === 'careerPath') {
         draft.careerChoiceId = input.value;
+        pruneCompanions();
         const flow = steps();
         if (flow[draft.step] === 'path' && $('onbAutoAdvance').checked) setTimeout(() => goToStep(draft.step + 1), 180);
       }
-      if (input.name === 'companion') draft.companionIds = companions();
       if (input.name === 'level') {
         draft.level = input.value;
         const flow = steps();
@@ -348,7 +486,8 @@ export function initOnboarding(api) {
       if (id === 'framework') draft.frontendFrameworkId = selected('uiFramework');
       if (id === 'path' && !selected('careerPath')) return toast('Escolha um caminho.', 'error');
       if (id === 'path') draft.careerChoiceId = selected('careerPath');
-      if (id === 'companions') draft.companionIds = companions().filter((item) => item !== draft.trackId && (draft.trackId !== FULLSTACK_TRACK_ID || !blocksFullStackCompanion(item)) && (!careerIncludesFrontend(draft.trackId) || !FRONTEND_FRAMEWORK_IDS.includes(item)));
+      if (id === 'fundamentals') updateDraftCompanionsFromGroup('fundamentos', 'fundamental');
+      if (id === 'technologies') updateDraftCompanionsFromGroup('tecnologia', 'technology');
       if (id === 'level' && !selected('level')) return toast('Escolha um nível.', 'error');
       if (id === 'level') draft.level = selected('level');
       if (id === 'hours') {
@@ -376,6 +515,7 @@ export function initOnboarding(api) {
       draft.backendEcosystemIds = [...(state.profile.backendEcosystemIds || [])];
       draft.frontendFrameworkId = state.profile.frontendFrameworkId || null;
       draft.careerChoiceId = state.profile.careerChoices?.[state.activeTrackId] || null;
+      pruneCompanions();
     }
     if (mode === 'create') {
       draft.trackId = null;

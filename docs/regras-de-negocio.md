@@ -4,7 +4,7 @@ O que o Rumos promete pra quem estuda. O código que decide isso fica em `js/mod
 
 ## Adaptação da trilha
 
-- **RN-01.** A trilha segue o que foi escolhido: carreira, trilhas adicionais, nível e horas por semana. Não há outro campo de objetivo.
+- **RN-01.** A trilha segue o que foi escolhido: carreira, fundamentos (etapa própria, até 2), tecnologias complementares (etapa própria, até 3, com sugestões por carreira), nível e horas por semana. Não há outro campo de objetivo.
 - **RN-02.** Tópico com nível abaixo do escolhido entra como opcional e fica fora da conta do progresso, salvo se a pessoa pedir pra contar.
 - **RN-03.** O trajeto combinado junta a carreira e as trilhas adicionais, do mais básico ao mais avançado, respeitando pré-requisito dentro de cada trilha.
 - **RN-04.** Tópico com o mesmo título em trilhas diferentes aparece uma vez. Fica o da trilha principal. Se qualquer cópia estava concluída, a que resta aparece concluída.
