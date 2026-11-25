@@ -9,7 +9,7 @@ const WIN = {
   'É': 0xc9, 'Ê': 0xca, 'Í': 0xcd, 'Ó': 0xd3, 'Ô': 0xd4, 'Õ': 0xd5,
   'Ú': 0xda, 'Ç': 0xc7,
   '–': 0x96, '—': 0x97, '’': 0x92, '“': 0x93, '”': 0x94,
-  '•': 0x95, '→': 0x2d,
+  '•': 0x95, '·': 0xb7, 'º': 0xba, 'ª': 0xaa, '→': 0x2d,
 };
 
 function encodeWin(text) {
@@ -54,15 +54,60 @@ function pushAscii(target, str) {
   }
 }
 
-function pushWinText(target, x, y, text, size = 10) {
-  pushAscii(target, `BT /F1 ${size} Tf ${x} ${y} Td (`);
+function pushWinText(target, x, y, text, size = 10, bold = false) {
+  const font = bold ? '/F2' : '/F1';
+  pushAscii(target, `BT ${font} ${size} Tf ${x.toFixed(2)} ${y.toFixed(2)} Td (`);
   for (const b of encodeWin(text)) target.push(b);
   pushAscii(target, ') Tj ET\n');
 }
 
-function buildPdfDocument(pageStreams) {
+function pdfRoundRectPath(x, y, w, h, r) {
+  const rad = Math.min(r, w / 2, h / 2);
+  const k = 0.55228475 * rad;
+  const x0 = x;
+  const y0 = y;
+  const x1 = x + w;
+  const y1 = y + h;
+  const f = (n) => n.toFixed(2);
+  return [
+    `${f(x0 + rad)} ${f(y0)} m`,
+    `${f(x1 - rad)} ${f(y0)} l`,
+    `${f(x1 - rad + k)} ${f(y0)} ${f(x1)} ${f(y0 + rad - k)} ${f(x1)} ${f(y0 + rad)} c`,
+    `${f(x1)} ${f(y1 - rad)} l`,
+    `${f(x1)} ${f(y1 - rad + k)} ${f(x1 - rad + k)} ${f(y1)} ${f(x1 - rad)} ${f(y1)} c`,
+    `${f(x0 + rad)} ${f(y1)} l`,
+    `${f(x0 + rad - k)} ${f(y1)} ${f(x0)} ${f(y1 - rad + k)} ${f(x0)} ${f(y1 - rad)} c`,
+    `${f(x0)} ${f(y0 + rad)} l`,
+    `${f(x0)} ${f(y0 + rad - k)} ${f(x0 + rad - k)} ${f(y0)} ${f(x0 + rad)} ${f(y0)} c`,
+    'h',
+  ].join(' ');
+}
+
+function pushPdfRoundBox(target, x, y, w, h, r, fillRgb, strokeRgb, lineWidth = 1.2, dashed = false) {
+  pushAscii(
+    target,
+    `q ${dashed ? '[3 2] 0 d' : '[] 0 d'} ${lineWidth.toFixed(2)} w ${fillRgb} rg ${strokeRgb} RG ${pdfRoundRectPath(x, y, w, h, r)} B Q\n`,
+  );
+}
+
+function pushPdfCheckmark(target, x, y, size, strokeRgb = '1 1 1') {
+  const f = (n) => n.toFixed(2);
+  pushAscii(
+    target,
+    `q [] 0 d 1 J 1 j 1.5 w ${strokeRgb} RG ${f(x + size * 0.22)} ${f(y + size * 0.52)} m ${f(x + size * 0.43)} ${f(y + size * 0.28)} l ${f(x + size * 0.78)} ${f(y + size * 0.74)} l S Q\n`,
+  );
+}
+
+function truncText(text, maxChars) {
+  const str = String(text ?? '');
+  if (str.length <= maxChars) return str;
+  return `${str.slice(0, Math.max(1, maxChars - 3)).trimEnd()}...`;
+}
+
+function buildPdfDocument(pageStreams, { mono = false } = {}) {
   const pages = pageStreams.length ? pageStreams : [[]];
-  const fontId = 3 + pages.length * 2;
+  const font1Id = 3 + pages.length * 2;
+  const font2Id = font1Id + 1;
   const objects = [];
   const kids = [];
 
@@ -80,7 +125,7 @@ function buildPdfDocument(pageStreams) {
     const pageObj = [];
     pushAscii(
       pageObj,
-      `${pageId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents ${contentId} 0 R /Resources << /Font << /F1 ${fontId} 0 R >> >> >>\nendobj\n`,
+      `${pageId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents ${contentId} 0 R /Resources << /Font << /F1 ${font1Id} 0 R /F2 ${font2Id} 0 R >> >> >>\nendobj\n`,
     );
     objects.push(pageObj);
   });
@@ -89,10 +134,14 @@ function buildPdfDocument(pageStreams) {
   pushAscii(catalogObj, '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
   const pagesObj = [];
   pushAscii(pagesObj, `2 0 obj\n<< /Type /Pages /Count ${pages.length} /Kids [${kids.join(' ')}] >>\nendobj\n`);
-  const fontObj = [];
-  pushAscii(fontObj, `${fontId} 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>\nendobj\n`);
+  const baseRegular = mono ? '/Courier' : '/Helvetica';
+  const baseBold = mono ? '/Courier-Bold' : '/Helvetica-Bold';
+  const font1Obj = [];
+  pushAscii(font1Obj, `${font1Id} 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont ${baseRegular} /Encoding /WinAnsiEncoding >>\nendobj\n`);
+  const font2Obj = [];
+  pushAscii(font2Obj, `${font2Id} 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont ${baseBold} /Encoding /WinAnsiEncoding >>\nendobj\n`);
 
-  const allObjects = [catalogObj, pagesObj, ...objects, fontObj];
+  const allObjects = [catalogObj, pagesObj, ...objects, font1Obj, font2Obj];
   const pdf = [];
   pushAscii(pdf, '%PDF-1.4\n');
   const xref = ['0000000000 65535 f \n'];
@@ -141,83 +190,290 @@ export function textPdf(lines) {
     return streamBytes;
   });
 
-  return buildPdfDocument(streams);
+  return buildPdfDocument(streams, { mono: true });
 }
 
 export function roadmapPdf(track, view) {
+  const RGB_WHITE = '1 1 1';
+  const RGB_INK = '0.094 0.094 0.106';        // #18181B
+  const RGB_MUTED = '0.443 0.443 0.478';      // #71717A
+  const RGB_GREEN = '0.416 0.604 0.078';      // #6A9A14
+  const RGB_GREEN_TEXT = '0.302 0.478 0.055'; // #4D7A0E
+  const RGB_DONE = '0.184 0.478 0.306';       // #2F7A4E
+  const RGB_DONE_BG = '0.953 0.973 0.910';    // #F3F8E8
+  const RGB_SOFT_BG = '0.980 0.980 0.976';    // #FAFAF9
+  const RGB_STAGE_BG = '0.957 0.957 0.961';   // #F4F4F5
+
+  const MARGIN_X = 36;
+  const PAGE_W = 595;
+  const INNER_W = PAGE_W - MARGIN_X * 2; // 523
+  const BOTTOM_Y = 44;
+
   const streams = [];
-  const tree = [];
-  pushAscii(tree, `1 1 1 rg\n0 0 595 842 re f\n${brandMarkPdf()}\n0.059 0.090 0.165 rg\n`);
-  pushWinText(tree, 78, 792, `Rumos - ${track.name}`, 13);
-  pushAscii(tree, '0.145 0.388 0.922 rg\n');
-  pushWinText(tree, 48, 764, 'Arvore visual do roadmap', 11);
+  let page = [];
+  let curY = 804;
 
-  let yTop = 738;
-  let prevCenterX = null;
-  let prevBottomY = null;
-  for (let i = 0; i < view.phases.length && yTop >= 110; i += 1) {
-    const phase = view.phases[i];
-    const isLeft = i % 2 === 0;
-    const boxX = isLeft ? 48 : 112;
-    const boxW = 435;
-    const boxH = 44;
-    const boxY = yTop - boxH;
-    const centerX = boxX + boxW / 2;
-
-    if (prevCenterX !== null && prevBottomY !== null) {
-      const midY = Math.round((prevBottomY + yTop) / 2);
-      pushAscii(tree, `0.392 0.455 0.545 RG 1.2 w ${prevCenterX} ${prevBottomY} m ${prevCenterX} ${midY} l ${centerX} ${midY} l ${centerX} ${yTop} l S\n`);
-    }
-
-    if (phase.progress.complete) {
-      pushAscii(tree, `0.925 0.992 0.961 rg 0.020 0.588 0.412 RG 1.5 w ${boxX} ${boxY} ${boxW} ${boxH} re B\n`);
+  const startPage = (withBrand = false) => {
+    page = [];
+    pushAscii(page, '1 1 1 rg\n0 0 595 842 re f\n');
+    streams.push(page);
+    if (withBrand) {
+      pushAscii(page, `${brandMarkPdf(MARGIN_X, 784, 22)}\n`);
+      pushAscii(page, `${RGB_INK} rg\n`);
+      pushWinText(page, MARGIN_X + 28, 790, 'Rumos', 18, true);
+      pushAscii(page, `${RGB_GREEN_TEXT} rg\n`);
+      pushWinText(page, MARGIN_X, 766, truncText(track.name || 'Roadmap', 68), 13, true);
+      curY = 748;
     } else {
-      pushAscii(tree, `0.973 0.980 0.988 rg 0.145 0.388 0.922 RG 1.2 w ${boxX} ${boxY} ${boxW} ${boxH} re B\n`);
+      curY = 798;
+    }
+  };
+
+  const ensureSpace = (needed) => {
+    if (curY - needed < BOTTOM_Y) startPage(false);
+  };
+
+  startPage(true);
+
+  const phases = view.phases || [];
+
+  // 1. Fluxograma das etapas (mesma grade e estilo do PNG)
+  if (phases.length) {
+    const cols = Math.min(4, Math.max(1, phases.length));
+    const gapX = 14;
+    const boxW = (INNER_W - (cols - 1) * gapX) / cols;
+    const boxH = 34;
+    const rowStep = 44;
+    const totalRows = Math.ceil(phases.length / cols);
+
+    for (let row = 0; row < totalRows; row += 1) {
+      ensureSpace(rowStep);
+      const boxY = curY - boxH;
+      for (let col = 0; col < cols; col += 1) {
+        const idx = row * cols + col;
+        if (idx >= phases.length) break;
+        const phase = phases[idx];
+        const x = MARGIN_X + col * (boxW + gapX);
+        const done = !!phase.progress?.complete;
+
+        pushPdfRoundBox(
+          page,
+          x,
+          boxY,
+          boxW,
+          boxH,
+          6,
+          done ? RGB_DONE_BG : RGB_SOFT_BG,
+          done ? RGB_DONE : RGB_GREEN,
+          1.1,
+        );
+
+        pushAscii(page, `${done ? RGB_DONE : RGB_GREEN_TEXT} rg\n`);
+        pushWinText(page, x + 7, boxY + 21, `ETAPA ${phase.number} · ${phase.progress.done}/${phase.progress.total}`, 7, true);
+
+        pushAscii(page, `${RGB_INK} rg\n`);
+        const maxChars = cols >= 4 ? 19 : (cols === 3 ? 27 : 42);
+        pushWinText(page, x + 7, boxY + 9, truncText(phase.title, maxChars), 8, true);
+
+        if (col < cols - 1 && idx < phases.length - 1) {
+          const ax0 = (x + boxW + 2).toFixed(2);
+          const ax1 = (x + boxW + gapX - 2).toFixed(2);
+          const axTip = (x + boxW + gapX - 5.5).toFixed(2);
+          const ay = (boxY + boxH / 2).toFixed(2);
+          const ayUp = (boxY + boxH / 2 + 2.8).toFixed(2);
+          const ayDn = (boxY + boxH / 2 - 2.8).toFixed(2);
+          pushAscii(
+            page,
+            `q [] 0 d 1 w ${RGB_MUTED} RG ${ax0} ${ay} m ${ax1} ${ay} l ${axTip} ${ayUp} m ${ax1} ${ay} l ${axTip} ${ayDn} l S Q\n`,
+          );
+        }
+      }
+      curY -= rowStep;
+    }
+    curY -= 10;
+  }
+
+  // 2. Árvore visual conectada (espinha dorsal + ramificações com deslocamento entre etapas)
+  ensureSpace(64);
+  pushAscii(page, `${RGB_INK} rg\n`);
+  pushWinText(page, MARGIN_X, curY - 12, 'Árvore visual do roadmap', 12, true);
+  curY -= 24;
+
+  const baseCenterX = PAGE_W / 2;
+  const nodeW = 212;
+  const nodeH = 24;
+  const branchGap = 20;
+  const rowPitch = 32;
+
+  phases.forEach((phase, phaseIdx) => {
+    const visible = (phase.topics || []).filter((t) => t.status !== 'hidden');
+    const offsetX = phaseIdx % 2 === 0 ? -12 : 12;
+    const centerX = baseCenterX + offsetX;
+    const donePhase = !!phase.progress?.complete;
+
+    // Garante espaço para o marco da etapa + pelo menos a primeira dupla de nós
+    ensureSpace(28 + rowPitch + 12);
+
+    const stageW = 280;
+    const stageH = 24;
+    const stageX = centerX - stageW / 2;
+    const stageY = curY - stageH;
+
+    pushPdfRoundBox(
+      page,
+      stageX,
+      stageY,
+      stageW,
+      stageH,
+      6,
+      donePhase ? RGB_DONE_BG : RGB_STAGE_BG,
+      donePhase ? RGB_DONE : RGB_GREEN,
+      1.3,
+    );
+    pushAscii(page, `${RGB_INK} rg\n`);
+    const pTitle = `Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`;
+    pushWinText(page, stageX + 10, stageY + 8, truncText(pTitle, 52), 8.5, true);
+
+    curY = stageY;
+    const totalTopicRows = Math.max(1, Math.ceil(visible.length / 2));
+
+    if (!visible.length) {
+      const endY = curY - 16;
+      pushAscii(page, `q [] 0 d 1.4 w ${RGB_GREEN} RG ${centerX.toFixed(2)} ${curY.toFixed(2)} m ${centerX.toFixed(2)} ${endY.toFixed(2)} l S Q\n`);
+      curY = endY - 12;
+      return;
     }
 
-    pushAscii(tree, '0.059 0.090 0.165 rg\n');
-    const stageMark = phase.progress.complete ? '[x]' : '[ ]';
-    const stageLine = `${stageMark} Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`;
-    pushWinText(tree, boxX + 10, boxY + 26, stageLine.slice(0, 66), 9);
+    for (let row = 0; row < totalTopicRows; row += 1) {
+      if (curY - rowPitch < BOTTOM_Y) {
+        startPage(false);
+      }
+      const spineTop = curY;
+      const spineBottom = curY - rowPitch;
+      const ny = curY - 6 - nodeH;
+      const midY = ny + nodeH / 2;
 
-    const visible = phase.topics.filter((t) => t.status !== 'hidden').slice(0, 3);
-    const previewTopics = visible.map((t) => `${t.done ? '[x]' : '[ ]'} ${t.title}`).join('  |  ');
-    pushAscii(tree, '0.278 0.333 0.412 rg\n');
-    pushWinText(tree, boxX + 10, boxY + 10, previewTopics.slice(0, 74), 8);
+      // Segmento da espinha dorsal vertical
+      pushAscii(
+        page,
+        `q [] 0 d 1.4 w ${RGB_GREEN} RG ${centerX.toFixed(2)} ${spineTop.toFixed(2)} m ${centerX.toFixed(2)} ${spineBottom.toFixed(2)} l S Q\n`,
+      );
 
-    prevCenterX = centerX;
-    prevBottomY = boxY;
-    yTop = boxY - 22;
+      for (let side = 0; side < 2; side += 1) {
+        const tIdx = row * 2 + side;
+        if (tIdx >= visible.length) break;
+        const topic = visible[tIdx];
+        const isLeft = side === 0;
+        const nx = isLeft ? centerX - branchGap - nodeW : centerX + branchGap;
+        const connX = isLeft ? nx + nodeW : nx;
+        const isOpt = topic.status === 'optional';
+        const isDone = !!topic.done;
+
+        // Ramificação horizontal conectada à espinha
+        pushAscii(
+          page,
+          `q [] 0 d 1.3 w ${RGB_GREEN} RG ${centerX.toFixed(2)} ${midY.toFixed(2)} m ${connX.toFixed(2)} ${midY.toFixed(2)} l S Q\n`,
+        );
+
+        pushPdfRoundBox(
+          page,
+          nx,
+          ny,
+          nodeW,
+          nodeH,
+          5,
+          isDone ? RGB_DONE_BG : RGB_WHITE,
+          isDone ? RGB_DONE : (isOpt ? RGB_MUTED : RGB_GREEN),
+          1.1,
+          isOpt && !isDone,
+        );
+
+        let textX = nx + 8;
+        if (isDone) {
+          pushPdfRoundBox(page, nx + 6, ny + 6.5, 11, 11, 2.5, RGB_DONE, RGB_DONE, 1);
+          pushPdfCheckmark(page, nx + 6, ny + 6.5, 11);
+          textX = nx + 21;
+        }
+
+        pushAscii(page, `${isDone ? RGB_DONE : RGB_INK} rg\n`);
+        const optSuffix = isOpt ? ' (opc.)' : '';
+        const maxTitle = isDone ? 35 : 39;
+        pushWinText(page, textX, ny + 8.5, truncText(`${topic.title}${optSuffix}`, maxTitle), 7.8, true);
+      }
+
+      curY = spineBottom;
+    }
+
+    curY -= 14;
+  });
+
+  // 3. Caderno de acompanhamento — Etapas e tópicos (mesmo estilo do PNG)
+  ensureSpace(72);
+  curY -= 6;
+  pushAscii(page, `${RGB_INK} rg\n`);
+  pushWinText(page, MARGIN_X, curY - 14, 'Caderno de acompanhamento — Etapas e tópicos', 13, true);
+  curY -= 32;
+
+  for (const phase of phases) {
+    ensureSpace(44);
+    const pDone = !!phase.progress?.complete;
+    const pBoxY = curY - 12;
+
+    pushPdfRoundBox(
+      page,
+      MARGIN_X,
+      pBoxY,
+      12,
+      12,
+      3,
+      pDone ? RGB_DONE : RGB_WHITE,
+      pDone ? RGB_DONE : RGB_GREEN,
+      1.3,
+    );
+    if (pDone) pushPdfCheckmark(page, MARGIN_X, pBoxY, 12);
+
+    pushAscii(page, `${RGB_INK} rg\n`);
+    pushWinText(
+      page,
+      MARGIN_X + 20,
+      curY - 10,
+      truncText(`Etapa ${phase.number}: ${phase.title} (${phase.progress.done}/${phase.progress.total})`, 74),
+      10.5,
+      true,
+    );
+    curY -= 22;
+
+    for (const topic of phase.topics || []) {
+      if (topic.status === 'hidden') continue;
+      ensureSpace(20);
+      const tDone = !!topic.done;
+      const tBoxX = MARGIN_X + 20;
+      const tBoxY = curY - 10;
+
+      pushPdfRoundBox(
+        page,
+        tBoxX,
+        tBoxY,
+        10,
+        10,
+        2.5,
+        tDone ? RGB_DONE : RGB_WHITE,
+        tDone ? RGB_DONE : RGB_MUTED,
+        1.1,
+      );
+      if (tDone) pushPdfCheckmark(page, tBoxX, tBoxY, 10);
+
+      pushAscii(page, `${tDone ? RGB_DONE : RGB_INK} rg\n`);
+      const opt = topic.status === 'optional' ? ' · opcional' : '';
+      const hrs = Number(topic.hours) ? ` (${topic.hours} h)` : '';
+      pushWinText(page, tBoxX + 16, curY - 8.5, truncText(`${topic.title}${hrs}${opt}`, 82), 9, false);
+      curY -= 18;
+    }
+
+    curY -= 8;
   }
-  streams.push(tree);
 
-  const notebookLines = [
-    `Caderno de acompanhamento - ${track.name}`,
-    track.description || '',
-    '',
-    ...roadmapLines(track, view).slice(2),
-  ];
-  const wrapped = [];
-  for (const line of notebookLines) {
-    for (const part of wrapLine(line, 72)) wrapped.push(part);
-  }
-  const pageSize = 44;
-  for (let index = 0; index < wrapped.length; index += pageSize) {
-    const page = wrapped.slice(index, index + pageSize);
-    const streamBytes = [];
-    pushAscii(streamBytes, '1 1 1 rg\n0 0 595 842 re f\n0.059 0.090 0.165 rg\nBT\n/F1 10 Tf\n48 796 Td\n16 TL\n');
-    page.forEach((line, lineIndex) => {
-      const encoded = encodeWin(line);
-      if (lineIndex > 0) pushAscii(streamBytes, 'T* ');
-      streamBytes.push(0x28);
-      for (const b of encoded) streamBytes.push(b);
-      pushAscii(streamBytes, ') Tj\n');
-    });
-    pushAscii(streamBytes, 'ET\n');
-    streams.push(streamBytes);
-  }
-
-  return buildPdfDocument(streams);
+  return buildPdfDocument(streams, { mono: false });
 }
 
 export function roadmapLines(track, view) {
@@ -277,12 +533,21 @@ export function roadmapMarkdown(track, view) {
 const FONT_BODY = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
 const FONT_UI = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
 
-function brandMarkPdf() {
+function brandMarkPdf(x = 48, y = 784, size = 20) {
+  const f = (n) => n.toFixed(2);
+  const tipX = f(x + size * 0.88);
+  const tipY = f(y + size * 0.88);
+  const lwX = f(x + size * 0.10);
+  const lwY = f(y + size * 0.44);
+  const midX = f(x + size * 0.46);
+  const midY = f(y + size * 0.44);
+  const rwX = f(x + size * 0.46);
+  const rwY = f(y + size * 0.08);
   return [
     '0.416 0.604 0.078 rg',
-    '68 804 m 47.5 793 l 56.8 793 l 56.8 783.7 l h f',
+    `${tipX} ${tipY} m ${lwX} ${lwY} l ${midX} ${midY} l ${rwX} ${rwY} l h f`,
     '0.718 0.890 0.290 rg',
-    '68 804 m 56.8 793 l 56.8 783.7 l h f',
+    `${tipX} ${tipY} m ${midX} ${midY} l ${rwX} ${rwY} l h f`,
   ].join('\n');
 }
 

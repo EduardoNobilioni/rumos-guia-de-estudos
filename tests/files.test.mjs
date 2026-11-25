@@ -30,7 +30,7 @@ test('roadmapLines e roadmapMarkdown incluem o fluxograma das etapas', () => {
   assert.match(md, /→/);
 });
 
-test('roadmapPdf gera árvore visual e caderno de acompanhamento em WinAnsi válido', () => {
+test('roadmapPdf gera fluxograma, árvore visual conectada e caderno de acompanhamento igual ao PNG em WinAnsi válido', () => {
   const track = { name: 'Back-end', description: 'API e Programação' };
   const view = {
     phases: [
@@ -41,7 +41,7 @@ test('roadmapPdf gera árvore visual e caderno de acompanhamento em WinAnsi vál
         progress: { done: 1, total: 2, complete: false },
         topics: [
           { title: 'Variáveis e Funções', hours: 4, done: true, status: 'required' },
-          { title: 'Requisições HTTP', hours: 6, done: false, status: 'required' },
+          { title: 'Requisições HTTP', hours: 6, done: false, status: 'optional' },
         ],
         projects: [],
       },
@@ -49,7 +49,7 @@ test('roadmapPdf gera árvore visual e caderno de acompanhamento em WinAnsi vál
         number: 2,
         title: 'Banco de Dados',
         badgeTitle: 'Dados',
-        progress: { done: 2, total: 2, complete: true },
+        progress: { done: 1, total: 1, complete: true },
         topics: [
           { title: 'Modelagem Relacional', hours: 5, done: true, status: 'required' },
         ],
@@ -61,9 +61,11 @@ test('roadmapPdf gera árvore visual e caderno de acompanhamento em WinAnsi vál
   assert.ok(bytes instanceof Uint8Array);
   const latin1 = Buffer.from(bytes).toString('latin1');
   assert.ok(latin1.startsWith('%PDF-1.4\n'));
-  assert.match(latin1, /Arvore visual do roadmap/);
+  assert.match(latin1, /\/BaseFont \/Helvetica-Bold/);
+  assert.match(latin1, /ETAPA 1/);
+  assert.match(latin1, /rvore visual do roadmap/);
   assert.match(latin1, /Caderno de acompanhamento/);
-  assert.match(latin1, /\[x\] Vari/);
-  assert.match(latin1, /\[ \] Requisi/);
+  assert.match(latin1, /Vari\xe1veis e Fun\xe7\xf5es/);
+  assert.match(latin1, /Requisi\xe7\xf5es HTTP \\\(6 h\\\)/);
   assert.match(latin1, /%%EOF$/);
 });
